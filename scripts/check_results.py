@@ -37,13 +37,13 @@ def extract(fact):
         raise ValueError("empty selection")
     if op == "count":
         return float(len(rows)), len(rows)
-    if op == "regex_integer":
+    if op in {"regex_integer", "regex_number"}:
         if len(rows) != 1:
-            raise ValueError("regex_integer requires one source row")
+            raise ValueError(f"{op} requires one source row")
         match = re.search(fact["argument"], rows[0][fact["value_column"]])
         if match is None:
-            raise ValueError("declared integer not found")
-        return float(match.group(1).replace(",", "")), 1
+            raise ValueError("declared number not found")
+        return float(match.group(1).replace(",", "")) * float(fact.get("scale") or 1), 1
     values = [float(row[fact["value_column"]]) for row in rows]
     if op == "single":
         if len(values) != 1:
