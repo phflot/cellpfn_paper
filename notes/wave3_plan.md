@@ -1,0 +1,13 @@
+# Wave 3 execution contract
+
+Approved plan,14 October2026. Python quantitative plotting; retain both main tables. Main Figure1 architecture, Figure2 performance plus prior transfer, Figure3 biological context plus deletion explanations, Figure4 reserved for new cross-species/ROSMAP/harder-variable validation. Produce supplementary FiguresS1–S9 covering simulator realism, full benchmark, gene/input controls, operators, prior/task mixtures, current sex/age readouts, biological maps, explanation robustness and recorded computational costs.
+
+Remote root is `/share/runs/2026/30-03-phflot-hashprompt` on `rift_baest`. Existing artifacts are read-only. Derivative working files belong in a new `cellpfn_paper_figures` directory. SSH succeeds in execution mode with authorized network escalation. Verify manifest/checkpoint/cell/gene identities before joining arrays. Cached predictions should avoid retraining; use the principal checkpoint only for necessary frozen-case reproduction.
+
+Every figure has source data, source hashes, selected populations/filters, aggregation, uncertainty, exclusions and status in a JSON manifest. SVG/PDF retain editable labels. Dense point rasters are allowed with full source coordinates. Actual HVG widths, query-source exposure flags, paired baseline choices, single-training-seed limits and adverse outcomes remain visible. Use requested caps as categorical labels, never actual fixed widths.
+
+Main biological examples are PBMC coarse B100 draw0 and cortex development B10 draw0, chosen to match existing explanation cases. Use RNA-only geometry once per case, then identical coordinates across truth/error/expression/attribution overlays. Attribution indices require the actual case-to-barcode mapping; selected explained cells must remain distinguishable from other queries. Default PCA<=50,15neighbors,UMAPmin_dist0.3,Euclidean,seed42,up to2k visual HVGs. Visualization preprocessing never enters the frozen classifier.
+
+Figure4 remains a specification with pending inputs; do not draw fabricated data or blank result axes. Its inputs are the selected species/cohort and transfer direction, ortholog policy where required, corrected ROSMAP label/split manifests and access/export scope, and prespecified harder variables/baselines. New training and final validation experiments are outside this figure-production wave.
+
+Integrate current figures and complete legends into `output/cellpfn.pdf`, update figure references/visualization Methods, retain the Discussion budget, run numeric/provenance/layout checks, inspect final-size graphics and commit completed stages with the established one-line/no-coauthor convention.
