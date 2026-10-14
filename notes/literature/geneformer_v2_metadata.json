@@ -1,0 +1,21 @@
+{
+  "citation_key": "chen2026geneformer",
+  "type": "article",
+  "fields": {
+    "author": "Chen, Han and Venkatesh, Madhavan S. and G{\\'o}mez Ortega, Javier and Mahesh, Siddharth V. and Nandi, Tarak N. and Madduri, Ravi K. and Pelka, Karin and Theodoris, Christina V.",
+    "title": "Scaling and quantization of large-scale foundation model enables resource-efficient predictions in network biology",
+    "journal": "Nature Computational Science",
+    "year": "2026",
+    "volume": "6",
+    "number": "5",
+    "pages": "450--463",
+    "doi": "10.1038/s43588-026-00972-4",
+    "url": "https://www.nature.com/articles/s43588-026-00972-4"
+  },
+  "accessed": "2026-10-14",
+  "verification_sources": [
+    "https://www.nature.com/articles/s43588-026-00972-4",
+    "https://pubmed.ncbi.nlm.nih.gov/41896605/"
+  ],
+  "retrieval_note": "DOI extraction script attempted; shell networking unavailable. Fields extracted from publisher and PubMed web records and rendered with citation-management _common.render_entry; Greek omicron in online Gomez surname normalized to Latin accented o."
+}
