@@ -1,0 +1,12 @@
+[
+  {
+    "source": "/home/phflot/.codex/skills/draft-marker-discipline/scripts/prose_wordcount.py",
+    "copy": "scripts/vendor/prose_wordcount.py",
+    "sha256": "62cce98d160941a70fafef14d075b0cbbd5912d360fba617298def7ae95821e1"
+  },
+  {
+    "source": "/home/phflot/.codex/skills/citation-verifier/scripts/audit_bib.py",
+    "copy": "scripts/vendor/audit_bib.py",
+    "sha256": "04c00db4009fd2a2ecff3fb745d2c2ae86c0ce2749b3d54d817c9817b76de954"
+  }
+]

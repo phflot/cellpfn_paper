@@ -2,7 +2,7 @@
 
 The simulator is the PFN prior. Lead with CellPFN's competitive real-cell inference after limited training-task exposure, then demonstrate that the prior also improves released tabular models. Full-transcriptome operation and faithful attribution show capabilities of the cellular architecture. Avoid a universal leaderboard claim.
 
-`evidence/results.csv` records 49 numerical facts; `evidence/task_exposure.csv` records exposure quantities and unavailable comparator counts. Each local entry gives its source, exact string-valued filters, aggregation, selected-row count, units and limitations. Values retain precision for checking; prose should round. `python scripts/check_results.py` reads the original sibling export without changing it. It verifies extraction and arithmetic, not scientific validity or that every numeral in manuscript prose is registered. Its external-source and externally dependent outputs remain explicitly distinct.
+`evidence/results.csv` records 57 numerical facts; `evidence/task_exposure.csv` records exposure quantities and unavailable comparator counts. Each local entry gives its source, exact string-valued filters, aggregation, selected-row count, units and limitations. Values retain precision for checking; prose should round. `python scripts/check_results.py` reads the original sibling export without changing it. It verifies extraction and arithmetic, not scientific validity or that every numeral in manuscript prose is registered. Its external-source and externally dependent outputs remain explicitly distinct.
 
 ## Model and exposure
 
@@ -18,6 +18,18 @@ The simulator is the PFN prior. Lead with CellPFN's competitive real-cell infere
 **R08–R12:** the useful regime qualification is essential. On PBMC fine cell types with one support cell per class, Geneformer-LR yields 68.8% versus CellPFN's 51.1%. On the cortex query from held-out studies with ten supports per class, CellPFN yields 91.9% versus 87.4% for Geneformer-LR and 87.2% for scGPT-LR. These are three-draw descriptive means. Both cellular foundation models likely encountered the exact PBMC cells during unlabeled pretraining; Geneformer also encountered studies contributing most cortex OOD queries. Exposure is not evidence of label leakage or its causal effect. scGPT's unstandardized logistic classifier matters: do not treat this as a clean ranking of embedding architectures.
 
 The term “competitive” describes this bounded regime map. “Matches” cannot imply statistical equivalence, and “limited training-task exposure” cannot imply lower measured compute. Stronger broad claims remain bold red until the planned final evaluation resolves them.
+
+### Strong conventional references, including their coverage
+
+The conventional-family review inspected all available classical series, plus SingleR and CellTypist, across the four core panels. Full-gene rank-32 Woodbury LDA is the strongest generic classical series in the evaluated support-rich regimes. Its one-shot result does **not** exist: the export evaluates these LDA variants and NCM at ten and 100 supports only. Never compare a baseline mean excluding one-shot tasks directly with CellPFN's three-budget 72.9% mean.
+
+**R54–R57:** at 100 support cells per class, full-gene rank-32 Woodbury LDA yields 84.6% mean balanced accuracy versus 85.4% for CellPFN on the same four panels and three draws; at ten supports the corresponding values are 75.3% and 79.6%. LDA receives processed log1p-CP10K values for both PBMC and cortex. CellPFN receives integer PBMC counts and internally forms its transformed views, and receives the processed cortex values as supplied. Thus the comparison matches biological cases, gene coverage, budget and support draws, but does not use an identical model-input representation. Source: `fig4__methods.csv`, rows `model_id=woodbury32_lda`, `gene_view=all`, `input_modes=processed`; exact results selected from `fig4__cases.csv` in the registry. These LDA evaluations are exported diagnostics, not a separately preregistered superiority or equivalence test.
+
+Suggested main-text sentence: “At 100 labelled cells per class, support-trained rank-32 LDA using all genes reached 84.6% mean balanced accuracy across the four panels, compared with 85.4% for CellPFN.” Retain the existing input-route qualification and keep the missing one-shot LDA evaluation explicit in the supporting material.
+
+**R50, R52, R53:** among generic linear/prototype series with complete coverage of all three budgets, support-trained logistic regression (`C=1`) on up to 100 principal components averages 66.1%, compared with 64.5% on 2,000 HVGs. The PCA route is an exported sensitivity view, and identifying it as the highest complete generic series is a descriptive choice after inspecting the results. SingleR, a specialist annotation method, averages 68.4%; its default-marker setup has the documented caveat. Therefore do not call the 66.1% logistic result the strongest of *all* conventional annotation methods. These complete-series references and the limited-coverage LDA results belong together in the later comparison figure/table; no new tuning was performed.
+
+**R51:** released TabPFN-3.5 on 2,000 HVGs averages 67.0% across all four panels and three budgets. This is separate from its all-gene refusal and remains subject to the stated non-commercial research terms.
 
 ## Full-transcriptome operation
 

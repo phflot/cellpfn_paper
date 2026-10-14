@@ -1,0 +1,21 @@
+# Open claims and resolution routes
+
+Bold red manuscript prose is produced by `\unresolvedclaim{ID}{prose}`. The prose always remains red in the PDF; changing editorial-note visibility cannot silently promote it to an established finding. IDs are excluded from word counts, but the complete narrative text is included. `\TODO` is reserved for factual/sourcing questions, `\note` for editorial notes, `\directive` for required editorial changes and `\superseded` for local historical snippets. No empty placeholder citations are used.
+
+| ID | Location | Current state | Resolution route | Evidence needed / closure rule |
+|---|---|---|---|---|
+| O01 | Results, competitive inference | Current panels informed model selection; one training seed per arm | E: evidence does not yet exist; C: author evaluation decision | Freeze checkpoint, input routes and comparator selection; evaluate additional cohorts independent of development and quantify training variability. Replace the sentence with the resulting bounded finding or retain the limitation. Existing development-panel numbers need not be reclassified as invented results. |
+| O02 | Results, neuropathology application | Export explicitly NOT FINAL; values are existing aggregates | D: corrected donor-label data; C: freeze cohort definition | Complete label/provenance audit and rerun the frozen analysis. Identify original sequencing releases, donor overlap, support/query unit and interval construction in Methods. Update all three AUC values together. No clinical-performance conclusion follows. |
+| O03 | Results, disease explanations | No completed disease-gene attribution/independent replication package in export | E: evidence does not yet exist | Run query-side attribution on the corrected disease analysis; assess stability and test a prespecified signature in an independent cohort. If unavailable, remove the aspirational application claim rather than substituting cell-type marker evidence. |
+| O04 | Abstract, destination claim | Aspirational summary of O02 and O03 | D + E | Close only when corrected donor analysis and independent expression-signature evidence support the entire sentence. Otherwise replace with a bounded application statement or omit. No fabricated numerical outcome is supplied. |
+| O05 | Results, attribution timing | Measured DS-LOO/example-forward timing exists; all-gene exact cost is extrapolated and shared-GPU timing provisional | E: controlled timing evidence does not yet exist | Repeat comparable timings under controlled load and document memory, batch size and hardware. Keep extrapolated exhaustive cost explicitly labelled even after timing is finalized. This does not block the existing fidelity result. |
+
+`python3 scripts/check_manuscript.py` counts actionable claim IDs and rejects missing or unreferenced register rows. The draft currently has no actionable `\TODO` macros; these five claim IDs track unfinished scientific evidence rather than editorial preferences.
+
+## Deferred author decisions and reporting work
+
+- The current primary narrative uses processed ZEBRA inputs, as in the coherent gene-scaling/attribution export. Selecting reconstructed counts as the primary benchmark requires explicit reconciliation, not a silent numerical substitution. The processed view contains stored zeros for genes absent from contributing study panels; the reconstructed-count view removes them. The ten-draw sensitivity audit in `supp_stored_zeros` must accompany the final input choice.
+- Wave2 will audit both `hashprompt` and `pyscintelligentdesign` against run configurations, including prior versions, generic replay, task filtering, leakage controls and exact support/query definitions. No Methods section is claimed complete now.
+- Manuscript author list and affiliations are preserved from the seed. Corresponding author/email, contributions, competing interests and availability statements remain for the author/submission stage; Git identity does not determine them.
+- Wave3 will allocate at most six main display items under the current NBT Article guidance. Export figure IDs in comments/notes are evidence anchors, not final figure references.
+- Discussion is reserved within the main-text budget and remains unwritten in this wave.

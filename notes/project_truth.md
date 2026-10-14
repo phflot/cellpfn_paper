@@ -11,3 +11,5 @@ Synthetic-only refers to model-weight training. Aggregate real-data statistics a
 Wave 1: abstract, introduction, Results, bibliography and evidence notes. Wave 2: Methods grounded in code and run configuration after author discussion. Wave 3: figures. Discussion and submission materials deferred.
 
 Current harmonized export, including its 2026-10-13 refresh, controls experimental facts. Earlier prose and code notes are subordinate when they refer to a different model or experiment.
+
+Prior versions are explicit: the reference CellPFN saw320K episodes under v1 and64K under v2.2-B; tabular cellular adaptation uses v2.2-B throughout. Shared prior means the simulator-defined cellular prior family, not identical historical distributions.
