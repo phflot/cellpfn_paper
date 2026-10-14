@@ -85,8 +85,8 @@
     },
     "supp_taskmix_tradeoff": {
       "purpose": "Task-mixture checkpoint and gene-view tradeoffs",
-      "destinations": "appendix",
-      "reason": "Preserve checkpoint/view confounding and unequal sampling; not an isolated causal gene-view comparison."
+      "destinations": "main; appendix",
+      "reason": "Preserve checkpoint/view confounding and unequal sampling; also report the distinct later Zebra donor-unit sex controls without attributing them to specific genes."
     },
     "glossary": {
       "purpose": "Model, panel, metric and vocabulary definitions",
@@ -49998,8 +49998,8 @@
       "purpose": "Rank of known marker genes in the class rankings of each method (1 = top), long form.",
       "authority": "current harmonized data",
       "manuscript_destination": "main; appendix",
-      "disposition_reason": "Illustrative IL7R and NKG7 ranking statements within the evaluated class-margin rankings. Other rows remain supporting evidence; this designation does not promote the whole file to main-text results.",
-      "selected_main_anchor": "Illustrative IL7R and NKG7 ranking statements within the evaluated class-margin rankings.",
+      "disposition_reason": "Selected PBMC and Zebra lineage-associated marker ranks; explicit non-hits and no universal recovery or enrichment claim. Other rows remain supporting evidence; this designation does not promote the whole file to main-text results.",
+      "selected_main_anchor": "Selected PBMC and Zebra lineage-associated marker ranks; explicit non-hits and no universal recovery or enrichment claim.",
       "dictionary": {
         "anchor": "DATA_DICTIONARY.md#datafig5__marker_rankscsv",
         "line": 1997,
@@ -55386,9 +55386,9 @@
       "role": "case-level or finer observations",
       "purpose": "one row per model state or inference control x panel x support size x support draw (kidney: fold), all genes, the 3 frozen benchmark draws",
       "authority": "current harmonized data",
-      "manuscript_destination": "appendix",
-      "disposition_reason": "Supporting observations, derived summaries or definitions for this block; no separately selected main-text anchor. Report all three operator arms, the failed prespecified test, later paired comparisons and probability-quality tradeoffs.",
-      "selected_main_anchor": null,
+      "manuscript_destination": "main; appendix",
+      "disposition_reason": "Original frozen Zebra sex-classification score, distinct from later donor-unit tasks; also the operator-test provenance. Other rows remain supporting evidence; this designation does not promote the whole file to main-text results.",
+      "selected_main_anchor": "Original frozen Zebra sex-classification score, distinct from later donor-unit tasks; also the operator-test provenance.",
       "dictionary": {
         "anchor": "DATA_DICTIONARY.md#datafig6__operator_prereg_casescsv",
         "line": 2468,
@@ -70839,9 +70839,9 @@
       "role": "documented diagnostic or auxiliary measurement",
       "purpose": "one row per CellPFN reference state (5: G1v2' at update 96,000; GS1 and GL1 at updates 98,304 and 100,000) x tier-H value (metric x support size x scope)",
       "authority": "current harmonized data",
-      "manuscript_destination": "appendix",
-      "disposition_reason": "Supporting observations, derived summaries or definitions for this block; no separately selected main-text anchor. Report the positive filtering result alongside all neutral, rejected, unresolved and untestable candidates.",
-      "selected_main_anchor": null,
+      "manuscript_destination": "main; appendix",
+      "disposition_reason": "Eight exploratory PBMC subtype tasks: exported CellPFN means, without reconstructable draw-level uncertainty. Other rows remain supporting evidence; this designation does not promote the whole file to main-text results.",
+      "selected_main_anchor": "Eight exploratory PBMC subtype tasks: exported CellPFN means, without reconstructable draw-level uncertainty.",
       "dictionary": {
         "anchor": "DATA_DICTIONARY.md#datasupp_prior_ablation__hard_tier_cellpfn_valuescsv",
         "line": 3538,
@@ -72000,9 +72000,9 @@
       "role": "design, definition or provenance facts",
       "purpose": "one row per hard-class task (10)",
       "authority": "current harmonized data",
-      "manuscript_destination": "provenance; appendix",
-      "disposition_reason": "Retain exhaustive underlying observations for verification; summarize them in the appendix rather than printing all rows. Report the positive filtering result alongside all neutral, rejected, unresolved and untestable candidates.",
-      "selected_main_anchor": null,
+      "manuscript_destination": "main; appendix",
+      "disposition_reason": "Post hoc definitions and class counts of PBMC sibling and finest-label tasks; no formal binary easy/hard stratum. Other rows remain supporting evidence; this designation does not promote the whole file to main-text results.",
+      "selected_main_anchor": "Post hoc definitions and class counts of PBMC sibling and finest-label tasks; no formal binary easy/hard stratum.",
       "dictionary": {
         "anchor": "DATA_DICTIONARY.md#datasupp_prior_ablation__hard_tier_taskscsv",
         "line": 3628,
@@ -79769,9 +79769,9 @@
       "role": "case-level or finer observations",
       "purpose": "one row per CellPFN state (G1v2' @96,000; GS1 and GL1 at +256, +768, +1,280, +1,792, +2,304 updates) x E-fast case x metric; support-selected HVG-8192 view; tiers A (PBMC, Zebra), B (kidney, Zebra-sex) and C (person-level tasks)",
       "authority": "current harmonized data",
-      "manuscript_destination": "appendix",
-      "disposition_reason": "Supporting observations, derived summaries or definitions for this block; no separately selected main-text anchor. Preserve checkpoint/view confounding and unequal sampling; not an isolated causal gene-view comparison.",
-      "selected_main_anchor": null,
+      "manuscript_destination": "main; appendix",
+      "disposition_reason": "Later Zebra sex positive control and broader sex-task AUC; also matched 8,192-HVG PBMC coarse/fine context for the hard subtype panel. Distinct task populations and no exported sex-gene attribution. Other rows remain supporting evidence; this designation does not promote the whole file to main-text results.",
+      "selected_main_anchor": "Later Zebra sex positive control and broader sex-task AUC; also matched 8,192-HVG PBMC coarse/fine context for the hard subtype panel. Distinct task populations and no exported sex-gene attribution.",
       "dictionary": {
         "anchor": "DATA_DICTIONARY.md#datasupp_taskmix_tradeoff__efast_casescsv",
         "line": 3898,
@@ -80523,7 +80523,7 @@
       "purpose": "one row per Tier A cell (12) x read-out (3): GL1 minus GS1 balanced accuracy",
       "authority": "current harmonized data",
       "manuscript_destination": "appendix",
-      "disposition_reason": "Supporting observations, derived summaries or definitions for this block; no separately selected main-text anchor. Preserve checkpoint/view confounding and unequal sampling; not an isolated causal gene-view comparison.",
+      "disposition_reason": "Supporting observations, derived summaries or definitions for this block; no separately selected main-text anchor. Preserve checkpoint/view confounding and unequal sampling; also report the distinct later Zebra donor-unit sex controls without attributing them to specific genes.",
       "selected_main_anchor": null,
       "dictionary": {
         "anchor": "DATA_DICTIONARY.md#datasupp_taskmix_tradeoff__view_check_cellscsv",
@@ -81057,7 +81057,7 @@
       "purpose": "one row per read-out x cell group (8 low cells / Zebra low / PBMC low) x checkpoint",
       "authority": "current harmonized data",
       "manuscript_destination": "appendix",
-      "disposition_reason": "Supporting observations, derived summaries or definitions for this block; no separately selected main-text anchor. Preserve checkpoint/view confounding and unequal sampling; not an isolated causal gene-view comparison.",
+      "disposition_reason": "Supporting observations, derived summaries or definitions for this block; no separately selected main-text anchor. Preserve checkpoint/view confounding and unequal sampling; also report the distinct later Zebra donor-unit sex controls without attributing them to specific genes.",
       "selected_main_anchor": null,
       "dictionary": {
         "anchor": "DATA_DICTIONARY.md#datasupp_taskmix_tradeoff__view_check_groupscsv",

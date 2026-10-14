@@ -33,7 +33,7 @@ BLOCKS = {
  'supp_prior_ablation': ('Ten-candidate prior screen and hard-tier checks', 'main; appendix', 'Report the positive filtering result alongside all neutral, rejected, unresolved and untestable candidates.'),
  'supp_rosmap': ('Provisional ROSMAP aggregates and label issues', 'main (provisional); appendix; later Methods', 'Keep provisional status explicit; no final biological claim before label corrections and the controlled-data analysis.'),
  'supp_stored_zeros': ('Stored-zero and reconstructed-count sensitivity', 'appendix', 'Retain exploratory sensitivity and support-replacement checks without changing the primary benchmark input.'),
- 'supp_taskmix_tradeoff': ('Task-mixture checkpoint and gene-view tradeoffs', 'appendix', 'Preserve checkpoint/view confounding and unequal sampling; not an isolated causal gene-view comparison.'),
+ 'supp_taskmix_tradeoff': ('Task-mixture checkpoint and gene-view tradeoffs', 'main; appendix', 'Preserve checkpoint/view confounding and unequal sampling; also report the distinct later Zebra donor-unit sex controls without attributing them to specific genes.'),
  'glossary': ('Model, panel, metric and vocabulary definitions', 'provenance; later Methods', 'Resolve the harmonized identifiers and metric meanings used by every evidence table.'),
 }
 BUILD_BLOCKS = {
@@ -58,7 +58,8 @@ MAIN_SELECTIONS = {
  'fig4__default_series.csv': 'Declared series and exposure marks underlying the overview; not a new performance observation.',
  'fig5__cases.csv': 'Six-case/two-model validation scope, correctly predicted cells and full-precision attribution.',
  'fig5__fidelity_by_case.csv': 'Within-cell correlation fidelity and relative error, summarized at the case/model level.',
- 'fig5__marker_ranks.csv': 'Illustrative IL7R and NKG7 ranking statements within the evaluated class-margin rankings.',
+ 'fig5__marker_ranks.csv': 'Selected PBMC and Zebra lineage-associated marker ranks; explicit non-hits and no universal recovery or enrichment claim.',
+ 'fig6__operator_prereg_cases.csv': 'Original frozen Zebra sex-classification score, distinct from later donor-unit tasks; also the operator-test provenance.',
  'fig5__deletion_curves.csv': 'PBMC top-50 query-gene deletion versus random expressed-gene margin reversals.',
  'fig5__stability.csv': 'Top-20 class-gene overlap across support configurations; not context-independent importance.',
  'fig5__cost_by_route.csv': 'Provisional O05 runtime/forward-equivalent statement; measured and extrapolated components remain explicit.',
@@ -73,6 +74,9 @@ MAIN_SELECTIONS = {
  'supp_prior_ablation__outcomes.csv': 'Ten-candidate screen, retained learnable-task filter, rejected gene-absence candidate and nonpositive outcomes.',
  'supp_prior_ablation__replicates.csv': 'Three task-stream effects underlying the retained proxy result; not model-seed replication.',
  'supp_prior_ablation__thresholds.csv': 'Frozen retention/noise and predictive-log-loss guard thresholds for the prior campaign.',
+ 'supp_taskmix_tradeoff__efast_cases.csv': 'Later Zebra sex positive control and broader sex-task AUC; also matched 8,192-HVG PBMC coarse/fine context for the hard subtype panel. Distinct task populations and no exported sex-gene attribution.',
+ 'supp_prior_ablation__hard_tier_cellpfn_values.csv': 'Eight exploratory PBMC subtype tasks: exported CellPFN means, without reconstructable draw-level uncertainty.',
+ 'supp_prior_ablation__hard_tier_tasks.csv': 'Post hoc definitions and class counts of PBMC sibling and finest-label tasks; no formal binary easy/hard stratum.',
  'supp_rosmap__auc.csv': 'Provisional O02 donor-level AUC and corrected repeated-split interval; pending label audit and rerun.',
  'supp_rosmap__label_issues.csv': 'Reason O02 remains provisional; no completed or independent disease validation.',
 }

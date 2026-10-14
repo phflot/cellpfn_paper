@@ -15,7 +15,7 @@ This document allocates every export block. The per-file decisions and reasons a
 | `supp_prior_ablation`: Ten-candidate prior screen and hard-tier checks | main; appendix | Report the positive filtering result alongside all neutral, rejected, unresolved and untestable candidates. |
 | `supp_rosmap`: Provisional ROSMAP aggregates and label issues | main (provisional); appendix; later Methods | Keep provisional status explicit; no final biological claim before label corrections and the controlled-data analysis. |
 | `supp_stored_zeros`: Stored-zero and reconstructed-count sensitivity | appendix | Retain exploratory sensitivity and support-replacement checks without changing the primary benchmark input. |
-| `supp_taskmix_tradeoff`: Task-mixture checkpoint and gene-view tradeoffs | appendix | Preserve checkpoint/view confounding and unequal sampling; not an isolated causal gene-view comparison. |
+| `supp_taskmix_tradeoff`: Task-mixture checkpoint and gene-view tradeoffs | main; appendix | Preserve checkpoint/view confounding and unequal sampling; also report the distinct later Zebra donor-unit sex controls without attributing them to specific genes. |
 | `glossary`: Model, panel, metric and vocabulary definitions | provenance; later Methods | Resolve the harmonized identifiers and metric meanings used by every evidence table. |
 
 ## Rules for retaining or excluding detail

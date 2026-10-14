@@ -73,7 +73,7 @@ def main():
     checked = external = unavailable = partial = 0
     failures = []
     ids = set()
-    for registry in ("results.csv", "task_exposure.csv"):
+    for registry in ("results.csv", "task_exposure.csv", "attribution_extension.csv"):
         for fact in read_csv(ROOT / "evidence" / registry):
             identifier = fact["id"]
             if identifier in ids:
