@@ -1,0 +1,7 @@
+{
+ "case": "pbmc_l1_b100_s0",
+ "arm": "G",
+ "seconds": 20.750166615005583,
+ "median_abs_dl_dd": 0.0006286478019319475,
+ "median_abs_dl_dqdet": 2.682260274887085
+}

@@ -1,0 +1,167 @@
+{
+  "id": "supp_figure9",
+  "title": "Recorded computational costs",
+  "claim": "Existing logs quantify selected computation while their scope prevents universal speed claims.",
+  "status": "ready",
+  "size_mm": [
+    180.0,
+    180.0
+  ],
+  "backend": "Python/Matplotlib",
+  "versions": {
+    "python": "3.13.13",
+    "matplotlib": "3.11.2",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3"
+  },
+  "source_hashes": {
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig3__finetune_cost.csv": "cfb8071ed58747469cfb5c8923f4cfa5652ab8f76492e351a865e19ca074301b",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig5__cost_by_route.csv": "9b6dee16f3170285db74d03f14f1c55c13e44af3068f30d40a62028b92eec26d",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig5__cost_kumo_estimated.csv": "8889f6dd257e25ac4950b133f33d1a0e1beb31a96ec51b34655bbc5a26f7d178"
+  },
+  "panel_source_data": {
+    "figures/source_data/supp_figure9/a.csv": "4a516d60fa206af4a89c9ed2ee309a7498cad168840779130a2bdd038fa57967",
+    "figures/source_data/supp_figure9/b.csv": "5c0fbace27a37e1fce9729a544901ccddd41fdf9869c457ca25b9aad6383022d",
+    "figures/source_data/supp_figure9/c.csv": "ed4ce16a3df83a5a35482620c4f2a1d953277a2bf8b765745b8f9c6de78fd3d5",
+    "figures/source_data/supp_figure9/d.csv": "74fedf1f362fbac10e6f067cbb2d4a450d781231056e8eac8ba3422b6038aeb5"
+  },
+  "panels": [
+    {
+      "letter": "a",
+      "claim": "Additional adaptation has recorded optimizer costs",
+      "source": "fig3__finetune_cost",
+      "filters": {
+        "finetune_arm": [
+          "c2b",
+          "k2b_s",
+          "k2b_l"
+        ]
+      },
+      "n": 12,
+      "unit": "training update",
+      "aggregation": "Cumulative measured per-update compute on one H100 80 GB",
+      "uncertainty": "One training seed; no uncertainty",
+      "availability": "Excludes vendor pretraining, evaluation, startup and checkpoint IO; waiting separate; +25% replay beyond plotted cellular tasks"
+    },
+    {
+      "letter": "b",
+      "claim": "Measured attribution timing depends on route and GPU load",
+      "source": "fig5__cost_by_route",
+      "filters": {
+        "model_id": "cellpfn_g1v2p",
+        "route": [
+          "dsloo_plus_correction",
+          "ig64"
+        ],
+        "status": "measured"
+      },
+      "n": 15,
+      "unit": "timed case",
+      "aggregation": "Seconds converted to minutes; original and available retimed DS-LOO shown",
+      "uncertainty": "No error bars; reruns are not independent model replicates",
+      "availability": "Shared GPU; explained cells and scope in source data; IG64 was not load-matched to every rerun"
+    },
+    {
+      "letter": "c",
+      "claim": "Full all-gene exact deletion cost is extrapolated",
+      "source": "fig5__cost_by_route",
+      "filters": {
+        "model_id": "cellpfn_g1v2p",
+        "route": "exact_ko_all_genes_explained_cells",
+        "status": "inferred"
+      },
+      "n": 9,
+      "unit": "case timing extrapolation",
+      "aggregation": "Single-gene timing scaled across all genes; seconds to hours",
+      "uncertainty": "No confidence interval",
+      "availability": "Full all-gene exact runs were not measured; original and load-matched timing contexts differ"
+    },
+    {
+      "letter": "d",
+      "claim": "Kumo knockout costs are modelled estimates",
+      "source": "fig5__cost_kumo_estimated",
+      "filters": {
+        "model_id": [
+          "kumo_small",
+          "kumo_large"
+        ],
+        "kumo_task": [
+          "pbmc_l1",
+          "pbmc_l2",
+          "zebra_dev",
+          "zebra_ood"
+        ],
+        "kumo_panel": [
+          "pbmc",
+          "zebra"
+        ],
+        "gene_view": "hvg2000",
+        "route": "A_library_as_is",
+        "status": "estimated"
+      },
+      "n": 8,
+      "unit": "case-family timing estimate",
+      "aggregation": "Recorded forward median multiplied by library-loop forward count",
+      "uncertainty": "No confidence interval",
+      "availability": "No full deletion implementation timed; differs from CellPFN in query counts, gene coverage, precision and GPU conditions"
+    }
+  ],
+  "geometry": [
+    {
+      "axis": 0,
+      "bounds_fraction": [
+        0.19,
+        0.63,
+        0.2821428571428572,
+        0.28
+      ],
+      "xlabel": "Additional cellular tasks (thousands)",
+      "ylabel": "Cumulative optimizer compute (h)",
+      "title": "Measured adaptation compute"
+    },
+    {
+      "axis": 1,
+      "bounds_fraction": [
+        0.697857142857143,
+        0.63,
+        0.28214285714285725,
+        0.28
+      ],
+      "xlabel": "Recorded elapsed time (min)",
+      "ylabel": "",
+      "title": "Measured attribution routes"
+    },
+    {
+      "axis": 2,
+      "bounds_fraction": [
+        0.19,
+        0.14,
+        0.2821428571428572,
+        0.27999999999999997
+      ],
+      "xlabel": "Extrapolated exact-deletion time (h)",
+      "ylabel": "",
+      "title": "Inferred all-gene exact deletion"
+    },
+    {
+      "axis": 3,
+      "bounds_fraction": [
+        0.697857142857143,
+        0.14,
+        0.28214285714285725,
+        0.27999999999999997
+      ],
+      "xlabel": "Estimated library-loop deletion time (h)",
+      "ylabel": "",
+      "title": "Estimated Kumo, 2k HVGs"
+    }
+  ],
+  "outputs": {
+    "figures/supp_figure9.pdf": "27e8ee0efd0b5761c4bdf55e61fee8dc7f7473e1be4830d5ad1caa020d6f5482",
+    "figures/supp_figure9.svg": "d044f364200362a27d424bef8cf3f2b92e30ab06a0a982e203dd2983444b03d9",
+    "figures/supp_figure9.png": "e2ce231dc35e392c3a42198f2f906b7eb86c5b4191703ecfdade99a0db1c8fea"
+  },
+  "extra": {
+    "timing_claim_status": "Provisional; shared-GPU and scope differences retained"
+  }
+}

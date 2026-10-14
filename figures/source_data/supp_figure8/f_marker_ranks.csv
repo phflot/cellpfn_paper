@@ -1,0 +1,40 @@
+case_id,model_id,class_label,marker,method_id,target,rank,n_genes,status,marker_set_origin,class_gene
+pbmc_l1_b10_s0,cellpfn_g1v2p,B,MS4A1,dsloo_corr_margin,margin,4,33538,ok,listed in code/aggregate.py MARKERS,B: MS4A1
+pbmc_l1_b10_s0,cellpfn_g1v2p,B,CD79A,dsloo_corr_margin,margin,6,33538,ok,listed in code/aggregate.py MARKERS,B: CD79A
+pbmc_l1_b10_s0,cellpfn_g1v2p,CD4 T,IL7R,dsloo_corr_margin,margin,88,33538,ok,listed in code/aggregate.py MARKERS,CD4 T: IL7R
+pbmc_l1_b10_s0,cellpfn_g1v2p,CD8 T,CD8A,dsloo_corr_margin,margin,2,33538,ok,listed in code/aggregate.py MARKERS,CD8 T: CD8A
+pbmc_l1_b10_s0,cellpfn_g1v2p,DC,FCER1A,dsloo_corr_margin,margin,1,33538,ok,listed in code/aggregate.py MARKERS,DC: FCER1A
+pbmc_l1_b10_s0,cellpfn_g1v2p,DC,CLEC10A,dsloo_corr_margin,margin,15,33538,ok,listed in code/aggregate.py MARKERS,DC: CLEC10A
+pbmc_l1_b10_s0,cellpfn_g1v2p,DC,LILRA4,dsloo_corr_margin,margin,659,33538,ok,listed in code/aggregate.py MARKERS,DC: LILRA4
+pbmc_l1_b10_s0,cellpfn_g1v2p,Mono,CD14,dsloo_corr_margin,margin,13,33538,ok,listed in code/aggregate.py MARKERS,Mono: CD14
+pbmc_l1_b10_s0,cellpfn_g1v2p,Mono,LYZ,dsloo_corr_margin,margin,17,33538,ok,listed in code/aggregate.py MARKERS,Mono: LYZ
+pbmc_l1_b10_s0,cellpfn_g1v2p,NK,NKG7,dsloo_corr_margin,margin,1,33538,ok,listed in code/aggregate.py MARKERS,NK: NKG7
+pbmc_l1_b10_s0,cellpfn_g1v2p,NK,GNLY,dsloo_corr_margin,margin,2,33538,ok,listed in code/aggregate.py MARKERS,NK: GNLY
+pbmc_l1_b10_s0,cellpfn_g1v2p,other,PPBP,dsloo_corr_margin,margin,2,33538,ok,listed in code/aggregate.py MARKERS,other: PPBP
+pbmc_l1_b10_s0,cellpfn_g1v2p,other T,CD3E,dsloo_corr_margin,margin,33487,33538,ok,listed in code/aggregate.py MARKERS,other T: CD3E
+pbmc_l1_b10_s1,cellpfn_g1v2p,B,MS4A1,dsloo_corr_margin,margin,8,33538,ok,listed in code/aggregate.py MARKERS,B: MS4A1
+pbmc_l1_b10_s1,cellpfn_g1v2p,B,CD79A,dsloo_corr_margin,margin,1,33538,ok,listed in code/aggregate.py MARKERS,B: CD79A
+pbmc_l1_b10_s1,cellpfn_g1v2p,CD4 T,IL7R,dsloo_corr_margin,margin,1,33538,ok,listed in code/aggregate.py MARKERS,CD4 T: IL7R
+pbmc_l1_b10_s1,cellpfn_g1v2p,CD8 T,CD8A,dsloo_corr_margin,margin,2,33538,ok,listed in code/aggregate.py MARKERS,CD8 T: CD8A
+pbmc_l1_b10_s1,cellpfn_g1v2p,DC,FCER1A,dsloo_corr_margin,margin,47,33538,ok,listed in code/aggregate.py MARKERS,DC: FCER1A
+pbmc_l1_b10_s1,cellpfn_g1v2p,DC,CLEC10A,dsloo_corr_margin,margin,4,33538,ok,listed in code/aggregate.py MARKERS,DC: CLEC10A
+pbmc_l1_b10_s1,cellpfn_g1v2p,DC,LILRA4,dsloo_corr_margin,margin,150,33538,ok,listed in code/aggregate.py MARKERS,DC: LILRA4
+pbmc_l1_b10_s1,cellpfn_g1v2p,Mono,CD14,dsloo_corr_margin,margin,28,33538,ok,listed in code/aggregate.py MARKERS,Mono: CD14
+pbmc_l1_b10_s1,cellpfn_g1v2p,Mono,LYZ,dsloo_corr_margin,margin,8,33538,ok,listed in code/aggregate.py MARKERS,Mono: LYZ
+pbmc_l1_b10_s1,cellpfn_g1v2p,NK,NKG7,dsloo_corr_margin,margin,2,33538,ok,listed in code/aggregate.py MARKERS,NK: NKG7
+pbmc_l1_b10_s1,cellpfn_g1v2p,NK,GNLY,dsloo_corr_margin,margin,1,33538,ok,listed in code/aggregate.py MARKERS,NK: GNLY
+pbmc_l1_b10_s1,cellpfn_g1v2p,other,PPBP,dsloo_corr_margin,margin,4,33538,ok,listed in code/aggregate.py MARKERS,other: PPBP
+pbmc_l1_b10_s1,cellpfn_g1v2p,other T,CD3E,dsloo_corr_margin,margin,1326,33538,ok,listed in code/aggregate.py MARKERS,other T: CD3E
+pbmc_l1_b100_s0,cellpfn_g1v2p,B,MS4A1,dsloo_corr_margin,margin,2,33538,ok,listed in code/aggregate.py MARKERS,B: MS4A1
+pbmc_l1_b100_s0,cellpfn_g1v2p,B,CD79A,dsloo_corr_margin,margin,1,33538,ok,listed in code/aggregate.py MARKERS,B: CD79A
+pbmc_l1_b100_s0,cellpfn_g1v2p,CD4 T,IL7R,dsloo_corr_margin,margin,2,33538,ok,listed in code/aggregate.py MARKERS,CD4 T: IL7R
+pbmc_l1_b100_s0,cellpfn_g1v2p,CD8 T,CD8A,dsloo_corr_margin,margin,2,33538,ok,listed in code/aggregate.py MARKERS,CD8 T: CD8A
+pbmc_l1_b100_s0,cellpfn_g1v2p,DC,FCER1A,dsloo_corr_margin,margin,1,33538,ok,listed in code/aggregate.py MARKERS,DC: FCER1A
+pbmc_l1_b100_s0,cellpfn_g1v2p,DC,CLEC10A,dsloo_corr_margin,margin,2,33538,ok,listed in code/aggregate.py MARKERS,DC: CLEC10A
+pbmc_l1_b100_s0,cellpfn_g1v2p,DC,LILRA4,dsloo_corr_margin,margin,4392,33538,ok,listed in code/aggregate.py MARKERS,DC: LILRA4
+pbmc_l1_b100_s0,cellpfn_g1v2p,Mono,CD14,dsloo_corr_margin,margin,3,33538,ok,listed in code/aggregate.py MARKERS,Mono: CD14
+pbmc_l1_b100_s0,cellpfn_g1v2p,Mono,LYZ,dsloo_corr_margin,margin,33354,33538,ok,listed in code/aggregate.py MARKERS,Mono: LYZ
+pbmc_l1_b100_s0,cellpfn_g1v2p,NK,NKG7,dsloo_corr_margin,margin,7,33538,ok,listed in code/aggregate.py MARKERS,NK: NKG7
+pbmc_l1_b100_s0,cellpfn_g1v2p,NK,GNLY,dsloo_corr_margin,margin,2,33538,ok,listed in code/aggregate.py MARKERS,NK: GNLY
+pbmc_l1_b100_s0,cellpfn_g1v2p,other,PPBP,dsloo_corr_margin,margin,3,33538,ok,listed in code/aggregate.py MARKERS,other: PPBP
+pbmc_l1_b100_s0,cellpfn_g1v2p,other T,CD3E,dsloo_corr_margin,margin,5,33538,ok,listed in code/aggregate.py MARKERS,other T: CD3E

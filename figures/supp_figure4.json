@@ -1,0 +1,206 @@
+{
+  "id": "supp_figure4",
+  "title": "Gene\u2013gene operator ablations and prespecified test",
+  "claim": "The trained operator gives context-dependent gains; its prespecified overall support criterion failed.",
+  "status": "ready",
+  "size_mm": [
+    180.0,
+    182.0
+  ],
+  "backend": "Python/Matplotlib",
+  "versions": {
+    "python": "3.13.13",
+    "matplotlib": "3.11.2",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3"
+  },
+  "source_hashes": {
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig6__operator_paired_by_view.csv": "e085c5819e7903ba0ec02d9c7cf5f9750e33edc33b17008d6168842bfa439d9d",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig6__operator_n3_test_wide.csv": "e322108bc79061d56435d34f7db332d96fa8e364d3292eff62899839c74f6bc2",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig6__operator_prereg_cases.csv": "5a06a8093f93a5f47d9b820f5da90d7b5984cf43a827b1ab266e73e9a4805ef5"
+  },
+  "panel_source_data": {
+    "figures/source_data/supp_figure4/a.csv": "4e7e787aedb42e993e012357aadac94f09bada9d6850adcf8b8746301069c621",
+    "figures/source_data/supp_figure4/b.csv": "d96fee8f33b8f75279c8dfc520cc19123379e128e0d68b255f40f2d3dc4a61b7",
+    "figures/source_data/supp_figure4/c.csv": "2db29d6a2c6537d33b82c70c33cb6bc70e994d2159c31159e269adff372b6e9d",
+    "figures/source_data/supp_figure4/d.csv": "e322108bc79061d56435d34f7db332d96fa8e364d3292eff62899839c74f6bc2",
+    "figures/source_data/supp_figure4/e.csv": "f688f82a86653a7519bd473836e1fb4ddf6ac53283889d181972f8e93e232634"
+  },
+  "panels": [
+    {
+      "letter": "a",
+      "claim": "Trained operator contrasts by support budget",
+      "source": "fig6__operator_paired_by_view",
+      "filters": {
+        "metric": "balanced_accuracy",
+        "gene_view": "all",
+        "contrasts": [
+          [
+            "cellpfn_g1v2p",
+            "cellpfn_c1v2p"
+          ],
+          [
+            "cellpfn_d1v2p",
+            "cellpfn_c1v2p"
+          ],
+          [
+            "cellpfn_g1v2p",
+            "cellpfn_d1v2p"
+          ]
+        ]
+      },
+      "n": "20 paired support draws per task/budget; one training seed per arm",
+      "uncertainty": "Exported paired 95% t intervals",
+      "note": "At one support per class the operator gate is zero; differences reflect trained-network differences."
+    },
+    {
+      "letter": "b",
+      "claim": "Trained operator contrasts by support budget",
+      "source": "fig6__operator_paired_by_view",
+      "filters": {
+        "metric": "balanced_accuracy",
+        "gene_view": "hvg8192",
+        "contrasts": [
+          [
+            "cellpfn_g1v2p",
+            "cellpfn_c1v2p"
+          ],
+          [
+            "cellpfn_d1v2p",
+            "cellpfn_c1v2p"
+          ],
+          [
+            "cellpfn_g1v2p",
+            "cellpfn_d1v2p"
+          ]
+        ]
+      },
+      "n": "20 paired support draws per task/budget; one training seed per arm",
+      "uncertainty": "Exported paired 95% t intervals",
+      "note": "At one support per class the operator gate is zero; differences reflect trained-network differences."
+    },
+    {
+      "letter": "c",
+      "claim": "Trained operator contrasts by support budget",
+      "source": "fig6__operator_paired_by_view",
+      "filters": {
+        "metric": "balanced_accuracy",
+        "gene_view": "hvg2000",
+        "contrasts": [
+          [
+            "cellpfn_g1v2p",
+            "cellpfn_c1v2p"
+          ],
+          [
+            "cellpfn_d1v2p",
+            "cellpfn_c1v2p"
+          ],
+          [
+            "cellpfn_g1v2p",
+            "cellpfn_d1v2p"
+          ]
+        ]
+      },
+      "n": "20 paired support draws per task/budget; one training seed per arm",
+      "uncertainty": "Exported paired 95% t intervals",
+      "note": "At one support per class the operator gate is zero; differences reflect trained-network differences."
+    },
+    {
+      "letter": "d",
+      "claim": "The prespecified operator test failed on coarse PBMC at ten supports",
+      "source": "fig6__operator_n3_test_wide",
+      "filters": {},
+      "n": "Three frozen support draws; PBMC four query donors; cortex donor bootstrap within study",
+      "uncertainty": "Original PBMC donor-enumeration interval ~80%; cortex 95%; not homogenized",
+      "numeric_anchors": {
+        "harm_delta": -1.5625,
+        "harm_threshold": 1.5
+      },
+      "verdict": "NOT SUPPORTED"
+    },
+    {
+      "letter": "e",
+      "claim": "Removing an operator at inference differs from training without it",
+      "source": "fig6__operator_prereg_cases",
+      "filters": {
+        "checkpoint_update": "96000",
+        "model_id": [
+          "cellpfn_g1v2p",
+          "cellpfn_g1v2p_rank0",
+          "cellpfn_g1v2p_opoff"
+        ]
+      },
+      "n": "Three frozen support draws per condition",
+      "uncertainty": "Mean and observed min\u2013max, with all draw values",
+      "exclusions": "Selected original primary examples; inference interventions are not separately trained diagonal/none arms."
+    }
+  ],
+  "geometry": [
+    {
+      "axis": 0,
+      "bounds_fraction": [
+        0.18,
+        0.5053225806451613,
+        0.21143617021276595,
+        0.3846774193548387
+      ],
+      "xlabel": "Paired change in accuracy (pp)",
+      "ylabel": "",
+      "title": "All genes"
+    },
+    {
+      "axis": 1,
+      "bounds_fraction": [
+        0.47178191489361704,
+        0.5053225806451613,
+        0.2114361702127659,
+        0.3846774193548387
+      ],
+      "xlabel": "Paired change in accuracy (pp)",
+      "ylabel": "",
+      "title": "Up to 8,192 HVGs"
+    },
+    {
+      "axis": 2,
+      "bounds_fraction": [
+        0.763563829787234,
+        0.5053225806451613,
+        0.21143617021276606,
+        0.3846774193548387
+      ],
+      "xlabel": "Paired change in accuracy (pp)",
+      "ylabel": "",
+      "title": "Up to 2k HVGs"
+    },
+    {
+      "axis": 3,
+      "bounds_fraction": [
+        0.18,
+        0.09499999999999997,
+        0.503218085106383,
+        0.2564516129032258
+      ],
+      "xlabel": "Full minus none, accuracy (pp)",
+      "ylabel": "",
+      "title": "Prespecified criterion: not supported"
+    },
+    {
+      "axis": 4,
+      "bounds_fraction": [
+        0.763563829787234,
+        0.09499999999999997,
+        0.21143617021276606,
+        0.2564516129032258
+      ],
+      "xlabel": "",
+      "ylabel": "Balanced accuracy (%)",
+      "title": "Inference-only interventions"
+    }
+  ],
+  "outputs": {
+    "figures/supp_figure4.pdf": "740d56180002cfaf8f882aa2b989cfc73dbaffc92dc526a00157c388b7823e8f",
+    "figures/supp_figure4.svg": "70cc48cde130d6f43b29ad6d00aee4a2e0df0875101200d8f94e3a52276e3b84",
+    "figures/supp_figure4.png": "9be33265e6013f61b3c851d35c858e921b3b270f9f4f15955b478bc738b4324c"
+  },
+  "extra": {}
+}

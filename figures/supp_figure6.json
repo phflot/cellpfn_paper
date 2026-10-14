@@ -1,0 +1,229 @@
+{
+  "id": "supp_figure6",
+  "title": "Sex and age evaluation boundaries",
+  "claim": "A strong sex positive control contrasts with near-chance broader sex performance and heterogeneous age results.",
+  "status": "ready",
+  "size_mm": [
+    180.0,
+    153.0
+  ],
+  "backend": "Python/Matplotlib",
+  "versions": {
+    "python": "3.13.13",
+    "matplotlib": "3.11.2",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3"
+  },
+  "source_hashes": {
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig6__operator_prereg_cases.csv": "5a06a8093f93a5f47d9b820f5da90d7b5984cf43a827b1ab266e73e9a4805ef5",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/supp_taskmix_tradeoff__efast_cases.csv": "f5a3fe3cc3a0259edb3cab1d332ca334a9a9c5f0376710eec605a65a74fded4f",
+    "/home/phflot/projects/ccb/hashprompt/paper/hashprompt/efast/tiers.py": "a86cb45f0de85d83cb6e4a2c3324a62061b963ca67fab398607c3446d401d220",
+    "/home/phflot/projects/ccb/hashprompt/paper/hashprompt/efast/metrics.py": "c36a6cd464816de34b48f0fb0da412a86c3cfcdec1c2277cfcaed11e34dbaec9"
+  },
+  "panel_source_data": {
+    "figures/source_data/supp_figure6/a.csv": "a240b0cfd515003d1a2673300dede76c7acb185d2a45e8ba85e7c12d41e0bc8b",
+    "figures/source_data/supp_figure6/b.csv": "a65e1c6f89f56b71afe2b1533d42d323e530fa5273bebe584be12442e30f1814",
+    "figures/source_data/supp_figure6/c.csv": "c2665b20e1812d2528730c83c3296b7093b042f51a2f601f49a7e572e30eb94d",
+    "figures/source_data/supp_figure6/d.csv": "bbc5b3fd5af5313ab0fbc96fb96f178b131019268aa188dcce7d953ef3333a51",
+    "figures/source_data/supp_figure6/e.csv": "d01c3c00ab81d1aa2b7d6da90c09ae2314687b46102a8efeb94898c8a0ac0641",
+    "figures/source_data/supp_figure6/f.csv": "ba29e826b4bb31cf498834973ef4b162deea7d3965e2cd537a5b6560116229b6"
+  },
+  "panels": [
+    {
+      "letter": "a",
+      "claim": "Original frozen sex case is a single GSM-separated example",
+      "source": "fig6__operator_prereg_cases",
+      "filters": {
+        "panel": "zebra_sex",
+        "model_id": "cellpfn_g1v2p",
+        "checkpoint_update": "96000",
+        "support_per_class": "100",
+        "draw": "0"
+      },
+      "n": "50 query cells, 10 query GSM samples, one support draw",
+      "uncertainty": "No interval available; points are observed values",
+      "note": "GSM sample separation does not establish distinct biological donors."
+    },
+    {
+      "letter": "b",
+      "claim": "XY-eligible positive control",
+      "source": "supp_taskmix_tradeoff__efast_cases",
+      "filters": {
+        "model_id": "cellpfn_g1v2p",
+        "checkpoint_update": "96000",
+        "efast_task": "zsex_xy",
+        "metric": "unit_level_auc"
+      },
+      "n": "10 repeated support/query splits at each support budget",
+      "uncertainty": "All split values plus mean/min\u2013max; no confidence interval",
+      "numeric_anchors": {
+        "4": 0.976530612244898,
+        "8": 0.9933673469387756,
+        "16": 1.0,
+        "32": 1.0
+      },
+      "note": "Persons where resolved; some Sayed units are age-by-sex GSM groups. Study sets and gene universes differ across sex tasks."
+    },
+    {
+      "letter": "c",
+      "claim": "Broader sex task",
+      "source": "supp_taskmix_tradeoff__efast_cases",
+      "filters": {
+        "model_id": "cellpfn_g1v2p",
+        "checkpoint_update": "96000",
+        "efast_task": "zsex",
+        "metric": "unit_level_auc"
+      },
+      "n": "10 repeated support/query splits at each support budget",
+      "uncertainty": "All split values plus mean/min\u2013max; no confidence interval",
+      "numeric_anchors": {
+        "4": 0.507421875,
+        "8": 0.544140625,
+        "16": 0.5375,
+        "32": 0.5390625
+      },
+      "note": "Persons where resolved; some Sayed units are age-by-sex GSM groups. Study sets and gene universes differ across sex tasks."
+    },
+    {
+      "letter": "d",
+      "claim": "Existing age tasks",
+      "source": "supp_taskmix_tradeoff__efast_cases",
+      "filters": {
+        "model_id": "cellpfn_g1v2p",
+        "checkpoint_update": "96000",
+        "efast_task": [
+          "zagedev",
+          "zage_sayed",
+          "zage_sayed",
+          "zage_gerrits"
+        ],
+        "metric": "unit_level_auc"
+      },
+      "n": "10 repeated support/query splits per task/budget",
+      "uncertainty": "All split values plus mean/min\u2013max; no confidence interval",
+      "note": "Herring age has four classes and macro one-vs-rest AUC; Sayed/Gerrits use within-study median age binary targets. NLL is not comparable across class counts without context."
+    },
+    {
+      "letter": "e",
+      "claim": "Cell-level age classification",
+      "source": "supp_taskmix_tradeoff__efast_cases",
+      "filters": {
+        "model_id": "cellpfn_g1v2p",
+        "checkpoint_update": "96000",
+        "efast_task": [
+          "zagedev",
+          "zage_sayed",
+          "zage_sayed",
+          "zage_gerrits"
+        ],
+        "metric": "balanced_accuracy"
+      },
+      "n": "10 repeated support/query splits per task/budget",
+      "uncertainty": "All split values plus mean/min\u2013max; no confidence interval",
+      "note": "Herring age has four classes and macro one-vs-rest AUC; Sayed/Gerrits use within-study median age binary targets. NLL is not comparable across class counts without context."
+    },
+    {
+      "letter": "f",
+      "claim": "Age prediction log loss",
+      "source": "supp_taskmix_tradeoff__efast_cases",
+      "filters": {
+        "model_id": "cellpfn_g1v2p",
+        "checkpoint_update": "96000",
+        "efast_task": [
+          "zagedev",
+          "zage_sayed",
+          "zage_sayed",
+          "zage_gerrits"
+        ],
+        "metric": "nll"
+      },
+      "n": "10 repeated support/query splits per task/budget",
+      "uncertainty": "All split values plus mean/min\u2013max; no confidence interval",
+      "note": "Herring age has four classes and macro one-vs-rest AUC; Sayed/Gerrits use within-study median age binary targets. NLL is not comparable across class counts without context."
+    }
+  ],
+  "geometry": [
+    {
+      "axis": 0,
+      "bounds_fraction": [
+        0.09,
+        0.6035647279549718,
+        0.2225,
+        0.2964352720450282
+      ],
+      "xlabel": "",
+      "ylabel": "Balanced accuracy (%)",
+      "title": "Original Sayed oligodendrocytes"
+    },
+    {
+      "axis": 1,
+      "bounds_fraction": [
+        0.42374999999999996,
+        0.6035647279549718,
+        0.22250000000000003,
+        0.2964352720450282
+      ],
+      "xlabel": "Support units per sex",
+      "ylabel": "Unit-level AUC",
+      "title": "XY-eligible positive control"
+    },
+    {
+      "axis": 2,
+      "bounds_fraction": [
+        0.7575,
+        0.6035647279549718,
+        0.22250000000000003,
+        0.2964352720450282
+      ],
+      "xlabel": "Support units per sex",
+      "ylabel": "Unit-level AUC",
+      "title": "Broader sex task"
+    },
+    {
+      "axis": 3,
+      "bounds_fraction": [
+        0.09,
+        0.10999999999999999,
+        0.2225,
+        0.3112570356472796
+      ],
+      "xlabel": "",
+      "ylabel": "Unit-level AUC",
+      "title": "Existing age tasks"
+    },
+    {
+      "axis": 4,
+      "bounds_fraction": [
+        0.42374999999999996,
+        0.10999999999999999,
+        0.22250000000000003,
+        0.3112570356472796
+      ],
+      "xlabel": "",
+      "ylabel": "Cell-level balanced accuracy (%)",
+      "title": "Cell-level age classification"
+    },
+    {
+      "axis": 5,
+      "bounds_fraction": [
+        0.7575,
+        0.10999999999999999,
+        0.22250000000000003,
+        0.3112570356472796
+      ],
+      "xlabel": "",
+      "ylabel": "Cell-level NLL (nats)",
+      "title": "Age prediction log loss"
+    }
+  ],
+  "outputs": {
+    "figures/supp_figure6.pdf": "336ef8ec95677f6372cf2aa550c17491ec5d35a6022ca7fa58e64ca9ce2014a1",
+    "figures/supp_figure6.svg": "b37a23b96c9de413ba282d440f66dc69c1c3a0a1a3eb26063d6b704f8dbe970b",
+    "figures/supp_figure6.png": "00b0965ab6da73acd829e3c7bc73dc6eb93566b55a837e218fac6c9ceee1d482"
+  },
+  "extra": {
+    "checkpoint_update": 96000,
+    "gene_view": "Up to 8192 HVGs for unit-level tasks; all 21158 processed genes in original sex case",
+    "exclusions": "No sex-specific attribution arrays are available. No provisional ROSMAP result is plotted."
+  }
+}

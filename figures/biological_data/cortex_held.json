@@ -1,0 +1,43 @@
+{
+  "case": {
+    "key": "zebra_ood_b10_s0",
+    "panel": "zebra",
+    "case": "zebra_closed_ood_development_b10_s0_p0",
+    "mode": "processed",
+    "markers": []
+  },
+  "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+  "source_hashes": {
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases/zebra/zebra_closed_ood_development_b10_s0_p0.json": "1a12eb292bb6df699cd36c78d43f8d000e69e3f356ac58fe1b581a477f646fb9",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases/zebra/zebra_closed_ood_development_b10_s0_p0.npz": "b8449f853de430e3da5a6db250e737d6cb8d1c4fa691f0f72981b1b0d528d883",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases_labels/zebra/zebra_closed_ood_development_b10_s0_p0.npz": "77193137b2c431ca4cb5bb7c26d4763518a041d06735ef399479d6df69633315",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_gene_r12k_eval_v2col_20261002/practical/zebra/G1v2p_096000/zebra_cell_type/zebra_closed_ood_development_b10_s0_p0/predictions.npz": "4d6e25b7fd2dc937f217f546ec2370c9e99c44eb0b4809aa298d9b21f7bfe878"
+  },
+  "preparation_script_sha256": "e6a5b5793070b309d11f13825fc052c46dbcb9ea11e719728df28063c5959bbc",
+  "query_cells": 7163,
+  "support_cells": 40,
+  "explained_cells": 0,
+  "balanced_accuracy_pct": 92.48697464255963,
+  "visualization_only": true,
+  "parameters": {
+    "hvg_flavor": "seurat",
+    "requested_hvgs": 2000,
+    "realized_hvgs": 2000,
+    "scale_clip": 10,
+    "pca_components": 50,
+    "neighbors": 15,
+    "umap_min_dist": 0.3,
+    "metric": "euclidean",
+    "seed": 42,
+    "fitting_population": "exact support/query union, without labels"
+  },
+  "versions": {
+    "python": "3.11.15",
+    "numpy": "2.4.4",
+    "pandas": "2.3.3",
+    "scanpy": "1.11.5",
+    "anndata": "0.12.10"
+  },
+  "output_sha256": "4ef74cc376acc75b5da6ae097a83be7de451973b7a661cbd219297197d2ac24e",
+  "seconds": 16.111608862003777
+}

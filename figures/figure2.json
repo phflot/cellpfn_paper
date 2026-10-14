@@ -1,0 +1,342 @@
+{
+  "id": "figure2",
+  "title": "Biological performance and cellular-prior transfer",
+  "claim": "The cellular prior supports compact inference and transfers to pretrained tabular models, with condition-specific tradeoffs.",
+  "status": "ready",
+  "size_mm": [
+    180.0,
+    175.0
+  ],
+  "backend": "Python/Matplotlib",
+  "versions": {
+    "python": "3.13.13",
+    "matplotlib": "3.11.2",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3"
+  },
+  "source_hashes": {
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig2__cases.csv": "23cc90e3a26c69a6f1d318c6dba1831775ae5e9787a4788e022add56a1df9034",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig3__generic_tables_cases.csv": "0c2f5a89f7a19b52aa1b7bc6a16a8ce9f73208feec7d5ab41ffd47769b79e18b",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig3__paired.csv": "4033b66f0d172aaa6cd2bf3c8795172886bccf6356e3a3614b045dfa4b01244e",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig3__trajectory.csv": "b4ba4253c69963bbf8d4c80e79a49c17174e4eda6a4581cf30886a63a39dc41d",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig4__cases.csv": "5d9e44533316aba609bf5f6fa6722c9fbc1386b737964ba73a4e65dec5ccbee0",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig1__lineage.csv": "0902ce749d25739b5fac308552025182712f55c4bdfa020ab0c594b26eccd79d",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig3__arms.csv": "990fac6c07c0381d25ecf94ee5b20b0e72424e1b5a9ca07b000d3552e8664186",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig2__exposure_marks.csv": "8136784541582b1e6fde5182f29e08e092aea69f021f01c05175afb68d607f15"
+  },
+  "panel_source_data": {
+    "figures/source_data/figure2/a.csv": "6fa3758017e1ab34a2315808ddb6f44d46f20da9419999cba1f886ffbf62c148",
+    "figures/source_data/figure2/b.csv": "e9c07739a9c7cbee10091fd856d0926d5fdb4465357e91213c84b9e2a4cc86b1",
+    "figures/source_data/figure2/c.csv": "48b89695cc80d338591dffcb94851b02ead13c360279d3d4aae73cd557877cbc",
+    "figures/source_data/figure2/d.csv": "1993b9769a16fce66dfed0be7c796edf96f9294af347378996147c3dca49a8be",
+    "figures/source_data/figure2/e.csv": "2f05efe99638d50d25ff4e5a4526a4050c46cd55a14ab58481ffe404f8d65613",
+    "figures/source_data/figure2/f.csv": "b67a741c48ce7ec6b0011afa431e6d5f355e59cc8e6d7a92eeb418d90d17c900",
+    "figures/source_data/figure2/g.csv": "9d105f5db899bcceaa4a7eeaaa4d66ae6273c53f4f63c654a1f8610fcbfca5cc"
+  },
+  "panels": [
+    {
+      "letter": "a",
+      "claim": "Support-dependent biological classification",
+      "source": "fig2__cases / fig4__cases",
+      "filters": {
+        "panel": "pbmc_l1",
+        "models": [
+          "cellpfn_g1v2p",
+          "tabicl_v2",
+          "kumo_large",
+          "geneformer_lr",
+          "scgpt_lr",
+          "woodbury32_lda"
+        ],
+        "views": {
+          "cellpfn_g1v2p": "all",
+          "tabicl_v2": "hvg2000",
+          "kumo_large": "hvg2000",
+          "geneformer_lr": "own_input",
+          "scgpt_lr": "own_input",
+          "woodbury32_lda": "all"
+        },
+        "metric": "balanced_accuracy",
+        "draw": [
+          "0",
+          "1",
+          "2"
+        ],
+        "status": "ok"
+      },
+      "n": 51,
+      "unit": "support draw",
+      "aggregation": "Mean within panel, budget and model",
+      "uncertainty": "Three raw support draws; no confidence interval",
+      "availability": "LDA one-shot unavailable; flags follow exposure audit"
+    },
+    {
+      "letter": "b",
+      "claim": "Support-dependent biological classification",
+      "source": "fig2__cases / fig4__cases",
+      "filters": {
+        "panel": "pbmc_l2",
+        "models": [
+          "cellpfn_g1v2p",
+          "tabicl_v2",
+          "kumo_large",
+          "geneformer_lr",
+          "scgpt_lr",
+          "woodbury32_lda"
+        ],
+        "views": {
+          "cellpfn_g1v2p": "all",
+          "tabicl_v2": "hvg2000",
+          "kumo_large": "hvg2000",
+          "geneformer_lr": "own_input",
+          "scgpt_lr": "own_input",
+          "woodbury32_lda": "all"
+        },
+        "metric": "balanced_accuracy",
+        "draw": [
+          "0",
+          "1",
+          "2"
+        ],
+        "status": "ok"
+      },
+      "n": 51,
+      "unit": "support draw",
+      "aggregation": "Mean within panel, budget and model",
+      "uncertainty": "Three raw support draws; no confidence interval",
+      "availability": "LDA one-shot unavailable; flags follow exposure audit"
+    },
+    {
+      "letter": "c",
+      "claim": "Support-dependent biological classification",
+      "source": "fig2__cases / fig4__cases",
+      "filters": {
+        "panel": "zebra_dev",
+        "models": [
+          "cellpfn_g1v2p",
+          "tabicl_v2",
+          "kumo_large",
+          "geneformer_lr",
+          "scgpt_lr",
+          "woodbury32_lda"
+        ],
+        "views": {
+          "cellpfn_g1v2p": "all",
+          "tabicl_v2": "hvg2000",
+          "kumo_large": "hvg2000",
+          "geneformer_lr": "own_input",
+          "scgpt_lr": "own_input",
+          "woodbury32_lda": "all"
+        },
+        "metric": "balanced_accuracy",
+        "draw": [
+          "0",
+          "1",
+          "2"
+        ],
+        "status": "ok"
+      },
+      "n": 51,
+      "unit": "support draw",
+      "aggregation": "Mean within panel, budget and model",
+      "uncertainty": "Three raw support draws; no confidence interval",
+      "availability": "LDA one-shot unavailable; flags follow exposure audit"
+    },
+    {
+      "letter": "d",
+      "claim": "Support-dependent biological classification",
+      "source": "fig2__cases / fig4__cases",
+      "filters": {
+        "panel": "zebra_ood",
+        "models": [
+          "cellpfn_g1v2p",
+          "tabicl_v2",
+          "kumo_large",
+          "geneformer_lr",
+          "scgpt_lr",
+          "woodbury32_lda"
+        ],
+        "views": {
+          "cellpfn_g1v2p": "all",
+          "tabicl_v2": "hvg2000",
+          "kumo_large": "hvg2000",
+          "geneformer_lr": "own_input",
+          "scgpt_lr": "own_input",
+          "woodbury32_lda": "all"
+        },
+        "metric": "balanced_accuracy",
+        "draw": [
+          "0",
+          "1",
+          "2"
+        ],
+        "status": "ok"
+      },
+      "n": 51,
+      "unit": "support draw",
+      "aggregation": "Mean within panel, budget and model",
+      "uncertainty": "Three raw support draws; no confidence interval",
+      "availability": "LDA one-shot unavailable; flags follow exposure audit"
+    },
+    {
+      "letter": "e",
+      "claim": "Cellular adaptation improves several conditions but can harm fine PBMC",
+      "source": "fig3__paired",
+      "filters": {
+        "model_id": [
+          "c2b40k",
+          "k2b_s40k",
+          "k2b_l40k"
+        ],
+        "gene_view": "hvg2000",
+        "metric": "balanced_accuracy",
+        "draw": [
+          "0",
+          "1",
+          "2"
+        ]
+      },
+      "n": 108,
+      "unit": "paired support draw",
+      "aggregation": "Mean matched-run delta over three draws per cell",
+      "uncertainty": "No inferential interval; exact signed values shown",
+      "availability": "Complete selected rows"
+    },
+    {
+      "letter": "f",
+      "claim": "Cellular and generic task streams produce different changes",
+      "source": "fig3__trajectory",
+      "filters": {
+        "gene_view": "hvg2000",
+        "finetune_arm": [
+          "c2b",
+          "k2b_s",
+          "k2b_l",
+          "p1_s43",
+          "p1_s44",
+          "p1_g"
+        ],
+        "scoring_run": [
+          "c2b_root",
+          "k2b_root",
+          "p1_root"
+        ]
+      },
+      "n": 18,
+      "unit": "checkpoint on one training seed",
+      "aggregation": "Equal mean of eight low-support panel\u2013budget conditions, each over three support draws",
+      "uncertainty": "Separate lines show task-stream repeats, not model-seed uncertainty",
+      "availability": "Generic control has unmatched row/column exposure; cellular curves exclude 25% additional replay count"
+    },
+    {
+      "letter": "g",
+      "claim": "Generic-task retention is incomplete",
+      "source": "fig3__generic_tables_cases",
+      "filters": {
+        "model_id": [
+          "tabicl_v2",
+          "c2b40k"
+        ],
+        "metric": "balanced_accuracy",
+        "status": "ok"
+      },
+      "n": 120,
+      "unit": "dataset/split",
+      "aggregation": "Large symbols: equal mean of four datasets and five splits; small dots: dataset means",
+      "uncertainty": "Dataset dots are heterogeneity, not confidence intervals",
+      "availability": "Complete selected rows"
+    }
+  ],
+  "geometry": [
+    {
+      "axis": 0,
+      "bounds_fraction": [
+        0.08,
+        0.6904644662685382,
+        0.17509727626459143,
+        0.1695355337314618
+      ],
+      "xlabel": "Supports per class",
+      "ylabel": "Balanced accuracy (%)",
+      "title": "PBMC coarse"
+    },
+    {
+      "axis": 1,
+      "bounds_fraction": [
+        0.3216342412451362,
+        0.6904644662685382,
+        0.17509727626459143,
+        0.1695355337314618
+      ],
+      "xlabel": "Supports per class",
+      "ylabel": "",
+      "title": "PBMC fine"
+    },
+    {
+      "axis": 2,
+      "bounds_fraction": [
+        0.5632684824902723,
+        0.6904644662685382,
+        0.17509727626459137,
+        0.1695355337314618
+      ],
+      "xlabel": "Supports per class",
+      "ylabel": "",
+      "title": "Cortex\ndevelopment"
+    },
+    {
+      "axis": 3,
+      "bounds_fraction": [
+        0.8049027237354084,
+        0.6904644662685382,
+        0.17509727626459148,
+        0.1695355337314618
+      ],
+      "xlabel": "Supports per class",
+      "ylabel": "",
+      "title": "Cortex\nheld studies"
+    },
+    {
+      "axis": 4,
+      "bounds_fraction": [
+        0.08,
+        0.4298148855253311,
+        0.8999999999999999,
+        0.128847005635911
+      ],
+      "xlabel": "Supports per class",
+      "ylabel": "",
+      "title": "Adapted \u2212 released balanced accuracy (percentage points)"
+    },
+    {
+      "axis": 5,
+      "bounds_fraction": [
+        0.08,
+        0.1200000000000001,
+        0.4167315175097276,
+        0.1780123104180349
+      ],
+      "xlabel": "Additional main-stream tasks (thousands)",
+      "ylabel": "Low-support change (pp)",
+      "title": "Adaptation trajectory and generic control"
+    },
+    {
+      "axis": 6,
+      "bounds_fraction": [
+        0.5632684824902723,
+        0.1200000000000001,
+        0.4167315175097276,
+        0.1780123104180349
+      ],
+      "xlabel": "Generic-table support budget",
+      "ylabel": "Balanced accuracy (%)",
+      "title": "Generic-task retention"
+    }
+  ],
+  "outputs": {
+    "figures/figure2.pdf": "c5b7280d899045b295254a745b5d251a7f49c1e69ddc15bfbc9edf6beeb77494",
+    "figures/figure2.svg": "ff5a8adb453c818fbf2915c62af667d018ecff6328a90b556d080092380d5db5",
+    "figures/figure2.png": "f18908341e126a0c0d01779ff96a86b4dbf7bd6963b3ad3753de05bd3c489bcf"
+  },
+  "extra": {}
+}

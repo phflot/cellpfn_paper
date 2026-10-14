@@ -1,0 +1,44 @@
+{
+ "smi_start": [
+  "1831003, 13056 MiB",
+  "1869301, 10394 MiB"
+ ],
+ "start_utc": "2026-10-08T14:41:41Z",
+ "exact_before": {
+  "exact_1gene_2pairs_s": [
+   1.7457039640285075,
+   1.7606378239579499
+  ],
+  "exact_1gene_all_QxK_s": 282.5255895960754,
+  "n_cells": 96,
+  "G": 21158,
+  "Q": 7769,
+  "K": 4
+ },
+ "dsloo_process_wall_s": 23.048794193193316,
+ "dsloo_s": 16.36506331525743,
+ "dsloo_corr_process_wall_s": 18.68754810327664,
+ "dsloo_corr_s": 6.2356710261665285,
+ "dsloo_sq_process_wall_s": 15.003962262999266,
+ "dsloo_sq_s": 8.375238773878664,
+ "exact_after": {
+  "exact_1gene_2pairs_s": [
+   1.7553741158917546,
+   1.7483665593899786
+  ],
+  "exact_1gene_all_QxK_s": 282.6541128847948,
+  "n_cells": 96,
+  "G": 21158,
+  "Q": 7769,
+  "K": 4
+ },
+ "smi_end": [
+  "1831003, 13066 MiB",
+  "1869301, 10394 MiB"
+ ],
+ "dsloo_plus_corr_in_exact_2pair_forwards": 12.900917297257823,
+ "dsloo_sq_in_exact_2pair_forwards": 4.780741242047097,
+ "exact_all_genes_2pairs_h": 10.29613127883485,
+ "exact_all_genes_naive_h": 1660.8433534847572,
+ "speedup_dsloo_corr_vs_exact_2pairs": 1640.0384183919446
+}

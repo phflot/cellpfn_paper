@@ -1,0 +1,247 @@
+{
+  "id": "supp_figure8",
+  "title": "Explanation fidelity, coverage and support sensitivity",
+  "claim": "Deletion explanations are faithful to selected model deletions while their coverage and marker ranks remain conditional on task context.",
+  "status": "ready",
+  "size_mm": [
+    180.0,
+    190.0
+  ],
+  "backend": "Python/Matplotlib",
+  "versions": {
+    "python": "3.13.13",
+    "matplotlib": "3.11.2",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3"
+  },
+  "source_hashes": {
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig5__fidelity_by_case.csv": "0ac3dc42a4d60dd6c8090d87d4d87dd91e819a03e99fe836b88354aa4901445e",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig5__fidelity_by_class.csv": "1dfe064bb070db582557accae39e9473772a478d502f77409e6072c80a8585a8",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig5__cases.csv": "efc146c73eda61dea4c703812d62d4d6189a7972d46194f3eeaf9868399cabff",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig5__stability.csv": "c896ce3d5beb685725f3c034c86c129d56587f26aaded1ba989a41e0509c7389",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig5__marker_ranks.csv": "7be1ffed4222b5aa224c1b6650c3643b2166817ff9412e1becad3659f4df083a",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig5__deletion_curves.csv": "9c8125ab20cbcb1e959eba7e2ab2c82dd5ddbff4ba6389129fefe282badf64dd"
+  },
+  "panel_source_data": {
+    "figures/source_data/supp_figure8/a_method_fidelity.csv": "4af2504c8b5f139e6c914648c39e51b3dcac9ba24321d8cf1f18b5bd30210910",
+    "figures/source_data/supp_figure8/b_explanation_coverage.csv": "74e23d089d80e56f33fc7f70839ce5c4776e2aa025e67c8ff5bfdc2127163957",
+    "figures/source_data/supp_figure8/c_class_fidelity.csv": "b257f90ee437e697489fd5fcd1105f7fe610395eabb178fbb1e1bd381ff37bcd",
+    "figures/source_data/supp_figure8/d_magnitude_error.csv": "728a4f8208ae1113bce16f4ae8bb7f9c5c1815e791eb08bd803632ccdc07f30e",
+    "figures/source_data/supp_figure8/e_support_stability.csv": "f1faf3738c347c88b8b08a732b48b0593aa79a13e55be10b2ec781273933fce5",
+    "figures/source_data/supp_figure8/f_marker_ranks.csv": "b3c5a1579f6675a20e2f833aab15ac9b6d5d6f533e32b7b9fe29727260c8cb9d",
+    "figures/source_data/supp_figure8/g_gene_subset_sensitivity.csv": "f0479a9eb028dd8c04d1674816356e04af953cb70610071cba843bfef45188cc",
+    "figures/source_data/supp_figure8/h_all_deletion_curves.csv": "d5d2638b506a651a79a9152113a93087dd22d2675f88b7d731725e5161333647"
+  },
+  "panels": [
+    {
+      "letter": "a",
+      "claim": "Fidelity depends on attribution method",
+      "sources": "fig5__fidelity_by_case",
+      "filters": "full operator; adversarial recomputation; evaluated_set; query_only; cell; spearman_rho",
+      "n": 48,
+      "unit": "case-method summaries",
+      "aggregation": "within-cell Spearman correlations summarized by class then case",
+      "exclusions": "none",
+      "uncertainty": "none; descriptive values"
+    },
+    {
+      "letter": "b",
+      "claim": "Explanations cover a selected correctly classified subset",
+      "sources": "fig5__cases",
+      "filters": {
+        "model_id": "cellpfn_g1v2p"
+      },
+      "n": 6,
+      "unit": "case configurations",
+      "aggregation": "explained cells / all queries",
+      "exclusions": "selected correct in both BF16 and FP32; cap 24/class (40 kidney)",
+      "uncertainty": "none; descriptive values"
+    },
+    {
+      "letter": "c",
+      "claim": "Class-specific fidelity includes the cortex immune compartment",
+      "sources": "fig5__fidelity_by_class",
+      "filters": "PBMC 100/0 and cortex 10/0; full operator; query_only; cell_median; rho_cell_q_median",
+      "n": 12,
+      "unit": "class summaries",
+      "aggregation": "median within-cell Spearman per class",
+      "exclusions": "none",
+      "uncertainty": "none; descriptive values"
+    },
+    {
+      "letter": "d",
+      "claim": "Magnitude fidelity with and without the operator",
+      "sources": "fig5__fidelity_by_case",
+      "filters": "DS-LOO corrected; evaluated_set; query_only; pooled_cells_x_genes; rel_err_corr; tables/dsloo_vs_exact.csv",
+      "n": 12,
+      "unit": "case-model summaries",
+      "aggregation": "relative L2 error computed per class, median across classes",
+      "exclusions": "none",
+      "uncertainty": "none; descriptive values"
+    },
+    {
+      "letter": "e",
+      "claim": "Ranked genes depend on support draw and support budget",
+      "sources": "fig5__stability",
+      "filters": "support_draw rows; DS-LOO corrected; full and no-operator models; PBMC 10/0 vs 10/1 or 100/0",
+      "n": 8,
+      "unit": "classes per comparison",
+      "aggregation": "points are classes; horizontal segment is exported class mean",
+      "exclusions": "none",
+      "uncertainty": "none; descriptive values"
+    },
+    {
+      "letter": "f",
+      "claim": "Recognizable markers include low-ranking counterexamples",
+      "sources": "fig5__marker_ranks",
+      "filters": {
+        "model_id": "cellpfn_g1v2p",
+        "method_id": "dsloo_corr_margin",
+        "target": "margin",
+        "markers": "all Table S8 PBMC checks"
+      },
+      "n": 39,
+      "unit": "case-class-marker rankings",
+      "aggregation": "class-mean signed-margin rank; log color scale; lower rank is higher importance",
+      "exclusions": "none",
+      "uncertainty": "none; descriptive values"
+    },
+    {
+      "letter": "g",
+      "claim": "Fidelity checked across selected and random validation subsets",
+      "sources": "fig5__fidelity_by_case",
+      "filters": "adversarial recomputation; full model; corrected DS-LOO and IG64; four exported gene subsets",
+      "n": 48,
+      "unit": "case-method-subset summaries",
+      "aggregation": "exported median cell/class rank correlations",
+      "exclusions": "Nonzero means |exact effect| > 1e-4 per cell; No extremes excludes low genes and DS-LOO extremes",
+      "uncertainty": "none; descriptive values"
+    },
+    {
+      "letter": "h",
+      "claim": "Cell-wise ranked deletion is compared with random expressed genes in every case",
+      "sources": "fig5__deletion_curves",
+      "filters": "full model; all classes; cell orderings; DS-LOO solid and pooled random dashed",
+      "n": 6,
+      "unit": "case configurations",
+      "aggregation": "fraction of selected cells with reversed original margin; random pools two curves/cell",
+      "exclusions": "none",
+      "uncertainty": "none; descriptive values"
+    }
+  ],
+  "geometry": [
+    {
+      "axis": 0,
+      "bounds_fraction": [
+        0.18,
+        0.8240768223483195,
+        0.2922794117647059,
+        0.1359231776516805
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "Attribution-method fidelity"
+    },
+    {
+      "axis": 1,
+      "bounds_fraction": [
+        0.682720588235294,
+        0.8240768223483195,
+        0.29227941176470584,
+        0.1359231776516805
+      ],
+      "xlabel": "Explained queries (%)",
+      "ylabel": "",
+      "title": "Selected correct-cell coverage"
+    },
+    {
+      "axis": 2,
+      "bounds_fraction": [
+        0.18,
+        0.5760170231340026,
+        0.2922794117647059,
+        0.1585770405936272
+      ],
+      "xlabel": "Median cell Spearman \u03c1",
+      "ylabel": "",
+      "title": "PBMC and cortex class fidelity"
+    },
+    {
+      "axis": 3,
+      "bounds_fraction": [
+        0.682720588235294,
+        0.5760170231340026,
+        0.29227941176470584,
+        0.1585770405936272
+      ],
+      "xlabel": "Relative L\u2082 error (%)",
+      "ylabel": "",
+      "title": "Finite-deletion magnitude error"
+    },
+    {
+      "axis": 4,
+      "bounds_fraction": [
+        0.18,
+        0.32795722391968574,
+        0.2922794117647059,
+        0.1585770405936272
+      ],
+      "xlabel": "",
+      "ylabel": "Top-20 gene overlap",
+      "title": "Support-context sensitivity"
+    },
+    {
+      "axis": 5,
+      "bounds_fraction": [
+        0.682720588235294,
+        0.32795722391968574,
+        0.29227941176470584,
+        0.1585770405936272
+      ],
+      "xlabel": "PBMC supports / draw",
+      "ylabel": "",
+      "title": "Marker ranks vary with context"
+    },
+    {
+      "axis": 6,
+      "bounds_fraction": [
+        0.18,
+        0.09499999999999997,
+        0.2922794117647059,
+        0.1434744652989961
+      ],
+      "xlabel": "",
+      "ylabel": "Case Spearman \u03c1",
+      "title": "Gene-set sensitivity"
+    },
+    {
+      "axis": 7,
+      "bounds_fraction": [
+        0.682720588235294,
+        0.09499999999999997,
+        0.29227941176470584,
+        0.1434744652989961
+      ],
+      "xlabel": "Genes deleted",
+      "ylabel": "Margin reversed (%)",
+      "title": "Deletion across case configurations"
+    }
+  ],
+  "outputs": {
+    "figures/supp_figure8.pdf": "c6dc89093959d3865032e159c39c071b2e8543e4e5a3db3ba577780fec0e1abc",
+    "figures/supp_figure8.svg": "fd8b95f2f70cc8e32474d66ec5013945fde9723cc75627cd4534d9872c4c8bf6",
+    "figures/supp_figure8.png": "5a49fd16315bb82f7c48e5019d3b4f0c5f098c2fa0bdd0d927fd80edffb9413f"
+  },
+  "extra": {
+    "case_key": {
+      "pbmc_l1_b10_s0": "PBMC 10 / 0",
+      "pbmc_l1_b10_s1": "PBMC 10 / 1",
+      "pbmc_l1_b100_s0": "PBMC 100 / 0",
+      "zebra_dev_b10_s0": "Cortex 10 / 0",
+      "kidney_core9_A_F0_count": "Kidney counts",
+      "kidney_core9_A_F0_processed": "Kidney processed"
+    },
+    "plot_semantics": "No confidence intervals; cases share cells and are not independent cohorts.",
+    "missing_validation": "No one-shot or held-study-cortex exact-deletion case."
+  }
+}

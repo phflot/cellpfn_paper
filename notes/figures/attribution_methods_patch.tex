@@ -1,0 +1,59 @@
+% Suggested replacement for the DS-LOO prose paragraph in methods_evaluation.tex.
+% Integrator should update M01 separately after cached-fixture reconciliation.
+DS-LOO approximates all query-gene deletions by updating the mean, root-mean-square, maximum and log-sum-exp pools when each gene's relation vector is replaced by its zero-expression counterpart. It also updates the gene--gene operator's class-distance scalars and reevaluates their learned pair embedding. A first-order expansion of the prediction head combines the pooled and pair-embedding changes. The own-gene whitening-channel change is retained, whereas changes propagated to other genes through off-diagonal whitening are omitted. An additional gradient calculation supplies first-order corrections for query read depth in count mode and for the detected-gene fraction. This is a gene-attribution sweep with head differentiation and normalization corrections; it is neither an ordinary prediction pass nor exact finite deletion. The technical supplement specifies the estimator, numerical stabilization and validation boundaries.
+
+% Suggested replacement for the pooled-statistic derivation in technical_evaluation.tex.
+\paragraph{Conditional pool and operator updates for DS-LOO.}
+For each query and its fixed predicted/runner-up classes, concatenate the pooled relation representations into $P$ and the additive operator pair embeddings into $h$, with fixed-pair margin $H(P,h)$. Holding query depth and detected fraction fixed, replace gene $g$'s relation vector $r_g$ by its zero-expression counterpart $r_g^0$. If $G$ genes are supplied, the changes in the componentwise mean and RMS are
+\[
+ \Delta P_g^{\mathrm{mean}}=\frac{r_g^0-r_g}{G},\qquad
+ \Delta P_g^{\mathrm{RMS}}=
+ \sqrt{\max\!\left(\frac{\sum_j r_j^2+(r_g^0)^2-r_g^2}{G}+\epsilon,0\right)}
+ -\sqrt{\frac{\sum_j r_j^2}{G}+\epsilon}.
+\]
+Top-two maxima and their indices give the exact maximum after replacement. Writing $L=\log\sum_j\exp(r_j)$ componentwise, the normalized log-sum-exp change is
+\[
+ \Delta P_g^{\mathrm{LSE}}=
+ \log\max\!\left[1-\exp(r_g-L)+\exp(r_g^0-L),10^{-30}\right].
+\]
+These replacements are exact conditional on the other relations and row-level scalars being fixed.
+
+For the full operator, let $v$ be the support-fitted inverse diagonal scale and
+\[
+ A=I-U\operatorname{diag}\!\left[1-(1+\lambda)^{-1/2}\right]U^{\mathsf T},
+ \qquad w_c=A\{v\odot(z-\mu_c)\}.
+\]
+At fixed depth, setting gene $g$ to zero changes its standardized coordinate by $\delta_g=z_g^0-z_g$. DS-LOO updates the own-gene whitening coordinate as
+\[
+ w_{cg}^{(g)}=w_{cg}+A_{gg}v_g\delta_g,
+\]
+then applies the original clipping to $[-8,8]$, scaling by $1/4$ and support gate. Changes $A_{jg}v_g\delta_g$ in other coordinates $j\ne g$ are omitted. Thus the low-rank operator introduces an explicit approximation beyond head linearization.
+
+The operator's scalar branch is updated separately. For every class $c$, its squared Mahalanobis distance changes according to
+\[
+ M_c^{(g)}=\max\!\left\{M_c+
+ 2\delta_g[\Sigma^{-1}(z-\mu_c)]_g+
+ \delta_g^2[\Sigma^{-1}]_{gg},0\right\}.
+\]
+The implementation recomputes the original across-class centering, normalization, $\operatorname{asinh}$ transformation, gate-weighted recentering and gated scalar features from these distances, then reevaluates the nonlinear pair multilayer perceptron to obtain $\Delta h_g$. The resulting uncorrected approximation is
+\[
+ \widehat I_g^{\mathrm{conditional}}
+ =-\nabla_P H(P,h)^{\mathsf T}\Delta P_g
+  -\nabla_h H(P,h)^{\mathsf T}\Delta h_g.
+\]
+The second term is absent in the no-operator model. Pair-embedding reevaluation is exact for the conditional scalar inputs; the final scorer remains linearized. Selected-gene exact head replay evaluates $H(P+\Delta P_g,h+\Delta h_g)$ and therefore isolates head linearization while retaining the conditional-state approximations.
+
+\paragraph{First-order depth and detection correction.}
+Let $d=\max(\sum_jx_j,1)$ in count mode and $q=G^{-1}\sum_j\mathbf1(x_j>0)$. With expression held fixed, differentiate the reconstructed fixed-pair margin with respect to independent depth and detection leaves at the original query. The implemented corrected estimate is
+\[
+ \widehat I_g^{\mathrm{corrected}}
+ =\widehat I_g^{\mathrm{conditional}}
+ +\mathbf1_{\mathrm{count}}\frac{\partial m}{\partial d}x_g
+ +\frac{\partial m}{\partial q}\frac{\mathbf1(x_g>0)}{G}.
+\]
+The depth derivative passes through the differentiable full query-side operator, including depth-induced changes to its whitening coordinates. It does not restore fixed-depth off-diagonal deletion effects. The correction is first order and does not eliminate nonlinear remainders or effects of clipping and the depth floor. Processed-mode inputs receive only the detected-fraction correction. Operator algebra uses float64, relation pools and head evaluation use float32, and TF32 is disabled.
+
+The recovered historical consistency checks matched the reconstructed pooled representation and base operator channels exactly for all twelve case--model combinations. The largest recorded final-logit discrepancy was $1.04\times10^{-3}$ for the reference model and $1.53\times10^{-4}$ for the no-operator model. These checks are recorded execution diagnostics; they do not make the finite-deletion approximation exact.
+
+% Suggested replacement/expansion of the validation aggregation sentence.
+For the principal corrected-DS-LOO comparison, Spearman correlations were computed across the original exact-deletion gene set for each cell, summarized by the median within each class and then the median over classes. Constant or undefined correlations were excluded by the recorded finite-value rule. Relative Euclidean error was computed within each class after flattening the gene-by-selected-cell arrays, $\|\widehat I-I\|_F/\|I\|_F$, and summarized by the median across classes. Additional DS-LOO-selected extreme genes augmented separately labelled uncorrected validation statistics; they did not augment the principal corrected statistic. Exact head replay and finite query deletion were kept distinct. Deletion-curve reversal denotes the original predicted-versus-runner-up margin becoming negative, not a recomputed global-argmax label change. Validation quantifies agreement with the specified finite-deletion target and supplies no analytical error bound or causal biological interpretation.

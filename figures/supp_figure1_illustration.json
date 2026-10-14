@@ -1,0 +1,94 @@
+{
+  "id": "supp_figure1_illustration",
+  "title": "Illustrative synthetic-cell RNA geometry",
+  "claim": "A single predefined cellular-prior draw shows cell-type and donor structure in RNA coordinates.",
+  "status": "ready",
+  "size_mm": [
+    180.0,
+    90.0
+  ],
+  "backend": "Python/Matplotlib",
+  "versions": {
+    "python": "3.13.13",
+    "matplotlib": "3.11.2",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3"
+  },
+  "source_hashes": {
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/synthetic_illustration.csv": "15a035d3dd7d15ce4964d20dc8f8c9142270ba6c17462ac12e15ad88c3bcd661",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/synthetic_illustration.json": "9dcdde3100b56668204756d8d821f62081995ef05f88e58697657e7ca112aa91",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/synthetic_illustration_genes.csv": "bee57e81b96dcec41dc53f31facc118ca8cac47862d0800415673f75c32b04e9"
+  },
+  "panel_source_data": {
+    "figures/source_data/supp_figure1_illustration/m_n.csv": "15a035d3dd7d15ce4964d20dc8f8c9142270ba6c17462ac12e15ad88c3bcd661"
+  },
+  "panels": [
+    {
+      "letter": "m",
+      "claim": "Cell-type structure",
+      "source": "synthetic_illustration.csv",
+      "n": "16384 generated cells from one synthetic bank",
+      "uncertainty": "Illustrative coordinates; no inferential estimate",
+      "color": "cell_type",
+      "geometry": "Same unsupervised RNA coordinates in both panels"
+    },
+    {
+      "letter": "n",
+      "claim": "Donor structure",
+      "source": "synthetic_illustration.csv",
+      "n": "16384 generated cells from one synthetic bank",
+      "uncertainty": "Illustrative coordinates; no inferential estimate",
+      "color": "donor",
+      "geometry": "Same unsupervised RNA coordinates in both panels"
+    }
+  ],
+  "geometry": [
+    {
+      "axis": 0,
+      "bounds_fraction": [
+        0.07,
+        0.20000000000000007,
+        0.4044444444444444,
+        0.6299999999999999
+      ],
+      "xlabel": "RNA UMAP 1",
+      "ylabel": "RNA UMAP 2",
+      "title": "Simulated cell type"
+    },
+    {
+      "axis": 1,
+      "bounds_fraction": [
+        0.5755555555555556,
+        0.20000000000000007,
+        0.4044444444444444,
+        0.6299999999999999
+      ],
+      "xlabel": "RNA UMAP 1",
+      "ylabel": "RNA UMAP 2",
+      "title": "Simulated donor"
+    }
+  ],
+  "outputs": {
+    "figures/supp_figure1_illustration.pdf": "48eb7f12e6e215456e8bb73bdda7d4fb56fd3e0c7e02c0b811bad427feae1fa0",
+    "figures/supp_figure1_illustration.svg": "ccb7016c6e3f27666fbc63192a169ee3bfe4e8b5d2170ca23796c118585bd479",
+    "figures/supp_figure1_illustration.png": "787a26e9babfc038ea362b3b28fd73113159d8fb6bd4c9c08370cca567a107dd"
+  },
+  "extra": {
+    "selection": "First mean_program lane in four-bank schedule with root_start=42, seed=42; no bank screening",
+    "bank_hash": "c5c54a81e5bb254b510514d820d4c7ff5deb9f0460ccdce059eb7b8adf98ab9e",
+    "visualization": {
+      "normalization": "log1p(CP10000)",
+      "hvg_flavor": "seurat",
+      "hvg_requested": 2000,
+      "hvg_realized": 2000,
+      "pca_components": 50,
+      "pca_solver": "arpack",
+      "neighbors": 15,
+      "metric": "euclidean",
+      "min_dist": 0.3,
+      "random_state": 42,
+      "labels_used_in_geometry": false
+    },
+    "exclusions": "None; every generated cell is displayed."
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "case": {
+    "key": "pbmc_l1_b100_s0",
+    "panel": "pbmc",
+    "case": "celltype.l1_b100_s0",
+    "mode": "count",
+    "markers": [
+      "IL7R",
+      "NKG7"
+    ]
+  },
+  "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+  "source_hashes": {
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases/pbmc/celltype.l1_b100_s0.json": "a76c9043da4737d0809766c29092685c7189a1ba17850e00c7de5db237ad2c6a",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases/pbmc/celltype.l1_b100_s0.npz": "9c565b9265838e13e715d4df1aee582d0bf29abab18e42f2b924ddb3e25a6c2f",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases_labels/pbmc/celltype.l1_b100_s0.npz": "3044b55d1d595a521656ee439d8bddad14b2da74481b756b2d2ed54155222d71",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_gene_r12k_eval_v2col_20261002/practical/pbmc/results/G1v2p_096000/celltype.l1_b100_s0/predictions.npz": "de914a837e54bf59b6bae533d6f30b3e4210712bca3ef36304f9505917244ba2",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_importance_20261008/results/pbmc_l1_b100_s0__G.npz": "134ba7565e019083995d7687df478ff9f1ee0fbbb6daea7ada12a3a1f1d26705",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_importance_20261008/results/pbmc_l1_b100_s0__G__dsloo_corr.npz": "d6005e184a4a7d906dcda5f4f792bc2781fc2493fcd8e02cc324ebcb6b69c8a6"
+  },
+  "preparation_script_sha256": "e6a5b5793070b309d11f13825fc052c46dbcb9ea11e719728df28063c5959bbc",
+  "query_cells": 320,
+  "support_cells": 800,
+  "explained_cells": 191,
+  "balanced_accuracy_pct": 92.1875,
+  "visualization_only": true,
+  "parameters": {
+    "hvg_flavor": "seurat",
+    "requested_hvgs": 2000,
+    "realized_hvgs": 2000,
+    "scale_clip": 10,
+    "pca_components": 50,
+    "neighbors": 15,
+    "umap_min_dist": 0.3,
+    "metric": "euclidean",
+    "seed": 42,
+    "fitting_population": "exact support/query union, without labels"
+  },
+  "versions": {
+    "python": "3.11.15",
+    "numpy": "2.4.4",
+    "pandas": "2.3.3",
+    "scanpy": "1.11.5",
+    "anndata": "0.12.10"
+  },
+  "output_sha256": "c7a3ca92914c7fab839e8cfe6d61f845a5e04e24efce0d2aed167481e7192ee5",
+  "seconds": 13.94561930600321
+}

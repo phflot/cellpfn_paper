@@ -1,0 +1,7 @@
+model_id,task_stream,window,quantity,category,value,unit,share
+cellpfn_gl1,learnable_only (learnable_v1),"tasks 384,000-399,999 (updates 96,001-100,000)",families,cell_type,12001.0,tasks,0.7500625
+cellpfn_gl1,learnable_only (learnable_v1),"tasks 384,000-399,999 (updates 96,001-100,000)",families,donor_identity,3999.0,tasks,0.2499375
+cellpfn_gs1,standard (parent_policy),"tasks 384,000-399,999 (updates 96,001-100,000)",families,cell_type,2398.0,tasks,0.149875
+cellpfn_gs1,standard (parent_policy),"tasks 384,000-399,999 (updates 96,001-100,000)",families,donor_identity,786.0,tasks,0.049125
+cellpfn_gs1,standard (parent_policy),"tasks 384,000-399,999 (updates 96,001-100,000)",families,metadata_binary,9651.0,tasks,0.6031875
+cellpfn_gs1,standard (parent_policy),"tasks 384,000-399,999 (updates 96,001-100,000)",families,metadata_categorical,3165.0,tasks,0.1978125

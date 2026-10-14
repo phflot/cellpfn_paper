@@ -1,0 +1,554 @@
+{
+  "id": "supp_figure7_maps",
+  "title": "Expanded biological maps",
+  "claim": "Reference labels, errors and study context can be examined on shared RNA coordinates without dropping query cells.",
+  "status": "ready",
+  "size_mm": [
+    180.0,
+    180.0
+  ],
+  "backend": "Python/Matplotlib",
+  "versions": {
+    "python": "3.13.13",
+    "matplotlib": "3.11.2",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3"
+  },
+  "source_hashes": {
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_fine.csv": "56e5797ea8f1a0cd6237fe10babf93cf338b609c725dcaae441be277b10afea8",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_fine.json": "1bcf0bbbd3ba55b098cfe1c39e8d390c43887a23febf71a146462bfb4ab53bb4",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_held.csv": "4ef74cc376acc75b5da6ae097a83be7de451973b7a661cbd219297197d2ac24e",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_held.json": "f70035de37ede1eb04b2cec6fb4b62a59f0a5fb2446f75601719d95f08e82e84",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.csv": "c7a3ca92914c7fab839e8cfe6d61f845a5e04e24efce0d2aed167481e7192ee5",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.json": "01b7504285c530d2a89eb924538dab238fd894f4a0cf38031a7af2000534812d",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.csv": "3d94ca4fd570ad7f5582dffd3f8e2304cdfbc820ddb73d1a15b3a4c7a291131a",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.json": "0a8a0c8b5451157e64956c21af366314a4750a6939f254af066983111374da7a"
+  },
+  "panel_source_data": {
+    "figures/source_data/supp_figure7/a.csv": "d57c4c847b1fa4038938d54d37dcc7b11dffbc1f319fb9b7e08aebeed1d4c8f1",
+    "figures/source_data/supp_figure7/b.csv": "b1ee5aecb274f1b66d6d6417040faff8d36356cb6bc91ebe79c60bbfe6913565",
+    "figures/source_data/supp_figure7/c.csv": "873067146733a6e4a2e58fd20c6d00fd50c61c43b680a8e95949d5662c3300c1",
+    "figures/source_data/supp_figure7/d.csv": "3b7c1022cecd5e0aa5c92a5d6b569dd1677267e3f671227264a61d4b49b01093",
+    "figures/source_data/supp_figure7/e.csv": "7e010fcccd29f4f10bfd56634f10660c50cc6780fae81b37bdba896cee5254b0",
+    "figures/source_data/supp_figure7/f.csv": "5bf09f6b51d64a07efd8bae11dda067c0f018346bfcd2f29e4231197a22eea47",
+    "figures/source_data/supp_figure7/g.csv": "38e55d201f647ac822b82f1d5ddd12282de365db7494fbc527c5df722482e9fb",
+    "figures/source_data/supp_figure7/h.csv": "4d874bfea309959f1452acc3b681e0db5de09bc90b8de654ff48e0ff5a5181e4"
+  },
+  "panels": [
+    {
+      "letter": "a",
+      "claim": "Reference and predicted labels share one RNA-derived geometry",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_fine.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_fine.json"
+      ],
+      "filters": {
+        "case": "pbmc_fine",
+        "variable": "true_label",
+        "population": "all query cells"
+      },
+      "n": 800,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "class_palette": {
+        "B intermediate": "#1f77b4",
+        "B memory": "#aec7e8",
+        "B naive": "#ff7f0e",
+        "CD14 Mono": "#ffbb78",
+        "CD16 Mono": "#2ca02c",
+        "CD4 Naive": "#98df8a",
+        "CD4 TCM": "#d62728",
+        "CD4 TEM": "#ff9896",
+        "CD8 Naive": "#9467bd",
+        "CD8 TCM": "#c5b0d5",
+        "CD8 TEM": "#8c564b",
+        "MAIT": "#c49c94",
+        "NK": "#e377c2",
+        "NK Proliferating": "#f7b6d2",
+        "NK_CD56bright": "#7f7f7f",
+        "Platelet": "#c7c7c7",
+        "Treg": "#bcbd22",
+        "cDC2": "#dbdb8d",
+        "gdT": "#17becf",
+        "pDC": "#9edae5"
+      },
+      "draw_order": "fixed seed-42 permutation for categorical maps; correct background then errors"
+    },
+    {
+      "letter": "b",
+      "claim": "Reference and predicted labels share one RNA-derived geometry",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_fine.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_fine.json"
+      ],
+      "filters": {
+        "case": "pbmc_fine",
+        "variable": "predicted_label",
+        "population": "all query cells"
+      },
+      "n": 800,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "class_palette": {
+        "B intermediate": "#1f77b4",
+        "B memory": "#aec7e8",
+        "B naive": "#ff7f0e",
+        "CD14 Mono": "#ffbb78",
+        "CD16 Mono": "#2ca02c",
+        "CD4 Naive": "#98df8a",
+        "CD4 TCM": "#d62728",
+        "CD4 TEM": "#ff9896",
+        "CD8 Naive": "#9467bd",
+        "CD8 TCM": "#c5b0d5",
+        "CD8 TEM": "#8c564b",
+        "MAIT": "#c49c94",
+        "NK": "#e377c2",
+        "NK Proliferating": "#f7b6d2",
+        "NK_CD56bright": "#7f7f7f",
+        "Platelet": "#c7c7c7",
+        "Treg": "#bcbd22",
+        "cDC2": "#dbdb8d",
+        "gdT": "#17becf",
+        "pDC": "#9edae5"
+      },
+      "draw_order": "fixed seed-42 permutation for categorical maps; correct background then errors"
+    },
+    {
+      "letter": "c",
+      "claim": "Reference and predicted labels share one RNA-derived geometry",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_fine.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_fine.json"
+      ],
+      "filters": {
+        "case": "pbmc_fine",
+        "variable": "correct",
+        "population": "all query cells"
+      },
+      "n": 800,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "class_palette": {
+        "B intermediate": "#1f77b4",
+        "B memory": "#aec7e8",
+        "B naive": "#ff7f0e",
+        "CD14 Mono": "#ffbb78",
+        "CD16 Mono": "#2ca02c",
+        "CD4 Naive": "#98df8a",
+        "CD4 TCM": "#d62728",
+        "CD4 TEM": "#ff9896",
+        "CD8 Naive": "#9467bd",
+        "CD8 TCM": "#c5b0d5",
+        "CD8 TEM": "#8c564b",
+        "MAIT": "#c49c94",
+        "NK": "#e377c2",
+        "NK Proliferating": "#f7b6d2",
+        "NK_CD56bright": "#7f7f7f",
+        "Platelet": "#c7c7c7",
+        "Treg": "#bcbd22",
+        "cDC2": "#dbdb8d",
+        "gdT": "#17becf",
+        "pDC": "#9edae5"
+      },
+      "draw_order": "fixed seed-42 permutation for categorical maps; correct background then errors"
+    },
+    {
+      "letter": "d",
+      "claim": "Reference and predicted labels share one RNA-derived geometry",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_held.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_held.json"
+      ],
+      "filters": {
+        "case": "cortex_held",
+        "variable": "true_label",
+        "population": "all query cells"
+      },
+      "n": 7163,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "class_palette": {
+        "Glia": "#826199",
+        "Immune cell": "#CC6E3B",
+        "Neural": "#167C80",
+        "Vascular cell": "#3F69A5"
+      },
+      "draw_order": "fixed seed-42 permutation for categorical maps; correct background then errors"
+    },
+    {
+      "letter": "e",
+      "claim": "Reference and predicted labels share one RNA-derived geometry",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_held.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_held.json"
+      ],
+      "filters": {
+        "case": "cortex_held",
+        "variable": "predicted_label",
+        "population": "all query cells"
+      },
+      "n": 7163,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "class_palette": {
+        "Glia": "#826199",
+        "Immune cell": "#CC6E3B",
+        "Neural": "#167C80",
+        "Vascular cell": "#3F69A5"
+      },
+      "draw_order": "fixed seed-42 permutation for categorical maps; correct background then errors"
+    },
+    {
+      "letter": "f",
+      "claim": "Reference and predicted labels share one RNA-derived geometry",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_held.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_held.json"
+      ],
+      "filters": {
+        "case": "cortex_held",
+        "variable": "correct",
+        "population": "all query cells"
+      },
+      "n": 7163,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "class_palette": {
+        "Glia": "#826199",
+        "Immune cell": "#CC6E3B",
+        "Neural": "#167C80",
+        "Vascular cell": "#3F69A5"
+      },
+      "draw_order": "fixed seed-42 permutation for categorical maps; correct background then errors"
+    },
+    {
+      "letter": "g",
+      "claim": "Biological maps retain donor/study context without integration",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.json"
+      ],
+      "filters": {
+        "case": "pbmc_main",
+        "variable": "donor",
+        "population": "all query cells"
+      },
+      "n": 320,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "category_palette": {
+        "P2": "#3F69A5",
+        "P4": "#167C80",
+        "P6": "#826199",
+        "P8": "#CC6E3B"
+      },
+      "draw_order": "fixed seed-42 permutation"
+    },
+    {
+      "letter": "h",
+      "claim": "Biological maps retain donor/study context without integration",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.json"
+      ],
+      "filters": {
+        "case": "cortex_main",
+        "variable": "study",
+        "population": "all query cells"
+      },
+      "n": 7769,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "category_palette": {
+        "Absinta 2021": "#3F69A5",
+        "Kihara 2022": "#167C80",
+        "Lim 2022": "#826199",
+        "Velmeshev 2019": "#CC6E3B"
+      },
+      "draw_order": "fixed seed-42 permutation"
+    }
+  ],
+  "geometry": [
+    {
+      "axis": 0,
+      "bounds_fraction": [
+        0.0796115839938751,
+        0.655,
+        0.21577683201224976,
+        0.235
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "Reference labels"
+    },
+    {
+      "axis": 1,
+      "bounds_fraction": [
+        0.39961158399387514,
+        0.655,
+        0.2157768320122498,
+        0.235
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "CellPFN predictions"
+    },
+    {
+      "axis": 2,
+      "bounds_fraction": [
+        0.719611583993875,
+        0.655,
+        0.21577683201224984,
+        0.235
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "Prediction errors"
+    },
+    {
+      "axis": 3,
+      "bounds_fraction": [
+        0.09267125278899171,
+        0.355,
+        0.1896574944220166,
+        0.235
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "Reference labels"
+    },
+    {
+      "axis": 4,
+      "bounds_fraction": [
+        0.4126712527889917,
+        0.355,
+        0.18965749442201668,
+        0.235
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "CellPFN predictions"
+    },
+    {
+      "axis": 5,
+      "bounds_fraction": [
+        0.7326712527889916,
+        0.355,
+        0.18965749442201663,
+        0.235
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "Prediction errors"
+    },
+    {
+      "axis": 6,
+      "bounds_fraction": [
+        0.055,
+        0.09627595497668152,
+        0.265,
+        0.16244809004663696
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "PBMC coarse: donor"
+    },
+    {
+      "axis": 7,
+      "bounds_fraction": [
+        0.42419329676664946,
+        0.075,
+        0.16661340646670114,
+        0.20499999999999996
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "Development cortex: study"
+    },
+    {
+      "axis": 8,
+      "bounds_fraction": [
+        0.695,
+        0.015,
+        0.28500000000000003,
+        0.27
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": ""
+    }
+  ],
+  "outputs": {
+    "figures/supp_figure7_maps.pdf": "d644db039d0b47a969b7f15b00f9988d6c45f927ad5905672ae5bb950e38aeab",
+    "figures/supp_figure7_maps.svg": "406cafb2e347d93db16058e43d3f1cddf109a8b0b8ba2cec1fc0285e2b60aa94",
+    "figures/supp_figure7_maps.png": "032ffd559ea74f64aab37a7fffd70f41ec2c090bd0d60b8bc75ee1011785941c"
+  },
+  "extra": {
+    "numbered_figure": "S7",
+    "continuation_asset": "page 1 of 2",
+    "fine_class_palette": {
+      "B intermediate": "#1f77b4",
+      "B memory": "#aec7e8",
+      "B naive": "#ff7f0e",
+      "CD14 Mono": "#ffbb78",
+      "CD16 Mono": "#2ca02c",
+      "CD4 Naive": "#98df8a",
+      "CD4 TCM": "#d62728",
+      "CD4 TEM": "#ff9896",
+      "CD8 Naive": "#9467bd",
+      "CD8 TCM": "#c5b0d5",
+      "CD8 TEM": "#8c564b",
+      "MAIT": "#c49c94",
+      "NK": "#e377c2",
+      "NK Proliferating": "#f7b6d2",
+      "NK_CD56bright": "#7f7f7f",
+      "Platelet": "#c7c7c7",
+      "Treg": "#bcbd22",
+      "cDC2": "#dbdb8d",
+      "gdT": "#17becf",
+      "pDC": "#9edae5"
+    },
+    "coarse_class_palette": {
+      "B": "#3F69A5",
+      "CD4 T": "#39957B",
+      "CD8 T": "#CC6E3B",
+      "DC": "#A67C00",
+      "Mono": "#826199",
+      "NK": "#BC5D80",
+      "other": "#727D49",
+      "other T": "#56A4B3",
+      "Glia": "#826199",
+      "Immune cell": "#CC6E3B",
+      "Neural": "#167C80",
+      "Vascular cell": "#3F69A5"
+    }
+  }
+}

@@ -1,0 +1,507 @@
+{
+  "id": "supp_figure1",
+  "title": "Simulator calibration and task diversity",
+  "claim": "The cellular prior broadens biological effect coverage but retains excessive separability and noise relative to calibrated public references.",
+  "status": "ready",
+  "size_mm": [
+    180.0,
+    184.0
+  ],
+  "backend": "Python/Matplotlib",
+  "versions": {
+    "python": "3.13.13",
+    "matplotlib": "3.11.2",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3"
+  },
+  "source_hashes": {
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig7__sim_vs_real_summary.csv": "bc3ab7cad3885b6eb102bb6be1ae27f664a917fc7b4e606e75f7f6fbfece98ca"
+  },
+  "panel_source_data": {
+    "figures/source_data/supp_figure1/a.csv": "b42e7e45f66f7fb504b3088ada9c69292f2a549168e105e406dc3d9c58b6277c",
+    "figures/source_data/supp_figure1/b.csv": "853fbf73cb1839be296ce89e1cfe6ff18df2d73f9832afd73c26b7b3b1205854",
+    "figures/source_data/supp_figure1/c.csv": "8040312c25343d63069d613e607c5853ec6fdd729beaf5e22c6262727860bded",
+    "figures/source_data/supp_figure1/d.csv": "26e9e2ebc725d034f2dfdb78f7b75ee98caed8af22b8c44195e53c0eecb22866",
+    "figures/source_data/supp_figure1/e.csv": "5c06f03324cbee62ab6a62fb7597d96429c35e080c1dda09378c598dcc51d12e",
+    "figures/source_data/supp_figure1/f.csv": "2ebebb5f7440376991bb9462dacb5ad734af78e0fbd4e05e6d01cc0bf8f37c5e",
+    "figures/source_data/supp_figure1/g.csv": "a8f53f1c18bdacb9aa9731ae4cecc8292dda5baceaada49749e55d74e21f656b",
+    "figures/source_data/supp_figure1/h.csv": "af6afb95bad2d126ad60aa70827d1e965120b143009edcd2d9b8d9ac534a77b5",
+    "figures/source_data/supp_figure1/i.csv": "c8072c4de765b0245285fe5ed883349fc189bcdb5f4a7bd37da75d81e89ad9b4",
+    "figures/source_data/supp_figure1/j.csv": "16ff17c6040f94907d2eedc50ae9f5dfb5babea5547a0ccb3fa00c9e2ad0a472",
+    "figures/source_data/supp_figure1/k.csv": "f1081ac9aac4598e9d6b51955dd36de79ab1b922dcc5869620ea2623b1c00f53",
+    "figures/source_data/supp_figure1/l.csv": "56297c9ba3eb552ef0a098d09d48a59524a931c86c0f40f4bf358fdb04d7f54d"
+  },
+  "panels": [
+    {
+      "letter": "a",
+      "claim": "Strongest class marker",
+      "source": "fig7__sim_vs_real_summary",
+      "filters": {
+        "effect": "A class: strongest marker per pair",
+        "prior_id": [
+          "v1_late",
+          "v2.2-B"
+        ]
+      },
+      "n": {
+        "real_units": 142,
+        "synthetic_units": {
+          "v1_late": 2016,
+          "v2.2-B": 2688
+        },
+        "synthetic_banks": {
+          "v1_late": 72,
+          "v2.2-B": 96
+        }
+      },
+      "uncertainty": "Synthetic median/IQR/5\u201395%; real median and min\u2013max; not confidence intervals",
+      "display_scale": 1,
+      "exclusions": "All real summaries exclude ROSMAP; fresh synthetic banks, not independent real validation"
+    },
+    {
+      "letter": "b",
+      "claim": "Large class effects",
+      "source": "fig7__sim_vs_real_summary",
+      "filters": {
+        "effect": "A class: share DE with |LFC|>2",
+        "prior_id": [
+          "v1_late",
+          "v2.2-B"
+        ]
+      },
+      "n": {
+        "real_units": 142,
+        "synthetic_units": {
+          "v1_late": 2016,
+          "v2.2-B": 2688
+        },
+        "synthetic_banks": {
+          "v1_late": 72,
+          "v2.2-B": 96
+        }
+      },
+      "uncertainty": "Synthetic median/IQR/5\u201395%; real median and min\u2013max; not confidence intervals",
+      "display_scale": 1,
+      "exclusions": "All real summaries exclude ROSMAP; fresh synthetic banks, not independent real validation"
+    },
+    {
+      "letter": "c",
+      "claim": "Task separability: 10 supports",
+      "source": "fig7__sim_vs_real_summary",
+      "filters": {
+        "effect": "A class: separability BA B10, K-matched (real K8, 64 cells; primary)",
+        "prior_id": [
+          "v1_late",
+          "v2.2-B"
+        ]
+      },
+      "n": {
+        "real_units": 8,
+        "synthetic_units": {
+          "v1_late": 72,
+          "v2.2-B": 96
+        },
+        "synthetic_banks": {
+          "v1_late": 72,
+          "v2.2-B": 96
+        }
+      },
+      "uncertainty": "Synthetic median/IQR/5\u201395%; real median and min\u2013max; not confidence intervals",
+      "display_scale": 1,
+      "exclusions": "All real summaries exclude ROSMAP; fresh synthetic banks, not independent real validation"
+    },
+    {
+      "letter": "d",
+      "claim": "Task separability: 100 supports",
+      "source": "fig7__sim_vs_real_summary",
+      "filters": {
+        "effect": "A class: separability BA B100, K-matched (real K8, 64 cells; primary)",
+        "prior_id": [
+          "v1_late",
+          "v2.2-B"
+        ]
+      },
+      "n": {
+        "real_units": 8,
+        "synthetic_units": {
+          "v1_late": 72,
+          "v2.2-B": 96
+        },
+        "synthetic_banks": {
+          "v1_late": 72,
+          "v2.2-B": 96
+        }
+      },
+      "uncertainty": "Synthetic median/IQR/5\u201395%; real median and min\u2013max; not confidence intervals",
+      "display_scale": 1,
+      "exclusions": "All real summaries exclude ROSMAP; fresh synthetic banks, not independent real validation"
+    },
+    {
+      "letter": "e",
+      "claim": "Within-study donor variation",
+      "source": "fig7__sim_vs_real_summary",
+      "filters": {
+        "effect": "B donor: SD within study, 4x2 design (primary)",
+        "prior_id": [
+          "v1_late",
+          "v2.2-B"
+        ]
+      },
+      "n": {
+        "real_units": 11,
+        "synthetic_units": {
+          "v1_late": 768,
+          "v2.2-B": 1024
+        },
+        "synthetic_banks": {
+          "v1_late": 96,
+          "v2.2-B": 128
+        }
+      },
+      "uncertainty": "Synthetic median/IQR/5\u201395%; real median and min\u2013max; not confidence intervals",
+      "display_scale": 1,
+      "exclusions": "All real summaries exclude ROSMAP; fresh synthetic banks, not independent real validation"
+    },
+    {
+      "letter": "f",
+      "claim": "Large donor on-switches",
+      "source": "fig7__sim_vs_real_summary",
+      "filters": {
+        "effect": "B donor: >=10x on-switches (4x2)",
+        "prior_id": [
+          "v1_late",
+          "v2.2-B"
+        ]
+      },
+      "n": {
+        "real_units": 11,
+        "synthetic_units": {
+          "v1_late": 768,
+          "v2.2-B": 1024
+        },
+        "synthetic_banks": {
+          "v1_late": 96,
+          "v2.2-B": 128
+        }
+      },
+      "uncertainty": "Synthetic median/IQR/5\u201395%; real median and min\u2013max; not confidence intervals",
+      "display_scale": 1,
+      "exclusions": "All real summaries exclude ROSMAP; fresh synthetic banks, not independent real validation"
+    },
+    {
+      "letter": "g",
+      "claim": "Donor silencing",
+      "source": "fig7__sim_vs_real_summary",
+      "filters": {
+        "effect": "B donor: silenced pairs, 4x2 design (primary)",
+        "prior_id": [
+          "v1_late",
+          "v2.2-B"
+        ]
+      },
+      "n": {
+        "real_units": 11,
+        "synthetic_units": {
+          "v1_late": 768,
+          "v2.2-B": 1024
+        },
+        "synthetic_banks": {
+          "v1_late": 96,
+          "v2.2-B": 128
+        }
+      },
+      "uncertainty": "Synthetic median/IQR/5\u201395%; real median and min\u2013max; not confidence intervals",
+      "display_scale": 1,
+      "exclusions": "All real summaries exclude ROSMAP; fresh synthetic banks, not independent real validation"
+    },
+    {
+      "letter": "h",
+      "claim": "Count overdispersion",
+      "source": "fig7__sim_vs_real_summary",
+      "filters": {
+        "effect": "D marginal: NB phi",
+        "prior_id": [
+          "v1_late",
+          "v2.2-B"
+        ]
+      },
+      "n": {
+        "real_units": 79,
+        "synthetic_units": {
+          "v1_late": 768,
+          "v2.2-B": 1024
+        },
+        "synthetic_banks": {
+          "v1_late": 96,
+          "v2.2-B": 128
+        }
+      },
+      "uncertainty": "Synthetic median/IQR/5\u201395%; real median and min\u2013max; not confidence intervals",
+      "display_scale": 1,
+      "exclusions": "All real summaries exclude ROSMAP; fresh synthetic banks, not independent real validation"
+    },
+    {
+      "letter": "i",
+      "claim": "Excess zeros",
+      "source": "fig7__sim_vs_real_summary",
+      "filters": {
+        "effect": "D marginal: zero excess",
+        "prior_id": [
+          "v1_late",
+          "v2.2-B"
+        ]
+      },
+      "n": {
+        "real_units": 79,
+        "synthetic_units": {
+          "v1_late": 768,
+          "v2.2-B": 1024
+        },
+        "synthetic_banks": {
+          "v1_late": 96,
+          "v2.2-B": 128
+        }
+      },
+      "uncertainty": "Synthetic median/IQR/5\u201395%; real median and min\u2013max; not confidence intervals",
+      "display_scale": 1,
+      "exclusions": "All real summaries exclude ROSMAP; fresh synthetic banks, not independent real validation"
+    },
+    {
+      "letter": "j",
+      "claim": "Gene detection",
+      "source": "fig7__sim_vs_real_summary",
+      "filters": {
+        "effect": "D marginal: detected-gene fraction",
+        "prior_id": [
+          "v1_late",
+          "v2.2-B"
+        ]
+      },
+      "n": {
+        "real_units": 79,
+        "synthetic_units": {
+          "v1_late": 768,
+          "v2.2-B": 1024
+        },
+        "synthetic_banks": {
+          "v1_late": 96,
+          "v2.2-B": 128
+        }
+      },
+      "uncertainty": "Synthetic median/IQR/5\u201395%; real median and min\u2013max; not confidence intervals",
+      "display_scale": 1,
+      "exclusions": "All real summaries exclude ROSMAP; fresh synthetic banks, not independent real validation"
+    },
+    {
+      "letter": "k",
+      "claim": "Gene\u2013gene signal: 10 supports",
+      "source": "fig7__sim_vs_real_summary",
+      "filters": {
+        "effect": "E gene-gene: LDA gain B10 (full - diagonal), K-matched (real K8, 64 cells)",
+        "prior_id": [
+          "v1_late",
+          "v2.2-B"
+        ]
+      },
+      "n": {
+        "real_units": 8,
+        "synthetic_units": {
+          "v1_late": 72,
+          "v2.2-B": 96
+        },
+        "synthetic_banks": {
+          "v1_late": 72,
+          "v2.2-B": 96
+        }
+      },
+      "uncertainty": "Synthetic median/IQR/5\u201395%; real median and min\u2013max; not confidence intervals",
+      "display_scale": 100,
+      "exclusions": "All real summaries exclude ROSMAP; fresh synthetic banks, not independent real validation"
+    },
+    {
+      "letter": "l",
+      "claim": "Gene\u2013gene signal: 100 supports",
+      "source": "fig7__sim_vs_real_summary",
+      "filters": {
+        "effect": "E gene-gene: LDA gain B100 (full - diagonal), K-matched (real K8, 64 cells)",
+        "prior_id": [
+          "v1_late",
+          "v2.2-B"
+        ]
+      },
+      "n": {
+        "real_units": 8,
+        "synthetic_units": {
+          "v1_late": 72,
+          "v2.2-B": 96
+        },
+        "synthetic_banks": {
+          "v1_late": 72,
+          "v2.2-B": 96
+        }
+      },
+      "uncertainty": "Synthetic median/IQR/5\u201395%; real median and min\u2013max; not confidence intervals",
+      "display_scale": 100,
+      "exclusions": "All real summaries exclude ROSMAP; fresh synthetic banks, not independent real validation"
+    }
+  ],
+  "geometry": [
+    {
+      "axis": 0,
+      "bounds_fraction": [
+        0.135,
+        0.7563043478260869,
+        0.20609756097560983,
+        0.10869565217391308
+      ],
+      "xlabel": "Absolute log2 fold change",
+      "ylabel": "",
+      "title": "Strongest class marker"
+    },
+    {
+      "axis": 1,
+      "bounds_fraction": [
+        0.4544512195121952,
+        0.7563043478260869,
+        0.20609756097560977,
+        0.10869565217391308
+      ],
+      "xlabel": "Fraction of genes",
+      "ylabel": "",
+      "title": "Large class effects"
+    },
+    {
+      "axis": 2,
+      "bounds_fraction": [
+        0.7739024390243904,
+        0.7563043478260869,
+        0.20609756097560983,
+        0.10869565217391308
+      ],
+      "xlabel": "Chance-adjusted accuracy",
+      "ylabel": "",
+      "title": "Task separability: 10 supports"
+    },
+    {
+      "axis": 3,
+      "bounds_fraction": [
+        0.135,
+        0.5258695652173913,
+        0.20609756097560983,
+        0.10869565217391308
+      ],
+      "xlabel": "Chance-adjusted accuracy",
+      "ylabel": "",
+      "title": "Task separability: 100 supports"
+    },
+    {
+      "axis": 4,
+      "bounds_fraction": [
+        0.4544512195121952,
+        0.5258695652173913,
+        0.20609756097560977,
+        0.10869565217391308
+      ],
+      "xlabel": "SD (log2 expression)",
+      "ylabel": "",
+      "title": "Within-study donor variation"
+    },
+    {
+      "axis": 5,
+      "bounds_fraction": [
+        0.7739024390243904,
+        0.5258695652173913,
+        0.20609756097560983,
+        0.10869565217391308
+      ],
+      "xlabel": "Fraction of genes",
+      "ylabel": "",
+      "title": "Large donor on-switches"
+    },
+    {
+      "axis": 6,
+      "bounds_fraction": [
+        0.135,
+        0.2954347826086956,
+        0.20609756097560983,
+        0.10869565217391308
+      ],
+      "xlabel": "Fraction of gene\u2013donor pairs",
+      "ylabel": "",
+      "title": "Donor silencing"
+    },
+    {
+      "axis": 7,
+      "bounds_fraction": [
+        0.4544512195121952,
+        0.2954347826086956,
+        0.20609756097560977,
+        0.10869565217391308
+      ],
+      "xlabel": "Negative-binomial dispersion",
+      "ylabel": "",
+      "title": "Count overdispersion"
+    },
+    {
+      "axis": 8,
+      "bounds_fraction": [
+        0.7739024390243904,
+        0.2954347826086956,
+        0.20609756097560983,
+        0.10869565217391308
+      ],
+      "xlabel": "Fraction",
+      "ylabel": "",
+      "title": "Excess zeros"
+    },
+    {
+      "axis": 9,
+      "bounds_fraction": [
+        0.135,
+        0.06499999999999995,
+        0.20609756097560983,
+        0.10869565217391308
+      ],
+      "xlabel": "Fraction of genes",
+      "ylabel": "",
+      "title": "Gene detection"
+    },
+    {
+      "axis": 10,
+      "bounds_fraction": [
+        0.4544512195121952,
+        0.06499999999999995,
+        0.20609756097560977,
+        0.10869565217391308
+      ],
+      "xlabel": "Full minus diagonal LDA (pp)",
+      "ylabel": "",
+      "title": "Gene\u2013gene signal: 10 supports"
+    },
+    {
+      "axis": 11,
+      "bounds_fraction": [
+        0.7739024390243904,
+        0.06499999999999995,
+        0.20609756097560983,
+        0.10869565217391308
+      ],
+      "xlabel": "Full minus diagonal LDA (pp)",
+      "ylabel": "",
+      "title": "Gene\u2013gene signal: 100 supports"
+    }
+  ],
+  "outputs": {
+    "figures/supp_figure1.pdf": "0338e44afd4310686757c882db02fe9ef30d070f7d7b69601107677f4d5c018a",
+    "figures/supp_figure1.svg": "29c0967e6b3757bdd5ab1656af55522f39ea068593b86faacbb96c2e7c8f4f3f",
+    "figures/supp_figure1.png": "bb640970c7ec4cdb350f2b30e5ee059e54b784784b9aed6a80980da10565caac"
+  },
+  "extra": {
+    "archetype": "quantitative grid",
+    "numeric_anchors": {
+      "strongest_marker_cellular_median": 6.232146276525665
+    },
+    "real_reference": "PBMC, human ZEBRA cortex and kidney; calibration and evaluation datasets overlap",
+    "training_exposure": "Cellular prior supplies the final 64000 of 384000 scheduled CellPFN episodes; all cellular adaptation episodes use it."
+  }
+}

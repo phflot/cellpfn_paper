@@ -1,0 +1,3 @@
+model_id,model_label,family,operator_mode,inference_control,arm_role,checkpoint_update,source_row_id,panel,label_set,n_classes,support_per_class,draw,fold,gene_view,input_mode,feature_panel,scoring_unit,n_query,ba_pct,nll,status,note
+cellpfn_g1v2p,CellPFN G1v2' 12K,cellpfn,full,none,ablation_arm,96000,cellpfn_G1v2p_12K,zebra_sex,sex (oligodendrocytes),2,100,0,,all,,,cell,,100.0,0.40867,ok,
+cellpfn_g1v2p,CellPFN G1v2' 12K,cellpfn,full,none,ablation_arm,96000,cellpfn_G1v2p_12K,zebra_sex,sex (oligodendrocytes),2,100,0,,all,,,gsm,,100.0,0.39845,ok,

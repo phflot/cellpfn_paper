@@ -1,0 +1,78 @@
+{
+ "case": "zebra_dev_b10_s0",
+ "arm": "C",
+ "info": {
+  "arm": "C",
+  "label": "C1v2p_096000",
+  "checkpoint": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_gene_r12k_v22_20261001/training/C1v2p/checkpoints/checkpoint_96000.pt",
+  "sha256": "cee5126d995953c65db5819171becf54b2aca59aadd6fba0cbd055c619f2e763",
+  "gene_gene_operator": "none",
+  "parameter_count": 11925345,
+  "model_source_sha256": "031adb6a9b11295f23978c0f8574c4325f6cddc4b4bb43a69b1e893aad50d1af",
+  "dependencies_checked": [
+   "aligned_class_inducing_pfn",
+   "aligned_prototype_pfn",
+   "embedding",
+   "episodes",
+   "gene_gene_operator",
+   "program_pfn"
+  ]
+ },
+ "stored": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_gene_r12k_eval_v2col_20261002/practical/zebra/C1v2p_096000/zebra_cell_type/zebra_closed_development_b10_s0_p0/predictions.npz",
+ "diag": {
+  "ig16_completeness_margin_median_relgap": 0.612459659576416,
+  "ig16_completeness_logit_median_relgap": 0.7995805740356445,
+  "ko_noise_floor_margin_maxabs": 0.0,
+  "eval_margin_vs_selected_baseline_maxabs": 0.0
+ },
+ "timing": {
+  "fit_support": 0.40150624234229326,
+  "baseline_logits_selected": 1.3561751642264426,
+  "gxi": 2.2934157587587833,
+  "ig16": 32.70476948004216,
+  "operator_readout": 0.001342094037681818,
+  "noise_floor": 1.0811183112673461,
+  "ko_query_only": 50.88248191121966,
+  "ko_support_query": 27.21367538208142,
+  "deletion": 61.734041064977646,
+  "group_ko_support_query": 3.1286200378090143,
+  "naive_single_ko_full_forward": 4.876705058850348,
+  "naive_single_ko_support_refit": 0.010810569860041142,
+  "n_cells": 96,
+  "G": 21158,
+  "K": 4,
+  "Q": 7769,
+  "N": 40,
+  "passes": {
+   "gxi": 1,
+   "ig16": 16
+  },
+  "naive_single_ko_full_forward_seconds": 73.99828437931319,
+  "naive_single_ko_full_forward_scaled_from": 512,
+  "naive_exact_ko_all_genes_query_only_hours": 434.90436136041905,
+  "naive_exact_ko_all_genes_support_query_hours": 434.96789748183534,
+  "ko_query_only_seconds_per_gene_class": 0.14496433592940072,
+  "ko_restricted_all_genes_query_only_hours": 3.4079504662158446,
+  "ko_support_query_genes": 152,
+  "ko_support_query_fit_seconds": 2.031675430480391,
+  "ko_support_query_seconds_per_gene": 0.17903733804000935,
+  "peak_gpu_gib": 2.933452606201172,
+  "torch": "2.11.0+cu130",
+  "cuda": "13.0",
+  "gpu": "NVIDIA H100 80GB HBM3",
+  "cuda_visible_devices": "2"
+ },
+ "cells_per_class": [
+  24,
+  24,
+  24,
+  24
+ ],
+ "class_names": [
+  "Glia",
+  "Immune cell",
+  "Neural",
+  "Vascular cell"
+ ],
+ "mode": "processed"
+}

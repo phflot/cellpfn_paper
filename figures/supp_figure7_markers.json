@@ -1,0 +1,547 @@
+{
+  "id": "supp_figure7_markers",
+  "title": "Expression and signed attribution overlays",
+  "claim": "Known marker expression and query-specific deletion effects can be inspected on a common RNA map with explicit explanation coverage.",
+  "status": "ready",
+  "size_mm": [
+    180.0,
+    150.0
+  ],
+  "backend": "Python/Matplotlib",
+  "versions": {
+    "python": "3.13.13",
+    "matplotlib": "3.11.2",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3"
+  },
+  "source_hashes": {
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.csv": "c7a3ca92914c7fab839e8cfe6d61f845a5e04e24efce0d2aed167481e7192ee5",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.json": "01b7504285c530d2a89eb924538dab238fd894f4a0cf38031a7af2000534812d",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.csv": "3d94ca4fd570ad7f5582dffd3f8e2304cdfbc820ddb73d1a15b3a4c7a291131a",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.json": "0a8a0c8b5451157e64956c21af366314a4750a6939f254af066983111374da7a"
+  },
+  "panel_source_data": {
+    "figures/source_data/supp_figure7/i.csv": "c1409e504174f465d941ff2c0347de07569647327672a2e7053fb63072fe9cb5",
+    "figures/source_data/supp_figure7/j.csv": "db1378e6b4947622eea9806c5f9bc1c55a0faa1738f8f2faf6cd841bf61bec9c",
+    "figures/source_data/supp_figure7/k.csv": "0fcea3502e1b81e4586083526e64e2aac6dbdccc73576419d6a1cc985fed3735",
+    "figures/source_data/supp_figure7/l.csv": "58f6efbc4a5ac626d075f58b81502659a8e8f42e41e3b72454071459b27ad89d",
+    "figures/source_data/supp_figure7/m.csv": "f8cf6faa105c82f25dd3f866ae6832077d35c6bd1e55d690d850fe2faad565ab",
+    "figures/source_data/supp_figure7/n.csv": "b52ed6e7e29f1759fcc52cbfe53c68d04d9f27c100c4497bb87f1b2edcb43ce6",
+    "figures/source_data/supp_figure7/o.csv": "f20cf175a90a2b0186618e76816f6d96f87cf83ea1f2ef21594650467f75bad1",
+    "figures/source_data/supp_figure7/p.csv": "7a20fe26fc32c1db8b21822382583e036235561131d94f1401388fab89b8e11e"
+  },
+  "panels": [
+    {
+      "letter": "i",
+      "claim": "Marker expression and signed deletion effects are distinct quantities",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.json"
+      ],
+      "filters": {
+        "case": "pbmc_main",
+        "variable": "expression_IL7R",
+        "population": "all query cells"
+      },
+      "n": 320,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "color_scale": [
+        0,
+        4.1472616
+      ],
+      "transformation": "No additional transformation; supplied display expression"
+    },
+    {
+      "letter": "j",
+      "claim": "Marker expression and signed deletion effects are distinct quantities",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.json"
+      ],
+      "filters": {
+        "case": "pbmc_main",
+        "variable": "attribution_IL7R",
+        "population": "all query cells"
+      },
+      "n": 320,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "color_scale": [
+        -0.4404376447200775,
+        0.4404376447200775
+      ],
+      "explained_cells": 191,
+      "missing_values": "NaN = not explained; gray background; not interpreted as zero",
+      "target": "Corrected DS-LOO query-only predicted-versus-fixed-runner-up margin; positive supports the predicted class",
+      "point_sizes": "Explained-cell marks enlarged for visibility; size does not encode effect"
+    },
+    {
+      "letter": "k",
+      "claim": "Marker expression and signed deletion effects are distinct quantities",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.json"
+      ],
+      "filters": {
+        "case": "pbmc_main",
+        "variable": "expression_NKG7",
+        "population": "all query cells"
+      },
+      "n": 320,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "color_scale": [
+        0,
+        4.7815404
+      ],
+      "transformation": "No additional transformation; supplied display expression"
+    },
+    {
+      "letter": "l",
+      "claim": "Marker expression and signed deletion effects are distinct quantities",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.json"
+      ],
+      "filters": {
+        "case": "pbmc_main",
+        "variable": "attribution_NKG7",
+        "population": "all query cells"
+      },
+      "n": 320,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "color_scale": [
+        -0.3816887140274048,
+        0.3816887140274048
+      ],
+      "explained_cells": 191,
+      "missing_values": "NaN = not explained; gray background; not interpreted as zero",
+      "target": "Corrected DS-LOO query-only predicted-versus-fixed-runner-up margin; positive supports the predicted class",
+      "point_sizes": "Explained-cell marks enlarged for visibility; size does not encode effect"
+    },
+    {
+      "letter": "m",
+      "claim": "Marker expression and signed deletion effects are distinct quantities",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.json"
+      ],
+      "filters": {
+        "case": "cortex_main",
+        "variable": "expression_PLP1",
+        "population": "all query cells"
+      },
+      "n": 7769,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "color_scale": [
+        0,
+        5.8301964
+      ],
+      "transformation": "No additional transformation; supplied display expression"
+    },
+    {
+      "letter": "n",
+      "claim": "Marker expression and signed deletion effects are distinct quantities",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.json"
+      ],
+      "filters": {
+        "case": "cortex_main",
+        "variable": "attribution_PLP1",
+        "population": "all query cells"
+      },
+      "n": 7769,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "color_scale": [
+        -0.1151826083660125,
+        0.1151826083660125
+      ],
+      "explained_cells": 96,
+      "missing_values": "NaN = not explained; gray background; not interpreted as zero",
+      "target": "Corrected DS-LOO query-only predicted-versus-fixed-runner-up margin; positive supports the predicted class",
+      "point_sizes": "Explained-cell marks enlarged for visibility; size does not encode effect"
+    },
+    {
+      "letter": "o",
+      "claim": "Marker expression and signed deletion effects are distinct quantities",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.json"
+      ],
+      "filters": {
+        "case": "cortex_main",
+        "variable": "expression_CLDN5",
+        "population": "all query cells"
+      },
+      "n": 7769,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "color_scale": [
+        0,
+        4.768407
+      ],
+      "transformation": "No additional transformation; supplied display expression"
+    },
+    {
+      "letter": "p",
+      "claim": "Marker expression and signed deletion effects are distinct quantities",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.csv",
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.json"
+      ],
+      "filters": {
+        "case": "cortex_main",
+        "variable": "attribution_CLDN5",
+        "population": "all query cells"
+      },
+      "n": 7769,
+      "unit": "query cell",
+      "aggregation": "none",
+      "uncertainty": "none; descriptive map",
+      "exclusions": "No cell sampling or omission",
+      "coordinate_system": "RNA-derived UMAP of exact support/query union; same coordinates reused within case",
+      "visualization_parameters": {
+        "hvg_flavor": "seurat",
+        "requested_hvgs": 2000,
+        "realized_hvgs": 2000,
+        "scale_clip": 10,
+        "pca_components": 50,
+        "neighbors": 15,
+        "umap_min_dist": 0.3,
+        "metric": "euclidean",
+        "seed": 42,
+        "fitting_population": "exact support/query union, without labels"
+      },
+      "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+      "color_scale": [
+        -0.0819137915968895,
+        0.0819137915968895
+      ],
+      "explained_cells": 96,
+      "missing_values": "NaN = not explained; gray background; not interpreted as zero",
+      "target": "Corrected DS-LOO query-only predicted-versus-fixed-runner-up margin; positive supports the predicted class",
+      "point_sizes": "Explained-cell marks enlarged for visibility; size does not encode effect"
+    }
+  ],
+  "geometry": [
+    {
+      "axis": 0,
+      "bounds_fraction": [
+        0.055,
+        0.6670995657519383,
+        0.20500000000000002,
+        0.1508008684961234
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "IL7R: expression"
+    },
+    {
+      "axis": 1,
+      "bounds_fraction": [
+        0.067,
+        0.593,
+        0.181,
+        0.01200000000000001
+      ],
+      "xlabel": "log1p CP10k",
+      "ylabel": "",
+      "title": ""
+    },
+    {
+      "axis": 2,
+      "bounds_fraction": [
+        0.29,
+        0.6670995657519383,
+        0.20500000000000002,
+        0.1508008684961234
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "IL7R: attribution"
+    },
+    {
+      "axis": 3,
+      "bounds_fraction": [
+        0.302,
+        0.593,
+        0.181,
+        0.01200000000000001
+      ],
+      "xlabel": "Signed margin change",
+      "ylabel": "",
+      "title": ""
+    },
+    {
+      "axis": 4,
+      "bounds_fraction": [
+        0.525,
+        0.6670995657519383,
+        0.20499999999999996,
+        0.15080086849612329
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "NKG7: expression"
+    },
+    {
+      "axis": 5,
+      "bounds_fraction": [
+        0.537,
+        0.593,
+        0.18099999999999994,
+        0.01200000000000001
+      ],
+      "xlabel": "log1p CP10k",
+      "ylabel": "",
+      "title": ""
+    },
+    {
+      "axis": 6,
+      "bounds_fraction": [
+        0.76,
+        0.6670995657519383,
+        0.20499999999999996,
+        0.15080086849612329
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "NKG7: attribution"
+    },
+    {
+      "axis": 7,
+      "bounds_fraction": [
+        0.772,
+        0.593,
+        0.18100000000000005,
+        0.01200000000000001
+      ],
+      "xlabel": "Signed margin change",
+      "ylabel": "",
+      "title": ""
+    },
+    {
+      "axis": 8,
+      "bounds_fraction": [
+        0.07453194190174436,
+        0.21,
+        0.1659361161965113,
+        0.24499999999999997
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "PLP1: expression"
+    },
+    {
+      "axis": 9,
+      "bounds_fraction": [
+        0.067,
+        0.183,
+        0.181,
+        0.01200000000000001
+      ],
+      "xlabel": "Processed expression",
+      "ylabel": "",
+      "title": ""
+    },
+    {
+      "axis": 10,
+      "bounds_fraction": [
+        0.3095319419017443,
+        0.21,
+        0.16593611619651133,
+        0.24499999999999997
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "PLP1: attribution"
+    },
+    {
+      "axis": 11,
+      "bounds_fraction": [
+        0.302,
+        0.183,
+        0.181,
+        0.01200000000000001
+      ],
+      "xlabel": "Signed margin change",
+      "ylabel": "",
+      "title": ""
+    },
+    {
+      "axis": 12,
+      "bounds_fraction": [
+        0.5445319419017444,
+        0.21,
+        0.16593611619651127,
+        0.24499999999999997
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "CLDN5: expression"
+    },
+    {
+      "axis": 13,
+      "bounds_fraction": [
+        0.537,
+        0.183,
+        0.18099999999999994,
+        0.01200000000000001
+      ],
+      "xlabel": "Processed expression",
+      "ylabel": "",
+      "title": ""
+    },
+    {
+      "axis": 14,
+      "bounds_fraction": [
+        0.7795319419017444,
+        0.21,
+        0.16593611619651127,
+        0.24499999999999997
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "CLDN5: attribution"
+    },
+    {
+      "axis": 15,
+      "bounds_fraction": [
+        0.772,
+        0.183,
+        0.18100000000000005,
+        0.01200000000000001
+      ],
+      "xlabel": "Signed margin change",
+      "ylabel": "",
+      "title": ""
+    }
+  ],
+  "outputs": {
+    "figures/supp_figure7_markers.pdf": "66f59164d8f85377dbc463de1cebd767282f2e10a814484fa7a8220d1250d5e9",
+    "figures/supp_figure7_markers.svg": "b7975ca7a6d46294aa74184fb17c4c5779034fb3d4a3b37c893a9202f46bc70a",
+    "figures/supp_figure7_markers.png": "46b63a96b66898722dc61bdb5e075e7db4e0004a471148562cdaf3fb92fc5dbc"
+  },
+  "extra": {
+    "numbered_figure": "S7",
+    "continuation_asset": "page 2 of 2",
+    "color_scale_policy": "Full observed limits; no clipping or quantile scaling; separate per gene and quantity"
+  }
+}

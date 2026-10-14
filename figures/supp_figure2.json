@@ -1,0 +1,242 @@
+{
+  "id": "supp_figure2",
+  "title": "Complete biological benchmark and finer annotation",
+  "claim": "Performance is heterogeneous across methods, annotation resolutions and cohorts.",
+  "status": "ready",
+  "size_mm": [
+    180.0,
+    190.0
+  ],
+  "backend": "Python/Matplotlib",
+  "versions": {
+    "python": "3.13.13",
+    "matplotlib": "3.11.2",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3"
+  },
+  "source_hashes": {
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig2__cases.csv": "23cc90e3a26c69a6f1d318c6dba1831775ae5e9787a4788e022add56a1df9034",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig2__exposure_marks.csv": "8136784541582b1e6fde5182f29e08e092aea69f021f01c05175afb68d607f15",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig4__cases.csv": "5d9e44533316aba609bf5f6fa6722c9fbc1386b737964ba73a4e65dec5ccbee0",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/supp_prior_ablation__hard_tier_cellpfn_values.csv": "863a22bd4586e814b5057c27fa54fa1417b9964845eb2a4eb11ac8ee2c27e6b2"
+  },
+  "panel_source_data": {
+    "figures/source_data/supp_figure2/a.csv": "dddc02d0d8bf87f7b28a63979963a3adcea84b7ddfaf32b0ff7fd5f915dd6807",
+    "figures/source_data/supp_figure2/b.csv": "c562bfe708561702dd6a118b6572a8838033e35c33eca0e2488f13f0c3220913",
+    "figures/source_data/supp_figure2/c.csv": "0ac6bdb5627048862730600959930c7247bb4b17caac5c0a7143049e16593e1c",
+    "figures/source_data/supp_figure2/d.csv": "2e90eb99445a6333c5104e3fcf43b5ebe61fd4c1dd156974ba260aadc3117335"
+  },
+  "panels": [
+    {
+      "letter": "a",
+      "claim": "Full declared core comparator set",
+      "source": "fig2__cases / fig4__cases",
+      "filters": {
+        "models": [
+          "cellpfn_g1v2p",
+          "tabicl_v2",
+          "c2b40k",
+          "kumo_small",
+          "k2b_s40k",
+          "kumo_large",
+          "k2b_l40k",
+          "tabpfn35",
+          "geneformer_lr",
+          "scgpt_lr",
+          "woodbury32_lda",
+          "celltypist",
+          "singler",
+          "scanvi_inductive",
+          "scanvi_transductive",
+          "logreg"
+        ],
+        "views": {
+          "cellpfn_g1v2p": "all",
+          "tabicl_v2": "hvg2000",
+          "c2b40k": "hvg2000",
+          "kumo_small": "hvg2000",
+          "k2b_s40k": "hvg2000",
+          "kumo_large": "hvg2000",
+          "k2b_l40k": "hvg2000",
+          "tabpfn35": "hvg2000",
+          "geneformer_lr": "own_input",
+          "scgpt_lr": "own_input",
+          "woodbury32_lda": "all",
+          "celltypist": "all",
+          "singler": "all",
+          "scanvi_inductive": "hvg2000",
+          "scanvi_transductive": "hvg2000",
+          "logreg": "hvg2000"
+        },
+        "panel": [
+          "pbmc_l1",
+          "pbmc_l2",
+          "zebra_dev",
+          "zebra_ood"
+        ],
+        "draw": [
+          "0",
+          "1",
+          "2"
+        ],
+        "metric": "balanced_accuracy",
+        "status": "ok"
+      },
+      "n": 528,
+      "unit": "support draw",
+      "aggregation": "Mean over three draws; bold best overall and best unflagged per condition, ties at displayed precision",
+      "uncertainty": "No confidence intervals",
+      "availability": "Missing scores are dashes; gray starred values are exposure flagged; transductive scANVI uses query expression"
+    },
+    {
+      "letter": "b",
+      "claim": "Finer biological label tasks are available but exploratory",
+      "source": "supp_prior_ablation__hard_tier_cellpfn_values",
+      "filters": {
+        "model_id": "cellpfn_g1v2p",
+        "checkpoint_update": "96000",
+        "gene_view": "hvg8192",
+        "scope_kind": "task",
+        "status": "ok",
+        "readout_status": "final"
+      },
+      "n": 30,
+      "unit": "task summary",
+      "aggregation": "Supplied mean balanced accuracy; class counts in parentheses",
+      "uncertainty": "10/10/5 support-draw means; no draw-level data or intervals in this checkpoint summary",
+      "availability": "Eight PBMC tasks and two cortex tasks defined post hoc; differing labels prevent an isolated difficulty comparison"
+    },
+    {
+      "letter": "c",
+      "claim": "Kidney cell-type evaluation extends the contextual benchmark",
+      "source": "fig4__cases",
+      "filters": {
+        "panel": [
+          "kidney_core5_a",
+          "kidney_core5_b",
+          "kidney_core9_a",
+          "kidney_core9_b"
+        ],
+        "support_per_class": "100",
+        "metric": "balanced_accuracy",
+        "level": "cell",
+        "models": [
+          [
+            "cellpfn_g1v2p",
+            "CellPFN, counts",
+            "all",
+            "count"
+          ],
+          [
+            "cellpfn_g1v2p",
+            "CellPFN, processed",
+            "all",
+            "processed"
+          ],
+          [
+            "tabicl_v2",
+            "TabICLv2",
+            "hvg2000",
+            "processed"
+          ],
+          [
+            "kumo_large",
+            "Kumo large",
+            "hvg2000",
+            "processed"
+          ],
+          [
+            "geneformer_lr",
+            "Geneformer + LR",
+            "own_input",
+            "own"
+          ],
+          [
+            "scgpt_lr",
+            "scGPT + LR",
+            "own_input",
+            "own"
+          ],
+          [
+            "woodbury32_lda",
+            "Low-rank LDA",
+            "all",
+            "processed"
+          ]
+        ]
+      },
+      "n": 84,
+      "unit": "donor-held-out fold",
+      "aggregation": "Mean over available folds, separately for feature panels A/B",
+      "uncertainty": "No inferred intervals; complete folds in source data",
+      "availability": "Count and processed CellPFN input modes both shown; Geneformer query-source exposure flagged"
+    },
+    {
+      "letter": "d",
+      "claim": "Pretraining exposure is evidence-qualified",
+      "source": "fig2__exposure_marks",
+      "filters": {},
+      "n": 32,
+      "unit": "source-study audit",
+      "aggregation": "No numerical score adjustment",
+      "uncertainty": "Not applicable",
+      "availability": "Unflagged results do not certify no exposure"
+    }
+  ],
+  "geometry": [
+    {
+      "axis": 0,
+      "bounds_fraction": [
+        0.25,
+        0.59,
+        0.72,
+        0.33999999999999997
+      ],
+      "xlabel": "Supports per class",
+      "ylabel": "",
+      "title": ""
+    },
+    {
+      "axis": 1,
+      "bounds_fraction": [
+        0.25,
+        0.16,
+        0.28,
+        0.30999999999999994
+      ],
+      "xlabel": "Supports per class",
+      "ylabel": "",
+      "title": "Finer tasks: CellPFN, up to 8,192 HVGs"
+    },
+    {
+      "axis": 2,
+      "bounds_fraction": [
+        0.69,
+        0.28,
+        0.28,
+        0.19
+      ],
+      "xlabel": "Classes / feature panel",
+      "ylabel": "",
+      "title": "Kidney, 100 supports/class"
+    },
+    {
+      "axis": 3,
+      "bounds_fraction": [
+        0.62,
+        0.095,
+        0.35,
+        0.12
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "Exposure and comparison boundaries"
+    }
+  ],
+  "outputs": {
+    "figures/supp_figure2.pdf": "6b356cf7bb684bad994a477a4b4aa3237849933b6a3b521f00a376560d2ecf55",
+    "figures/supp_figure2.svg": "cd3d1ec4297d1f837bc3eb7b4ab67d1b73bdd918642e7369b2963ea1ebcacb3c",
+    "figures/supp_figure2.png": "d5fc5f6854e57152ef23f1dd66dbbbd5eef2e6b5c830ec6ec0bf41d20cd94c14"
+  },
+  "extra": {}
+}

@@ -1,0 +1,15 @@
+{
+ "case": "zebra_dev_b10_s0",
+ "arm": "G",
+ "checks": {
+  "max_abs_R_vs_model": 0.0,
+  "max_abs_logit_vs_model": 0.0009918212890625,
+  "channel_recompute_maxabs": 0.0
+ },
+ "seconds_all_genes": 16.36506331525743,
+ "seconds_validation_replay": 0.2956487466581166,
+ "n_cells": 96,
+ "G": 21158,
+ "K": 4,
+ "peak_gpu_gib": 3.3758535385131836
+}

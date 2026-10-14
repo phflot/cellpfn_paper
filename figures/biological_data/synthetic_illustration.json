@@ -1,0 +1,487 @@
+{
+  "purpose": "Single fixed-seed illustrative prior draw, not an evaluation or realism statistic",
+  "selection": "First mean_program lane in four-bank schedule with root_start=42, seed=42; no bank screening",
+  "prior_label": "Cellular prior",
+  "root_start": 42,
+  "task_stream_seed": 42,
+  "bank_root": 44,
+  "curriculum_offset": 10000,
+  "spec": {
+    "index": 2,
+    "root": 44,
+    "lane": "mean_program",
+    "support_budget": 1,
+    "support_seed": 147851627,
+    "query_seed": 657370838,
+    "target_num_classes": 2,
+    "target_num_genes": 8192,
+    "requested_num_classes": 2,
+    "requested_num_genes": 8192,
+    "simulator_num_classes": 8,
+    "target_family": "metadata_binary",
+    "metadata_index": 19,
+    "target_transform": "native_or_rank_binary_v1",
+    "metadata_effect_energy": 0.08,
+    "split_policy": "donor_disjoint",
+    "target_stage": "datasets_10000",
+    "support_stage": "pre_25000_datasets",
+    "support_tier": "B1",
+    "support_anchor": 1,
+    "support_jitter": 0,
+    "parent_support_per_class": 100,
+    "class_selection_seed": 609282834,
+    "downshift_reasons": [],
+    "dataset_index": 2,
+    "episode_index": 0,
+    "episodes_per_dataset": 1,
+    "dominant_metadata_index": 19,
+    "early_prior": false,
+    "cell_type_index": 5,
+    "gene_seed": 1888843573,
+    "filter_signal": false,
+    "requested_panel_genes": 8192,
+    "curriculum_dataset_index": 10002
+  },
+  "config_identity": {
+    "schema_version": 1,
+    "kind": "hashprompt_foundation_resolved_config",
+    "entry_path": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/conf/foundation_realism_v22_B_usage.yaml",
+    "source_bindings": [
+      {
+        "path": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/conf/transfer_role_01_simple.yaml",
+        "sha256": "e9fb85f31d15a08219bbc741c462560649aad21b8ea22d248ecb14dd6ad899b3"
+      },
+      {
+        "path": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/conf/difficulty_base.yaml",
+        "sha256": "602fe01e29f8c5b5e8d3f8155e6b089d0f3e00db0cc68558686d6e5acb0c3c1e"
+      },
+      {
+        "path": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/conf/data_gate_s14_mixed_program_umi.yaml",
+        "sha256": "34bf6732941f745b869abc5d53de15016cf906dd485232f632c21f5c46ad0ca2"
+      },
+      {
+        "path": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/conf/data_gate_s15_anonymous_cellular_umi_g2048.yaml",
+        "sha256": "6bf57bd91eff949cfbf63b51ecde8f6f1d8d8c87438b56e28497ed4856a1b155"
+      },
+      {
+        "path": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/conf/data_gate_s15_anonymous_cellular_umi_g8192.yaml",
+        "sha256": "bcc25610a2c300893457e2472582d732785340a4c7057fa306d9d5c4c10f02f6"
+      },
+      {
+        "path": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/conf/foundation_discovery_dynamic_8192.yaml",
+        "sha256": "0797027b0ee7d2a00b9d3de4c8872b79cebd796a9b516451a0f253b50e0b702e"
+      },
+      {
+        "path": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/conf/foundation_repaired_broad_8192.yaml",
+        "sha256": "7d605dd529569bf0e2f9587be51b5433301a8f6d12458ae23a86f72c8c933113"
+      },
+      {
+        "path": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/conf/foundation_mechanism_mirror_8192.yaml",
+        "sha256": "2f2884182f8b35b4d5c8011aa52378a82d9866f5639fb0ef3939099ddff6c551"
+      },
+      {
+        "path": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/conf/foundation_count_repaired_8192_v1.yaml",
+        "sha256": "9aae67a838d79a649fa81cffad424b593bb047d4102006046f2e2a6c2f503f06"
+      },
+      {
+        "path": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/conf/foundation_rosmap_moments_aging_v1.yaml",
+        "sha256": "6be66bc0739dfd6a309244f746a3909778d41cf2c01c62ae9459c8561c7c8106"
+      },
+      {
+        "path": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/conf/foundation_rosmap_moments_meyer_v1.yaml",
+        "sha256": "f641f22830c1bc4fa307db79d999f395d6d99c799cf748dc2e317b2b993eca87"
+      },
+      {
+        "path": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/conf/foundation_realism_v2.yaml",
+        "sha256": "f156f63634c0671f4cab34b3dde521d1f822eb66eae33a7ee7f5c05f6438cf5f"
+      },
+      {
+        "path": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/conf/foundation_realism_v21.yaml",
+        "sha256": "d94756502f56c974b9802f9afe849d5595a5d692b98afac4eede7f41e97a98eb"
+      },
+      {
+        "path": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/conf/foundation_realism_v22_B_usage.yaml",
+        "sha256": "a72c2d6aba5881584206555b482d85cf2639178407e8685c316ed1908c9dbc96"
+      }
+    ],
+    "resolved_config_sha256": "00ba63620d9ca1eb6abb32bac4bca2a341bf9b918e1b2ae4cf483dc575339c04",
+    "content_sha256": "cc68d5c1d32854b56e61d83b884705dfe16adb00a5f1b7616f282af7bb7aa428"
+  },
+  "source_revisions": {
+    "hashprompt": "c06f99df609e4931828d8ebdceac27556c88b455",
+    "pyscintelligentdesign": "6c4d2d0e52db8f8ede6c662aa2b0c641454d73b9"
+  },
+  "source_modules": {
+    "reuse": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt/src/hashprompt/foundation_dataset_reuse.py",
+    "simulator": "/share/runs/2026/30-03-phflot-hashprompt/pyscintelligentdesign/src/pyScIntelligentDesign/__init__.py"
+  },
+  "receipt": {
+    "dataset_index": 2,
+    "root": 44,
+    "lane": "mean_program",
+    "dominant_metadata_index": 19,
+    "early_prior": false,
+    "bank_sha256": "c5c54a81e5bb254b510514d820d4c7ff5deb9f0460ccdce059eb7b8adf98ab9e",
+    "metadata_sha256": "fa27ff79833f909f8721b25d323fcd08777bf11ed3f385d2b9c6828080e9ac79",
+    "hidden_receipt_sha256": "6c7747b01888a188c615aa4f8bf23ed1c93ebe67df10d379aef88af2a7bfd470",
+    "bank_bytes": 268435456,
+    "unique_generated_cells": 16384,
+    "aging_enabled": true,
+    "generation_seconds": 41.059451340988744,
+    "metadata_registry": [
+      {
+        "index": 0,
+        "name": "age",
+        "type": "DiscreteMetaVariable"
+      },
+      {
+        "index": 1,
+        "name": "sex",
+        "type": "BinaryMetaVariable"
+      },
+      {
+        "index": 2,
+        "name": "meta3",
+        "type": "DiscreteMetaVariable"
+      },
+      {
+        "index": 3,
+        "name": "meta4",
+        "type": "DiscreteMetaVariable"
+      },
+      {
+        "index": 4,
+        "name": "meta5",
+        "type": "CategoricalMetaVariable"
+      },
+      {
+        "index": 5,
+        "name": "meta6",
+        "type": "ContinuousMetaVariable"
+      },
+      {
+        "index": 6,
+        "name": "meta7",
+        "type": "DiscreteMetaVariable"
+      },
+      {
+        "index": 7,
+        "name": "meta8",
+        "type": "ContinuousMetaVariable"
+      },
+      {
+        "index": 8,
+        "name": "meta9",
+        "type": "ContinuousMetaVariable"
+      },
+      {
+        "index": 9,
+        "name": "meta10",
+        "type": "ContinuousMetaVariable"
+      },
+      {
+        "index": 10,
+        "name": "meta11",
+        "type": "ContinuousMetaVariable"
+      },
+      {
+        "index": 11,
+        "name": "meta12",
+        "type": "BinaryMetaVariable"
+      },
+      {
+        "index": 12,
+        "name": "meta13",
+        "type": "ContinuousMetaVariable"
+      },
+      {
+        "index": 13,
+        "name": "meta14",
+        "type": "ContinuousMetaVariable"
+      },
+      {
+        "index": 14,
+        "name": "meta15",
+        "type": "BinaryMetaVariable"
+      },
+      {
+        "index": 15,
+        "name": "meta16",
+        "type": "CategoricalMetaVariable"
+      },
+      {
+        "index": 16,
+        "name": "meta17",
+        "type": "ContinuousMetaVariable"
+      },
+      {
+        "index": 17,
+        "name": "meta18",
+        "type": "ContinuousMetaVariable"
+      },
+      {
+        "index": 18,
+        "name": "meta19",
+        "type": "DiscreteMetaVariable"
+      },
+      {
+        "index": 19,
+        "name": "meta20",
+        "type": "BinaryMetaVariable"
+      }
+    ],
+    "worker_peak_rss_kb": 1831684,
+    "reuse_v2": {
+      "disable_early_prior_override": true,
+      "natural_query_frequency": true,
+      "qc_min_counts": 20,
+      "age_target_start_dataset": 0
+    },
+    "drawn_hyperparameters": {
+      "cell_state_energy": 0.037500801825406854,
+      "study_nuisance_energy": 0.007635224986137302,
+      "batch_nuisance_energy": 0.012923875439936436,
+      "donor_nuisance_energy": 0.010643384983680067,
+      "dispersion_shape_geometric_mean": 2.597667205109687,
+      "dispersion_shape_log_sd": 0.5420818617113754,
+      "class_domain_interaction_active": false,
+      "class_study_interaction_energy": 0.0,
+      "class_donor_interaction_energy": 0.0,
+      "trajectory_active": true,
+      "trajectory_energy": 0.0021544700674692215,
+      "trajectory_position_jitter_sigma": 0.09888648342177941,
+      "num_programs": 24,
+      "program_mask_fraction": 0.0693143987542722,
+      "program_loading_min": 0.3,
+      "program_loading_max": 3.0,
+      "class_signal_energy": 0.4811933931499707,
+      "baseline_law_log_sigma": 1.8143494686393364,
+      "baseline_law_outlier_probability": 0.021291365255127766,
+      "baseline_law_outlier_log_location": 6.02166959103631,
+      "baseline_law_outlier_log_scale": 0.9846269613619771,
+      "cell_state_structured_fraction": 0.8451780148538325,
+      "cell_state_program_genes": 86.17306275594777,
+      "cell_state_shared_fraction": 0.8952534683805962,
+      "cell_state_quality_weight": 0.03106445243935929,
+      "cell_state_abundance_power": 0.8158265981362092,
+      "cell_state_mean_compensation": 0.6880116545072901,
+      "cell_state_num_programs": 13,
+      "donor_library_donor_sigma": 0.21378095391599997,
+      "donor_library_study_sigma_multiplier": 0.9670896275799048,
+      "donor_library_batch_sigma_multiplier": 0.30059153842030223,
+      "donor_library_cell_sigma_multiplier": 1.5382836135242628,
+      "donor_library_global_log_mu_offset": -0.22944546713640523,
+      "class_hierarchy_levels": 4,
+      "class_hierarchy_level_sd_ratio": 0.7346760680187329,
+      "class_hierarchy_marker_fraction": 0.015423063069996249,
+      "class_hierarchy_marker_log_effect": 2.8978875853974637,
+      "class_hierarchy_applied": true,
+      "class_shift_bound_applied": true,
+      "class_shift_bound_weight_power": 0.5,
+      "class_shift_bound_max_log": 4.5,
+      "class_shift_bound_metric_energy_final": 0.5286644687572148,
+      "class_shift_bound_baseline_energy_before": 0.539586119821492,
+      "class_shift_bound_baseline_energy_after": 0.46435136903423735,
+      "class_shift_bound_max_abs_before": 6.681278099748949,
+      "class_shift_bound_max_abs_after": 4.060575563232611,
+      "class_shift_bound_fraction_beyond_max_log": 0.0008697509765625,
+      "class_mean_admission_applied": true,
+      "class_mean_admission_max_top_share": 0.35,
+      "class_mean_admission_attempts": 1,
+      "class_mean_admission_final_max_top_share": 0.14005328818292131,
+      "baseline_share_bound_max_share": 0.1,
+      "baseline_share_bound_applied": false,
+      "baseline_share_bound_top_share_before": 0.09632930508389564,
+      "baseline_share_bound_top_share_after": 0.09632930508389564,
+      "baseline_share_bound_top10_share_before": 0.2691486423950359,
+      "baseline_share_bound_top10_share_after": 0.2691486423950359,
+      "baseline_share_bound_genes_above_half_ceiling": 0,
+      "cell_noise_aging_gene_fraction": 0.05327051501014551,
+      "cell_noise_aging_increase_fraction": 0.6536864724582592,
+      "cell_noise_aging_susceptible_class_fraction": 0.7670297166975523,
+      "cell_noise_aging_applied": true,
+      "cell_noise_aging_susceptible_classes": 5,
+      "cell_noise_aging_zero_mean": true,
+      "directional_aging_gene_fraction": 0.09868121445582613,
+      "directional_aging_negative_fraction": 0.898719672267265,
+      "directional_aging_energy": 0.00209154218987532,
+      "directional_aging_applied": true,
+      "hidden_subtypes_energy_capped": false,
+      "hidden_subtypes_centering": "dirichlet_weighted",
+      "hidden_subtypes_max_abs_before": 7.910081219410764,
+      "hidden_subtypes_centering_space": "saturated",
+      "hidden_subtypes_max_abs_after": 5.060435408994942,
+      "hidden_subtypes_max_abs_total": 4.491878105928885,
+      "hidden_subtypes_max_template_top_share": 0.22440924389948233,
+      "hidden_subtypes_weighted_mean_energy_ratio": 6.316428209630252e-32,
+      "hidden_subtypes_admission_min_scale": 1.0,
+      "hidden_subtypes_admission_attenuated_classes": 0,
+      "hidden_subtypes_probability": 0.5883799843495923,
+      "hidden_subtypes_energy_ratio": 1.7301100298636627,
+      "hidden_subtypes_count": 4,
+      "hidden_subtypes_split_classes": 6,
+      "hidden_subtypes_applied": true,
+      "dispersion_phi_scale": 0.07799893910936406,
+      "dispersion_reference_applied": true,
+      "dispersion_class_top_gene_shape_min": 6.646984207595926,
+      "dispersion_baseline_top_gene_shape_min": 6.5708582098282085,
+      "cell_state_reference_scale": 0.2693218164714924,
+      "cell_state_program_energy_share": 0.9981155682176579,
+      "cell_state_energy_metric": "baseline_weights",
+      "cell_state_gene_offset_max": 0.200244181834751,
+      "cell_state_gene_offset_mean": -0.10242667078665316,
+      "cell_state_private_disabled_in_signed_lane": false,
+      "cell_state_donor_usage_logit_sd": 0.5477358733807647,
+      "cell_state_donor_usage_applied": true,
+      "cell_state_donor_usage_age_applied": false,
+      "cell_state_donor_usage_realized_logit_sd": 0.5454018876207355,
+      "cell_state_donor_usage_mean_activity": 0.26616184014126143,
+      "cell_state_donor_usage_base_mean_activity": 0.266595028667579
+    },
+    "drawn_aging": {
+      "gene_rates_donor_jitter_sd": 0.1,
+      "gene_rates_noisy_fraction": 0.24269471463222828,
+      "gene_rates_noisy_log_sd": 0.6469131034971674,
+      "gene_rates_quiet_scale_max": 0.2,
+      "gene_rates_noisy_genes": 1956
+    },
+    "aging_cumulative_sigma": 0.05123475382979799,
+    "qc_redrawn_zero_count_cells": 0,
+    "availability": [
+      [
+        224,
+        203,
+        130,
+        64,
+        69,
+        178,
+        98,
+        176
+      ],
+      [
+        224,
+        188,
+        149,
+        64,
+        105,
+        98,
+        152,
+        218
+      ],
+      [
+        120,
+        224,
+        84,
+        64,
+        64,
+        69,
+        145,
+        76
+      ],
+      [
+        135,
+        224,
+        116,
+        64,
+        65,
+        194,
+        116,
+        192
+      ],
+      [
+        147,
+        224,
+        167,
+        115,
+        64,
+        75,
+        137,
+        108
+      ],
+      [
+        167,
+        224,
+        77,
+        109,
+        64,
+        143,
+        141,
+        165
+      ],
+      [
+        119,
+        224,
+        83,
+        64,
+        64,
+        77,
+        64,
+        149
+      ],
+      [
+        124,
+        224,
+        123,
+        106,
+        64,
+        64,
+        131,
+        127
+      ]
+    ],
+    "composition": {
+      "alpha_global": 2.879030207583941,
+      "alpha_donor": 8.21328945341491,
+      "age_log_effect": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4770658442194481,
+        0.0,
+        0.0
+      ],
+      "min_rows": 64
+    },
+    "composition_scope": "cell_type_tasks",
+    "natural_query_frequency": true
+  },
+  "counts_shape": [
+    8,
+    8,
+    256,
+    8192
+  ],
+  "counts_dtype": "uint16",
+  "counts_file_sha256": "a417e5594ce37bd8f9ad5d462b5206a0381baebe6079fe69cfb5630d5043010e",
+  "n_cells": 16384,
+  "n_genes": 8192,
+  "visualization": {
+    "normalization": "log1p(CP10000)",
+    "hvg_flavor": "seurat",
+    "hvg_requested": 2000,
+    "hvg_realized": 2000,
+    "pca_components": 50,
+    "pca_solver": "arpack",
+    "neighbors": 15,
+    "metric": "euclidean",
+    "min_dist": 0.3,
+    "random_state": 42,
+    "labels_used_in_geometry": false
+  },
+  "versions": {
+    "numpy": "2.4.4",
+    "torch": "2.11.0+cu130",
+    "scanpy": "1.11.5",
+    "anndata": "0.12.10"
+  },
+  "cpu_threads_max": 4,
+  "cuda_initialized": false,
+  "derivative_elapsed_seconds": 87.41619372699643,
+  "timing_interpretation": "Illustration execution receipt only; not a controlled simulator throughput benchmark",
+  "outputs": {
+    "synthetic_illustration_genes.csv": "bee57e81b96dcec41dc53f31facc118ca8cac47862d0800415673f75c32b04e9",
+    "synthetic_illustration.csv": "15a035d3dd7d15ce4964d20dc8f8c9142270ba6c17462ac12e15ad88c3bcd661"
+  }
+}

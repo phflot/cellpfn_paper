@@ -1,0 +1,15 @@
+{
+ "case": "kidney_core9_A_F0_processed",
+ "arm": "G",
+ "checks": {
+  "max_abs_R_vs_model": 0.0,
+  "max_abs_logit_vs_model": 0.00103759765625,
+  "channel_recompute_maxabs": 0.0
+ },
+ "seconds_all_genes": 16.75109824212268,
+ "seconds_validation_replay": 1.2453679079189897,
+ "n_cells": 353,
+ "G": 4096,
+ "K": 9,
+ "peak_gpu_gib": 4.492565631866455
+}

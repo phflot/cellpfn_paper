@@ -1,0 +1,88 @@
+{
+ "case": "kidney_core9_A_F0_processed",
+ "arm": "C",
+ "info": {
+  "arm": "C",
+  "label": "C1v2p_096000",
+  "checkpoint": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_gene_r12k_v22_20261001/training/C1v2p/checkpoints/checkpoint_96000.pt",
+  "sha256": "cee5126d995953c65db5819171becf54b2aca59aadd6fba0cbd055c619f2e763",
+  "gene_gene_operator": "none",
+  "parameter_count": 11925345,
+  "model_source_sha256": "031adb6a9b11295f23978c0f8574c4325f6cddc4b4bb43a69b1e893aad50d1af",
+  "dependencies_checked": [
+   "aligned_class_inducing_pfn",
+   "aligned_prototype_pfn",
+   "embedding",
+   "episodes",
+   "gene_gene_operator",
+   "program_pfn"
+  ]
+ },
+ "stored": "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_gene_r12k_eval_v2col_20261002/practical/kidney/C1v2p_096000/kidney/kidney_core9_cell_type_F0_b100/predictions.npz",
+ "diag": {
+  "ig16_completeness_margin_median_relgap": 0.12044505029916763,
+  "ig16_completeness_logit_median_relgap": 1.0267254114151,
+  "ko_noise_floor_margin_maxabs": 3.0517578125e-05,
+  "eval_margin_vs_selected_baseline_maxabs": 3.0517578125e-05
+ },
+ "timing": {
+  "fit_support": 0.8252029060386121,
+  "baseline_logits_selected": 6.193762389011681,
+  "gxi": 5.395617588888854,
+  "ig16": 65.65287372097373,
+  "operator_readout": 0.005760406609624624,
+  "noise_floor": 2.4099614550359547,
+  "ko_query_only": 89.76741634169593,
+  "ko_support_query": 133.81968674622476,
+  "deletion": 153.1459967601113,
+  "group_ko_support_query": 24.87892924109474,
+  "naive_single_ko_full_forward": 5.3827110580168664,
+  "naive_single_ko_support_refit": 0.3270843899808824,
+  "n_cells": 347,
+  "G": 4096,
+  "K": 9,
+  "Q": 360,
+  "N": 900,
+  "passes": {
+   "gxi": 1,
+   "ig16": 16
+  },
+  "naive_single_ko_full_forward_seconds": 5.3827110580168664,
+  "naive_single_ko_full_forward_scaled_from": 360,
+  "naive_exact_ko_all_genes_query_only_hours": 6.124329026010301,
+  "naive_exact_ko_all_genes_support_query_hours": 6.496478376388549,
+  "ko_query_only_seconds_per_gene_class": 0.13162377762712013,
+  "ko_restricted_all_genes_query_only_hours": 1.34782748290171,
+  "ko_support_query_genes": 261,
+  "ko_support_query_fit_seconds": 84.59129032352939,
+  "ko_support_query_seconds_per_gene": 0.5127191063073746,
+  "peak_gpu_gib": 2.245807647705078,
+  "torch": "2.11.0+cu130",
+  "cuda": "13.0",
+  "gpu": "NVIDIA H100 80GB HBM3",
+  "cuda_visible_devices": "2"
+ },
+ "cells_per_class": [
+  40,
+  39,
+  32,
+  40,
+  36,
+  40,
+  40,
+  40,
+  40
+ ],
+ "class_names": [
+  "epithelial cell of proximal tubule",
+  "kidney loop of Henle cortical thick ascending limb epithelial cell",
+  "kidney loop of Henle descending limb epithelial cell",
+  "mononuclear phagocyte",
+  "T cell",
+  "kidney capillary endothelial cell",
+  "natural killer cell",
+  "renal principal cell",
+  "renal alpha-intercalated cell"
+ ],
+ "mode": "processed"
+}

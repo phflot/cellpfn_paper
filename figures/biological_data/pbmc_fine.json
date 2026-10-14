@@ -1,0 +1,43 @@
+{
+  "case": {
+    "key": "pbmc_l2_b10_s0",
+    "panel": "pbmc",
+    "case": "celltype.l2_b10_s0",
+    "mode": "count",
+    "markers": []
+  },
+  "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+  "source_hashes": {
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases/pbmc/celltype.l2_b10_s0.json": "70af00de4e3c7830cc6134763cdfd70f752b77f7a82674c6630e6bdc34797309",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases/pbmc/celltype.l2_b10_s0.npz": "340849ada0f38337eb1722d9c08debb5f92e3a64177d1a91fb6b5d71b7664613",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases_labels/pbmc/celltype.l2_b10_s0.npz": "1f27015c25f6a079d52cbf208541b8724cc84a3be5677efb7687a22330f9b50d",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_gene_r12k_eval_v2col_20261002/practical/pbmc/results/G1v2p_096000/celltype.l2_b10_s0/predictions.npz": "7ed55116856240418a1a23222a89e0a35fd2c230417671a67f01fe930cae883e"
+  },
+  "preparation_script_sha256": "e6a5b5793070b309d11f13825fc052c46dbcb9ea11e719728df28063c5959bbc",
+  "query_cells": 800,
+  "support_cells": 200,
+  "explained_cells": 0,
+  "balanced_accuracy_pct": 78.875,
+  "visualization_only": true,
+  "parameters": {
+    "hvg_flavor": "seurat",
+    "requested_hvgs": 2000,
+    "realized_hvgs": 2000,
+    "scale_clip": 10,
+    "pca_components": 50,
+    "neighbors": 15,
+    "umap_min_dist": 0.3,
+    "metric": "euclidean",
+    "seed": 42,
+    "fitting_population": "exact support/query union, without labels"
+  },
+  "versions": {
+    "python": "3.11.15",
+    "numpy": "2.4.4",
+    "pandas": "2.3.3",
+    "scanpy": "1.11.5",
+    "anndata": "0.12.10"
+  },
+  "output_sha256": "56e5797ea8f1a0cd6237fe10babf93cf338b609c725dcaae441be277b10afea8",
+  "seconds": 2.8851668320130557
+}

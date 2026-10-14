@@ -1,0 +1,25 @@
+case_id,model_id,class_label,method_id,knockout_scope,level,metric,value,unit,n_genes,n_cells,top20_in_set,status,source_table,source_column
+pbmc_l1_b100_s0,cellpfn_g1v2p,B,ig64_margin,query_only,cell_median,spearman_rho,0.869157,rho,96,24,20,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+pbmc_l1_b100_s0,cellpfn_g1v2p,B,dsloo_corr_margin,query_only,cell_median,spearman_rho,0.99763,rho,96,24,19,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+pbmc_l1_b100_s0,cellpfn_g1v2p,CD4 T,ig64_margin,query_only,cell_median,spearman_rho,0.814276,rho,101,24,20,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+pbmc_l1_b100_s0,cellpfn_g1v2p,CD4 T,dsloo_corr_margin,query_only,cell_median,spearman_rho,0.997533,rho,101,24,15,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+pbmc_l1_b100_s0,cellpfn_g1v2p,CD8 T,ig64_margin,query_only,cell_median,spearman_rho,0.710218,rho,102,24,20,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+pbmc_l1_b100_s0,cellpfn_g1v2p,CD8 T,dsloo_corr_margin,query_only,cell_median,spearman_rho,0.994189,rho,102,24,16,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+pbmc_l1_b100_s0,cellpfn_g1v2p,DC,ig64_margin,query_only,cell_median,spearman_rho,0.62955,rho,100,24,20,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+pbmc_l1_b100_s0,cellpfn_g1v2p,DC,dsloo_corr_margin,query_only,cell_median,spearman_rho,0.998018,rho,100,24,20,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+pbmc_l1_b100_s0,cellpfn_g1v2p,Mono,ig64_margin,query_only,cell_median,spearman_rho,0.790953,rho,90,24,20,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+pbmc_l1_b100_s0,cellpfn_g1v2p,Mono,dsloo_corr_margin,query_only,cell_median,spearman_rho,0.996932,rho,90,24,19,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+pbmc_l1_b100_s0,cellpfn_g1v2p,NK,ig64_margin,query_only,cell_median,spearman_rho,0.875919,rho,89,24,20,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+pbmc_l1_b100_s0,cellpfn_g1v2p,NK,dsloo_corr_margin,query_only,cell_median,spearman_rho,0.998532,rho,89,24,19,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+pbmc_l1_b100_s0,cellpfn_g1v2p,other,ig64_margin,query_only,cell_median,spearman_rho,0.798025,rho,107,24,20,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+pbmc_l1_b100_s0,cellpfn_g1v2p,other,dsloo_corr_margin,query_only,cell_median,spearman_rho,0.997728,rho,107,24,19,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+pbmc_l1_b100_s0,cellpfn_g1v2p,other T,ig64_margin,query_only,cell_median,spearman_rho,0.754976,rho,100,23,20,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+pbmc_l1_b100_s0,cellpfn_g1v2p,other T,dsloo_corr_margin,query_only,cell_median,spearman_rho,0.99674,rho,100,23,18,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+zebra_dev_b10_s0,cellpfn_g1v2p,Glia,ig64_margin,query_only,cell_median,spearman_rho,0.791823,rho,101,24,20,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+zebra_dev_b10_s0,cellpfn_g1v2p,Glia,dsloo_corr_margin,query_only,cell_median,spearman_rho,0.992394,rho,101,24,17,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+zebra_dev_b10_s0,cellpfn_g1v2p,Immune cell,ig64_margin,query_only,cell_median,spearman_rho,0.835474,rho,101,24,20,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+zebra_dev_b10_s0,cellpfn_g1v2p,Immune cell,dsloo_corr_margin,query_only,cell_median,spearman_rho,0.984845,rho,101,24,18,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+zebra_dev_b10_s0,cellpfn_g1v2p,Neural,ig64_margin,query_only,cell_median,spearman_rho,0.827111,rho,92,24,20,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+zebra_dev_b10_s0,cellpfn_g1v2p,Neural,dsloo_corr_margin,query_only,cell_median,spearman_rho,0.997184,rho,92,24,14,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+zebra_dev_b10_s0,cellpfn_g1v2p,Vascular cell,ig64_margin,query_only,cell_median,spearman_rho,0.780422,rho,90,24,20,ok,tables/faithfulness_per_class.csv,rho_cell_q_median
+zebra_dev_b10_s0,cellpfn_g1v2p,Vascular cell,dsloo_corr_margin,query_only,cell_median,spearman_rho,0.994348,rho,90,24,20,ok,tables/faithfulness_per_class.csv,rho_cell_q_median

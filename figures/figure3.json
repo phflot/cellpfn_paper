@@ -1,0 +1,419 @@
+{
+  "id": "figure3",
+  "title": "Gene-deletion explanations in biological context",
+  "claim": "RNA expression provides biological context while exact deletion validates decision-specific gene explanations.",
+  "status": "ready",
+  "size_mm": [
+    180.0,
+    180.0
+  ],
+  "backend": "Python/Matplotlib",
+  "versions": {
+    "python": "3.13.13",
+    "matplotlib": "3.11.2",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3"
+  },
+  "source_hashes": {
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.csv": "c7a3ca92914c7fab839e8cfe6d61f845a5e04e24efce0d2aed167481e7192ee5",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.csv": "3d94ca4fd570ad7f5582dffd3f8e2304cdfbc820ddb73d1a15b3a4c7a291131a",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.json": "a57849f7b604e07ca3c67b53941025928cc15b65097d4faddb583c019b803ce3",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.json": "20e46ec011a422693cef656e449a2919e111b7f3ffd243e52eb32d858fd67c0d",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_gene_matrix.csv": "2a8e95241746ada5e7fb4c6c2ad1b1bdaf27b031550d183a8e65fb3f8b267189",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig5__ko_pairs_by_class.csv": "abcafb398b070546c390631ee75204ac7531285cca11278a114da28736a742ea",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig5__top_genes.csv": "46132d8811bd741711ce7080ba1cf56e921c62d9993a5e882d823a0152001253",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig5__marker_ranks.csv": "7be1ffed4222b5aa224c1b6650c3643b2166817ff9412e1becad3659f4df083a",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig5__ko_pairs_by_cell__pbmc.csv": "e08287e2e767bdec00b309f9ee810da7a80c9be834319eb986a381fb4c7dffbe",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig5__fidelity_by_case.csv": "0ac3dc42a4d60dd6c8090d87d4d87dd91e819a03e99fe836b88354aa4901445e",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig5__deletion_curves.csv": "9c8125ab20cbcb1e959eba7e2ab2c82dd5ddbff4ba6389129fefe282badf64dd"
+  },
+  "panel_source_data": {
+    "figures/source_data/figure3/a_rna_coordinates.csv": "597400e2b2cd127b77295bdc65f71b4df6655c763198526dfb99836b65276642",
+    "figures/source_data/figure3/b_rna_coordinates.csv": "20177a305007ea47732f881030d192133306209d4927418f0522c02e2a095bc7",
+    "figures/source_data/figure3/c_gene_statistics.csv": "e050e6b1a6e729980b86967e03c630369d39ff565504e9deb03423aea7f5d450",
+    "figures/source_data/figure3/d_exact_deletion_pairs.csv": "1c35a68756c613596bf51d08a099b8cfbe4bbd3f217e3f800bb6a6b2dd306812",
+    "figures/source_data/figure3/e_case_fidelity.csv": "a650c8f0380f23d98b147cb47ecf32e8aed72b6dae5e52ef4b4a217f487e5db6",
+    "figures/source_data/figure3/f_deletion_curves.csv": "9f4c665a8127153232902b349a4755a678c2c976c22a76eabbdfb104786bed6d"
+  },
+  "panels": [
+    {
+      "letter": "a",
+      "claim": "RNA reference labels and prediction errors over every query",
+      "sources": "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_main.csv",
+      "filters": "exact case, draw 0; all query cells",
+      "n": 320,
+      "unit": "query cells",
+      "aggregation": "none",
+      "exclusions": "support cells determine RNA geometry but are not shown",
+      "uncertainty": "none; descriptive values"
+    },
+    {
+      "letter": "b",
+      "claim": "RNA reference labels and prediction errors over every query",
+      "sources": "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/cortex_main.csv",
+      "filters": "exact case, draw 0; all query cells",
+      "n": 7769,
+      "unit": "query cells",
+      "aggregation": "none",
+      "exclusions": "support cells determine RNA geometry but are not shown",
+      "uncertainty": "none; descriptive values"
+    },
+    {
+      "letter": "c",
+      "claim": "Expression and detection differ from signed model importance",
+      "sources": [
+        "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/biological_data/pbmc_gene_matrix.csv",
+        "fig5__top_genes",
+        "fig5__marker_ranks"
+      ],
+      "filters": {
+        "case": "pbmc_l1_b100_s0",
+        "model": "cellpfn_g1v2p",
+        "genes": "union of each class top1 and Table S8 marker checks"
+      },
+      "n": 152,
+      "unit": "class-gene entries",
+      "aggregation": "mean support log1p(CP10k), support detection fraction, mean corrected query margin attribution",
+      "exclusions": "complete support-expression and explained-query attribution matrix",
+      "uncertainty": "none; descriptive values"
+    },
+    {
+      "letter": "d",
+      "claim": "DS-LOO approximates exact finite query-gene deletion",
+      "sources": "fig5__ko_pairs_by_cell__pbmc",
+      "filters": {
+        "case_id": "pbmc_l1_b100_s0",
+        "model_id": "cellpfn_g1v2p"
+      },
+      "n": 20365,
+      "unit": "cell-gene validation pairs",
+      "aggregation": "none",
+      "exclusions": "validation gene union; includes zero and negative effects; selected correctly classified cells",
+      "uncertainty": "none; descriptive values"
+    },
+    {
+      "letter": "e",
+      "claim": "Matched DS-LOO and IG64 validation across six cases",
+      "sources": "fig5__fidelity_by_case",
+      "filters": {
+        "model_id": "cellpfn_g1v2p",
+        "gene_subset": "evaluated_set",
+        "level": "cell",
+        "knockout_scope": "query_only",
+        "metric": "spearman_rho",
+        "source": "exact Table S8 filters"
+      },
+      "n": 6,
+      "unit": "case configurations",
+      "aggregation": "median within-cell rank correlation, summarized within then across classes",
+      "exclusions": "kidney modes share biological cells; cases are not independent cohorts",
+      "uncertainty": "none; descriptive values"
+    },
+    {
+      "letter": "f",
+      "claim": "Ranked query-gene sets reverse the fixed runner-up margin more often",
+      "sources": "fig5__deletion_curves",
+      "filters": {
+        "case_id": "pbmc_l1_b100_s0",
+        "model_id": "cellpfn_g1v2p",
+        "ordering_scope": "cell",
+        "class_label": "ALL",
+        "methods": [
+          "dsloo",
+          "random_expressed"
+        ],
+        "random_replicate": "pooled"
+      },
+      "n": 191,
+      "unit": "explained query cells",
+      "aggregation": "fraction of original margins below zero; random pools two orderings per cell",
+      "exclusions": "none",
+      "uncertainty": "none; descriptive values"
+    }
+  ],
+  "geometry": [
+    {
+      "axis": 0,
+      "bounds_fraction": [
+        0.065,
+        0.767,
+        0.197125,
+        0.18000000000000005
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "Reference labels"
+    },
+    {
+      "axis": 1,
+      "bounds_fraction": [
+        0.282875,
+        0.767,
+        0.197125,
+        0.18000000000000005
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "Errors: 25/320"
+    },
+    {
+      "axis": 2,
+      "bounds_fraction": [
+        0.555,
+        0.767,
+        0.197125,
+        0.18000000000000005
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "Reference labels"
+    },
+    {
+      "axis": 3,
+      "bounds_fraction": [
+        0.772875,
+        0.767,
+        0.197125,
+        0.18000000000000005
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "Errors: 1,229/7,769"
+    },
+    {
+      "axis": 4,
+      "bounds_fraction": [
+        0.075,
+        0.443,
+        0.26,
+        0.197
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "Support expression"
+    },
+    {
+      "axis": 5,
+      "bounds_fraction": [
+        0.075,
+        0.665,
+        0.26,
+        0.01100000000000001
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": ""
+    },
+    {
+      "axis": 6,
+      "bounds_fraction": [
+        0.385,
+        0.443,
+        0.26,
+        0.197
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "Support detection"
+    },
+    {
+      "axis": 7,
+      "bounds_fraction": [
+        0.385,
+        0.665,
+        0.26,
+        0.01100000000000001
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": ""
+    },
+    {
+      "axis": 8,
+      "bounds_fraction": [
+        0.695,
+        0.443,
+        0.26,
+        0.197
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": "Query attribution"
+    },
+    {
+      "axis": 9,
+      "bounds_fraction": [
+        0.695,
+        0.665,
+        0.26,
+        0.01100000000000001
+      ],
+      "xlabel": "",
+      "ylabel": "",
+      "title": ""
+    },
+    {
+      "axis": 10,
+      "bounds_fraction": [
+        0.09,
+        0.095,
+        0.23,
+        0.222
+      ],
+      "xlabel": "Exact deletion (margin)",
+      "ylabel": "DS-LOO (margin)",
+      "title": "Finite-deletion agreement"
+    },
+    {
+      "axis": 11,
+      "bounds_fraction": [
+        0.505,
+        0.095,
+        0.18499999999999994,
+        0.222
+      ],
+      "xlabel": "Spearman \u03c1",
+      "ylabel": "",
+      "title": "Matched fidelity"
+    },
+    {
+      "axis": 12,
+      "bounds_fraction": [
+        0.8,
+        0.095,
+        0.17000000000000004,
+        0.222
+      ],
+      "xlabel": "Genes deleted",
+      "ylabel": "Margin reversed (%)",
+      "title": "Deletion consequence"
+    }
+  ],
+  "outputs": {
+    "figures/figure3.pdf": "cbf78be67984311c6d8571dd924caf0958065549b63abb48ccc2e11d1d494c4a",
+    "figures/figure3.svg": "c232183ad8a5b0bbfc93f01a7fd0add9bba36f9bcdf20e845860d1d6ed0bc4fa",
+    "figures/figure3.png": "ecdf19ea8ec41040c918cd6ce62bc393ea9c00a47cfe7032d5f0a017823b9d56"
+  },
+  "extra": {
+    "cell_map": "RNA-derived; not model embedding",
+    "gene_matrix_availability": "complete support-expression and explained-query attribution matrix",
+    "biological_provenance": [
+      {
+        "case": {
+          "key": "pbmc_l1_b100_s0",
+          "panel": "pbmc",
+          "case": "celltype.l1_b100_s0",
+          "mode": "count",
+          "markers": [
+            "IL7R",
+            "NKG7"
+          ]
+        },
+        "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+        "source_hashes": {
+          "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases/pbmc/celltype.l1_b100_s0.json": "a76c9043da4737d0809766c29092685c7189a1ba17850e00c7de5db237ad2c6a",
+          "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases/pbmc/celltype.l1_b100_s0.npz": "9c565b9265838e13e715d4df1aee582d0bf29abab18e42f2b924ddb3e25a6c2f",
+          "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases_labels/pbmc/celltype.l1_b100_s0.npz": "3044b55d1d595a521656ee439d8bddad14b2da74481b756b2d2ed54155222d71",
+          "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_gene_r12k_eval_v2col_20261002/practical/pbmc/results/G1v2p_096000/celltype.l1_b100_s0/predictions.npz": "de914a837e54bf59b6bae533d6f30b3e4210712bca3ef36304f9505917244ba2",
+          "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_importance_20261008/results/pbmc_l1_b100_s0__G.npz": "134ba7565e019083995d7687df478ff9f1ee0fbbb6daea7ada12a3a1f1d26705",
+          "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_importance_20261008/results/pbmc_l1_b100_s0__G__dsloo_corr.npz": "d6005e184a4a7d906dcda5f4f792bc2781fc2493fcd8e02cc324ebcb6b69c8a6"
+        },
+        "query_cells": 320,
+        "support_cells": 800,
+        "explained_cells": 191,
+        "balanced_accuracy_pct": 92.1875,
+        "visualization_only": true,
+        "parameters": {
+          "hvg_flavor": "seurat",
+          "requested_hvgs": 2000,
+          "realized_hvgs": 2000,
+          "scale_clip": 10,
+          "pca_components": 50,
+          "neighbors": 15,
+          "umap_min_dist": 0.3,
+          "metric": "euclidean",
+          "seed": 42,
+          "fitting_population": "exact support/query union, without labels"
+        },
+        "versions": {
+          "python": "3.11.15",
+          "numpy": "2.4.4",
+          "pandas": "2.3.3",
+          "scanpy": "1.11.5",
+          "anndata": "0.12.10"
+        },
+        "output_sha256": "c7a3ca92914c7fab839e8cfe6d61f845a5e04e24efce0d2aed167481e7192ee5",
+        "seconds": 19.895646827993914
+      },
+      {
+        "case": {
+          "key": "zebra_dev_b10_s0",
+          "panel": "zebra",
+          "case": "zebra_closed_development_b10_s0_p0",
+          "mode": "processed",
+          "markers": [
+            "PLP1",
+            "CLDN5"
+          ]
+        },
+        "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+        "source_hashes": {
+          "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases/zebra/zebra_closed_development_b10_s0_p0.json": "9d4c397be900312730053d0e87a9386c04f03170c5c2b113c0160804c4a8e77a",
+          "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases/zebra/zebra_closed_development_b10_s0_p0.npz": "a3495cd6326e68421f23fc00e5b6f259f48a5ab449c239bec23720e0f9c972fd",
+          "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases_labels/zebra/zebra_closed_development_b10_s0_p0.npz": "310395d1c312dc8cb83e24b4eb2bd926d5887c549ab99941e8462f77e15f5c97",
+          "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_gene_r12k_eval_v2col_20261002/practical/zebra/G1v2p_096000/zebra_cell_type/zebra_closed_development_b10_s0_p0/predictions.npz": "9efe3472af21afcc89159fe3348f509b2a75303eb26cffa001a29f2b14a0c74f",
+          "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_importance_20261008/results/zebra_dev_b10_s0__G.npz": "f3f7f0e5e79de21882faf438e369f31a2bccd2ffcd480ab526e27a4edc57083b",
+          "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_importance_20261008/results/zebra_dev_b10_s0__G__dsloo_corr.npz": "85ccdaf0ccda657a30c12aff6d5de05570625a7397a7573fa6220b08dee2ba4c"
+        },
+        "query_cells": 7769,
+        "support_cells": 40,
+        "explained_cells": 96,
+        "balanced_accuracy_pct": 63.258060703547095,
+        "visualization_only": true,
+        "parameters": {
+          "hvg_flavor": "seurat",
+          "requested_hvgs": 2000,
+          "realized_hvgs": 2000,
+          "scale_clip": 10,
+          "pca_components": 50,
+          "neighbors": 15,
+          "umap_min_dist": 0.3,
+          "metric": "euclidean",
+          "seed": 42,
+          "fitting_population": "exact support/query union, without labels"
+        },
+        "versions": {
+          "python": "3.11.15",
+          "numpy": "2.4.4",
+          "pandas": "2.3.3",
+          "scanpy": "1.11.5",
+          "anndata": "0.12.10"
+        },
+        "output_sha256": "3d94ca4fd570ad7f5582dffd3f8e2304cdfbc820ddb73d1a15b3a4c7a291131a",
+        "seconds": 17.517077623982914
+      }
+    ],
+    "selected_gene_order": [
+      "CD79A",
+      "MAL",
+      "CD8B",
+      "FCER1A",
+      "SERPINA1",
+      "KLRF1",
+      "GNG11",
+      "GZMK",
+      "MS4A1",
+      "IL7R",
+      "CD8A",
+      "CLEC10A",
+      "CD14",
+      "GNLY",
+      "NKG7",
+      "PPBP",
+      "CD3E",
+      "LILRA4",
+      "LYZ"
+    ],
+    "attribution_causality": "model deletion, not biological perturbation"
+  }
+}

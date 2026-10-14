@@ -1,0 +1,48 @@
+{
+  "case": {
+    "key": "zebra_dev_b10_s0",
+    "panel": "zebra",
+    "case": "zebra_closed_development_b10_s0_p0",
+    "mode": "processed",
+    "markers": [
+      "PLP1",
+      "CLDN5"
+    ]
+  },
+  "checkpoint_sha256": "aa5490d5a5d4020c87eba05297d80a31c901bcbeba6ba49b4b4857acb84f9f02",
+  "source_hashes": {
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases/zebra/zebra_closed_development_b10_s0_p0.json": "9d4c397be900312730053d0e87a9386c04f03170c5c2b113c0160804c4a8e77a",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases/zebra/zebra_closed_development_b10_s0_p0.npz": "a3495cd6326e68421f23fc00e5b6f259f48a5ab449c239bec23720e0f9c972fd",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/realcell_baselines_20261008/cases_labels/zebra/zebra_closed_development_b10_s0_p0.npz": "310395d1c312dc8cb83e24b4eb2bd926d5887c549ab99941e8462f77e15f5c97",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_gene_r12k_eval_v2col_20261002/practical/zebra/G1v2p_096000/zebra_cell_type/zebra_closed_development_b10_s0_p0/predictions.npz": "9efe3472af21afcc89159fe3348f509b2a75303eb26cffa001a29f2b14a0c74f",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_importance_20261008/results/zebra_dev_b10_s0__G.npz": "f3f7f0e5e79de21882faf438e369f31a2bccd2ffcd480ab526e27a4edc57083b",
+    "/share/runs/2026/30-03-phflot-hashprompt/hashprompt_improvement_loop/gene_importance_20261008/results/zebra_dev_b10_s0__G__dsloo_corr.npz": "85ccdaf0ccda657a30c12aff6d5de05570625a7397a7573fa6220b08dee2ba4c"
+  },
+  "preparation_script_sha256": "e6a5b5793070b309d11f13825fc052c46dbcb9ea11e719728df28063c5959bbc",
+  "query_cells": 7769,
+  "support_cells": 40,
+  "explained_cells": 96,
+  "balanced_accuracy_pct": 63.258060703547095,
+  "visualization_only": true,
+  "parameters": {
+    "hvg_flavor": "seurat",
+    "requested_hvgs": 2000,
+    "realized_hvgs": 2000,
+    "scale_clip": 10,
+    "pca_components": 50,
+    "neighbors": 15,
+    "umap_min_dist": 0.3,
+    "metric": "euclidean",
+    "seed": 42,
+    "fitting_population": "exact support/query union, without labels"
+  },
+  "versions": {
+    "python": "3.11.15",
+    "numpy": "2.4.4",
+    "pandas": "2.3.3",
+    "scanpy": "1.11.5",
+    "anndata": "0.12.10"
+  },
+  "output_sha256": "3d94ca4fd570ad7f5582dffd3f8e2304cdfbc820ddb73d1a15b3a4c7a291131a",
+  "seconds": 16.714174701017328
+}

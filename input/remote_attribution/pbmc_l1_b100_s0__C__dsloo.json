@@ -1,0 +1,15 @@
+{
+ "case": "pbmc_l1_b100_s0",
+ "arm": "C",
+ "checks": {
+  "max_abs_R_vs_model": 0.0,
+  "max_abs_logit_vs_model": 0.000152587890625,
+  "channel_recompute_maxabs": 0.0
+ },
+ "seconds_all_genes": 49.73039332451299,
+ "seconds_validation_replay": 0.5918309395201504,
+ "n_cells": 192,
+ "G": 33538,
+ "K": 8,
+ "peak_gpu_gib": 3.5743637084960938
+}

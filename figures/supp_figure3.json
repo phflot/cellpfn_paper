@@ -1,0 +1,221 @@
+{
+  "id": "supp_figure3",
+  "title": "Gene coverage and preprocessing sensitivity",
+  "claim": "Gene coverage and missing-assay encoding affect performance and qualify scaling comparisons.",
+  "status": "ready",
+  "size_mm": [
+    180.0,
+    190.0
+  ],
+  "backend": "Python/Matplotlib",
+  "versions": {
+    "python": "3.13.13",
+    "matplotlib": "3.11.2",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3"
+  },
+  "source_hashes": {
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig2__cases.csv": "23cc90e3a26c69a6f1d318c6dba1831775ae5e9787a4788e022add56a1df9034",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig2__cells.csv": "fc0c545272d31658bbe26d52e375d5a06636668adc85852ae025120461761179",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/supp_stored_zeros__cases.csv": "6de2cf05c593191853b9ff1cd174fa1d04c762d11a485a0c26c6b28577a4d499",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/supp_stored_zeros__facts.csv": "ffee368cbc205f2f617c7cd7da5c8077384a4f2588016025e219584fd3a84b5e",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/supp_stored_zeros__study_gene_availability.csv": "07373a876a8e601cec051a48d34d3a47ff7adad1213ff154f4be2494a6c3dca8"
+  },
+  "panel_source_data": {
+    "figures/source_data/supp_figure3/a.csv": "8294e26f6ae3c40d645e4746c801ae6706dd527aa8ae4c758c8aa1f4a311c9da",
+    "figures/source_data/supp_figure3/b.csv": "a3eb52e0649e3ef86a8c59de5562c980eda44085dc40585543b66cc610082acd",
+    "figures/source_data/supp_figure3/c.csv": "ae2dec7e220fd91bd07d7ffff08349cf0e4501e6e5c7e4802478870714b80087",
+    "figures/source_data/supp_figure3/d.csv": "ccc3cb9a0a734fe415bb515a3a9eba905ff97ac9c40939465ea07b7adc9a3e7a",
+    "figures/source_data/supp_figure3/e.csv": "5bc2b60271d0fe65c484046029501f2ae717b72012c0d0d2701dde98c43e6f2e",
+    "figures/source_data/supp_figure3/f.csv": "7d635879925d5abe2ed050dfe1a97edf1b79bdcf6c9c6589fb3f576d66e0061d"
+  },
+  "panels": [
+    {
+      "letter": "a",
+      "claim": "HVG labels denote caps, with reduced realized width at low support",
+      "source": "fig2__cases",
+      "filters": {
+        "model_id": "cellpfn_g1v2p",
+        "gene_view": [
+          "hvg2000",
+          "hvg8192",
+          "all"
+        ],
+        "metric": "balanced_accuracy",
+        "draw": [
+          "0",
+          "1",
+          "2"
+        ]
+      },
+      "n": 108,
+      "unit": "support draw",
+      "aggregation": "8,192-HVG means and min/max over three draws; all/2k widths preserved in source data",
+      "uncertainty": "Descriptive ranges, not CIs",
+      "availability": "Complete selected rows"
+    },
+    {
+      "letter": "b",
+      "claim": "Full-gene effects vary across settings",
+      "source": "fig2__cells",
+      "filters": {
+        "model_id": "cellpfn_g1v2p",
+        "gene_view": "all",
+        "metric": "balanced_accuracy",
+        "draw_set": "draws_0_19"
+      },
+      "n": 12,
+      "unit": "paired support draw",
+      "aggregation": "Exported mean all-minus-HVG difference",
+      "uncertainty": "Exported paired 95% t intervals over 20 draws; not training/donor uncertainty",
+      "availability": "Complete selected rows"
+    },
+    {
+      "letter": "c",
+      "claim": "Random-gene controls contextualize gene selection",
+      "source": "fig2__cells",
+      "filters": {
+        "model_id": "cellpfn_g1v2p",
+        "gene_view": [
+          "rand2000",
+          "hvg2000",
+          "rand8192",
+          "hvg8192",
+          "all"
+        ],
+        "draw_set": "draws_0_19",
+        "metric": "balanced_accuracy"
+      },
+      "n": 60,
+      "unit": "panel\u2013support combination",
+      "aggregation": "Small dots: 20-draw means for 12 conditions; diamond: equally weighted condition mean",
+      "uncertainty": "Condition heterogeneity only; no CI over conditions",
+      "availability": "Complete selected rows"
+    },
+    {
+      "letter": "d",
+      "claim": "Missing assays are encoded as zeros in the merged cortex matrix",
+      "source": "supp_stored_zeros__study_gene_availability",
+      "filters": {},
+      "n": 15,
+      "unit": "study",
+      "aggregation": "Percentage of 21,158 panel genes unmeasured per study",
+      "uncertainty": "Descriptive; no uncertainty",
+      "availability": "Includes support, query and separate sex-case study roles; see source data"
+    },
+    {
+      "letter": "e",
+      "claim": "Removing stored-zero genes changes performance",
+      "source": "supp_stored_zeros__facts",
+      "filters": {
+        "key": "tierD.{panel}.b{budget}.b_raw_minus_a and ci_low/ci_high"
+      },
+      "n": 18,
+      "unit": "paired support draw",
+      "aggregation": "Exported difference after removing unmeasured genes; retained values unchanged",
+      "uncertainty": "Paired 95% t intervals over 10 draws",
+      "availability": "No renormalization; separate from reconstructed-count experiment"
+    },
+    {
+      "letter": "f",
+      "claim": "Count reconstruction changes multiple inputs simultaneously",
+      "source": "supp_stored_zeros__cases",
+      "filters": {
+        "model_id": "cellpfn_g1v2p",
+        "gene_view": "all",
+        "metric": "balanced_accuracy",
+        "draw": [
+          "0",
+          "1",
+          "2"
+        ],
+        "input_mode": "count for counts panels; processed otherwise"
+      },
+      "n": 36,
+      "unit": "support draw",
+      "aggregation": "Mean over three draws per panel/budget",
+      "uncertainty": "No confidence interval",
+      "availability": "21,158 processed versus 12,325 count genes; some support identities differ"
+    }
+  ],
+  "geometry": [
+    {
+      "axis": 0,
+      "bounds_fraction": [
+        0.18,
+        0.7526456984273822,
+        0.2941176470588236,
+        0.15735430157261787
+      ],
+      "xlabel": "Realized genes (mean and range)",
+      "ylabel": "",
+      "title": "Requested 8,192 HVGs"
+    },
+    {
+      "axis": 1,
+      "bounds_fraction": [
+        0.6858823529411766,
+        0.7526456984273822,
+        0.2941176470588236,
+        0.15735430157261787
+      ],
+      "xlabel": "Balanced-accuracy change (pp)",
+      "ylabel": "",
+      "title": "All genes \u2212 2k HVGs, 20 draws"
+    },
+    {
+      "axis": 2,
+      "bounds_fraction": [
+        0.18,
+        0.39635060129509725,
+        0.2941176470588236,
+        0.20980573543015724
+      ],
+      "xlabel": "Balanced accuracy (%)",
+      "ylabel": "",
+      "title": "Random and HVG controls"
+    },
+    {
+      "axis": 3,
+      "bounds_fraction": [
+        0.6858823529411766,
+        0.39635060129509725,
+        0.2941176470588236,
+        0.20980573543015724
+      ],
+      "xlabel": "Genes unmeasured in study (%)",
+      "ylabel": "",
+      "title": "Stored-zero gene coverage"
+    },
+    {
+      "axis": 4,
+      "bounds_fraction": [
+        0.18,
+        0.10000000000000009,
+        0.2941176470588236,
+        0.1498612395929695
+      ],
+      "xlabel": "Balanced-accuracy change (pp)",
+      "ylabel": "",
+      "title": "Remove genes unmeasured in any study"
+    },
+    {
+      "axis": 5,
+      "bounds_fraction": [
+        0.6858823529411766,
+        0.10000000000000009,
+        0.2941176470588236,
+        0.1498612395929695
+      ],
+      "xlabel": "Supports per class",
+      "ylabel": "Balanced accuracy (%)",
+      "title": "Processed versus reconstructed counts"
+    }
+  ],
+  "outputs": {
+    "figures/supp_figure3.pdf": "be6798d301775de118896c6c8abcf9e5818c65518d4b57c9d8372d437e331812",
+    "figures/supp_figure3.svg": "3ea8631517d5272e6e7b765d53bc168b16601a8a98705cdbb9dc9dec45e98407",
+    "figures/supp_figure3.png": "b4057d1e21556e8826e042be2b7845f62b738f1cf4ef13b8485fdc6323d2c95c"
+  },
+  "extra": {}
+}

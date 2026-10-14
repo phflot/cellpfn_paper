@@ -1,0 +1,234 @@
+{
+  "id": "supp_figure5",
+  "title": "Prior interventions and task-mixture tradeoffs",
+  "claim": "Task restriction improves proxy low-support accuracy but changes training composition and exposure and incurs calibration tradeoffs.",
+  "status": "ready",
+  "size_mm": [
+    180.0,
+    189.0
+  ],
+  "backend": "Python/Matplotlib",
+  "versions": {
+    "python": "3.13.13",
+    "matplotlib": "3.11.2",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3"
+  },
+  "source_hashes": {
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/supp_prior_ablation__outcomes.csv": "0cb728c9bea2a32c4d662d35dd09d5ab365806197b8c94a464facb47c5e9b62e",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig6__taskmix_stream_composition.csv": "770ff2f0f4dc8969bd7c6b5d73c754a0e77e2281a5e5f55a3400b8a1af238cbe",
+    "/home/phflot/projects/ccb/hashprompt/paper/paper_export_20261011/data/fig6__taskmix_paired.csv": "b41411d7a2aae5266e7b973ba831c1bc18203e7b3491cc96b1ceb7e13e712f92"
+  },
+  "panel_source_data": {
+    "figures/source_data/supp_figure5/a.csv": "a14783379c90218caf9144bdf49fc8eb3f03f9f9cc8d8b2e077dd6d6bf729927",
+    "figures/source_data/supp_figure5/b.csv": "941a5d464e52c39f4730cc869773e941856cebfd3722776c34ed3ccd4d313a10",
+    "figures/source_data/supp_figure5/c.csv": "8b86df33690e71f0da233553fa413614f5b5b391f1048734cb02cd45afe3afab",
+    "figures/source_data/supp_figure5/d.csv": "fa7c0794fdb3018abbc04824a948211b1311c1a1676a382eb01640f3f5e6a089",
+    "figures/source_data/supp_figure5/e.csv": "f08f3ffd2b03b838841e4d9df828508bc8ea36a5b55437e610aa2160f7fa129f",
+    "figures/source_data/supp_figure5/f.csv": "3c259d9415853f05cdae30a586613b14b1076d5332a494aef9204c7f03ccded5",
+    "figures/source_data/supp_figure5/g.csv": "bafacb468b9c943b182c610ab903d6a6d51e0243a1c34e8071e198d90e42265a"
+  },
+  "panels": [
+    {
+      "letter": "a",
+      "claim": "Accuracy endpoints: six candidates",
+      "source": "supp_prior_ablation__outcomes",
+      "filters": {
+        "arm": [
+          "LR",
+          "A5",
+          "A6",
+          "A7",
+          "A8a",
+          "A8d"
+        ]
+      },
+      "n": "Three paired task-stream replicates, one model seed",
+      "uncertainty": "Each replicate and mean; effective noise-band and keep thresholds, not confidence intervals",
+      "aggregation": "Improvement-signed difference against each arm-specific base; endpoints retained separately",
+      "source_labels": "Frozen outcome labels retained in source; routing only means proxy cannot decide donor/weak-task efficacy"
+    },
+    {
+      "letter": "b",
+      "claim": "Donor endpoints: reported only",
+      "source": "supp_prior_ablation__outcomes",
+      "filters": {
+        "arm": [
+          "A1",
+          "A3",
+          "A2"
+        ]
+      },
+      "n": "Three paired task-stream replicates, one model seed",
+      "uncertainty": "Each replicate and mean; effective noise-band and keep thresholds, not confidence intervals",
+      "aggregation": "Improvement-signed difference against each arm-specific base; endpoints retained separately",
+      "source_labels": "Frozen outcome labels retained in source; routing only means proxy cannot decide donor/weak-task efficacy"
+    },
+    {
+      "letter": "c",
+      "claim": "Weak-task calibration endpoint",
+      "source": "supp_prior_ablation__outcomes",
+      "filters": {
+        "arm": [
+          "A4"
+        ]
+      },
+      "n": "Three paired task-stream replicates, one model seed",
+      "uncertainty": "Each replicate and mean; effective noise-band and keep thresholds, not confidence intervals",
+      "aggregation": "Improvement-signed difference against each arm-specific base; endpoints retained separately",
+      "source_labels": "Frozen outcome labels retained in source; routing only means proxy cannot decide donor/weak-task efficacy"
+    },
+    {
+      "letter": "d",
+      "claim": "Restricted training removes metadata tasks",
+      "source": "fig6__taskmix_stream_composition",
+      "filters": {
+        "quantity": "families"
+      },
+      "n": "16000 tasks per arm",
+      "uncertainty": "Exact task counts; no intervals"
+    },
+    {
+      "letter": "e",
+      "claim": "Equal additional updates do not match materialized cell exposure",
+      "source": "fig6__taskmix_stream_composition",
+      "filters": {
+        "quantity": "cells_per_update",
+        "category": "total"
+      },
+      "n": "4000 updates per arm",
+      "uncertainty": "Exact recorded counts; repeated cell exposures, not unique cells",
+      "numeric_anchors": {
+        "standard": 6386352.0,
+        "restricted": 10671056.0,
+        "ratio": 1.670915727789511
+      }
+    },
+    {
+      "letter": "f",
+      "claim": "Accuracy change",
+      "source": "fig6__taskmix_paired",
+      "filters": {
+        "metric": "balanced_accuracy",
+        "model_a": "cellpfn_gl1",
+        "model_b": "cellpfn_gs1",
+        "gene_view": "all"
+      },
+      "n": "20 paired support draws per task/budget, one training run per arm",
+      "uncertainty": "Exported paired 95% t intervals; no model-seed replication",
+      "note": "4,000 additional updates; unequal cell exposures and simultaneous task-family/lane changes preclude an isolated causal task-difficulty effect."
+    },
+    {
+      "letter": "g",
+      "claim": "Log-loss change",
+      "source": "fig6__taskmix_paired",
+      "filters": {
+        "metric": "nll",
+        "model_a": "cellpfn_gl1",
+        "model_b": "cellpfn_gs1",
+        "gene_view": "all"
+      },
+      "n": "20 paired support draws per task/budget, one training run per arm",
+      "uncertainty": "Exported paired 95% t intervals; no model-seed replication",
+      "note": "4,000 additional updates; unequal cell exposures and simultaneous task-family/lane changes preclude an isolated causal task-difficulty effect."
+    }
+  ],
+  "geometry": [
+    {
+      "axis": 0,
+      "bounds_fraction": [
+        0.19,
+        0.7114492753623188,
+        0.2872727272727273,
+        0.21855072463768122
+      ],
+      "xlabel": "Improvement in balanced accuracy (pp)",
+      "ylabel": "",
+      "title": "Accuracy endpoints: six candidates"
+    },
+    {
+      "axis": 1,
+      "bounds_fraction": [
+        0.6927272727272726,
+        0.8291304347826087,
+        0.28727272727272735,
+        0.10086956521739132
+      ],
+      "xlabel": "Improvement in unit AUC",
+      "ylabel": "",
+      "title": "Donor endpoints: reported only"
+    },
+    {
+      "axis": 2,
+      "bounds_fraction": [
+        0.6927272727272726,
+        0.7114492753623188,
+        0.28727272727272735,
+        0.033623188405797144
+      ],
+      "xlabel": "Reduction in NLL (nats)",
+      "ylabel": "",
+      "title": "Weak-task calibration endpoint"
+    },
+    {
+      "axis": 3,
+      "bounds_fraction": [
+        0.19,
+        0.3983333333333333,
+        0.2872727272727273,
+        0.1681159420289855
+      ],
+      "xlabel": "Share of 16,000 additional tasks (%)",
+      "ylabel": "",
+      "title": "The task family distribution changes"
+    },
+    {
+      "axis": 4,
+      "bounds_fraction": [
+        0.6927272727272726,
+        0.3983333333333333,
+        0.28727272727272735,
+        0.1681159420289855
+      ],
+      "xlabel": "",
+      "ylabel": "Cell exposures (millions)",
+      "title": "CellPFN cell exposure is unequal"
+    },
+    {
+      "axis": 5,
+      "bounds_fraction": [
+        0.19,
+        0.05999999999999994,
+        0.2872727272727273,
+        0.19333333333333336
+      ],
+      "xlabel": "Supports per class",
+      "ylabel": "Restricted minus standard (pp)",
+      "title": "Accuracy change"
+    },
+    {
+      "axis": 6,
+      "bounds_fraction": [
+        0.6927272727272726,
+        0.05999999999999994,
+        0.28727272727272735,
+        0.19333333333333336
+      ],
+      "xlabel": "Supports per class",
+      "ylabel": "Restricted minus standard NLL (nats)",
+      "title": "Log-loss change"
+    }
+  ],
+  "outputs": {
+    "figures/supp_figure5.pdf": "3486521fd9ed29a32c0b26863f20992374030a1b9430931b0f60dec3c46753b9",
+    "figures/supp_figure5.svg": "e67e72bca72158cddbcccf80119be876b511dfc0281167be61357a464d033ec7",
+    "figures/supp_figure5.png": "478fe2d3da119623dbe41e544f93619ecddb693ed7658a411502094782102940"
+  },
+  "extra": {
+    "numeric_anchors": {
+      "LR_mean": 1.9522613295976043,
+      "total_candidates": 10
+    },
+    "axes_units": "Accuracy, AUC and NLL are never combined on one numerical axis."
+  }
+}
