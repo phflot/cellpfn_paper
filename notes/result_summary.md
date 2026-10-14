@@ -9,7 +9,7 @@ The simulator is the PFN prior. Lead with CellPFN's competitive real-cell infere
 - **R01; T01–T05:** the reference G1v2′ endpoint has 12,329,889 trainable parameters, 384,000 scheduled episodes from 12,000 simulated banks and 276,828 loss-bearing episodes, at 96,000 update opportunities. Each bank supplies 32 views. Do not call the bank count the training-task count or call the episode views independent biological datasets.
 - **T06–T07:** TabICLv2 reports approximately 35 million synthetic training datasets in its primary article, section 4.1. Against 384,000 scheduled CellPFN episodes this is approximately 91-fold greater task exposure, or about 90-fold fewer for CellPFN. The article was opened and read on 2026-10-14; the local check cannot verify its claim. This is a descriptive cross-paper exposure comparison, not matched-compute or causal training-efficiency evidence.
 - **T08–T10:** current continued training adds 40,000 cellular tasks and 10,000 generic replay tasks over 2,500 updates. The released pretraining is additional. Do not describe 40,000 as total lifetime training or omit replay when accounting for exposure.
-- **T11–T12:** exact Kumo and TabPFN-3.5 pretraining-task counts are unverified here. TabPFN-v2 numbers and the old Google TabFM campaign must not substitute for them.
+- **T11/T13:** the official NVIDIA Kumo-Tabular1.0 model card reports approximately35million synthetic tables for small and137million for large. These external approximations were verified on2026-10-14 in the literature review and remain outside local numerical verification. **T12:** no comparable total for TabPFN-3.5 was verified; TabPFN-v2 and the old Google TabFM campaign must not substitute.
 
 ## Comparable performance with a compact cellular model
 

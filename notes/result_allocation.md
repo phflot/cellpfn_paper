@@ -29,7 +29,7 @@ The earlier hypothetical broad applicability map and prospective external evalua
 
 - Use G1v2′ at the exported endpoint to connect scaling, benchmarking and DS-LOO. GL1/GS1 are explicit continuation ablations rather than an undocumented replacement model.
 - Use the processed Zebra view for the current coherent Wave 1 narrative and describe reconstructed-count sensitivity separately, unless the author selects the latter as primary. Gene-view and DS-LOO results cannot silently migrate to another input panel. The final frozen evaluation is unresolved.
-- Make quantitative comparison of training exposure against the verified TabICLv2 paper; leave unverified comparator counts unavailable. No wall-clock claim follows from task exposure.
+- Make quantitative comparison of training exposure against the verified TabICLv2 paper; retain verified Kumo model-card approximations in the ledger and leave unverified TabPFN-3.5 counts unavailable. No wall-clock claim follows from task exposure.
 - ROSMAP numerical prose remains bold red pending corrected labels. A complete aspirational abstract may include bold-red unresolved generality/application claims, but not imaginary numerical outcomes.
 - Use supplied intervals only. A three-draw range is descriptive; neither query-cell pseudoreplication nor treating different result-table cells as training replicates is permitted.
 - Build final figures in Wave 3. The present allocation tracks evidence ownership and captions' scientific obligations without producing new panels or analyses.
