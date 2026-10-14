@@ -1,47 +1,50 @@
-     A cellular prior enables compact and transferable single-cell inference
-                                                    with CellPFN
-                                         Philipp Flotho1,2 , Matthias Flotho1,2 ,
-                                           Pirya Rani1,2 , Andreas Keller1,2
+    A cellular prior enables compact and transferable single-cell inference
+                                                  with CellPFN
+                                       Philipp Flotho1,2 , Matthias Flotho1,2 ,
+                                         Pirya Rani1,2 , Andreas Keller1,2
 
 
-                      1
-                       Chair for Clinical Bioinformatics, Saarland University, Saarbrücken, Germany
-     2
-         Helmholtz Institute for Pharmaceutical Research Saarland (HIPS), Helmholtz Centre for Infection Research,
-                                                  Saarbrücken, Germany
+                     1
+                      Chair for Clinical Bioinformatics, Saarland University, Saarbrücken, Germany
+    2
+        Helmholtz Institute for Pharmaceutical Research Saarland (HIPS), Helmholtz Centre for Infection Research,
+                                                 Saarbrücken, Germany
 
-                                Wave 1 working draft: abstract, introduction and Results.
-                    Bold red prose is provisional or aspirational, not an established finding.
-                  Claim IDs refer to notes/open_claims.md. Methods and figures follow in later waves.
+                     Wave 1 working draft: abstract, introduction, Results and supporting tables.
+                   Bold red prose is provisional or aspirational, not an established finding.
+                 Claim IDs refer to notes/open_claims.md. Methods and figures follow in later waves.
 
-                                                           Abstract
-                  Single-cell prediction often requires learning from limited labelled context across heterogeneous
-              experiments. We developed CellPFN, a prior-data fitted network trained on a procedural
-              cellular prior that varies biological signals, donor structure and measurement noise. The
-              12.33-million-parameter model uses task-local gene correspondence without persistent gene
-              identities and requires no target-task gradient updates. After 384,000 scheduled synthetic
-              episodes, CellPFN achieved competitive cell-type classification relative to pretrained tabular
-              models, with approximately 90-fold less reported task exposure than TabICLv2. The cellular
-              prior improved three pretrained tabular models through continued training, improving one-shot
-              balanced accuracy by 5.6–10.8 percentage points. CellPFN also accepted transcriptome-scale
-              inputs and supported efficient gene-deletion explanations. The framework further identifies
-              neuropathology-associated cellular states and reproducible predictive expression
-              signatures across independent cohorts.[O04] These results position a cellular task prior as a
-              reusable resource for learning biological inference with limited labelled data.
+                                                        Abstract
 
- 1   Single-cell atlases provide increasingly broad reference maps, yet annotating a new experiment
- 2   often requires inference from a small labelled set collected under different biological and technical
- 3   conditions. More profiled cells do not necessarily supply more independent donors or more varied
- 4   experimental settings. In supervised single-cell annotation, increasing donor diversity can contribute
- 5   more to generalization than increasing cell count alone 1 . This distinction motivates models that
- 6   learn how to interpret limited experimental context across heterogeneous tasks.
- 7         Single-cell foundation models such as Geneformer, scGPT, scFoundation, UCE and Transcript-
- 8   Former learn reusable representations from large collections of measured profiles 2–6 . Their breadth
- 9   supports transfer across biological settings, but large-scale pretraining does not guarantee an advan-
+                 Single-cell prediction often requires learning from limited labelled context across heteroge-
+             neous experiments. We developed CellPFN, a prior-data fitted network trained on a procedural
+             cellular prior varying biological signals, donor structure and measurement noise. The 12.33-
+             million-parameter model uses task-local gene correspondence without persistent gene identities or
+             target-task gradient updates. After 384,000 scheduled synthetic episodes, CellPFN reached 72.9%
+             mean balanced accuracy across four cell-typing panels and three support budgets, compared
+             with 66.8–70.1% for released TabICLv2 and Kumo large under their tested input configurations.
+             Cellular continued training improved three tabular models’ one-shot balanced accuracy by 5.6–
+             10.8 percentage points. Ablations revealed support-dependent benefits and tradeoffs. CellPFN
+             also accepted transcriptome-scale inputs and yielded gene-deletion explanations recovering estab-
+             lished cell-type markers. The framework further identifies neuropathology-associated
+             cellular states and reproducible predictive expression signatures across independent
+             cohorts.[O04] These results support cellular task priors for learning biological inference with
+             limited labelled data.
+
+1   Single-cell atlases provide increasingly broad reference maps, yet annotating a new experiment
+2   often requires inference from a small labelled set collected under different biological and technical
+3   conditions. More profiled cells do not necessarily supply more independent donors or more varied
+4   experimental settings. In supervised single-cell annotation, increasing donor diversity can contribute
+5   more to generalization than increasing cell count alone 1 . This distinction motivates models that
+6   learn how to interpret limited experimental context across heterogeneous tasks.
+7         Single-cell foundation models such as Geneformer, scGPT, scFoundation, UCE and Transcript-
+8   Former learn reusable representations from large collections of measured profiles 2–6 . Their breadth
+
+
+                                                            1
+ 9   supports transfer across biological settings, but large-scale pretraining does not guarantee an advan-
 10   tage on each downstream task. Evaluations have found limitations in frozen representations and
-
-                                                               1
-11   saturation as pretraining collections expand 7,8 ; recent preprint evidence also shows that normaliza-
+11   saturation as pretraining collections expand 7,8 ; recent preprint evidence also shows that normaliza-
 12   tion and linear methods can remain competitive across several benchmarks 9 . These findings motivate
 13   a complementary question: can learning improve the inference rule that combines a few labelled
 14   examples, even when the expression measurements themselves already provide useful features?
@@ -64,177 +67,260 @@
 31   face analysis provides precedents for learning from known simulated structure 28,29 . Nevertheless,
 32   simulator fidelity depends on the statistic and scenario being evaluated 30,31 . The relevant test is
 33   whether the induced prior teaches inference that transfers to real biological data.
-34      Here we introduce CellPFN and its procedural cellular prior. CellPFN learns from synthetic
-35   tasks while preserving gene correspondence within each task and omitting persistent gene identities
-36   across tasks. We test two consequences of this prior: whether a compact cellular model can
-37   achieve competitive biological inference after substantially fewer training episodes than a general
-38   tabular model, and whether tasks from the same simulator can improve released tabular models
-39   through continued training. We further examine transcriptome-scale inputs and efficient query-gene
-40   explanations. The aim is a reusable method for learning from limited labelled biological context,
-41   with the prior’s usefulness established through downstream inference rather than simulation scale
-42   alone.
+34      Here we introduce CellPFN and its procedural cellular prior. CellPFN preserves gene corre-
+35   spondence within each task without persistent gene identities across tasks. We test whether a
+36   compact model can achieve competitive biological inference with limited synthetic training exposure,
+37   and whether the same simulator can improve released tabular models through continued training.
+38   Quantitative ablations examine which architectural and task-distribution choices help, where they
+39   fail, and how simulator statistics relate to transfer. We further evaluate transcriptome-scale inputs
+40   and query-gene explanations, grounding the prior’s utility in inference from limited labelled biological
+41   context.
 
 
-43   Results
-44   A cellular prior teaches inference from labelled context
-45   We constructed a procedural prior over single-cell prediction problems, varying biological differences
-46   together with the conditions under which they are observed. The generator samples hierarchical cell
-47   identities, distributed expression programs, rare markers, correlated variation and donor-dependent
+42   Results
+43   A cellular prior teaches inference from labelled context
+44   We constructed a procedural prior over single-cell prediction problems, varying biological signals
+45   together with their observation conditions. The generator samples hierarchical identities, distributed
 
 
-                                                       2
-48   states. Donor composition, study and batch shifts, sequencing depth and overdispersed count
-49   sampling produce heterogeneous observations of these latent signals. Different labels and support
-50   budgets turn each simulated dataset into multiple inference problems. This makes experimental
-51   variation part of the training distribution, with known task labels and controllable nuisance factors.
-52   Aggregate statistics from real datasets, including those later evaluated here, informed the prior’s
-53   ranges. All examples used to optimize CellPFN’s weights were synthetic.
-54      Each problem comprises labelled support cells and unlabelled queries. Genes retain their
-55   correspondence between support and query but have no persistent identity across problems. CellPFN
-56   compares each query gene with support-derived class summaries, pools the resulting relations through
-57   permutation-invariant statistics and integrates this evidence into class scores. This use of unordered
-58   features follows the principle of set-based learning 32 , while preserving the within-task correspondence
-59   required for expression comparisons. A covariance estimate fitted to the support cells supplies an
-60   additional statistical channel when support is sufficient. The pooled evidence produces direct neural
-61   class predictions. Prediction on a new task requires labelled context but no gradient updates, and
-62   queries do not condition on other query cells.
-63      The reference model has 12.33 million trainable parameters and was trained over 384,000
-64   scheduled episodes drawn from 12,000 simulated dataset banks. Reused banks supplied distinct task
-65   views; 276,828 episodes carried nonzero loss weight. The first 320,000 scheduled episodes used prior
-66   v1, followed by 64,000 using the revised v2.2-B prior. For scale, TabICLv2 reports approximately 35
-67   million synthetic pretraining datasets 15 , about 90 times CellPFN’s scheduled episode count. This
-68   comparison describes training-task exposure across different priors and architectures; it does not
-69   measure a matched-compute advantage.
+                                                        2
+46   expression programs, rare markers, correlated variation and donor-dependent states. Donor com-
+47   position, study and batch shifts, sequencing depth and overdispersed count sampling produce
+48   heterogeneous observations. Varying labels and support budgets turns each simulated dataset into
+49   multiple inference problems with known labels and controllable nuisance factors. Aggregate statistics
+50   from real datasets, including those evaluated here, informed the prior’s ranges. All examples used
+51   to optimize CellPFN’s weights were synthetic.
+52      Each problem comprises labelled support cells and unlabelled queries. Genes retain their
+53   correspondence within a task but have no persistent identity across tasks. CellPFN compares
+54   each query gene with support-derived class summaries, pools these relations through permutation-
+55   invariant statistics 32 and integrates them into direct neural class predictions. A covariance estimate
+56   fitted to the support supplies an additional statistical channel when support is sufficient. Prediction
+57   requires no gradient updates, and queries do not condition on other query cells.
+58      The reference model has 12.33 million trainable parameters and received 384,000 scheduled
+59   episodes from 12,000 simulated dataset banks; 276,828 episodes carried nonzero loss weight. Reused
+60   banks supplied distinct task views. The first 320,000 episodes used prior v1 and the remaining
+61   64,000 used v2.2-B. TabICLv2 reports approximately 35 million synthetic pretraining datasets 15 ,
+62   about 90 times CellPFN’s scheduled episode count (Supplementary Table S2). These different
+63   exposure units contextualize training scale but do not establish a matched-compute advantage.
 
-70   Compact CellPFN is competitive across biological inference regimes
-71   We evaluated coarse and fine cell-type annotation in peripheral blood mononuclear cells (PBMCs) 33 ,
-72   together with cortex annotation within the development collection and on queries from held-out
-73   studies in ZEBRA 34 . Each panel used one, ten or 100 labelled support cells per class. Comparators
-74   included support-trained statistical classifiers, released tabular models, and logistic classifiers fitted
-75   to Geneformer and scGPT embeddings 2,3,15,35,36 . The main comparisons used the same three
-76   support draws. PBMC inputs were counts for CellPFN and normalized expression for tabular
-77   comparators; the cortex analysis used the exported processed-expression view. Model-specific input
-78   routes were retained for the single-cell foundation models; the Geneformer logistic classifier used
-79   standardized embeddings, whereas the scGPT classifier used unscaled embeddings.
-80      Across the four panels and three support sizes, CellPFN using all available genes reached a
-81   mean balanced accuracy of 72.9%. Released TabICLv2 and Kumo large reached 66.8% and 70.1%,
-82   respectively, using 2,000 highly variable genes, while cellular continued training brought Kumo large
-83   to 72.4%. Geneformer and scGPT with logistic classifiers reached 74.9% and 69.4% through their
-84   native input routes. These descriptive averages place the compact cellular model in a competitive
-85   range without establishing statistical equivalence or a universal ranking.
+64   Compact CellPFN is competitive across biological inference regimes
+65   We evaluated coarse and fine peripheral blood mononuclear cell (PBMC) annotation 33 , cortex
+66   annotation within the development collection, and cortex queries from held-out ZEBRA studies 34 .
+67   Each panel used one, ten or 100 labelled support cells per class with three matched support draws.
+68   Comparators included statistical classifiers, released tabular models, and logistic classifiers on
+69   Geneformer-V2 and scGPT embeddings 2,3,15,35–37 . PBMC inputs were counts for CellPFN and
+70   normalized expression for tabular comparators; cortex used processed expression. Foundation models
+71   retained their native input routes, with standardized Geneformer and unscaled scGPT embeddings.
+72      Across the four panels and three support sizes, all-gene CellPFN reached 72.9% mean balanced
+73   accuracy, compared with 66.8% for released TabICLv2 and 70.1% for Kumo large using 2k highly
+74   variable genes (HVGs; Table 1). Geneformer reached 74.9% through its native input route. These
+75   descriptive averages place CellPFN in a competitive range without establishing equivalence or a
+76   universal ranking. Supplementary Table S1 reports panel-specific means and three-draw ranges.
+77      Conventional low-rank linear discriminant analysis (LDA) remained strong with abundant labels:
+78   at 100 supports per class, its four-panel mean was 84.6%, compared with 85.4% for CellPFN; at ten
+79   supports, the means were 75.3% and 79.6%. LDA used processed expression and was not evaluated
+80   at one support.
+81      Task-specific differences were larger than the overall differences. For fine PBMC annotation
+82   at one support, Geneformer reached 68.8% versus CellPFN’s 51.1%; for held-out cortex at ten
+83   supports, CellPFN reached 91.9% versus Geneformer’s 87.4%. Both foundation models likely
 
 
-                                                         3
-86       Support-trained low-rank linear discriminant analysis (LDA) remained strong when labels were
-87    abundant. At 100 support cells per class, LDA using all genes reached 84.6% mean balanced accuracy
-88    across the four panels, compared with 85.4% for CellPFN; at ten supports, the corresponding values
-89    were 75.3% and 79.6%. LDA received processed expression throughout and was not evaluated with
-90    one support cell per class.
-91       The ranking depended on the biological task and the amount of labelled context. For fine PBMC
-92    annotation with one support cell per class, Geneformer reached 68.8% balanced accuracy versus
-93    51.1% for CellPFN. For cortex queries from held-out studies with ten support cells per class, CellPFN
-94    reached 91.9%, compared with 87.4% for Geneformer and 87.2% for scGPT. Both foundation models
-95    likely encountered the exact PBMC cells during unlabelled pretraining; Geneformer also encountered
-96    source studies contributing most held-out cortex queries. This exposure does not establish label
-97    leakage or explain the performance differences, which also reflect preprocessing and classifier settings.
-98    Moreover, model variants were selected on these development panels, and each training arm currently
-99    has one training seed. A frozen evaluation on additional, independently held-out cohorts
-100   will determine how consistently this competitive performance generalizes.[O01]
+                                                       3
+84    encountered the PBMC cells during unlabelled pretraining. Geneformer-V2 corpus records overlap
+85    studies supplying 92.6% of held-out cortex queries, an upper bound on exact-cell overlap. This
+86    evidence does not establish label exposure or explain the ranking (Table 1). Model variants were
+87    selected on these development panels, with one training seed per arm. A frozen evaluation
+88    on additional, independently held-out cohorts will determine how consistently this
+89    competitive performance generalizes.[O01]
+90       Finer PBMC distinctions remained difficult. At 8,192 HVGs, a separate evaluation gave one-shot
+91    balanced accuracies of 62.3% for eight coarse types, 53.9% for 20 fine types and 32.4% across eight
+92    harder tasks. The latter separated sibling CD4, CD8, B, NK or broader T-cell subtypes, or all 35
+93    fine-grained labels; their means rose to 63.9% and 80.2% at ten and 100 supports (Supplementary
+94    Table S9). Nine CD4 subtypes yielded 23.4% and 79.6% at one and 100 supports. This analysis
+95    used ten support draws at one/ten supports and five at 100. The harder tasks were defined post
+96    hoc; they are not a prespecified binary difficulty stratum, and the CellPFN export supplies means
+97    without draw-level intervals.
 
-101   The cellular prior also improves pretrained tabular models
-102   To test whether the prior’s utility extends beyond CellPFN, we continued training released TabICLv2,
-103   Kumo small and Kumo large on tasks from the same simulator, using prior v2.2-B throughout
-104   cellular adaptation. Each model received 40,000 additional cellular tasks and 10,000 generic replay
-105   tasks over 2,500 updates. With 2,000 highly variable genes at evaluation, one-shot balanced accuracy
-106   improved by 7.3, 10.8 and 5.6 percentage points, respectively, averaged across the four core panels.
-107   Changes at 100 support cells per class were smaller than one percentage point in magnitude. Thus
-108   the largest benefits arose where labelled biological context was most limited.
-109      A generic-table continued-training control for Kumo small changed mean balanced accuracy
-110   by approximately zero across the eight low-support panel–budget combinations, compared with a
-111   6.1-point gain for cellular continued training. This comparison supports a contribution from the
-112   training distribution, although the controls differed in rows and columns per update and equivalent
-113   controls were unavailable for the other architectures. The experiments therefore demonstrate two
-114   uses of the cellular prior: training a compact specialist from scratch and adapting already pretrained
-115   tabular learners.
+98    The cellular prior also improves pretrained tabular models
+99    The cellular prior also improved already pretrained tabular learners. We continued training released
+100   TabICLv2, Kumo small and Kumo large using v2.2-B throughout, with 40,000 cellular tasks and
+101   10,000 generic replay tasks over 2,500 updates per model. At 2k HVGs, one-shot balanced accuracy
+102   improved by 7.3, 10.8 and 5.6 percentage points, respectively, averaged over four panels (Table 1).
+103   Changes at 100 supports were below one point in magnitude. Benefits were not uniform: fine PBMC
+104   accuracy for TabICLv2 at ten supports fell from 73.8% to 64.6%, with all three support draws
+105   worsening (Supplementary Table S2).
+106      Cellular continued training of Kumo small improved accuracy by 6.1 points across eight low-
+107   support panel–budget combinations, compared with approximately zero change after generic-table
+108   continued training. Two further cellular task streams yielded gains of 5.7 and 5.2 points with the
+109   same model seed. The control differed in rows and columns per update, so task content was not
+110   isolated under matched data volume. Adaptation could also reduce generic-table performance:
+111   TabICLv2’s one-shot mean balanced accuracy across four generic tables and five split seeds fell from
+112   70.9% to 64.0% (Supplementary Table S2).
 
-116   Gene-anonymous inference extends to transcriptome-scale inputs
-117   We next asked whether CellPFN could use more genes than it encountered during training. The
-118   largest training tasks contained 8,192 genes, whereas the PBMC and processed cortex evaluations
-119   contained 33,538 and 21,158 genes, respectively. The same shared per-gene computations and
-120   symmetric aggregation accepted these larger inputs without expanding a learned gene vocabulary.
-121   Across the matched benchmark draws, balanced accuracy increased from 71.2% with 2,000 highly
-122   variable genes to 73.8% with 8,192, and was 72.9% with all genes. Additional genes therefore
+113   Gene-anonymous inference extends to transcriptome-scale inputs
+114   CellPFN accepted more genes than it encountered during training: the widest training tasks
+115   contained 8,192 genes, whereas PBMC and cortex evaluations contained 33,538 and 21,158. Shared
+116   per-gene computations and symmetric aggregation required no expanded vocabulary. Across the
+117   three benchmark draws, balanced accuracy was 71.2% with 2k HVGs, 73.8% with 8,192 and 72.9%
+118   with all genes (Table 2). A separate twenty-draw analysis resolved task-specific effects: all genes
+119   versus 2k HVGs improved held-out cortex accuracy at ten supports by 7.4 points (95% interval,
+120   5.3–9.6), but reduced one-shot PBMC accuracy by 3.3 points for coarse and 2.0 points for fine labels
 
-                                                         4
-123   remained usable, although retaining every gene did not maximize aggregate accuracy and was not
-124   beneficial in every task.
-125      Released TabICLv2 declined from 66.8% to 48.3% and Kumo large from 70.1% to 66.4% when
-126   moving from 2,000 highly variable genes to all genes. TabPFN-3.5, evaluated under its non-
-127   commercial research terms, refused the all-gene cases at its default feature guard 36,37 . These
-128   outcomes describe the tested inference configurations, including their column handling; they do not
-129   establish a fundamental limit of tabular architectures. CellPFN’s advantage here is the ability to
-130   retain transcriptome-scale input under its existing inference procedure.
+                                                       4
+121   (Supplementary Table S3). These paired intervals quantify support-draw variation, not training-run
+122   variation.
+123      Released TabICLv2 declined from 66.8% to 48.3% and Kumo large from 70.1% to 66.4% when
+124   moving from 2k HVGs to all genes. TabPFN-3.5 refused the all-gene cases at its default feature
+125   guard 37,38 . These are outcomes of the tested column-handling configurations, not fundamental
+126   architectural limits. Random-gene controls and alternative input views are reported in Supplementary
+127   Tables S3 and S9.
 
-131   Prior and architecture changes have regime-dependent effects
-132   We examined whether explicitly exposing cross-gene structure accounted for CellPFN’s performance.
-133   The support-fitted covariance channel supplied both per-gene variance information and low-rank
-134   relationships between genes. Later comparisons of separately trained models with no operator,
-135   diagonal information alone or the full operator showed gains in several support-rich settings. However,
-136   the prespecified operator test did not support its primary claim: an operator-attributable loss
-137   exceeded the allowed threshold on a primary task. The later descriptive improvements therefore do
-138   not establish the operator as uniformly beneficial, and variation across independent training runs
-139   remains unmeasured.
-140      Changing the simulated task distribution also produced a tradeoff. Continuation on tasks selected
-141   as learnable improved some low-support accuracies but worsened predictive log loss at larger support
-142   sizes; the comparison additionally changed the number of cells per update. Simulator diagnostics
-143   likewise showed partial agreement with real data rather than uniform fidelity: the prior covered
-144   the observed strongest-marker range, while its few-cell discrimination tasks were easier than the
-145   real reference. Together, these results motivate judging the prior through transfer and targeted
-146   controls, alongside distributional checks, rather than treating greater simulated realism or a stronger
-147   statistical channel as sufficient evidence of better inference.
-
-148   Query-gene deletion explains predictions efficiently
-149   Gene anonymity still permits gene-level explanations because feature names can be restored after
-150   prediction. We developed DeepSets leave-one-gene-out (DS-LOO), which estimates how setting an
-151   individual query gene to zero changes the logit margin between the initially predicted class and its
-152   runner-up. The support set and fitted covariance remain fixed. In contrast to gradient attribution
-153   along an input path 38 , the target is this finite query-side deletion. DS-LOO uses the pooled gene
-154   statistics and a linearization of the prediction head, with corrections for changes in depth and
-155   detected-gene fraction. It is an approximation to a model intervention, not a simulated biological
-156   gene knockout.
-157      Against exact deletions in six evaluated cases and two model states, the case-level medians of
-158   within-cell rank correlation ranged from 0.979 to 0.998. For the reference model, case-level corrected
-159   relative L2 errors ranged from 0.5% to 4.9%. These checks used selected genes and correctly
-
-                                                         5
-160   classified cells in full precision. Under matched load, computing all-gene explanations
-161   cost approximately 10–13 single-gene exact forward passes. For the PBMC example,
-162   DS-LOO took 67.9 seconds; the corresponding 61-hour exhaustive-deletion runtime was
-163   extrapolated from individual forward timings rather than measured directly. Shared-
-164   GPU timings remain provisional.[O05]
-165      Despite the absence of gene-name embeddings, IL7R ranked second for CD4 T cells and NKG7
-166   seventh for natural killer cells in the evaluated class-margin rankings. Removing each PBMC
-167   query’s 50 most influential genes reversed its margin against the original runner-up class in 45.0%
-168   of evaluated cells, compared with 0.3% for random expressed genes. This supports faithfulness to
-169   the classifier’s decisions. It does not show that the same deletions would change biological identity
-170   or predict experimental perturbation responses.
-
-171   A provisional application examines neuropathology-associated expression
-172   We extended the framework to donor-level neuropathology contrasts in ROSMAP-
-173   derived single-nucleus data 39 . In the exported analysis with case and control support
-174   matched within sex, microglial predictions distinguished the CERAD 4-versus-1 donor
-175   groups with an AUC of 0.745 and a reported corrected 95% repeated-split interval of
-176   0.700–0.790. This result remains provisional pending completion of the donor-label
-177   audit and a frozen rerun. It measures association with neuropathology, not prospective
-178   diagnosis or clinical utility.[O02]
-179      Applying query-gene deletion to the corrected disease analysis and testing the
-180   findings in independent cohorts will test whether this approach can connect donor-level
-181   prediction to reproducible cellular expression signatures.[O03]
+128   Prior and architecture changes have regime-dependent effects
+129   The support-fitted covariance channel had substantial but regime-dependent effects. On fine
+130   PBMC annotation at 100 supports, separately trained models with no operator, diagonal variance
+131   information or the full operator reached 82.2%, 85.7% and 89.0% balanced accuracy. Full versus
+132   no operator gained 6.81 points (95% paired interval, 6.36–7.26); full versus diagonal gained 3.37
+133   points (3.06–3.68), over twenty support draws with one training run per arm (Supplementary
+134   Table S4). Nevertheless, the earlier prespecified test failed: the full model lost 1.56 points against
+135   the no-operator model on coarse PBMC at ten supports, exceeding the allowed 1.50-point harm
+136   threshold. Later descriptive gains do not overturn that outcome.
+137      A ten-candidate prior screen identified learnable-task filtering as the only change meeting its
+138   retention rule on the Kumo-small proxy (Supplementary Table S5). After 10,000 cellular tasks,
+139   low-support accuracy improved by 1.95 points, with gains of 1.63, 1.62 and 2.61 across three task
+140   streams sharing one model seed. No prior-content modification demonstrated benefit. Whole-study
+141   gene absence, for example, gained 0.90 points but failed its predictive-log-loss guard, worsening
+142   negative log likelihood (NLL) by 0.099 against a 0.03 limit. Other outcomes included neutral and
+143   unresolved cases; they do not establish that the corresponding mechanisms are irrelevant.
+144      Learnable-task continuation also improved CellPFN’s one-shot accuracy on all four panels:
+145   gains were 1.11, 2.42, 2.56 and 3.49 points for coarse PBMC, fine PBMC, development cortex and
+146   held-out cortex, respectively (Supplementary Table S6). The held-out cortex gain had a 95% paired
+147   interval of 1.73–5.26 over twenty support draws. At 100 supports, NLL worsened on three panels by
+148   0.35–0.63, while improving by 0.05 on fine PBMC. This is a probabilistic-prediction tradeoff, not a
+149   calibration-only measurement. Learnable-task continuation processed 1.67 times as many cells per
+150   update, precluding attribution to filtering alone.
+151      Simulator diagnostics likewise supported partial agreement with real data (Supplementary
+152   Table S7). The median strongest-marker absolute log2 fold change was 6.23 under v2.2-B versus
+153   7.10 in the real reference and 1.94 under v1. Yet eight-class tasks with ten supports were easier:
+154   median chance-adjusted nearest-class-mean accuracy was 0.881 versus 0.775, and 37.5% of synthetic
+155   banks exceeded the real maximum. These reference statistics informed prior calibration, and v2.2-B
+156   supplied only the final 64,000 CellPFN episodes. They therefore contextualize transfer without
+157   establishing that increased realism caused better predictions.
 
 
 
+                                                           5
+158   Sex prediction varies across evaluation settings
+159   CellPFN also predicted sex in ZEBRA, but performance depended on the evaluation setting. On
+160   one frozen oligodendrocyte case, it achieved 100% balanced accuracy over 50 query cells and over
+161   ten query GSM samples, using 100 support cells per sex. Support and query GSMs were disjoint;
+162   GSM identifiers do not guarantee distinct donors. A later positive control restricted studies to those
+163   measuring XIST and at least four Y-linked genes. With 8,192 HVGs, mean unit-level AUC was 0.977
+164   at four support units per sex and 1.000 at 16, across ten splits; units included age-by-sex sample
+165   groups. The broader sex task yielded 0.507 and 0.538 at those budgets (Supplementary Table S9).
+166   Study sets and gene universes also differed, so this contrast does not isolate the effect of sex-linked
+167   genes. Gene-level attribution of these sex predictions will establish which expression
+168   features the model uses; the available results do not yet identify those features.[O06]
 
-                                                        6
+169   Query-gene deletion recovers cell-type marker structure
+170   Gene anonymity still permits gene-level explanations because feature names can be restored after
+171   prediction. DeepSets leave-one-gene-out (DS-LOO) approximates the effect of zeroing one query
+172   gene on the logit margin between the predicted class and its original runner-up, holding support
+173   and fitted covariance fixed. Unlike gradient attribution along an input path 39 , the target is a finite
+174   deletion. One attribution sweep combines pooled gene statistics with head-gradient evaluations and
+175   depth/detection corrections, avoiding a separate full-model forward pass per deleted gene. It is not
+176   literally one forward pass, and its target is a model intervention rather than a biological knockout.
+177      Against exact deletions in six cases and two model states, case-level medians of within-cell rank
+178   correlation ranged from 0.979 to 0.998; reference-model relative L2 errors were 0.5–4.9%. Validation
+179   used selected genes and correctly classified cells in full precision (Supplementary Table S8). All-gene
+180   explanations cost approximately 10–13 single-gene exact forward passes. For the PBMC
+181   example, DS-LOO took 67.9 seconds; the corresponding 61-hour exhaustive-deletion
+182   runtime was extrapolated from individual forward timings. Shared-GPU timings
+183   remain provisional.[O05]
+184      The explanations recovered recognizable cell-type markers without gene-name embeddings. In
+185   PBMC class-margin rankings at 100 supports, B-cell markers CD79A and MS4A1 ranked first and
+186   second; IL7R ranked second for CD4 T cells, CD8A second for CD8 T cells, and GNLY /NKG7
+187   second/seventh for natural killer cells 33,40 . In development cortex, oligodendrocyte-associated
+188   PLP1 ranked eighth for glia, neuronal SYT1 seventh for neural cells, and endothelial CLDN5
+189   sixteenth for vascular cells 41 . These are selected lineage-associated matches, not an enrichment test
+190   (Supplementary Table S8).
+191      Removing each PBMC query’s 50 highest-ranked genes reversed its original runner-up margin in
+192   45.0% of cells, versus 0.3% for random expressed genes. Class-level top-20 overlap across support
+193   configurations was 0.43–0.56, indicating context sensitivity. Thus the rankings explain classifier
+194   decisions without establishing perturbation responses or universal marker recovery.
+
+
+
+                                                         6
+195   A provisional application examines neuropathology-associated expression
+196   In a provisional donor-level application to ROSMAP-derived single-nucleus data 42 ,
+197   microglial predictions distinguished CERAD 4-versus-1 neuropathology groups with an
+198   AUC of 0.745 and a reported corrected 95% repeated-split interval of 0.700–0.790. Case
+199   and control support was matched within sex (Supplementary Table S9). The result
+200   awaits a donor-label audit and frozen rerun; it measures association, not prospective
+201   diagnosis or clinical utility.[O02]
+202      Applying query-gene deletion to the corrected disease analysis and testing the
+203   findings in independent cohorts will test whether this approach can connect donor-level
+204   prediction to reproducible cellular expression signatures.[O03]
+
+
+
+
+                                                 7
+                                              Table 1: Biological classification and cellular-prior transfer.
+                                                       Model comparison: balanced accuracy (%)
+       Panel, support/class        CellPFN       TabICLv2            Kumo small           Kumo large      TabPFN Geneformer        scGPT Low-rank
+                                                                                                            3.5    V2 (316M)               LDA
+                                  All genes Released    + prior   Released   + prior   Released   + prior Released   + LR           + LR All genes
+       PBMC coarse, 1                60.1      50.2      62.3       45.8      62.8      58.9       62.2      34.3       67.1*       64.9*       –
+       PBMC coarse, 10               84.0      81.4      85.2       82.2      83.3      81.7       82.5      82.6       88.5*       77.5*      79.4
+       PBMC coarse, 100              91.9      92.4      93.4       92.6      92.3      92.8       92.8      91.5        92.7*      80.7*      90.0
+       PBMC fine, 1                  51.1      30.0      29.1       44.1      49.0      46.3       50.9      33.0       68.8*       55.7*       –
+       PBMC fine, 10                 79.0      73.8      64.6       80.0      80.5      83.3       82.2      79.3       84.9*       65.9*      70.3
+       PBMC fine, 100                89.0      83.6      85.3       88.3      88.7      89.3       89.2      86.9       90.4*       72.0*      87.8
+       ZEBRA development, 1          41.4      39.5      44.6       31.2      41.9      40.1       42.8      38.4       43.1(*)     47.6        –
+       ZEBRA development, 10         63.6      59.9      60.6       57.5      59.2      56.8       60.6      59.3       61.1(*)     60.2       60.6
+       ZEBRA development, 100        66.1      65.3      65.3       65.1      64.9      65.1       65.8      65.5       65.4(*)     65.8       66.0
+8
+
+
+
+
+       ZEBRA held-study, 1           62.8      49.8      62.7       48.8      59.3      49.1       60.8      54.1        58.4*      65.5        –
+       ZEBRA held-study, 10          91.9      83.2      85.8       84.8      86.8      85.1       85.9      85.3        87.4*      87.2       91.0
+       ZEBRA held-study, 100         94.7      92.9      93.2       93.7      92.9      93.1       93.4      93.9        90.3*      89.5       94.7
+       Overall                       72.9      66.8       69.4      67.8      71.8       70.1      72.4      67.0       74.9*       69.4*       –
+
+    Means over three support draws. Bold identifies the highest row mean overall and among unflagged entries, including ties at displayed precision; gray
+    marks starred exposure flags. Rankings are descriptive, not significance claims. Overall equally weights twelve panel–budget combinations; dashes
+    denote unevaluated settings, and LDA has no overall mean. ZEBRA development and held-study query panels are distinct. Tabular models use 2k
+    HVGs; CellPFN and LDA use all genes. CellPFN uses PBMC counts and processed ZEBRA values; tabular models and LDA use processed values.
+    Geneformer/scGPT use native embeddings with logistic regression (LR); scGPT uses the declared unstandardized route. “+ prior” denotes released
+    weights adapted with 40,000 cellular tasks plus generic replay. Panel-specific draw ranges appear in Table S1. HVG, highly variable gene.
+    *
+      flags likely pretraining exposure: PBMC cells are assessed as likely present for Geneformer-V2 (316M) 35 and scGPT. Geneformer-V2 corpus records
+    overlap source studies supplying 92.6% of ZEBRA held-study query cells; this is an upper bound on exact-cell overlap, not verified cell matching. (*)
+    denotes inferred possible overlap of control cells in ZEBRA development (at most 22.3%). These marks concern cell-expression exposure, not evidence
+    that target labels were seen. Overall starred means include flagged evaluations. Unmarked scores do not certify absence of exposure outside the
+    audited Geneformer/scGPT corpora.
+                                                         Table 2: CellPFN gene-panel ablation.
+                                                                  Balanced accuracy (%)
+      Panel                                  1 support/class                       10 supports/class                      100 supports/class
+                                   2k HVGs       8,192         All genes   2k HVGs      8,192      All genes    2k HVGs         8,192      All genes
+                                                 HVGs                                   HVGs                                    HVGs
+      PBMC coarse                    60.4         61.1           60.1       82.6         82.8          84.0        90.6          92.0          91.9
+9
+
+
+
+
+      PBMC fine                      53.0         54.3           51.1       79.8         81.3          79.0        87.4          90.3          89.0
+      ZEBRA development              43.2         45.8           41.4       60.8         63.4          63.6        64.2          65.1          66.1
+      ZEBRA held-study               61.1         65.0           62.8       80.9         92.0          91.9        89.8          92.7          94.7
+
+    Means over three support draws for the same CellPFN checkpoint and query panels used in Table 1. Bold identifies the highest mean within each panel
+    and support-budget group, including ties at displayed precision. Rankings are descriptive, not significance claims. CellPFN uses PBMC counts and
+    processed ZEBRA values; ZEBRA development and held-study query panels are distinct. HVG, highly variable gene. Table S3 reports the separate
+    twenty-draw analysis, paired intervals and random-gene controls.
 References
 [1] Felix Fischer, David S. Fischer, Roman Mukhin, Andrey Isaev, Evan Biederstedt, Alexandra-
    Chloé Villani, and Fabian J. Theis. scTab: Scaling cross-tissue single-cell annotation models.
@@ -279,7 +365,7 @@
    nature.com/articles/s41592-026-03120-y.
 
 
-                                               7
+                                               10
  [9] Huan Souza and Pankaj Mehta. Parameter-free representations outperform single-cell foundation
     models on downstream benchmarks. Preprint at arXiv, 2026. URL https://arxiv.org/abs/
     2602.16696.
@@ -325,7 +411,7 @@
 
 
 
-                                                 8
+                                                11
 [18] Luke Zappia, Belinda Phipson, and Alicia Oshlack. Splatter: simulation of single-cell rna
     sequencing data. Genome Biology, 18:174, 2017. doi: 10.1186/s13059-017-1305-0. URL
     https://link.springer.com/article/10.1186/s13059-017-1305-0.
@@ -371,7 +457,7 @@
 
 
 
-                                               9
+                                               12
 [27] Erpai Luo, Minsheng Hao, Lei Wei, and Xuegong Zhang. scDiffusion: conditional generation
     of high-quality single-cell data using diffusion model. Bioinformatics, 40(9):btae518, 2024.
     doi: 10.1093/bioinformatics/btae518. URL https://academic.oup.com/bioinformatics/
@@ -416,16 +502,22 @@
 
 
 
-                                                10
+                                                13
 [34] Matthias Flotho, Jérémy Amand, Pascal Hirsch, Friederike Grandke, Tony Wyss-Coray, Andreas
     Keller, and Fabian Kern. ZEBRA: a hierarchically integrated gene expression atlas of the
     murine and human brain at single-cell resolution. Nucleic Acids Research, 52(D1):D1089–D1096,
     2024. doi: 10.1093/nar/gkad990. URL https://pubmed.ncbi.nlm.nih.gov/37941147/.
 
-[35] NVIDIA. Kumo-Tabular 1.0 model card, 2026. URL https://build.nvidia.com/nvidia/
+[35] Han Chen, Madhavan S. Venkatesh, Javier Gómez Ortega, Siddharth V. Mahesh, Tarak N.
+    Nandi, Ravi K. Madduri, Karin Pelka, and Christina V. Theodoris. Scaling and quantization
+    of large-scale foundation model enables resource-efficient predictions in network biology. Nature
+    Computational Science, 6(5):450–463, 2026. doi: 10.1038/s43588-026-00972-4. URL https:
+    //www.nature.com/articles/s43588-026-00972-4.
+
+[36] NVIDIA. Kumo-Tabular 1.0 model card, 2026. URL https://build.nvidia.com/nvidia/
     kumo-tabular/modelcard. Released 23 September 2026; accessed 14 October 2026.
 
-[36] Benjamin Jäger, Nick Erickson, Léo Grinsztajn, Felix Birkel, Klemens Flöge, Oscar Key, Kürşat
+[37] Benjamin Jäger, Nick Erickson, Léo Grinsztajn, Felix Birkel, Klemens Flöge, Oscar Key, Kürşat
     Kaya, Jonas Kübler, Adèle Frankel, Tobias Schröder, Anurag Garg, Jan Hendrik Metzen, David
     Salinas, Simon Bing, Kristina Collins, Tuana Çelik, Vahid Balazadeh, Lydia Sidhoum, Tomás
     Pereda, Brendan Roof, Andrej Tschalzev, Siyuan Guo, Philipp Singer, Lennart Purucker, Jake
@@ -435,21 +527,611 @@
     LeCun, Madelon Hulsebos, Sauraj Gambhir, Noah Hollmann, and Frank Hutter. TabPFN-3.5:
     Technical report, 2026. URL https://arxiv.org/abs/2609.17895. Preprint, version 2.
 
-[37] Prior Labs. TabPFN-3.5 model card, 2026. URL https://huggingface.co/Prior-Labs/
+[38] Prior Labs. TabPFN-3.5 model card, 2026. URL https://huggingface.co/Prior-Labs/
     tabpfn_3_5. Accessed 14 October 2026.
 
-[38] Mukund Sundararajan, Ankur Taly, and Qiqi Yan. Axiomatic attribution for deep networks.
+[39] Mukund Sundararajan, Ankur Taly, and Qiqi Yan. Axiomatic attribution for deep networks.
     In Proceedings of the 34th International Conference on Machine Learning, volume 70 of
     Proceedings of Machine Learning Research, pages 3319–3328. PMLR, 2017. URL https:
     //proceedings.mlr.press/v70/sundararajan17a.html.
 
-[39] David A. Bennett, Aron S. Buchman, Patricia A. Boyle, Lisa L. Barnes, Robert S. Wilson,
+[40] David Schafflick, Chenling A. Xu, Maike Hartlehnert, Michael Cole, Andreas Schulte-
+    Mecklenbeck, Tobias Lautwein, Jolien Wolbert, Michael Heming, Sven G. Meuth, Tanja
+    Kuhlmann, Catharina C. Gross, Heinz Wiendl, Nir Yosef, and Gerd Meyer zu Horste. In-
+    tegrated single cell analysis of blood and cerebrospinal fluid leukocytes in multiple sclero-
+    sis. Nature Communications, 11(1):247, 2020. doi: 10.1038/s41467-019-14118-w. URL
+    https://www.nature.com/articles/s41467-019-14118-w.
+
+[41] Yun Gong, Mohammad Haeri, Xiao Zhang, Yisu Li, Anqi Liu, Di Wu, Qilei Zhang, S. Michal
+    Jazwinski, Xiang Zhou, Xiaoying Wang, Kai Zhang, Lindong Jiang, Yi-Ping Chen, Xiaoxin
+    Yan, Russell H. Swerdlow, Hui Shen, and Hong-Wen Deng. Stereo-seq of the prefrontal cortex
+
+
+
+                                                14
+    in aging and Alzheimer’s disease. Nature Communications, 16(1):482, 2025. doi: 10.1038/
+    s41467-024-54715-y. URL https://www.nature.com/articles/s41467-024-54715-y.
+
+[42] David A. Bennett, Aron S. Buchman, Patricia A. Boyle, Lisa L. Barnes, Robert S. Wilson,
     and Julie A. Schneider. Religious orders study and rush memory and aging project. Journal
     of Alzheimer’s Disease, 64(s1):S161–S189, 2018. doi: 10.3233/JAD-179939. URL https:
     //pubmed.ncbi.nlm.nih.gov/29865057/.
 
+[43] C. Domínguez Conde, C. Xu, L. B. Jarvis, D. B. Rainbow, S. B. Wells, T. Gomes, S. K. Howlett,
+    O. Suchanek, K. Polanski, H. W. King, L. Mamanova, N. Huang, P. A. Szabo, L. Richardson,
+    L. Bolt, E. S. Fasouli, K. T. Mahbubani, M. Prete, L. Tuck, N. Richoz, Z. K. Tuong, L. Campos,
+    H. S. Mousa, E. J. Needham, S. Pritchard, T. Li, R. Elmentaite, J. Park, E. Rahmani, D. Chen,
+    D. K. Menon, O. A. Bayraktar, L. K. James, K. B. Meyer, N. Yosef, M. R. Clatworthy, P. A.
+    Sims, D. L. Farber, K. Saeb-Parsy, J. L. Jones, and S. A. Teichmann. Cross-tissue immune
+    cell analysis reveals tissue-specific features in humans. Science, 376(6594):eabl5197, 2022. doi:
+    10.1126/science.abl5197. URL https://doi.org/10.1126/science.abl5197.
+
+[44] Dvir Aran, Agnieszka P. Looney, Leqian Liu, Esther Wu, Valerie Fong, Austin Hsu, Suzanna
+    Chak, Ram P. Naikawadi, Paul J. Wolters, Adam R. Abate, Atul J. Butte, and Mallar Bhat-
+    tacharya. Reference-based analysis of lung single-cell sequencing reveals a transitional profibrotic
+    macrophage. Nature Immunology, 20(2):163–172, 2019. doi: 10.1038/s41590-018-0276-y. URL
+    https://www.nature.com/articles/s41590-018-0276-y.
+
+[45] Chenling Xu, Romain Lopez, Edouard Mehlman, Jeffrey Regier, Michael I. Jordan, and Nir
+    Yosef. Probabilistic harmonization and annotation of single-cell transcriptomics data with deep
+    generative models. Molecular Systems Biology, 17(1):e9620, 2021. doi: 10.15252/msb.20209620.
+    URL https://doi.org/10.15252/msb.20209620.
 
 
 
-                                               11
+
+                                                  15
+Supporting quantitative results
+These tables accompany the main Results and retain negative findings, exploratory analyses and limits on
+replication. Unless stated otherwise, intervals describe variation over support draws for fixed models and
+query panels; they do not represent independent model training or population-level biological replication.
+                    Table S1: Panel-specific benchmark performance and contextual
+                    baselines.
+
+   Model                         1 support/class           10 supports/class    100 supports/class
+   PBMC coarse
+   CellPFN                       60.1 [52.5, 70.9]         84.0 [81.9, 85.9]    91.9 [91.6, 92.2]
+   TabICLv2                      50.2 [41.3, 58.4]         81.4 [79.4, 83.1]    92.4 [91.3, 93.4]
+   TabICLv2 + cellular prior     62.3 [48.1, 72.5]         85.2 [81.9, 88.1]    93.4 [93.1, 94.1]
+   Kumo small                    45.8 [40.3, 50.3]         82.2 [80.6, 83.4]    92.6 [91.6, 94.7]
+   Kumo small + cellular prior   62.8 [52.8, 69.7]         83.3 [80.9, 86.3]    92.3 [91.6, 93.1]
+   Kumo large                    58.9 [46.3, 65.6]         81.7 [78.8, 83.8]    92.8 [91.9, 93.8]
+   Kumo large + cellular prior   62.2 [50.3, 70.0]         82.5 [79.4, 85.0]    92.8 [91.9, 93.4]
+   TabPFN-3.5                    34.3 [30.9, 38.4]         82.6 [80.6, 83.8]    91.5 [90.0, 92.5]
+   Geneformer-V2 + LR            67.1* [58.1, 74.7]        88.5* [86.9, 90.3]   92.7* [91.6, 93.4]
+   scGPT + LR                    64.9* [53.1, 72.2]        77.5* [75.6, 78.8]   80.7* [80.3, 81.3]
+   Low-rank LDA                  –                         79.4 [78.8, 80.0]    90.0 [89.7, 90.3]
+   CellTypist                    39.8 [33.8, 47.5]         77.5 [76.9, 78.1]    87.8 [87.5, 88.1]
+   SingleR                       56.7 [52.8, 60.9]         78.2 [74.1, 80.9]    85.9 [85.0, 86.6]
+   scANVI inductive              20.0 [11.3, 32.5]         40.7 [26.6, 51.3]    86.7 [86.6, 86.9]
+   scANVI transductive           40.5 [36.3, 44.1]         69.1 [65.9, 74.7]    89.1 [88.1, 90.9]
+   Logistic regression           37.5 [34.4, 43.4]         80.5 [79.1, 81.6]    91.7 [90.6, 93.1]
+   PBMC fine
+   CellPFN                       51.1 [44.8, 55.4]         79.0 [77.6, 80.4]    89.0 [88.6, 89.1]
+   TabICLv2                      30.0 [26.8, 34.3]         73.8 [72.1, 75.6]    83.6 [82.9, 84.5]
+   TabICLv2 + cellular prior     29.1 [26.4, 32.3]         64.6 [61.0, 67.9]    85.3 [84.3, 86.1]
+   Kumo small                    44.1 [43.6, 44.6]         80.0 [79.4, 80.4]    88.3 [88.1, 88.4]
+   Kumo small + cellular prior   49.0 [45.9, 52.3]         80.5 [80.0, 81.0]    88.7 [87.6, 89.6]
+   Kumo large                    46.3 [42.3, 50.0]         83.3 [82.8, 83.6]    89.3 [89.1, 89.5]
+   Kumo large + cellular prior   50.9 [47.0, 55.8]         82.2 [81.4, 83.5]    89.2 [89.1, 89.4]
+   TabPFN-3.5                    33.0 [29.4, 36.5]         79.3 [77.4, 80.4]    86.9 [86.5, 87.3]
+   Geneformer-V2 + LR            68.8* [66.6, 70.9]        84.9* [84.3, 85.5]   90.4* [90.0, 90.9]
+   scGPT + LR                    55.7* [51.3, 58.1]        65.9* [65.3, 67.1]   72.0* [71.5, 72.9]
+   Low-rank LDA                  –                         70.3 [70.0, 70.5]    87.8 [87.5, 87.9]
+   CellTypist                    33.9 [26.8, 37.8]         69.7 [68.6, 70.8]    84.2 [83.9, 84.6]
+   SingleR                       46.0 [42.1, 51.8]         68.6 [67.0, 70.1]    83.3 [82.6, 83.9]
+   scANVI inductive              21.7 [14.4, 26.1]         51.8 [50.8, 53.4]    83.9 [81.6, 85.3]
+   scANVI transductive           40.8 [39.5, 41.5]         70.8 [68.8, 74.0]    86.2 [85.8, 86.5]
+   Logistic regression           39.0 [34.0, 46.8]         73.4 [71.8, 75.9]    85.1 [84.4, 85.6]
+   ZEBRA development
+   CellPFN                       41.4 [33.1, 47.4]         63.6 [61.9, 65.6]    66.1 [65.8, 66.4]
+   TabICLv2                      39.5 [33.4, 42.6]         59.9 [57.9, 62.2]    65.3 [64.9, 65.7]
+   TabICLv2 + cellular prior     44.6 [35.9, 57.1]         60.6 [57.4, 62.6]    65.3 [65.1, 65.5]
+   Kumo small                    31.2 [26.6, 36.4]         57.5 [50.5, 61.7]    65.1 [64.5, 65.7]
+   Kumo small + cellular prior   41.9 [34.9, 51.2]         59.2 [53.4, 62.3]    64.9 [63.8, 65.6]
+   Kumo large                    40.1 [38.2, 41.5]         56.8 [49.2, 61.2]    65.1 [64.9, 65.3]
+   Kumo large + cellular prior   42.8 [37.3, 52.3]         60.6 [55.6, 63.4]    65.8 [65.6, 66.1]
+   TabPFN-3.5                    38.4 [32.8, 43.3]         59.3 [56.6, 60.8]    65.5 [64.8, 66.0]
+
+
+                                                      16
+    Table S1 (continued)
+   Model                           1 support/class           10 supports/class      100 supports/class
+                                       (*)                       (*)
+   Geneformer-V2 + LR              43.1 [34.8, 50.2]         61.1 [55.3, 66.7]      65.4(*) [65.3, 65.5]
+   scGPT + LR                      47.6 [43.7, 55.0]         60.2 [53.2, 66.5]      65.8 [65.6, 66.1]
+   Low-rank LDA                    –                         60.6 [58.4, 62.0]      66.0 [65.8, 66.4]
+   CellTypist                      34.9 [32.6, 37.3]         57.8 [48.6, 64.0]      63.9 [63.5, 64.6]
+   SingleR                         44.4 [34.4, 53.3]         61.7 [59.8, 63.5]      63.9 [63.2, 64.2]
+   scANVI inductive                –                         –                      –
+   scANVI transductive             –                         –                      –
+   Logistic regression             34.7 [28.1, 39.6]         57.4 [48.7, 62.4]      65.5 [65.1, 65.8]
+   ZEBRA held-study
+   CellPFN                         62.8 [45.2, 77.1]         91.9 [88.6, 94.7]      94.7 [94.3, 95.0]
+   TabICLv2                        49.8 [46.6, 55.2]         83.2 [75.5, 88.1]      92.9 [92.1, 93.5]
+   TabICLv2 + cellular prior       62.7 [37.8, 81.0]         85.8 [81.9, 88.7]      93.2 [92.2, 94.0]
+   Kumo small                      48.8 [31.7, 65.9]         84.8 [81.3, 86.7]      93.7 [92.3, 94.7]
+   Kumo small + cellular prior     59.3 [41.8, 73.5]         86.8 [83.4, 88.7]      92.9 [91.1, 94.4]
+   Kumo large                      49.1 [39.6, 56.6]         85.1 [80.3, 88.8]      93.1 [91.7, 94.5]
+   Kumo large + cellular prior     60.8 [39.1, 75.8]         85.9 [81.4, 88.6]      93.4 [93.2, 93.6]
+   TabPFN-3.5                      54.1 [48.0, 65.3]         85.3 [84.9, 85.8]      93.9 [92.5, 95.3]
+   Geneformer-V2 + LR              58.4* [44.2, 72.5]        87.4* [83.8, 91.7]     90.3* [88.4, 92.6]
+   scGPT + LR                      65.5 [52.5, 80.7]         87.2 [80.6, 93.1]      89.5 [88.9, 90.2]
+   Low-rank LDA                    –                         91.0 [89.6, 93.8]      94.7 [94.0, 95.4]
+   CellTypist                      44.4 [41.6, 47.5]         87.8 [80.4, 92.5]      91.4 [90.6, 92.3]
+   SingleR                         56.8 [38.4, 71.1]         86.6 [79.7, 90.8]      89.1 [86.8, 90.6]
+   scANVI inductive                –                         –                      –
+   scANVI transductive             –                         –                      –
+   Logistic regression             45.0 [42.1, 48.1]         73.5 [70.7, 76.0]      90.6 [90.0, 91.5]
+
+
+    Values are mean [minimum, maximum] balanced accuracy (%) over the same three support draws, not
+confidence intervals. Within each panel and support budget, bold identifies the highest mean overall and
+among unflagged comparators, including ties at displayed precision. Gray means and ranges carry the
+exposure stars defined in Table 1; unflagged entries do not certify absence of exposure. Inputs follow Table 1;
+CellTypist, SingleR and low-rank LDA use all genes, whereas logistic regression and scANVI use 2k HVGs.
+CellTypist 43 is fitted to the support cells; SingleR 44 uses the declared reference route. The scANVI 45
+transductive route additionally uses the unlabelled query pool and is contextual rather than an inductive
+comparison. Dashes are missing evaluations, never zero accuracy. All selected fitted model checkpoints have
+one training seed; support-draw variation does not measure training uncertainty. Geneformer-V2 uses the
+316M checkpoint. Source-study corpus overlap does not establish exact-cell or target-label exposure. Native
+gene vocabularies and training histories differ. Family variants were selected in the export and the evaluation
+is not a newly frozen independent benchmark.
+
+
+
+
+                                                        17
+                     Table S2: Training exposure, prior transfer and generic-task reten-
+                     tion.
+
+    Model                          Quantity                                    Count
+    CellPFN                        Parameters                                  12329889
+    CellPFN                        Optimizer updates                           96000
+    CellPFN                        Simulated banks                             12000
+    CellPFN                        Scheduled episodes                          384000
+    CellPFN                        Loss-bearing episodes                       276828
+    TabICLv2                       Parameters                                  27552258
+    TabICLv2                       Additional cellular tasks                   40000
+    TabICLv2                       Adaptation updates                          2500
+    Kumo small                     Parameters                                  27458266
+    Kumo small                     Additional cellular tasks                   40000
+    Kumo small                     Adaptation updates                          2500
+    Kumo large                     Parameters                                  213668250
+    Kumo large                     Additional cellular tasks                   40000
+    Kumo large                     Adaptation updates                          2500
+
+    CellPFN banks are reused for multiple episodes; scheduled and loss-bearing episodes are distinct. Adapta-
+tion uses 40,000 cellular tasks and 10,000 generic replay tasks per arm. Released-model pretraining precedes
+this adaptation and is not included in these counts. TabICLv2 reports 35 million synthetic pretraining
+datasets 15 ; this published count is distinct from CellPFN banks and scheduled episodes. These units do not
+establish a matched-compute comparison. Adapted minus released balanced accuracy (percentage
+points).
+Model                         1 support                10 supports              100 supports
+TabICLv2                      +7.30                    -0.50                    +0.77
+Kumo small                    +10.79                   +1.31                    -0.22
+Kumo large                    +5.58                    +1.08                    +0.26
+
+Kumo-small low-support change relative to released weights.
+Training stream                                    Mean change (percentage points)
+Cellular task stream 1                             +6.05
+Cellular task stream 2                             +5.73
+Cellular task stream 3                             +5.17
+Generic-table control                              -0.05
+    The low-support average weights eight panel–budget combinations equally (three support draws each).
+The three cellular runs vary the task stream with the same model seed. The generic control changes rows and
+columns per update, so this is not a matched-data or matched-cost contrast. No corresponding generic-only
+control was run for TabICLv2 or Kumo large.
+Retention on four generic classification datasets.
+Model                       One-shot BA         One-shot           All-budget BA       All-budget
+                                                accuracy                               accuracy
+TabICLv2 released            70.9              69.3              87.8               87.2
+TabICLv2 adapted             64.0              62.0              84.8               84.3
+   Balanced accuracy (BA) and ordinary accuracy (%) equally weight breast cancer, digits, iris and wine,
+with five split seeds each. The all-budget mean additionally weights 1, 10 and the full training split equally.
+These exploratory retention checks do not estimate universal tabular performance.
+
+
+
+
+                                                      18
+                         Table S3: Gene-panel scaling and random-gene controls.
+
+    Panel                            Support/class        All minus 2k HVGs (pp; 95% CI)
+    PBMC coarse                      1                    -3.31 [-5.20, -1.42]
+    PBMC coarse                      10                   +0.91 [-0.11, 1.92]
+    PBMC coarse                      100                  +1.31 [0.92, 1.71]
+    PBMC fine                        1                    -1.96 [-3.27, -0.65]
+    PBMC fine                        10                   -0.55 [-1.25, 0.15]
+    PBMC fine                        100                  +1.81 [1.44, 2.18]
+    ZEBRA development                1                    +0.26 [-2.58, 3.10]
+    ZEBRA development                10                   +2.52 [1.66, 3.39]
+    ZEBRA development                100                  +1.30 [0.98, 1.61]
+    ZEBRA held-study                 1                    +1.11 [-2.05, 4.27]
+    ZEBRA held-study                 10                   +7.41 [5.26, 9.57]
+    ZEBRA held-study                 100                  +4.38 [3.69, 5.07]
+
+   Paired differences in balanced accuracy (percentage points) use twenty support draws per panel–budget
+combination. Intervals are the exported paired 95% t intervals over support draws. They condition on
+the evaluated checkpoint and query set; they do not cover training, donor-population or panel-selection
+uncertainty. Mean balanced accuracy across the twelve panel–budget combinations.
+
+Gene panel                                        Mean balanced accuracy (%)
+Random 2,000 genes                                 62.9
+2k HVGs                                            72.4
+Random 8,192 genes                                 69.4
+8,192 HVGs                                         74.1
+All genes                                          73.7
+    Bold identifies the highest descriptive gene-panel average, including ties at displayed precision; paired
+contrast intervals above are not ranked. These descriptive twenty-draw averages differ from the three-draw
+headline benchmark in Table 1. Random-panel controls assess the delivered panels and cannot isolate every
+effect of feature selection or gene coverage.
+
+
+
+
+                                                     19
+                        Table S4: Operator ablation and the prespecified decision.
+
+    Panel                           Support/class        Full minus no operator (pp; 95% CI)
+    PBMC coarse                     1                    +0.20 [-0.23, 0.64]
+    PBMC coarse                     10                   -0.50 [-1.24, 0.24]
+    PBMC coarse                     100                  +2.69 [2.35, 3.02]
+    PBMC fine                       1                    +0.61 [0.19, 1.03]
+    PBMC fine                       10                   +4.18 [3.48, 4.87]
+    PBMC fine                       100                  +6.81 [6.36, 7.26]
+    ZEBRA development               1                    -0.29 [-0.60, 0.01]
+    ZEBRA development               10                   +1.97 [0.99, 2.95]
+    ZEBRA development               100                  +2.07 [1.77, 2.37]
+    ZEBRA held-study                1                    -1.35 [-1.98, -0.73]
+    ZEBRA held-study                10                   +2.71 [1.39, 4.04]
+    ZEBRA held-study                100                  +2.33 [1.86, 2.80]
+
+    Twenty paired support draws, one training seed per arm, all genes. Intervals are exported paired 95%
+t intervals over support draws. Full and no-operator checkpoints share the parent, prior and task stream.
+These later descriptive evaluations do not replace the prespecified decision below.
+Operator structure across support budgets.
+Panel                 Support/ None          Diagonal    Full          Full minus diagonal (pp; 95% CI)
+                      class
+PBMC coarse            1          59.81       59.09       60.02      +0.92 [0.39, 1.45]
+PBMC coarse            10         85.84       85.69       85.34      -0.34 [-0.86, 0.18]
+PBMC coarse            100        89.14       88.89       91.83      +2.94 [2.64, 3.24]
+PBMC fine              1          51.30       51.38       51.91      +0.53 [0.13, 0.93]
+PBMC fine              10         75.64       78.48       79.81      +1.33 [0.87, 1.79]
+PBMC fine              100        82.22       85.66       89.03      +3.37 [3.06, 3.68]
+ZEBRA development 1               46.62       46.45       46.33      -0.12 [-0.49, 0.24]
+ZEBRA development 10              61.36       63.20       63.33      +0.13 [-0.48, 0.75]
+ZEBRA development 100             63.70       64.74       65.77      +1.03 [0.89, 1.18]
+ZEBRA held-study       1          66.53       65.84       65.17      -0.67 [-1.08, -0.25]
+ZEBRA held-study       10         88.59       91.11       91.31      +0.19 [-0.32, 0.70]
+ZEBRA held-study       100        92.10       93.57       94.43      +0.86 [0.40, 1.32]
+   Values are mean balanced accuracy (%). The diagonal ablation is a trained per-gene-variance-only
+operator arm; it shares the parent, prior and task stream with the full-operator arm. The printed matrices
+use all genes. The source-value index retains additional HVG and random-panel analyses.
+Prespecified three-draw readout.
+Panel                        Support/class      Full minus none (pp)        Harm threshold (pp)
+PBMC coarse                    10                -1.56                       1.50
+PBMC coarse                    100               +3.02                       1.50
+ZEBRA held-study               10                +3.30                       2.72
+   The overall test was not supported because coarse-PBMC ten-support accuracy crossed the prespecified
+harm threshold (N3). Turning the full operator off at inference isolated a harmful -0.94-point operator
+contribution in that setting. Its donor-enumeration interval has approximately 80% coverage, not 95%, and is
+not used as a 95% interval here. Three frozen support draws and four query donors informed the PBMC test;
+the later twenty-draw estimates describe support sensitivity rather than overturning the decision.
+
+
+
+
+                                                    20
+                              Table S5: Complete ten-candidate prior screen.
+
+    Arm/base Change                       r42        r43         r44        Mean       Decision
+    LR / b0     Learnable-only tasks       +1.63     +1.62       +2.61      +1.95      Keep
+    A5 / lr     Fewer/weaker markers       -1.52     -1.05       -1.54      -1.37      Drop: guard
+                and closer sibling classes
+    A6 / b0     Remove signed-covariance -0.19       +0.74       +1.16      +0.57      Neutral
+                task lane
+    A7 / b0     Donor dominance            +0.16     -0.21       +0.65      +0.20      Unresolved
+    A1 / b0     More donor-rich tasks      -0.0008   -0.0080     -0.0133    -0.0074    Routing only
+    A3 / a1     Sex mechanisms             -0.0089   -0.0089     +0.0357    +0.0060    Routing only
+    A4 / lr     Weak metadata tasks        +0.0110   -0.0347     -0.0325    -0.0188    Routing only
+    A2 /        Adult-age prior            +0.0083   +0.0000     +0.0000    +0.0028    Routing only
+    a1age
+    A8a / b0 Study-wide gene absence +0.52           +0.54       +1.64      +0.90      Drop: guard
+    A8d / b0 Study-specific detection -0.43          +0.60       +0.87      +0.35      Not testable
+
+    All changes are improvement-signed relative to the indicated base. LR, A5, A6, A7, A8a and A8d use
+balanced-accuracy percentage points; A1, A3 and A2 use donor AUC differences on a 0–1 scale; A4 uses
+negative log-loss differences (base minus arm, nats). A7 uses the held-study panel; A8a/A8d use low-support
+cortex; LR/A5/A6 use all low-support core panels. A1/A3/A2 respectively target donor, worse-sex and
+adult-age AUC. The Kumo-small proxy uses 10,000 cellular tasks, 625 updates and 2k HVGs. The three
+columns are task-stream replicates from one model seed, not independent model-seed replications. A5 and
+A4 are compared with LR; A3 with A1; A2 with the matched age-task stream. Other candidates use the
+pipeline control b0.
+    LR was the only retained change: its keep threshold was 1.63 points and effective noise band 1.09 points.
+A5 failed the low-support guard. A7 remained unresolved; omitting the prescribed two extension replicates
+departed from the frozen rule, although the required keep count was no longer attainable. A1–A4 routing
+labels do not establish successful donor-level or probability-prediction improvements: those endpoints were
+outside the proxy’s trusted decision scope. A8a failed the log-loss guard (0.099-nat deterioration against a
+0.03-nat limit). A8d was not testable because measured headroom (1.257 points) was below the 1.5-point
+keep threshold; its two extension replicates were omitted under the documented shortcut because the required
+keep count was no longer attainable. A8d replicate r43 skipped one invalid task, an authorized deviation
+made after the other two replicate readouts. None of these routing, unresolved or headroom-limited outcomes
+is evidence that its biological mechanism does or does not work.
+Stored-zero mechanism readout (percentage points).
+Arm           Mean gap shrinkage      Noise band           Proxy headroom          Keep threshold
+A8a          0.072                     0.620                1.257            1.500
+A8d          0.071                     0.620                1.257            1.500
+    Gap shrinkage is the reduction in the accuracy difference between removing unmeasured genes and
+retaining stored zeros. The gap did not shrink beyond the noise band; the reference row repeats the
+three-replicate aggregate, not a single-replicate estimate.
+
+
+
+
+                                                     21
+                      Table S6: Learnable-only versus standard CellPFN continuation.
+
+   Panel                      Support/class Accuracy change (pp; 95%          Log-loss change (nats; 95%
+                                            CI)                               CI)
+   PBMC coarse                1               +1.11 [0.45, 1.77]              -0.332 [-0.400, -0.265]
+   PBMC coarse                10              -1.47 [-2.12, -0.81]            +0.416 [0.337, 0.496]
+   PBMC coarse                100             -1.56 [-1.94, -1.19]            +0.374 [0.357, 0.391]
+   PBMC fine                  1               +2.42 [1.61, 3.23]              -0.742 [-0.773, -0.710]
+   PBMC fine                  10              +1.06 [0.26, 1.86]              -0.159 [-0.172, -0.145]
+   PBMC fine                  100             +0.50 [0.22, 0.78]              -0.047 [-0.051, -0.042]
+   ZEBRA development          1               +2.56 [1.11, 4.02]              -0.054 [-0.205, 0.097]
+   ZEBRA development          10              +1.34 [0.35, 2.33]              +0.281 [0.198, 0.363]
+   ZEBRA development          100             +0.33 [0.19, 0.48]              +0.629 [0.606, 0.652]
+   ZEBRA held-study           1               +3.49 [1.73, 5.26]              -0.251 [-0.363, -0.139]
+   ZEBRA held-study           10              +1.38 [0.72, 2.05]              +0.249 [0.186, 0.312]
+   ZEBRA held-study           100             +0.24 [-0.02, 0.49]             +0.346 [0.304, 0.388]
+
+   Learnable-only (GL1) minus standard (GS1) at 100,000 updates; twenty paired support draws; all genes.
+Positive accuracy change is favourable, whereas positive log-loss change is unfavourable. Intervals are exported
+paired 95% t intervals over support draws. Both arms continue the same checkpoint for 4,000 updates with
+one model seed. Log loss measures probabilistic prediction and is not exclusively a calibration measure.
+Realized training exposure during continuation.
+
+Task stream                                         Mean cells per update
+Learnable-only                                      2667.8
+Standard                                            1596.6
+   The learnable-only continuation processed approximately 1.67 times as many cells per update. Its gains
+therefore cannot be attributed to task filtering alone under matched cell exposure. Higher-support log loss
+worsened on three of four panels but improved on fine PBMC.
+
+
+
+
+                                                      22
+                     Table S7: Simulator realism diagnostics against public biological
+                     references.
+
+   Statistic                       Prior        Synthetic median [5th, 95th   Real median [minimum,
+                                                percentile]                   maximum]
+   Strongest marker (log2          v1           1.936 [1.408, 3.497]          7.100 [3.310, 9.762]
+   FC)
+   Strongest marker (log2          v2.2-B       6.232 [4.273, 10.225]         7.100 [3.310, 9.762]
+   FC)
+   Class separation                v1           0.022 [0.001, 0.120]          0.775 [0.525, 0.916]
+   (chance-adjusted BA)
+   Class separation                v2.2-B       0.881 [0.522, 0.994]          0.775 [0.525, 0.916]
+   (chance-adjusted BA)
+   Within-study donor SD           v1           0.331 [0.213, 0.489]          0.290 [0.197, 0.391]
+   (log2)
+   Within-study donor SD           v2.2-B       0.404 [0.291, 0.528]          0.290 [0.197, 0.391]
+   (log2)
+
+   Synthetic quantile ranges and observed real ranges are descriptive distributions, not confidence intervals.
+The reference contains public PBMC, cortex and kidney datasets; ROSMAP is excluded. Class separation
+uses nearest-class-mean balanced accuracy at ten supports per class with eight classes in both synthetic and
+primary real references.
+Sampling units and synthetic tail frequencies by prior.
+Statistic                  Prior           Synthetic      Synthetic     Real units Synthetic above real
+                                           banks          units                    max (%)
+Strongest marker (log2 v1                 72             2016             142          0.0
+FC)
+Strongest marker (log2 v2.2-B             96             2688             142          8.3
+FC)
+Class separation             v1           72             72               8            0.0
+(chance-adjusted BA)
+Class separation             v2.2-B       96             96               8            37.5
+(chance-adjusted BA)
+Within-study donor SD v1                  96             768              11           37.9
+(log2)
+Within-study donor SD v2.2-B              128            1024             11           58.9
+(log2)
+    Units differ by statistic: class-pair comparisons for marker effects, dataset-level summaries for separation
+and donor-effect units for within-study SD. Units from one simulated bank are not independent biological
+replicates. The real reference helped calibrate the prior, so this is a reference-comparison diagnostic rather
+than independent validation. Prior v2.2-B supplied only the final 16.7% of scheduled CellPFN training
+episodes. Improved moment agreement is not itself evidence of a causal performance benefit.
+
+
+
+
+                                                         23
+                            Table S8: DS-LOO fidelity and support sensitivity.
+
+   Case                                 Full operator:       No operator:         Full operator: relative
+                                        Spearman             Spearman             error (%)
+   PBMC, 10 supports, draw 0            0.997                0.997                2.91
+   PBMC, 10 supports, draw 1            0.998                0.997                2.31
+   PBMC, 100 supports                   0.998                0.995                1.56
+   Cortex development, 10 supports      0.993                0.988                0.48
+   Kidney, counts                       0.986                0.979                4.88
+   Kidney, processed                    0.988                0.989                1.17
+
+   Corrected-margin DS-LOO versus exact query-only single-gene knockout, in fp32, on the selected evaluated
+genes and correctly classified cells. Spearman values summarize within-cell rank correlations, aggregated
+within classes and then across classes. Relative L2 errors are computed per class and summarized by the
+median across classes. These are six case summaries per model, not minima across every cell. No one-shot or
+held-study cortex attribution validation is included.
+Comparison                                               Range of class-mean top-20 overlap
+Different PBMC support choices                            0.431–0.563
+Full versus no operator                                   0.663–0.878
+    Overlap is the fraction of common genes among the twenty highest-ranked genes, averaged over classes for
+each comparison. The support comparisons include both a changed support draw at ten cells per class and a
+changed support budget; they are not a pure seed-only sensitivity analysis. Agreement with model knockout
+measures explanation fidelity, not causal biological validation.
+Three highest-ranked genes for each explained cell class.
+Panel          Cell class                Rank 1              Rank 2               Rank 3
+PBMC            B                         CD79A               MS4A1                BANK1
+PBMC            CD4 T                     MAL                 IL7R                 TRAC
+PBMC            CD8 T                     CD8B                CD8A                 TRBC2
+PBMC            DC                        FCER1A              CLEC10A              HLA-DQA1
+PBMC            Mono                      SERPINA1            FTL                  CD14
+PBMC            NK                        KLRF1               GNLY                 IL2RB
+PBMC            other                     GNG11               PF4                  PPBP
+PBMC            other T                   GZMK                TRGC2                KLRB1
+ZEBRA           Glia                      NPAS3               PCDH9                PPP2R2B
+ZEBRA           Immune cell               MBNL1               FMN1                 DPYD
+ZEBRA           Neural                    FGF12               RGS7                 RBFOX1
+ZEBRA           Vascular cell             PTPRG               MALAT1               LAMA2
+    Genes are selected directly by their class-mean corrected DS-LOO margin rank, independently of the
+curated marker checks below. PBMC uses 100 supports per class, draw 0; ZEBRA development uses ten
+supports per class, draw 0. These are model-ranked features conditional on the support set and class-
+discrimination target; they are not all canonical lineage markers and do not establish causal effects.
+
+
+
+
+                                                    24
+Known-marker ranks in the PBMC reference case.
+Cell class                 Marker                                    Corrected DS-LOO rank
+B                                  CD79A                        1
+B                                  MS4A1                        2
+CD4 T                              IL7R                         2
+CD8 T                              CD8A                         2
+DC                                 FCER1A                       1
+DC                                 CLEC10A                      2
+Mono                               CD14                         3
+NK                                 GNLY                         2
+NK                                 NKG7                         7
+other                              PPBP                         3
+other T                            CD3E                         5
+DC                                 LILRA4                       4392
+Mono                               LYZ                          33354
+    The reference uses 100 supports per class and support draw 0, explaining 191 correctly classified query
+cells across eight broad classes and 33,538 genes. Ranks refer to class-mean corrected margin attribution;
+smaller is higher. Familiar lineage markers 40 rank highly in several classes, but LYZ in monocytes and
+LILRA4 in pooled dendritic cells illustrate that marker identity does not guarantee a high rank for this
+class-discrimination target. These are selected descriptive marker checks, not an enrichment test or causal
+validation. Gene identities were assigned after inference.
+Contextual marker ranks in ZEBRA cell-type classification.
+Cell class                          Marker                           Corrected DS-LOO rank
+Glia                                  PLP1                            8
+Neural                                SYT1                            7
+Vascular cell                         FLT1                            5
+Vascular cell                         CLDN5                           16
+Immune cell                           PTPRC                           20710
+    ZEBRA development, ten supports per class, draw 0. PLP1, SYT1 and CLDN5 provide contextual
+cell-identity checks 41 . These are cell-type attribution ranks; they are not explanations of the sex-classification
+experiments in Table S9.
+
+
+
+
+                                                        25
+                     Table S9: Exploratory sensitivity analyses and provisional applica-
+                     tion.
+
+   Panel                           Support/class       Processed cortex BA (%) Reconstructed-count BA
+                                                                               (%)
+   ZEBRA development               1                   41.4                        51.4
+   ZEBRA development               10                  63.6                        63.4
+   ZEBRA development               100                 66.1                        64.9
+   ZEBRA held-study                1                   62.8                        65.9
+   ZEBRA held-study                10                  91.9                        92.9
+   ZEBRA held-study                100                 94.7                        93.8
+
+   Mean CellPFN balanced accuracy over three support draws. Processed and reconstructed-count cortex
+have different gene sets (21,158 versus 12,325), and some support identities change. These comparisons
+therefore do not isolate normalization, count reconstruction or stored-zero effects; the processed representation
+remains the primary panel.
+Removing unmeasured genes while retaining processed values.
+Panel                           Support/class       Accuracy change (pp; 95% CI)
+ZEBRA development              1                  +3.62 [0.42, 6.83]
+ZEBRA development              10                 +0.64 [0.38, 0.90]
+ZEBRA development              100                +0.14 [-0.10, 0.38]
+ZEBRA held-study               1                  +1.04 [-0.67, 2.75]
+ZEBRA held-study               10                 +0.51 [0.03, 0.99]
+ZEBRA held-study               100                -0.47 [-1.66, 0.71]
+    These Stage-0 contrasts remove genes not measured in every study without changing the retained expression
+values or re-normalizing their denominator. Values and paired 95% t intervals are the exported summaries
+over ten support draws. This is a separate diagnostic from the three-draw count-reconstruction comparison
+above.
+  Post hoc classifier sensitivity. Standardizing scGPT embeddings before logistic regression changed the
+PBMC mean from 69.5% to 73.5%. This diagnostic is not substituted for the declared baseline in Table 1.
+   Post hoc hard-tier boundary. Learnable-only proxy training changed held-study cortex neuronal-
+subtype accuracy at ten supports by -5.83 percentage points across three task streams (-6.62 to -4.56).
+Hard-tier tasks were defined after the initial screen and do not change its frozen labels. A8d’s hard-tier
+readout contains only two task-stream replicates.
+Early task-mixture gene-view sensitivity at update 98,304.
+Gene view                          Support draws            PBMC low-support change (pp)
+All genes                        3                     +0.344
+8,192 HVGs                       10                    -0.892
+    Changes are GL1 minus GS1, equally weighting coarse and fine PBMC at one and ten supports per class.
+Different draw counts and the early checkpoint prevent treating this as a final, isolated explanation of the
+task-mixture tradeoff.
+   Provisional ROSMAP application: sex-matched microglial CERAD discrimination gave
+donor AUC 0.745 [0.700, 0.790]. The supplied interval summarizes ten repeated splits with the
+export’s correction; it is not independent cohort replication. Label corrections remain pending,
+so this is not a final or confirmatory biological result.
+
+
+
+
+                                                       26
+PBMC annotation levels and fine-grained subtype tasks.
+Task                               Classes    1 support/class     10 supports/class 100
+                                                                                    supports/class
+Broad PBMC types (L1)              8          62.3                84.2                91.9
+Fine PBMC types (L2)               20         53.9                81.8                90.5
+CD4 T siblings (L2)                4          36.3                69.2                85.6
+T-cell siblings (L2)               9          27.4                64.4                83.8
+CD4 T siblings (L3)                9          23.4                56.3                79.6
+CD8 T siblings (L3)                7          39.5                69.4                84.4
+B-cell siblings (L3)               6          31.6                63.6                79.8
+NK-cell siblings (L3)              6          36.2                64.3                73.0
+T-cell siblings (L3)               17         25.0                55.7                76.8
+All finest PBMC types (L3)         35         39.8                68.4                78.4
+Mean of eight subtype tasks         –          32.4                63.9                80.2
+    Values are mean balanced accuracy (%) for the reference CellPFN checkpoint with 8,192 HVGs. Broad/fine
+context rows use the E-fast ten-, ten- and five-draw readouts at 1, 10 and 100 supports, respectively, rather
+than the three-draw main-table means. The subtype aggregate uses the corresponding ten/ten/five case
+design. L2 and L3 denote the supplied second and third annotation levels; sibling tasks restrict classification
+to a related group. These eight tasks were defined after the initial prior-screen readouts and are exploratory;
+they are not a formally defined “easy versus difficult” partition. The broad/coarse and fine primary panels
+remain in Table 1. The available checkpoint summaries do not provide CellPFN support-draw uncertainty,
+so no interval is inferred from the proxy-model case records. Different label sets and class counts prevent
+treating cross-task accuracy differences as isolated changes in difficulty.
+Original ZEBRA sex-classification case.
+Scoring unit                                     Balanced accuracy (%)      Log loss (nats)
+Query cells                                     100.0                      0.409
+Aggregated GSM samples                          100.0                      0.398
+    This single Sayed-study oligodendrocyte case used 200 support cells from 12 GSM samples and 50 query
+cells from ten disjoint GSM samples, with 21,158 processed genes. GSM separation does not guarantee donor
+separation. One support draw was evaluated; the perfect observed accuracy does not imply an uncertainty-free
+population estimate. This case is separate from the four core cell-type panels and is excluded from their
+averages.
+Later unit-level sex evaluation: positive control and broader task.
+Support units/class         XY-eligible task AUC                 Broader sex task AUC
+4                            0.977 [0.872, 1.000]                0.507 [0.391, 0.617]
+8                            0.993 [0.949, 1.000]                0.544 [0.453, 0.617]
+16                           1.000 [1.000, 1.000]                0.538 [0.441, 0.633]
+32                           1.000 [1.000, 1.000]                0.539 [0.426, 0.656]
+    Values are mean [minimum, maximum] unit-level AUC over ten support splits at the same reference
+CellPFN checkpoint, using 8,192 HVGs, ten support cells per unit and twenty query cells per unit. Units are
+persons where resolved; Sayed age-by-sex GSM groups remain a proxy, and cross-study person overlap is
+unknown. The XY-eligible positive control requires measured XIST and at least four Y-linked genes; this
+eligibility rule does not identify genes used by the model. The broader task remains close to chance. Splits
+reuse persons and are not independent cohort replications, so observed ranges are shown without confidence
+intervals. Support budgets of 16 and 32 units per class exceed the training support range. These later tasks
+are distinct from the original cell-level case above.
+     Sex-specific gene attribution remains unresolved. XIST and Y-linked genes define eligibility;
+they are not measured attribution hits.[O06]
+
+
+                                                      27
 

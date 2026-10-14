@@ -9,7 +9,22 @@
   {
     "command": [
       "python3",
+      "scripts/index_export.py",
+      "--check"
+    ],
+    "returncode": 0
+  },
+  {
+    "command": [
+      "python3",
       "scripts/check_results.py"
+    ],
+    "returncode": 0
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/check_tables.py"
     ],
     "returncode": 0
   },
@@ -29,7 +44,9 @@
       "--tex",
       "main.tex",
       "--tex",
-      "sections/*.tex"
+      "sections/*.tex",
+      "--tex",
+      "tables/*.tex"
     ],
     "returncode": 0
   },
@@ -51,6 +68,13 @@
     "command": [
       "python3",
       "scripts/check_sources.py"
+    ],
+    "returncode": 0
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/check_artifacts.py"
     ],
     "returncode": 0
   }

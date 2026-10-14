@@ -1,13 +1,25 @@
 {
   "source_files_and_pdf": {
-    "main.tex": "4f02aec0b2d00a5629c3365672f9b9a45fafb5ac974b72daa21d89b26f8fcf87",
-    "references.bib": "48ab36bc5dab3287e7e8b3cdb0969ce03284a8a45db65811358c334340d9d353",
-    "sections/abstract.tex": "e104ace32daf7fb32023843fedbf5b8155accb9fcd481a10173e311a4890265d",
-    "sections/introduction.tex": "11c73119a218e5163591a8c53498dac33bfa93416a31ac367a524bd42b7d60e8",
-    "sections/results.tex": "00d5c5a0d76fc15d4ad3365cef848eb5c777c8374b79e73f5cad997ca9b8994a",
-    "output/cellpfn_wave1.pdf": "1ac613fc1575adbac156f2bef7a83fe801b3838609ad74432f6be95ac149eb09"
+    "main.tex": "471b17c58afb9a1ed1f76a0088fc92f941dd26eef7b9ba08da2af93c4b6b3667",
+    "references.bib": "f49370f905aadb914a7ef75612bf75b73775833fcd0132fbd44544d1151cd176",
+    "sections/abstract.tex": "1b10bb65c38632fae99a5c1c689ab7c0cb31b2404c9f8778384205844502772e",
+    "sections/introduction.tex": "0d003d9ec1e02164c11ab00e18e6c085baa5370d4865b3a289d327b90d56af7a",
+    "sections/results.tex": "3c31a85f51aa90a34f8dba27f56c7bee62f62918c2aa271c5db89d4587e7d178",
+    "sections/supplementary.tex": "a18f4bae9e44642ef437d526bfa5ea491560ca3c1111d3a864cee9600f5d492e",
+    "tables/overview.tex": "aace15a5764f15cbfb6ea20e3f957c53613f02e01de99407308de2ffb9a868d2",
+    "tables/s1.tex": "7fda722a398f1b017ff17cd745b039c0ddcfeafb9e15629894532791187bed00",
+    "tables/s2.tex": "d985f092c72958f6e37ac693a23e5756cf2569b114de4a7d3ae5c9c45945012d",
+    "tables/s3.tex": "8fe23390d0de8577911ec2625919edfb46e21c394284f85f5385a48a5f3c4ce8",
+    "tables/s4.tex": "1d82653fba75d6c15f26d7661785fae80ce76ca506bc2b8c81617ab8b0533081",
+    "tables/s5.tex": "26f03529b07e7c83995bf9cf99c9e2fa5b32509530d13982430b1bcc15db9d59",
+    "tables/s6.tex": "e67ec1ea638495d203ac11c8843b1cbc4ffd4d27e238187595f783eae9115283",
+    "tables/s7.tex": "6aa03653f58bcef1736c4c773c223713bd79fd3acc6dd870f83662e252adda14",
+    "tables/s8.tex": "a8f5dd6c5f7c8a1c6d4d1adbea2d69c6ab492a136921cf428ff053b2085bf9a2",
+    "tables/s9.tex": "4b5dee63f1526ef5af0feb051dabe6de86b2bae18b641d8506dc2d79aea9c4cb",
+    "output/cellpfn.pdf": "9d54b49b3ae194da05366bb1edc9f03d612fe3c25e67d9376fd4a691f71d059f"
   },
   "build": "make pdf",
   "checks": "make check",
-  "word_count": "make words"
+  "word_count": "make words",
+  "temporary_build_removed": true
 }

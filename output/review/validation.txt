@@ -1,20 +1,26 @@
 $ python3 scripts/check_sources.py
 PASS: 359 original source hashes and 14 preserved copies unchanged.
 
+$ python3 scripts/index_export.py --check
+{"bytes": 111580319, "code_inspection": "All 58 Python files parsed as AST; all 7 shell files indexed without execution", "csv_files": 142, "data_files": 115, "data_rows": 677812, "dictionary_coverage": "115/115 complete ordered schemas", "file_count": 288, "manifest_integrity": "288/288 original source hashes match", "mode": "check", "types": {"csv": 142, "json": 48, "md": 29, "py": 58, "sh": 7, "sha256": 1, "txt": 3}}
+
 $ python3 scripts/check_results.py
 EXTERNAL T06: 35000000 synthetic_training_datasets; not locally verified
 ARITHMETIC ONLY T07: external numerator not locally verified
 EXTERNAL T11: 35000000 synthetic_training_tables; not locally verified
 UNAVAILABLE T12: no numerical pretraining claim
 EXTERNAL T13: 137000000 synthetic_training_tables; not locally verified
-Checked 66 local extractions/calculations (1 externally dependent); 3 external source, 1 unavailable; 0 failures.
+Checked 327 local extractions/calculations (1 externally dependent); 3 external source, 1 unavailable; 0 failures.
+
+$ python3 scripts/check_tables.py
+Checked 1268 table-value source selections, 350 ranking/color entries and deterministic rendering; 0 failures.
 
 $ python3 scripts/check_manuscript.py
-PASS: 5 actionable claim IDs, 0 factual TODOs, no citation placeholders.
-Word counts: {'abstract': 138, 'introduction': 488, 'results': 1644, 'main_text_so_far': 2132, 'remaining_of_3000': 868}
+PASS: 6 actionable claim IDs, 0 factual TODOs, no citation placeholders.
+Word counts: {'abstract': 143, 'introduction': 472, 'results': 1963, 'main_text_so_far': 2435, 'remaining_of_3000': 565}
 
-$ python3 scripts/vendor/audit_bib.py --bib references.bib --tex main.tex --tex sections/*.tex
-references.bib: 42 entries
+$ python3 scripts/vendor/audit_bib.py --bib references.bib --tex main.tex --tex sections/*.tex --tex tables/*.tex
+references.bib: 48 entries
 
 --- 1. duplicate citation keys ---
   none
@@ -30,7 +36,7 @@ references.bib: 42 entries
 
 --- 4. DOI status ---
   10 entries with no DOI yet
-  32 entries carry a DOI. EVERY ONE still needs external
+  38 entries carry a DOI. EVERY ONE still needs external
   verification against CrossRef; this script does not resolve them:
       kedzierska2025zeroshot             10.1186/s13059-025-03574-x
       denadel2026scaling                 10.1038/s41592-026-03120-y
@@ -64,9 +70,15 @@ references.bib: 42 entries
       luo2024scdiffusion                 10.1093/bioinformatics/btae518
       squair2021false                    10.1038/s41467-021-25960-2
       azodi2021splatpop                  10.1186/s13059-021-02546-1
+      dominguezconde2022celltypist       10.1126/science.abl5197
+      aran2019singler                    10.1038/s41590-018-0276-y
+      xu2021scanvi                       10.15252/msb.20209620
+      schafflick2020leukocytes           10.1038/s41467-019-14118-w
+      gong2025stereoseq                  10.1038/s41467-024-54715-y
+      chen2026geneformer                 10.1038/s43588-026-00972-4
 
 --- 5. cited vs defined ---
-  scanned 4 file(s), 39 distinct keys cited
+  scanned 15 file(s), 45 distinct keys cited
   every cited key is defined
   3 defined but never cited: bai2026sclong, squair2021false, tobin2017domain
 
@@ -74,13 +86,13 @@ references.bib: 42 entries
   none
 
 --- 7. author concentration ---
-  project rule, not a journal rule: no single author above 15% of 42 entries
-      zhang                  6/42  14.3%
-      wang                   5/42  11.9%
-      li                     5/42  11.9%
-      hao                    4/42   9.5%
-      hollmann               4/42   9.5%
-      hutter                 4/42   9.5%
+  project rule, not a journal rule: no single author above 15% of 48 entries
+      zhang                  7/48  14.6%
+      li                     7/48  14.6%
+      wang                   6/48  12.5%
+      liu                    6/48  12.5%
+      chen                   5/48  10.4%
+      hao                    4/48   8.3%
   note: the fix is to enlarge the denominator, not to delete
   self-citations. The stricter structural form of the rule is that
   no subsection may rest on a single group's work alone.
@@ -93,14 +105,17 @@ No blocking problem. Items under 4, 6 and 7 still need a human,
 and nothing here checks whether a source supports its claim.
 
 $ python3 scripts/count_words.py
-abstract: 138
-introduction: 488
-results: 1644
-main_text_so_far: 2132
-remaining_of_3000: 868
+abstract: 143
+introduction: 472
+results: 1963
+main_text_so_far: 2435
+remaining_of_3000: 565
 
 $ python3 scripts/check_export.py
 1375 checks, 0 mismatches; wrote CHECKS.md and checks/recomputed.csv
 
 $ python3 scripts/check_sources.py
 PASS: 359 original source hashes and 14 preserved copies unchanged.
+
+$ python3 scripts/check_artifacts.py
+PASS: canonical PDF matches 16 manuscript sources; Tables 1–2 and S1–S9 present; no intermediate PDFs.

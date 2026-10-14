@@ -19,3 +19,19 @@
 - State prior lineage: CellPFN320K v1 +64K v2.2-B episodes; tabular cellular adaptation uses v2.2-B throughout. The shared contribution is the simulator-defined prior family, not identical historical exposure.
 - Disclose calibration/evaluation dataset overlap and likely foundation-model pretraining exposure to exact PBMC cells.
 - Keep provisional timing prose visibly red as O05, while separating its measured and extrapolated values.
+
+## Quantitative completion of Wave 1 — 14 October 2026
+
+The author requested an exhaustive export index, quantitative Results and ablations, one at-a-glance Results table, and a supporting appendix in the same PDF. This supersedes the earlier decision to leave most ablations qualitative. Keep one canonical manuscript at output/cellpfn.pdf, remove intermediate manuscript PDFs, and use no version/revision suffixes. Historical source inputs remain provenance. Current export facts, including negative prespecified results and adverse outcomes, govern the revision. No new experiments, training or inferential tests are part of this work. Methods and figures remain later waves. These changes implement the approved plan; no new permission is required.
+
+## Author additions and final table conventions — 14 October 2026
+
+- Report PBMC and ZEBRA cell-type comparisons and the ablation with fewer/more genes. Use “2k HVGs” in the manuscript and tables.
+- The model comparison is Table 1; the gene-count ablation is a separate Table 2, as explicitly requested. They occupy two main display slots and leave four for Wave 3 figures.
+- Gray exposure-flagged values, retain bold for the overall best, and also bold the best unflagged value. Bold all ties at the displayed precision. Exposure flags must distinguish supported or possible unlabeled pretraining overlap from verified exact-cell identity or target-label leakage; the Geneformer/ZEBRA evidence is audited explicitly.
+- Include matched coarse/fine PBMC results and the eight post hoc harder subtype tasks. Do not manufacture a prespecified easy/hard binary subgroup or intervals absent from the export.
+- Include original and later ZEBRA sex results, keeping their GSM/sample-group units, input views and support budgets separate. Later units are not uniformly verified individual donors.
+- Report actual top-ranked genes and selected known cell-type marker matches for PBMC and ZEBRA, with primary literature support. Marker matches do not by themselves establish enrichment, perturbation mechanisms or disease signatures.
+- Use “one attribution sweep” for DS-LOO and state its head-gradient evaluations and corrections. Do not describe the exported implementation as literally one forward pass.
+- Keep the missing sex-gene attribution visible as O06. XIST/Y-linked task-eligibility criteria do not supply recovered attribution genes.
+- Preserve six unresolved scientific claims in red and defer Methods code auditing, Discussion and figure production to the agreed later waves.

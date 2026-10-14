@@ -19,4 +19,6 @@ Source hashes are checked by `make check`. Detailed passage-level reuse decision
 
 Total legacy files: 68. Export files recorded: 288.
 
+Every export file also has a semantic record in `evidence/export_index.json`, with a readable inventory in `notes/export_index.md` and manuscript allocation in `notes/export_disposition.md`. This covers numerical tables, reports, schemas, provenance and build artifacts; `python3 scripts/index_export.py --check` checks that the complete index is current without changing the export.
+
 Bibliographies in historical inputs are unverified leads. Only the active bibliography and literature verification notes define citations used in the new manuscript.
