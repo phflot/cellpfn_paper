@@ -1,0 +1,24 @@
+# Independent cross-review of biological and explanation figures
+
+Reviewed the final Figure 3, Supplementary Figure S8 and S1 illustration PNGs, their legends, plotting selections, panel manifests and relevant source-data dictionaries. Also inspected S7 as embedded on pages 69–70 of the 72-page canonical PDF.
+
+## Concrete findings
+
+1. **Clarify support versus query expression in Methods.** `sections/methods_visualization.tex` currently says “The expression and detection panels use the matching labelled supports”. That accurately describes the matrices in Figure 3c, but not the query-expression overlays in S7i,k,m,o. The latter use all query-cell expression values, as their data and captions correctly state. Suggested replacement: “The expression and detection matrices in Figure 3c summarize labelled supports; the spatial expression overlays in Supplementary Figure S7 show query values. Attribution panels summarize or display the original selected correctly classified query cells.” This is a wording inconsistency, not a wrong data join.
+
+2. **Remove duplicated continuation heading.** Embedded page 70 begins its caption “Figure S7 (continued). Supplementary Figure S7 continued: expression and signed deletion attribution.” The wrapper already identifies the continuation; the legend body's bold heading should simply be “Expression and signed deletion attribution.” The current duplicate is cosmetic and does not misnumber the figure.
+
+3. **Explicitly distinguish the two exact-deletion gene sets.** Figure 3d correctly contains all 20,365 exported pairs, including **1,625 `dsloo_extra` pairs**; the original validation set contains 18,740. Figure 3e correctly uses `gene_subset=evaluated_set` for both DS-LOO and IG64 and therefore excludes those extras. The current d caption says “selected gene union” but does not name the additional DS-LOO-selected genes. Add “including 1,625 DS-LOO-selected extra pairs” to panel d's caption so the scatter cannot be read as exactly the same gene selection used in e. No score recomputation or graphic change is required.
+
+## Scientific boundaries confirmed
+
+- **No incorrect numerical selection found** in the inspected Figure 3/S8 panels. Figure 3c uses a complete 8-class × 19-gene matrix with support mean log1p CP10k, support detection and class-mean corrected query attribution as three different quantities. Missing class–gene matrix entries were not replaced with zeros.
+- Figure 3e matches the original evaluated gene set and does not combine duplicate summary sources. S8 uses the independently recomputed original-set statistics for its eight-method comparison and explicitly selected sensitivity subsets. All displayed Spearman values lie within the plotted range. Relative-error axes include the adverse 12.1% no-operator kidney result.
+- Figure 3d retains negative and zero effects. Its selected gene union is not whole-transcriptome exact validation. Displayed fidelity remains conditional on correctly classified selected queries; S8b and the captions disclose that coverage.
+- Main-map errors are **ordinary errors**, correctly labelled as counts: 25/320 PBMC and 1,229/7,769 development-cortex queries. They are not converted to balanced-accuracy errors. S7 likewise reports raw error counts, not complement-of-balanced-accuracy values.
+- S7 attribution NaNs remain unexplained cells and are shown in pale gray; genuine zero attributions are retained among outlined explained cells. Expression and signed effects use separate scales. No causal or regulatory claim follows from attribution sign.
+- The S1 illustration is one predetermined fresh mean-program bank, root 44, with all 16,384 cells and no screening for attractive geometry. Its generation receipt records current pinned code, configuration and count/output hashes. It is explicitly an illustration, not realism or throughput validation; its receipt timing is not promoted to a benchmark.
+- **Synthetic and real UMAPs are not directly comparable coordinate systems.** Synthetic PCA uses log-normalized HVGs without the real-map standardization/clipping step. The synthetic caption accurately reports its own preprocessing, and its illustrative status prevents a quantitative real-versus-synthetic separation inference. Keep that boundary if the maps are rearranged later.
+- S7 embedded pages are readable and fit their captions. Minimum extracted font sizes are **5.334 pt** for the map page and **5.503 pt** for marker overlays. Main Figure 3 is **5.220 pt**, S8 **5.053 pt**. No below-5-pt text was found on these pages. Marker overlays remain sparse because only 96 cortex queries have explanations; the visible coverage restriction is a scientific limitation rather than a missing rendering layer.
+
+No files other than this review note were edited during the cross-review.

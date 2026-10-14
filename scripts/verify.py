@@ -13,11 +13,13 @@ commands = [
     ["scripts/check_tables.py"],
     ["scripts/check_manuscript.py"],
     ["scripts/check_methods.py"],
+    ["scripts/check_figures.py"],
     ["scripts/vendor/audit_bib.py", "--bib", "references.bib", "--tex", "main.tex", "--tex", "sections/*.tex", "--tex", "tables/*.tex"],
     ["scripts/count_words.py"],
     ["scripts/check_export.py"],
     ["scripts/check_sources.py"],
     ["scripts/check_artifacts.py"],
+    ["scripts/audit_rendered_figures.py"],
 ]
 logs, records = [], []
 for args in commands:

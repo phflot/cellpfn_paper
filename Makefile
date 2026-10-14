@@ -1,4 +1,4 @@
-.PHONY: all pdf check words tables index figure
+.PHONY: all pdf check words tables index figure figures
 all: pdf check
 
 pdf:
@@ -18,3 +18,6 @@ words:
 
 check:
 	python3 scripts/verify.py
+
+figures:
+	python3 scripts/build_figures.py

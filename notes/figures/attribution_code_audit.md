@@ -2,7 +2,7 @@
 
 ## Decision
 
-The implementation has been recovered. The missing-code, exact-formula and recorded-provenance components of M01 are resolved. The manuscript can now state the exact implemented estimator and its approximation boundaries. **Recommend closing M01 as a missing-method/provenance item after integrating the replacement text and the root's cached-array reconciliation.** Keep the absence of a fresh model-execution reproduction explicit in the handoff rather than continuing to claim the algorithm/code is missing.
+The implementation has been recovered. The missing-code, exact-formula and recorded-provenance components of M01 are resolved. The manuscript can now state the exact implemented estimator and its approximation boundaries. **M01 can remain closed as a missing-method/provenance item: the recovered source, complete checkpoint-pinned dependencies, historical consistency checks and cached-array reconciliation have now been verified.** Keep the absence of a fresh model-execution reproduction explicit in the handoff rather than continuing to claim the algorithm/code is missing.
 
 There is **no analytical error bound** in this implementation. Use “approximation with explicit limitations” rather than “bounded-error estimator.”
 
@@ -59,11 +59,21 @@ All **52 recovered JSON files** match their original export-inventory SHA256 has
 
 This establishes historical source/report identity and recorded consistency checks. It does not claim that a new GPU checkpoint execution reproduced those checks. Root-owned direct cached-array reconciliation supplies the output-to-figure link.
 
+### Complete pinned dependency closure
+
+Verified the full principal checkpoint SHA256 before loading its metadata using `torch.load(map_location="cpu", weights_only=True)`. CUDA remained uninitialized. The 148,092,883-byte checkpoint records `dropout=0.0` and all model dimensions/settings in `evidence/remote_model_source_manifest.json`.
+
+All **seven checkpoint-pinned source modules** (direct model plus six dependencies) are present and match the expected SHA256, both remotely and after local retrieval into `input/remote_attribution/model_source/`. Syntax parsing succeeds for every recovered Python file. The additional real-cell case loader is archived and hash-verified against its current remote copy; it was not independently pinned by the original export or checkpoint and is explicitly identified as such in the manifest.
+
+The historical loader's missing-file behavior mattered for exactly one dependency: `episodes.py` lives at `src/hashprompt/episodes.py`, consistent with the code's explicit `from hashprompt.episodes import DenseEpisodeBatch`, rather than its assumed `models/episodes.py`. The actual file's hash is `962729e8cadf1399c93cb57fe2b0771f40a66e78a09ef17860de26b129168fd5`, exactly matching the checkpoint. This audit resolves the path and verifies the source independently; no original loader/source was modified.
+
+Root's independent recomputation from stored arrays covers all twelve case/arm combinations and 24 principal corrected-Spearman/relative-L2 metrics. This audit independently compared those recomputed metrics in `evidence/remote_attribution_validation.json` with the original export: maximum absolute difference **4.96034506247689e-7**, within its serialized precision. No new inference or attribution execution was performed. This is the completed cached-fixture link required for M01 provenance closure.
+
 ## Cached-fixture closure checklist
 
 1. Match all recovered historical result NPZ/JSON and case-bundle hashes to the export inventory; also verify exact cell indices, class order, gene order and checkpoint identity. Save hashes of newly recovered scripts and full dependency sources.
 2. **Completed for the historical metadata:** each `__dsloo.json` and original case JSON has been recovered and SHA matched; exact recorded maxima and 78 matching gradient/noise diagnostics are documented above. Gradient/evaluation endpoint comparison is printed in the original runner rather than stored as a dedicated JSON field, so do not claim a fresh check of that quantity.
-3. Recompute corrected per-cell and class-summary Spearman, classwise relative L2, marker ranks and fixed-pair reversal aggregates directly from cached arrays, using the exact original selections and missing-value policy. Agreement to serialized precision closes the output-to-export link without GPU recomputation.
+3. **Completed for the principal fidelity fixtures:** root recomputed 24 corrected per-cell-Spearman/classwise-L2 metrics directly from stored arrays, and this audit independently matched them to the export as documented above. Marker/deletion figure checks are root-owned figure validations. Agreement to serialized precision closes the principal output-to-export link without GPU recomputation.
 4. Confirm absent-gene attribution/deletion effects are zero up to recorded numerical noise. Verify correction array minus uncorrected array is finite and consistent with recorded output identity. Raw depth/detection gradient leaves are not saved, so algebraic reconstruction of each correction term from outputs alone is impossible; a fresh tiny frozen-case rerun is needed only if exact computational replay is required.
 5. Record whether each part is **source verified**, **cached fixture reproduced**, or **fresh model execution reproduced**. M01 may be closed as a missing-method/provenance issue once 1–3 pass, while a separate runtime-reproduction limitation remains if a new checkpoint execution has not occurred.
 

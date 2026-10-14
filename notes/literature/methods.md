@@ -16,3 +16,8 @@ Checked 14 October 2026. This is targeted primary-source verification of added m
 Existing references cover set-based models, PFNs, simulator precedents, benchmark datasets, released comparators and integrated gradients. New references acknowledge intellectual/software dependencies; they do not validate our experimental outcomes. All comparisons and checkpoint-specific claims remain bound to the export and source/configuration audit.
 
 The simulator scalability protocol additionally uses the official scDesign3 documentation (https://songdongyuan1994.github.io/scDesign3/docs/index.html) for configurable cell counts and acceleration options. Neither that documentation nor the available local measurements establishes a universal inability to generate one million cells.
+
+## Wave 3 visualization references
+
+- McInnes, Healy, Saul and Großberger, UMAP, JOSS3(29),861(2018), DOI10.21105/joss.00861. Verified directly from publisher citation/BibTeX at https://joss.theoj.org/papers/10.21105/joss.00861 on14October2026. Cites the embedding implementation, not biological validity of UMAP geometry.
+- Wolf, Angerer and Theis, SCANPY, Genome Biology19,15(2018), DOI10.1186/s13059-017-1382-0. Verified from full publisher page https://link.springer.com/article/10.1186/s13059-017-1382-0 on14October2026. Cites the visualization preprocessing toolkit; concrete package versions are in the biological source receipts.
