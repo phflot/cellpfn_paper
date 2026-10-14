@@ -14,6 +14,7 @@ commands = [
     ["scripts/check_manuscript.py"],
     ["scripts/check_methods.py"],
     ["scripts/check_figures.py"],
+    ["scripts/audit_figure_layout.py", "--check"],
     ["scripts/vendor/audit_bib.py", "--bib", "references.bib", "--tex", "main.tex", "--tex", "sections/*.tex", "--tex", "tables/*.tex"],
     ["scripts/count_words.py"],
     ["scripts/check_export.py"],

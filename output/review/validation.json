@@ -45,6 +45,21 @@
   {
     "command": [
       "python3",
+      "scripts/check_figures.py"
+    ],
+    "returncode": 0
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/audit_figure_layout.py",
+      "--check"
+    ],
+    "returncode": 0
+  },
+  {
+    "command": [
+      "python3",
       "scripts/vendor/audit_bib.py",
       "--bib",
       "references.bib",
@@ -82,6 +97,13 @@
     "command": [
       "python3",
       "scripts/check_artifacts.py"
+    ],
+    "returncode": 0
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/audit_rendered_figures.py"
     ],
     "returncode": 0
   }

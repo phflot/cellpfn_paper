@@ -1,0 +1,468 @@
+{
+  "schema_version": 1,
+  "applicable": true,
+  "auditable": true,
+  "verdict": "PASS",
+  "backend": "Saved Matplotlib figure JSON",
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "comparisons": 10,
+    "exemptions": 2
+  },
+  "tolerances": {
+    "alignment_pt": 1.5,
+    "gutter_pt": 1.5
+  },
+  "layout": {
+    "schema_version": 1,
+    "backend": "Saved Matplotlib figure JSON",
+    "figure": {
+      "width_pt": 510.23622047244095,
+      "height_pt": 510.23622047244095
+    },
+    "panels": [
+      {
+        "id": "axis-0",
+        "bbox_pt": [
+          33.16535433070866,
+          391.3511811023622,
+          133.74566929133857,
+          483.1937007874016
+        ],
+        "title": "Reference labels",
+        "role": "data"
+      },
+      {
+        "id": "axis-1",
+        "bbox_pt": [
+          144.33307086614172,
+          391.3511811023622,
+          244.91338582677164,
+          483.1937007874016
+        ],
+        "title": "Errors: 25/320",
+        "role": "data"
+      },
+      {
+        "id": "axis-2",
+        "bbox_pt": [
+          283.18110236220474,
+          391.3511811023622,
+          383.7614173228347,
+          483.1937007874016
+        ],
+        "title": "Reference labels",
+        "role": "data"
+      },
+      {
+        "id": "axis-3",
+        "bbox_pt": [
+          394.3488188976378,
+          391.3511811023622,
+          494.92913385826773,
+          483.1937007874016
+        ],
+        "title": "Errors: 1,229/7,769",
+        "role": "data"
+      },
+      {
+        "id": "axis-4",
+        "bbox_pt": [
+          38.26771653543307,
+          226.03464566929134,
+          170.92913385826773,
+          326.5511811023622
+        ],
+        "title": "Support expression",
+        "role": "data"
+      },
+      {
+        "id": "axis-5",
+        "bbox_pt": [
+          38.26771653543307,
+          339.3070866141733,
+          170.92913385826773,
+          344.9196850393701
+        ],
+        "title": "",
+        "role": "colorbar"
+      },
+      {
+        "id": "axis-6",
+        "bbox_pt": [
+          196.44094488188978,
+          226.03464566929134,
+          329.10236220472444,
+          326.5511811023622
+        ],
+        "title": "Support detection",
+        "role": "data"
+      },
+      {
+        "id": "axis-7",
+        "bbox_pt": [
+          196.44094488188978,
+          339.3070866141733,
+          329.10236220472444,
+          344.9196850393701
+        ],
+        "title": "",
+        "role": "colorbar"
+      },
+      {
+        "id": "axis-8",
+        "bbox_pt": [
+          354.61417322834643,
+          226.03464566929134,
+          487.2755905511811,
+          326.5511811023622
+        ],
+        "title": "Query attribution",
+        "role": "data"
+      },
+      {
+        "id": "axis-9",
+        "bbox_pt": [
+          354.61417322834643,
+          339.3070866141733,
+          487.2755905511811,
+          344.9196850393701
+        ],
+        "title": "",
+        "role": "colorbar"
+      },
+      {
+        "id": "axis-10",
+        "bbox_pt": [
+          45.92125984251968,
+          48.47244094488189,
+          163.2755905511811,
+          161.74488188976378
+        ],
+        "title": "Finite-deletion agreement",
+        "role": "data"
+      },
+      {
+        "id": "axis-11",
+        "bbox_pt": [
+          257.6692913385827,
+          48.47244094488189,
+          352.06299212598424,
+          161.74488188976378
+        ],
+        "title": "Matched fidelity",
+        "role": "data"
+      },
+      {
+        "id": "axis-12",
+        "bbox_pt": [
+          408.18897637795277,
+          48.47244094488189,
+          494.9291338582678,
+          161.74488188976378
+        ],
+        "title": "Deletion consequence",
+        "role": "data"
+      }
+    ],
+    "row_groups": [
+      {
+        "id": "row-1",
+        "panels": [
+          "axis-0",
+          "axis-1",
+          "axis-2",
+          "axis-3"
+        ]
+      },
+      {
+        "id": "row-2",
+        "panels": [
+          "axis-4",
+          "axis-6",
+          "axis-8"
+        ]
+      },
+      {
+        "id": "row-3",
+        "panels": [
+          "axis-5",
+          "axis-7",
+          "axis-9"
+        ]
+      },
+      {
+        "id": "row-4",
+        "panels": [
+          "axis-10",
+          "axis-11",
+          "axis-12"
+        ]
+      }
+    ],
+    "column_groups": [
+      {
+        "id": "column-1",
+        "panels": [
+          "axis-4",
+          "axis-5"
+        ]
+      },
+      {
+        "id": "column-2",
+        "panels": [
+          "axis-6",
+          "axis-7"
+        ]
+      },
+      {
+        "id": "column-3",
+        "panels": [
+          "axis-8",
+          "axis-9"
+        ]
+      }
+    ],
+    "boundary_groups": [],
+    "exemptions": [
+      {
+        "panels": [
+          "axis-0",
+          "axis-1",
+          "axis-2",
+          "axis-3"
+        ],
+        "checks": [
+          "horizontal-gutter"
+        ],
+        "reason": "Two equal RNA-map pairs separated by a larger between-dataset gap."
+      },
+      {
+        "panels": [
+          "axis-10",
+          "axis-11",
+          "axis-12"
+        ],
+        "checks": [
+          "panel-width",
+          "horizontal-gutter"
+        ],
+        "reason": "Bottom scatter, six-case fidelity and deletion curve intentionally have unequal widths and margins for their different labels."
+      }
+    ]
+  },
+  "findings": [],
+  "figure_id": "figure3",
+  "figure_json_sha256": "f218975f3e1561fad565d937e8703e7e8e4ce85c8306f855956c38163dba181a",
+  "pdf_sha256": "a93e2a31cc28f42ebcf873f7f7e6826e63f8c58df2ab0f9c93291480c8cc7ce4",
+  "pdf_matches_render_manifest": true,
+  "named_design": "Equal RNA pairs and three equal gene matrices; colorbars align with their matrices; bottom panels share baseline/height while retaining unequal widths.",
+  "all_axis_roles": [
+    {
+      "id": "axis-0",
+      "bbox_pt": [
+        33.16535433070866,
+        391.3511811023622,
+        133.74566929133857,
+        483.1937007874016
+      ],
+      "title": "Reference labels",
+      "role": "data"
+    },
+    {
+      "id": "axis-1",
+      "bbox_pt": [
+        144.33307086614172,
+        391.3511811023622,
+        244.91338582677164,
+        483.1937007874016
+      ],
+      "title": "Errors: 25/320",
+      "role": "data"
+    },
+    {
+      "id": "axis-2",
+      "bbox_pt": [
+        283.18110236220474,
+        391.3511811023622,
+        383.7614173228347,
+        483.1937007874016
+      ],
+      "title": "Reference labels",
+      "role": "data"
+    },
+    {
+      "id": "axis-3",
+      "bbox_pt": [
+        394.3488188976378,
+        391.3511811023622,
+        494.92913385826773,
+        483.1937007874016
+      ],
+      "title": "Errors: 1,229/7,769",
+      "role": "data"
+    },
+    {
+      "id": "axis-4",
+      "bbox_pt": [
+        38.26771653543307,
+        226.03464566929134,
+        170.92913385826773,
+        326.5511811023622
+      ],
+      "title": "Support expression",
+      "role": "data"
+    },
+    {
+      "id": "axis-5",
+      "bbox_pt": [
+        38.26771653543307,
+        339.3070866141733,
+        170.92913385826773,
+        344.9196850393701
+      ],
+      "title": "",
+      "role": "colorbar"
+    },
+    {
+      "id": "axis-6",
+      "bbox_pt": [
+        196.44094488188978,
+        226.03464566929134,
+        329.10236220472444,
+        326.5511811023622
+      ],
+      "title": "Support detection",
+      "role": "data"
+    },
+    {
+      "id": "axis-7",
+      "bbox_pt": [
+        196.44094488188978,
+        339.3070866141733,
+        329.10236220472444,
+        344.9196850393701
+      ],
+      "title": "",
+      "role": "colorbar"
+    },
+    {
+      "id": "axis-8",
+      "bbox_pt": [
+        354.61417322834643,
+        226.03464566929134,
+        487.2755905511811,
+        326.5511811023622
+      ],
+      "title": "Query attribution",
+      "role": "data"
+    },
+    {
+      "id": "axis-9",
+      "bbox_pt": [
+        354.61417322834643,
+        339.3070866141733,
+        487.2755905511811,
+        344.9196850393701
+      ],
+      "title": "",
+      "role": "colorbar"
+    },
+    {
+      "id": "axis-10",
+      "bbox_pt": [
+        45.92125984251968,
+        48.47244094488189,
+        163.2755905511811,
+        161.74488188976378
+      ],
+      "title": "Finite-deletion agreement",
+      "role": "data"
+    },
+    {
+      "id": "axis-11",
+      "bbox_pt": [
+        257.6692913385827,
+        48.47244094488189,
+        352.06299212598424,
+        161.74488188976378
+      ],
+      "title": "Matched fidelity",
+      "role": "data"
+    },
+    {
+      "id": "axis-12",
+      "bbox_pt": [
+        408.18897637795277,
+        48.47244094488189,
+        494.9291338582678,
+        161.74488188976378
+      ],
+      "title": "Deletion consequence",
+      "role": "data"
+    }
+  ],
+  "custom_shared_edge_checks": [
+    {
+      "edge": "width",
+      "axes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "values_pt": [
+        100.58031496062992,
+        100.58031496062992,
+        100.58031496062995,
+        100.58031496062995
+      ],
+      "spread_pt": 2.842170943040401e-14,
+      "pass_check": true
+    },
+    {
+      "edge": "left",
+      "axes": [
+        4,
+        5
+      ],
+      "values_pt": [
+        38.26771653543307,
+        38.26771653543307
+      ],
+      "spread_pt": 0.0,
+      "pass_check": true
+    },
+    {
+      "edge": "left",
+      "axes": [
+        6,
+        7
+      ],
+      "values_pt": [
+        196.44094488188978,
+        196.44094488188978
+      ],
+      "spread_pt": 0.0,
+      "pass_check": true
+    },
+    {
+      "edge": "left",
+      "axes": [
+        8,
+        9
+      ],
+      "values_pt": [
+        354.61417322834643,
+        354.61417322834643
+      ],
+      "spread_pt": 0.0,
+      "pass_check": true
+    }
+  ],
+  "global_axis_intersections": [],
+  "all_axes_within_canvas": true,
+  "scope_limit": "Panel-label anchors are absent from saved JSON; this audit checks plot-area alignment, not type baseline alignment. Actual text collisions are checked independently on rendered PDFs.",
+  "combined_verdict": "PASS"
+}

@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "applicable": true,
+  "auditable": true,
+  "verdict": "PASS",
+  "backend": "Saved Matplotlib figure JSON",
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "comparisons": 4,
+    "exemptions": 0
+  },
+  "tolerances": {
+    "alignment_pt": 1.5,
+    "gutter_pt": 1.5
+  },
+  "layout": {
+    "schema_version": 1,
+    "backend": "Saved Matplotlib figure JSON",
+    "figure": {
+      "width_pt": 510.23622047244095,
+      "height_pt": 510.23622047244095
+    },
+    "panels": [
+      {
+        "id": "axis-0",
+        "bbox_pt": [
+          96.94488188976378,
+          321.4488188976378,
+          240.90438695163107,
+          464.3149606299213
+        ],
+        "title": "Measured adaptation compute",
+        "role": "data"
+      },
+      {
+        "id": "axis-1",
+        "bbox_pt": [
+          356.0719910011249,
+          321.4488188976378,
+          500.03149606299223,
+          464.3149606299213
+        ],
+        "title": "Measured attribution routes",
+        "role": "data"
+      },
+      {
+        "id": "axis-2",
+        "bbox_pt": [
+          96.94488188976378,
+          71.43307086614173,
+          240.90438695163107,
+          214.29921259842519
+        ],
+        "title": "Inferred all-gene exact deletion",
+        "role": "data"
+      },
+      {
+        "id": "axis-3",
+        "bbox_pt": [
+          356.0719910011249,
+          71.43307086614173,
+          500.03149606299223,
+          214.29921259842519
+        ],
+        "title": "Estimated Kumo, 2k HVGs",
+        "role": "data"
+      }
+    ],
+    "row_groups": [
+      {
+        "id": "row-1",
+        "panels": [
+          "axis-0",
+          "axis-1"
+        ]
+      },
+      {
+        "id": "row-2",
+        "panels": [
+          "axis-2",
+          "axis-3"
+        ]
+      }
+    ],
+    "column_groups": [
+      {
+        "id": "column-1",
+        "panels": [
+          "axis-0",
+          "axis-2"
+        ]
+      },
+      {
+        "id": "column-2",
+        "panels": [
+          "axis-1",
+          "axis-3"
+        ]
+      }
+    ],
+    "boundary_groups": [],
+    "exemptions": []
+  },
+  "findings": [],
+  "figure_id": "supp_figure9",
+  "figure_json_sha256": "0af30b5d0d48385ae392496c9a6768d07acd0a472c005416a2b48ceb697d911e",
+  "pdf_sha256": "27e8ee0efd0b5761c4bdf55e61fee8dc7f7473e1be4830d5ad1caa020d6f5482",
+  "pdf_matches_render_manifest": true,
+  "named_design": "Two-by-two grid separating measured, inferred and estimated costs.",
+  "all_axis_roles": [
+    {
+      "id": "axis-0",
+      "bbox_pt": [
+        96.94488188976378,
+        321.4488188976378,
+        240.90438695163107,
+        464.3149606299213
+      ],
+      "title": "Measured adaptation compute",
+      "role": "data"
+    },
+    {
+      "id": "axis-1",
+      "bbox_pt": [
+        356.0719910011249,
+        321.4488188976378,
+        500.03149606299223,
+        464.3149606299213
+      ],
+      "title": "Measured attribution routes",
+      "role": "data"
+    },
+    {
+      "id": "axis-2",
+      "bbox_pt": [
+        96.94488188976378,
+        71.43307086614173,
+        240.90438695163107,
+        214.29921259842519
+      ],
+      "title": "Inferred all-gene exact deletion",
+      "role": "data"
+    },
+    {
+      "id": "axis-3",
+      "bbox_pt": [
+        356.0719910011249,
+        71.43307086614173,
+        500.03149606299223,
+        214.29921259842519
+      ],
+      "title": "Estimated Kumo, 2k HVGs",
+      "role": "data"
+    }
+  ],
+  "custom_shared_edge_checks": [],
+  "global_axis_intersections": [],
+  "all_axes_within_canvas": true,
+  "scope_limit": "Panel-label anchors are absent from saved JSON; this audit checks plot-area alignment, not type baseline alignment. Actual text collisions are checked independently on rendered PDFs.",
+  "combined_verdict": "PASS"
+}

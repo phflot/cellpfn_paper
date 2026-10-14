@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "applicable": true,
+  "auditable": true,
+  "verdict": "PASS",
+  "backend": "Saved Matplotlib figure JSON",
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "comparisons": 1,
+    "exemptions": 0
+  },
+  "tolerances": {
+    "alignment_pt": 1.5,
+    "gutter_pt": 1.5
+  },
+  "layout": {
+    "schema_version": 1,
+    "backend": "Saved Matplotlib figure JSON",
+    "figure": {
+      "width_pt": 510.23622047244095,
+      "height_pt": 255.11811023622047
+    },
+    "panels": [
+      {
+        "id": "axis-0",
+        "bbox_pt": [
+          35.71653543307087,
+          51.02362204724411,
+          242.0787401574803,
+          211.748031496063
+        ],
+        "title": "Simulated cell type",
+        "role": "data"
+      },
+      {
+        "id": "axis-1",
+        "bbox_pt": [
+          293.6692913385827,
+          51.02362204724411,
+          500.0314960629921,
+          211.748031496063
+        ],
+        "title": "Simulated donor",
+        "role": "data"
+      }
+    ],
+    "row_groups": [
+      {
+        "id": "row-1",
+        "panels": [
+          "axis-0",
+          "axis-1"
+        ]
+      }
+    ],
+    "column_groups": [],
+    "boundary_groups": [],
+    "exemptions": []
+  },
+  "findings": [],
+  "figure_id": "supp_figure1_illustration",
+  "figure_json_sha256": "587d00e75501cc034b70dab9aff0885cadb271490546f3b105e85fad538c65b6",
+  "pdf_sha256": "48eb7f12e6e215456e8bb73bdda7d4fb56fd3e0c7e02c0b811bad427feae1fa0",
+  "pdf_matches_render_manifest": true,
+  "named_design": "Two equal overlays of the same illustrative synthetic RNA coordinates.",
+  "all_axis_roles": [
+    {
+      "id": "axis-0",
+      "bbox_pt": [
+        35.71653543307087,
+        51.02362204724411,
+        242.0787401574803,
+        211.748031496063
+      ],
+      "title": "Simulated cell type",
+      "role": "data"
+    },
+    {
+      "id": "axis-1",
+      "bbox_pt": [
+        293.6692913385827,
+        51.02362204724411,
+        500.0314960629921,
+        211.748031496063
+      ],
+      "title": "Simulated donor",
+      "role": "data"
+    }
+  ],
+  "custom_shared_edge_checks": [],
+  "global_axis_intersections": [],
+  "all_axes_within_canvas": true,
+  "scope_limit": "Panel-label anchors are absent from saved JSON; this audit checks plot-area alignment, not type baseline alignment. Actual text collisions are checked independently on rendered PDFs.",
+  "combined_verdict": "PASS"
+}

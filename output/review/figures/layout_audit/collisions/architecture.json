@@ -1,0 +1,415 @@
+{
+  "pdf": "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/architecture.pdf",
+  "auditable": true,
+  "verdict": "FIX BEFORE DELIVERY",
+  "page_count": 1,
+  "visible_text_box_count": 50,
+  "text_trace_count": 54,
+  "stroke_path_count": 41,
+  "filled_region_count": 61,
+  "image_region_count": 0,
+  "summary": {
+    "fail": 9,
+    "warn": 0,
+    "contained_fill_overlays": 83,
+    "contained_image_overlays": 0
+  },
+  "thresholds": {
+    "text_inset_pt": 0.6,
+    "min_overlap_ratio": 0.05,
+    "clipping_tolerance_pt": 0.5
+  },
+  "findings": [
+    {
+      "severity": "FAIL",
+      "kind": "text-text",
+      "page": 1,
+      "message": "Text boxes overlap by 97.2% of the smaller box",
+      "text": "Donor composition and covariates",
+      "text_bbox": [
+        19.842519760131836,
+        54.895118713378906,
+        156.12095642089844,
+        74.73764038085938
+      ],
+      "other_text": "Study-associated shifts",
+      "other_bbox": [
+        19.842519760131836,
+        65.76831817626953,
+        111.75308227539062,
+        74.99905395507812
+      ],
+      "object_count": 1,
+      "object_indexes": []
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-text",
+      "page": 1,
+      "message": "Text boxes overlap by 97.2% of the smaller box",
+      "text": "NumPy / PyTorch CPU backend",
+      "text_bbox": [
+        21.543306350708008,
+        237.89866638183594,
+        239.7919464111328,
+        257.7412109375
+      ],
+      "other_text": "Isolated seeds \u00b7 independent processes \u00b7 bounded prefetch",
+      "other_bbox": [
+        21.543306350708008,
+        249.4125518798828,
+        239.79348754882812,
+        257.98394775390625
+      ],
+      "object_count": 1,
+      "object_indexes": []
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-text",
+      "page": 1,
+      "message": "Text boxes overlap by 97.2% of the smaller box",
+      "text": "Compact neural predictor",
+      "text_bbox": [
+        28.34645652770996,
+        387.5679626464844,
+        122.77291107177734,
+        406.84356689453125
+      ],
+      "other_text": "Synthetic weight training",
+      "other_bbox": [
+        28.34645652770996,
+        398.514892578125,
+        121.2463150024414,
+        407.0863037109375
+      ],
+      "object_count": 1,
+      "object_indexes": []
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-text",
+      "page": 1,
+      "message": "Text boxes overlap by 97.2% of the smaller box",
+      "text": "Resolved con\ufb01guration",
+      "text_bbox": [
+        28.91338539123535,
+        204.44984436035156,
+        141.2351531982422,
+        223.1585235595703
+      ],
+      "other_text": "Reusable donor/program state",
+      "other_bbox": [
+        28.91338539123535,
+        214.82986450195312,
+        141.23341369628906,
+        223.40126037597656
+      ],
+      "object_count": 1,
+      "object_indexes": []
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-text",
+      "page": 1,
+      "message": "Text boxes overlap by 97.2% of the smaller box",
+      "text": "TabICL / Kumo",
+      "text_bbox": [
+        144.56692504882812,
+        387.5679626464844,
+        228.1790008544922,
+        406.84356689453125
+      ],
+      "other_text": "Cellular tasks + replay",
+      "other_bbox": [
+        144.56692504882812,
+        398.514892578125,
+        228.1804962158203,
+        407.0863037109375
+      ],
+      "object_count": 1,
+      "object_indexes": []
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-text",
+      "page": 1,
+      "message": "Text boxes overlap by 97.2% of the smaller box",
+      "text": "Hierarchical cell-type di\ufb00erences",
+      "text_bbox": [
+        186.51968383789062,
+        54.895118713378906,
+        317.11517333984375,
+        74.73764038085938
+      ],
+      "other_text": "Distributed and rare signals",
+      "other_bbox": [
+        186.51968383789062,
+        65.76831817626953,
+        296.8837585449219,
+        74.99905395507812
+      ],
+      "object_count": 1,
+      "object_indexes": []
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-text",
+      "page": 1,
+      "message": "Text boxes overlap by 97.2% of the smaller box",
+      "text": "Batched transformations",
+      "text_bbox": [
+        191.05511474609375,
+        204.44984436035156,
+        282.4072265625,
+        223.1585235595703
+      ],
+      "other_text": "Count sampling on CPU",
+      "other_bbox": [
+        191.05511474609375,
+        214.82986450195312,
+        277.808349609375,
+        223.40126037597656
+      ],
+      "object_count": 1,
+      "object_indexes": []
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-text",
+      "page": 1,
+      "message": "Text boxes overlap by 97.2% of the smaller box",
+      "text": "Depth, capture and dispersion",
+      "text_bbox": [
+        353.19683837890625,
+        54.895118713378906,
+        473.583740234375,
+        74.73764038085938
+      ],
+      "other_text": "Study and batch variation",
+      "other_bbox": [
+        353.19683837890625,
+        65.76831817626953,
+        456.14776611328125,
+        74.99905395507812
+      ],
+      "object_count": 1,
+      "object_indexes": []
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-text",
+      "page": 1,
+      "message": "Text boxes overlap by 18.3% of the smaller box",
+      "text": "Cells \u00d7 genes + metadata",
+      "text_bbox": [
+        353.19683837890625,
+        204.44984436035156,
+        450.5171813964844,
+        223.1585235595703
+      ],
+      "other_text": "Counts, expectations, pro\ufb01les",
+      "other_bbox": [
+        447.7550354003906,
+        215.78843688964844,
+        462.8194580078125,
+        223.1585235595703
+      ],
+      "object_count": 1,
+      "object_indexes": []
+    }
+  ],
+  "audit_command": [
+    "/home/phflot/conda/bin/python",
+    "/home/phflot/.codex/skills/nature-figure/scripts/audit_figure_collisions.py",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/architecture.pdf",
+    "--json-out",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/output/review/figures/layout_audit/collisions/architecture.json"
+  ],
+  "pdf_sha256": "696bcee0d55aaf4882567b95bf1c225f24340f92676c398de6181a890fd6f651",
+  "process_return_code": 1,
+  "reviewed_dispositions": [
+    {
+      "finding_index": 0,
+      "disposition": "false_positive",
+      "reason": "Cairo merged two baseline rows into one trace bounding box; uniquely matched per-glyph boxes are disjoint. Native PNG and enlarged PDF crops visually confirm separated text.",
+      "pdf_sha256": "696bcee0d55aaf4882567b95bf1c225f24340f92676c398de6181a890fd6f651",
+      "first_glyph_union_bbox": [
+        19.842519760131836,
+        54.895118713378906,
+        156.12095642089844,
+        62.83212661743164
+      ],
+      "second_glyph_union_bbox": [
+        19.842519760131836,
+        66.80062866210938,
+        111.7530517578125,
+        74.73764038085938
+      ],
+      "glyph_union_intersection_area_pt2": 0.0,
+      "pymupdf_version": "1.28.2"
+    },
+    {
+      "finding_index": 1,
+      "disposition": "false_positive",
+      "reason": "Cairo merged two baseline rows into one trace bounding box; uniquely matched per-glyph boxes are disjoint. Native PNG and enlarged PDF crops visually confirm separated text.",
+      "pdf_sha256": "696bcee0d55aaf4882567b95bf1c225f24340f92676c398de6181a890fd6f651",
+      "first_glyph_union_bbox": [
+        21.543306350708008,
+        237.89866638183594,
+        133.85423278808594,
+        245.2687530517578
+      ],
+      "second_glyph_union_bbox": [
+        21.543306350708008,
+        250.37112426757812,
+        239.7919464111328,
+        257.7412109375
+      ],
+      "glyph_union_intersection_area_pt2": 0.0,
+      "pymupdf_version": "1.28.2"
+    },
+    {
+      "finding_index": 2,
+      "disposition": "false_positive",
+      "reason": "Cairo merged two baseline rows into one trace bounding box; uniquely matched per-glyph boxes are disjoint. Native PNG and enlarged PDF crops visually confirm separated text.",
+      "pdf_sha256": "696bcee0d55aaf4882567b95bf1c225f24340f92676c398de6181a890fd6f651",
+      "first_glyph_union_bbox": [
+        28.34645652770996,
+        387.5679626464844,
+        122.77291107177734,
+        394.93804931640625
+      ],
+      "second_glyph_union_bbox": [
+        28.34645652770996,
+        399.4734802246094,
+        121.24459075927734,
+        406.84356689453125
+      ],
+      "glyph_union_intersection_area_pt2": 0.0,
+      "pymupdf_version": "1.28.2"
+    },
+    {
+      "finding_index": 3,
+      "disposition": "false_positive",
+      "reason": "Cairo merged two baseline rows into one trace bounding box; uniquely matched per-glyph boxes are disjoint. Native PNG and enlarged PDF crops visually confirm separated text.",
+      "pdf_sha256": "696bcee0d55aaf4882567b95bf1c225f24340f92676c398de6181a890fd6f651",
+      "first_glyph_union_bbox": [
+        28.91338539123535,
+        204.44984436035156,
+        113.45401763916016,
+        211.81993103027344
+      ],
+      "second_glyph_union_bbox": [
+        28.91338539123535,
+        215.78843688964844,
+        141.2351531982422,
+        223.1585235595703
+      ],
+      "glyph_union_intersection_area_pt2": 0.0,
+      "pymupdf_version": "1.28.2"
+    },
+    {
+      "finding_index": 4,
+      "disposition": "false_positive",
+      "reason": "Cairo merged two baseline rows into one trace bounding box; uniquely matched per-glyph boxes are disjoint. Native PNG and enlarged PDF crops visually confirm separated text.",
+      "pdf_sha256": "696bcee0d55aaf4882567b95bf1c225f24340f92676c398de6181a890fd6f651",
+      "first_glyph_union_bbox": [
+        144.56692504882812,
+        387.5679626464844,
+        196.47305297851562,
+        394.93804931640625
+      ],
+      "second_glyph_union_bbox": [
+        144.56692504882812,
+        399.4734802246094,
+        228.1790008544922,
+        406.84356689453125
+      ],
+      "glyph_union_intersection_area_pt2": 0.0,
+      "pymupdf_version": "1.28.2"
+    },
+    {
+      "finding_index": 5,
+      "disposition": "false_positive",
+      "reason": "Cairo merged two baseline rows into one trace bounding box; uniquely matched per-glyph boxes are disjoint. Native PNG and enlarged PDF crops visually confirm separated text.",
+      "pdf_sha256": "696bcee0d55aaf4882567b95bf1c225f24340f92676c398de6181a890fd6f651",
+      "first_glyph_union_bbox": [
+        186.51968383789062,
+        54.895118713378906,
+        317.11517333984375,
+        62.83212661743164
+      ],
+      "second_glyph_union_bbox": [
+        186.51968383789062,
+        66.80062866210938,
+        296.88372802734375,
+        74.73764038085938
+      ],
+      "glyph_union_intersection_area_pt2": 0.0,
+      "pymupdf_version": "1.28.2"
+    },
+    {
+      "finding_index": 6,
+      "disposition": "false_positive",
+      "reason": "Cairo merged two baseline rows into one trace bounding box; uniquely matched per-glyph boxes are disjoint. Native PNG and enlarged PDF crops visually confirm separated text.",
+      "pdf_sha256": "696bcee0d55aaf4882567b95bf1c225f24340f92676c398de6181a890fd6f651",
+      "first_glyph_union_bbox": [
+        191.05511474609375,
+        204.44984436035156,
+        282.4072265625,
+        211.81993103027344
+      ],
+      "second_glyph_union_bbox": [
+        191.05511474609375,
+        215.78843688964844,
+        277.807861328125,
+        223.1585235595703
+      ],
+      "glyph_union_intersection_area_pt2": 0.0,
+      "pymupdf_version": "1.28.2"
+    },
+    {
+      "finding_index": 7,
+      "disposition": "false_positive",
+      "reason": "Cairo merged two baseline rows into one trace bounding box; uniquely matched per-glyph boxes are disjoint. Native PNG and enlarged PDF crops visually confirm separated text.",
+      "pdf_sha256": "696bcee0d55aaf4882567b95bf1c225f24340f92676c398de6181a890fd6f651",
+      "first_glyph_union_bbox": [
+        353.19683837890625,
+        54.895118713378906,
+        473.583740234375,
+        62.83212661743164
+      ],
+      "second_glyph_union_bbox": [
+        353.19683837890625,
+        66.80062866210938,
+        456.1460876464844,
+        74.73764038085938
+      ],
+      "glyph_union_intersection_area_pt2": 0.0,
+      "pymupdf_version": "1.28.2"
+    },
+    {
+      "finding_index": 8,
+      "disposition": "false_positive",
+      "reason": "Cairo merged two baseline rows into one trace bounding box; uniquely matched per-glyph boxes are disjoint. Native PNG and enlarged PDF crops visually confirm separated text.",
+      "pdf_sha256": "696bcee0d55aaf4882567b95bf1c225f24340f92676c398de6181a890fd6f651",
+      "first_glyph_union_bbox": [
+        353.19683837890625,
+        204.44984436035156,
+        450.5171813964844,
+        211.81993103027344
+      ],
+      "second_glyph_union_bbox": [
+        353.19683837890625,
+        215.78843688964844,
+        462.8194580078125,
+        223.1585235595703
+      ],
+      "glyph_union_intersection_area_pt2": 0.0,
+      "pymupdf_version": "1.28.2"
+    }
+  ],
+  "unresolved_finding_indexes": [],
+  "reviewed_verdict": "PASS"
+}

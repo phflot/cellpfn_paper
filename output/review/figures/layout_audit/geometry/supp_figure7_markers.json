@@ -1,0 +1,531 @@
+{
+  "schema_version": 1,
+  "applicable": true,
+  "auditable": true,
+  "verdict": "PASS",
+  "backend": "Saved Matplotlib figure JSON",
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "comparisons": 12,
+    "exemptions": 0
+  },
+  "tolerances": {
+    "alignment_pt": 1.5,
+    "gutter_pt": 1.5
+  },
+  "layout": {
+    "schema_version": 1,
+    "backend": "Saved Matplotlib figure JSON",
+    "figure": {
+      "width_pt": 510.23622047244095,
+      "height_pt": 425.1968503937008
+    },
+    "panels": [
+      {
+        "id": "axis-0",
+        "bbox_pt": [
+          28.062992125984252,
+          283.6486342567297,
+          132.66141732283464,
+          347.768688577916
+        ],
+        "title": "IL7R: expression",
+        "role": "data"
+      },
+      {
+        "id": "axis-1",
+        "bbox_pt": [
+          34.185826771653545,
+          252.14173228346456,
+          126.53858267716535,
+          257.244094488189
+        ],
+        "title": "",
+        "role": "colorbar"
+      },
+      {
+        "id": "axis-2",
+        "bbox_pt": [
+          147.96850393700785,
+          283.6486342567297,
+          252.56692913385828,
+          347.768688577916
+        ],
+        "title": "IL7R: attribution",
+        "role": "data"
+      },
+      {
+        "id": "axis-3",
+        "bbox_pt": [
+          154.09133858267717,
+          252.14173228346456,
+          246.44409448818897,
+          257.244094488189
+        ],
+        "title": "",
+        "role": "colorbar"
+      },
+      {
+        "id": "axis-4",
+        "bbox_pt": [
+          267.8740157480315,
+          283.6486342567297,
+          372.4724409448819,
+          347.76868857791595
+        ],
+        "title": "NKG7: expression",
+        "role": "data"
+      },
+      {
+        "id": "axis-5",
+        "bbox_pt": [
+          273.9968503937008,
+          252.14173228346456,
+          366.3496062992126,
+          257.244094488189
+        ],
+        "title": "",
+        "role": "colorbar"
+      },
+      {
+        "id": "axis-6",
+        "bbox_pt": [
+          387.7795275590551,
+          283.6486342567297,
+          492.3779527559055,
+          347.76868857791595
+        ],
+        "title": "NKG7: attribution",
+        "role": "data"
+      },
+      {
+        "id": "axis-7",
+        "bbox_pt": [
+          393.9023622047244,
+          252.14173228346456,
+          486.25511811023625,
+          257.244094488189
+        ],
+        "title": "",
+        "role": "colorbar"
+      },
+      {
+        "id": "axis-8",
+        "bbox_pt": [
+          38.028896340417596,
+          89.29133858267717,
+          122.69551310840131,
+          193.46456692913384
+        ],
+        "title": "PLP1: expression",
+        "role": "data"
+      },
+      {
+        "id": "axis-9",
+        "bbox_pt": [
+          34.185826771653545,
+          77.81102362204724,
+          126.53858267716535,
+          82.91338582677166
+        ],
+        "title": "",
+        "role": "colorbar"
+      },
+      {
+        "id": "axis-10",
+        "bbox_pt": [
+          157.9344081514412,
+          89.29133858267717,
+          242.60102491942493,
+          193.46456692913384
+        ],
+        "title": "PLP1: attribution",
+        "role": "data"
+      },
+      {
+        "id": "axis-11",
+        "bbox_pt": [
+          154.09133858267717,
+          77.81102362204724,
+          246.44409448818897,
+          82.91338582677166
+        ],
+        "title": "",
+        "role": "colorbar"
+      },
+      {
+        "id": "axis-12",
+        "bbox_pt": [
+          277.8399199624648,
+          89.29133858267717,
+          362.50653673044854,
+          193.46456692913384
+        ],
+        "title": "CLDN5: expression",
+        "role": "data"
+      },
+      {
+        "id": "axis-13",
+        "bbox_pt": [
+          273.9968503937008,
+          77.81102362204724,
+          366.3496062992126,
+          82.91338582677166
+        ],
+        "title": "",
+        "role": "colorbar"
+      },
+      {
+        "id": "axis-14",
+        "bbox_pt": [
+          397.74543177348846,
+          89.29133858267717,
+          482.4120485414722,
+          193.46456692913384
+        ],
+        "title": "CLDN5: attribution",
+        "role": "data"
+      },
+      {
+        "id": "axis-15",
+        "bbox_pt": [
+          393.9023622047244,
+          77.81102362204724,
+          486.25511811023625,
+          82.91338582677166
+        ],
+        "title": "",
+        "role": "colorbar"
+      }
+    ],
+    "row_groups": [
+      {
+        "id": "row-1",
+        "panels": [
+          "axis-0",
+          "axis-2",
+          "axis-4",
+          "axis-6"
+        ]
+      },
+      {
+        "id": "row-2",
+        "panels": [
+          "axis-1",
+          "axis-3",
+          "axis-5",
+          "axis-7"
+        ]
+      },
+      {
+        "id": "row-3",
+        "panels": [
+          "axis-8",
+          "axis-10",
+          "axis-12",
+          "axis-14"
+        ]
+      },
+      {
+        "id": "row-4",
+        "panels": [
+          "axis-9",
+          "axis-11",
+          "axis-13",
+          "axis-15"
+        ]
+      }
+    ],
+    "column_groups": [
+      {
+        "id": "column-1",
+        "panels": [
+          "axis-1",
+          "axis-9"
+        ]
+      },
+      {
+        "id": "column-2",
+        "panels": [
+          "axis-3",
+          "axis-11"
+        ]
+      },
+      {
+        "id": "column-3",
+        "panels": [
+          "axis-5",
+          "axis-13"
+        ]
+      },
+      {
+        "id": "column-4",
+        "panels": [
+          "axis-7",
+          "axis-15"
+        ]
+      }
+    ],
+    "boundary_groups": [],
+    "exemptions": []
+  },
+  "findings": [],
+  "figure_id": "supp_figure7_markers",
+  "figure_json_sha256": "94d8e148312f05c68b3aaba1fefa946cb0d540ee440d3a50648ff72758e240e9",
+  "pdf_sha256": "66f59164d8f85377dbc463de1cebd767282f2e10a814484fa7a8220d1250d5e9",
+  "pdf_matches_render_manifest": true,
+  "named_design": "Four equal maps per case and matching colorbar rows. PBMC/cortex plot widths differ to preserve aspect; all maps and bars share column centers.",
+  "all_axis_roles": [
+    {
+      "id": "axis-0",
+      "bbox_pt": [
+        28.062992125984252,
+        283.6486342567297,
+        132.66141732283464,
+        347.768688577916
+      ],
+      "title": "IL7R: expression",
+      "role": "data"
+    },
+    {
+      "id": "axis-1",
+      "bbox_pt": [
+        34.185826771653545,
+        252.14173228346456,
+        126.53858267716535,
+        257.244094488189
+      ],
+      "title": "",
+      "role": "colorbar"
+    },
+    {
+      "id": "axis-2",
+      "bbox_pt": [
+        147.96850393700785,
+        283.6486342567297,
+        252.56692913385828,
+        347.768688577916
+      ],
+      "title": "IL7R: attribution",
+      "role": "data"
+    },
+    {
+      "id": "axis-3",
+      "bbox_pt": [
+        154.09133858267717,
+        252.14173228346456,
+        246.44409448818897,
+        257.244094488189
+      ],
+      "title": "",
+      "role": "colorbar"
+    },
+    {
+      "id": "axis-4",
+      "bbox_pt": [
+        267.8740157480315,
+        283.6486342567297,
+        372.4724409448819,
+        347.76868857791595
+      ],
+      "title": "NKG7: expression",
+      "role": "data"
+    },
+    {
+      "id": "axis-5",
+      "bbox_pt": [
+        273.9968503937008,
+        252.14173228346456,
+        366.3496062992126,
+        257.244094488189
+      ],
+      "title": "",
+      "role": "colorbar"
+    },
+    {
+      "id": "axis-6",
+      "bbox_pt": [
+        387.7795275590551,
+        283.6486342567297,
+        492.3779527559055,
+        347.76868857791595
+      ],
+      "title": "NKG7: attribution",
+      "role": "data"
+    },
+    {
+      "id": "axis-7",
+      "bbox_pt": [
+        393.9023622047244,
+        252.14173228346456,
+        486.25511811023625,
+        257.244094488189
+      ],
+      "title": "",
+      "role": "colorbar"
+    },
+    {
+      "id": "axis-8",
+      "bbox_pt": [
+        38.028896340417596,
+        89.29133858267717,
+        122.69551310840131,
+        193.46456692913384
+      ],
+      "title": "PLP1: expression",
+      "role": "data"
+    },
+    {
+      "id": "axis-9",
+      "bbox_pt": [
+        34.185826771653545,
+        77.81102362204724,
+        126.53858267716535,
+        82.91338582677166
+      ],
+      "title": "",
+      "role": "colorbar"
+    },
+    {
+      "id": "axis-10",
+      "bbox_pt": [
+        157.9344081514412,
+        89.29133858267717,
+        242.60102491942493,
+        193.46456692913384
+      ],
+      "title": "PLP1: attribution",
+      "role": "data"
+    },
+    {
+      "id": "axis-11",
+      "bbox_pt": [
+        154.09133858267717,
+        77.81102362204724,
+        246.44409448818897,
+        82.91338582677166
+      ],
+      "title": "",
+      "role": "colorbar"
+    },
+    {
+      "id": "axis-12",
+      "bbox_pt": [
+        277.8399199624648,
+        89.29133858267717,
+        362.50653673044854,
+        193.46456692913384
+      ],
+      "title": "CLDN5: expression",
+      "role": "data"
+    },
+    {
+      "id": "axis-13",
+      "bbox_pt": [
+        273.9968503937008,
+        77.81102362204724,
+        366.3496062992126,
+        82.91338582677166
+      ],
+      "title": "",
+      "role": "colorbar"
+    },
+    {
+      "id": "axis-14",
+      "bbox_pt": [
+        397.74543177348846,
+        89.29133858267717,
+        482.4120485414722,
+        193.46456692913384
+      ],
+      "title": "CLDN5: attribution",
+      "role": "data"
+    },
+    {
+      "id": "axis-15",
+      "bbox_pt": [
+        393.9023622047244,
+        77.81102362204724,
+        486.25511811023625,
+        82.91338582677166
+      ],
+      "title": "",
+      "role": "colorbar"
+    }
+  ],
+  "custom_shared_edge_checks": [
+    {
+      "edge": "center_x",
+      "axes": [
+        0,
+        1,
+        8,
+        9
+      ],
+      "values_pt": [
+        80.36220472440945,
+        80.36220472440945,
+        80.36220472440945,
+        80.36220472440945
+      ],
+      "spread_pt": 0.0,
+      "pass_check": true
+    },
+    {
+      "edge": "center_x",
+      "axes": [
+        2,
+        3,
+        10,
+        11
+      ],
+      "values_pt": [
+        200.26771653543307,
+        200.26771653543307,
+        200.26771653543307,
+        200.26771653543307
+      ],
+      "spread_pt": 0.0,
+      "pass_check": true
+    },
+    {
+      "edge": "center_x",
+      "axes": [
+        4,
+        5,
+        12,
+        13
+      ],
+      "values_pt": [
+        320.1732283464567,
+        320.1732283464567,
+        320.17322834645665,
+        320.1732283464567
+      ],
+      "spread_pt": 5.684341886080802e-14,
+      "pass_check": true
+    },
+    {
+      "edge": "center_x",
+      "axes": [
+        6,
+        7,
+        14,
+        15
+      ],
+      "values_pt": [
+        440.0787401574803,
+        440.0787401574803,
+        440.0787401574803,
+        440.0787401574803
+      ],
+      "spread_pt": 0.0,
+      "pass_check": true
+    }
+  ],
+  "global_axis_intersections": [],
+  "all_axes_within_canvas": true,
+  "scope_limit": "Panel-label anchors are absent from saved JSON; this audit checks plot-area alignment, not type baseline alignment. Actual text collisions are checked independently on rendered PDFs.",
+  "combined_verdict": "PASS"
+}

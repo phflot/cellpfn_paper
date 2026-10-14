@@ -1,0 +1,35 @@
+{
+  "pdf": "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/supp_figure6.pdf",
+  "auditable": true,
+  "verdict": "PASS",
+  "page_count": 1,
+  "visible_text_box_count": 98,
+  "text_trace_count": 100,
+  "stroke_path_count": 362,
+  "filled_region_count": 129,
+  "image_region_count": 0,
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "contained_fill_overlays": 4,
+    "contained_image_overlays": 0
+  },
+  "thresholds": {
+    "text_inset_pt": 0.6,
+    "min_overlap_ratio": 0.05,
+    "clipping_tolerance_pt": 0.5
+  },
+  "findings": [],
+  "audit_command": [
+    "/home/phflot/conda/bin/python",
+    "/home/phflot/.codex/skills/nature-figure/scripts/audit_figure_collisions.py",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/figures/supp_figure6.pdf",
+    "--json-out",
+    "/home/phflot/projects/ccb/hashprompt/paper/cellpfn_paper/output/review/figures/layout_audit/collisions/supp_figure6.json"
+  ],
+  "pdf_sha256": "336ef8ec95677f6372cf2aa550c17491ec5d35a6022ca7fa58e64ca9ce2014a1",
+  "process_return_code": 0,
+  "reviewed_dispositions": [],
+  "unresolved_finding_indexes": [],
+  "reviewed_verdict": "PASS"
+}

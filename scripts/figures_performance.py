@@ -92,8 +92,8 @@ def figure2():
     ax.scatter(np.full(3,bi)+np.array([-.04,0,.04]),v,s=6,color=COLORS[m],alpha=.5,linewidths=0,zorder=2)
     means.append(v.mean());xx.append(bi)
    ax.plot(xx,means,marker=MARKERS[mi],ms=3,lw=1.15 if m=='cellpfn_g1v2p' else .8,color=COLORS[m],label=label,zorder=4 if m=='cellpfn_g1v2p' else 3)
-   if mark(m,p):
-    for x,y in zip(xx,means):ax.annotate(mark(m,p),(x,y),xytext=(2,-8 if m=='scgpt_lr' else 3),textcoords='offset points',fontsize=6,color='#777777')
+  exposure_text='; '.join(label.split(' + ')[0]+mark(m,p) for m,label,_ in CORE if mark(m,p))
+  if exposure_text:ax.text(.025,.04,exposure_text,transform=ax.transAxes,fontsize=6,color='#777777',ha='left',va='bottom')
   write_source(fid,chr(97+pi),pd.concat(selected,ignore_index=True))
   ax.set_xticks(range(3),BUDGETS);ax.set_ylim(0,102);ax.set_xlim(-.15,2.2);ax.set_yticks([0,25,50,75,100]);ax.grid(axis='y',color='#EEEEEE',lw=.5)
   ax.set_xlabel('Supports per class')
@@ -118,7 +118,7 @@ def figure2():
  for arm,label,c,marker,style in [('c2b','TabICLv2',BLUE,'s','-'),('k2b_s','Kumo small',COLORS['kumo_small'],'o','-'),('k2b_l','Kumo large',PURPLE,'^','-'),('p1_s43','Kumo small, stream 2',COLORS['kumo_small'],'o',':'),('p1_s44','Kumo small, stream 3',COLORS['kumo_small'],'o','--'),('p1_g','Kumo small, generic',GRAY,'X','--')]:
   r=select(d,finetune_arm=arm).copy();r['sort']=numeric(r,'tasks_seen');r=r.sort_values('sort')
   ax.plot(numeric(r,'tasks_seen')/1000,numeric(r,'mean_delta_BA_8_low_support_cells'),color=c,marker=marker,ms=3,ls=style,lw=1,label=label)
- ax.axhline(0,color='#999999',lw=.6);ax.set_xticks([5,10,20,40]);ax.set_xlabel('Additional main-stream tasks (thousands)');ax.set_ylabel('Low-support change (pp)');ax.set_ylim(-4.8,7.5);handles,labels=ax.get_legend_handles_labels();ax.legend([handles[i] for i in [0,1,2,5]],['TabICLv2','Kumo small (3 task streams)','Kumo large','Kumo small, generic'],frameon=False,fontsize=6,loc='lower left',ncol=1,handlelength=1.5,borderaxespad=.2,labelspacing=.22)
+ ax.axhline(0,color='#999999',lw=.6);ax.set_xticks([5,10,20,40]);ax.set_xlabel('Additional main-stream tasks (thousands)');ax.set_ylabel('Low-support change (pp)');ax.set_ylim(-6.5,7.5);handles,labels=ax.get_legend_handles_labels();ax.legend([handles[i] for i in [0,1,2,5]],['TabICLv2','Kumo small (3 task streams)','Kumo large','Kumo small, generic'],frameon=False,fontsize=6,loc='lower left',ncol=1,handlelength=1.5,borderaxespad=.2,labelspacing=.22)
  panel_label(ax,'f','Adaptation trajectory and generic control');src(fid,'f','fig3__trajectory',d);source.append('fig3__trajectory')
  panels.append(metadata('f','Cellular and generic task streams produce different changes','fig3__trajectory',dict(gene_view='hvg2000',finetune_arm=['c2b','k2b_s','k2b_l','p1_s43','p1_s44','p1_g'],scoring_run=['c2b_root','k2b_root','p1_root']),len(d),'checkpoint on one training seed','Equal mean of eight low-support panel–budget conditions, each over three support draws','Separate lines show task-stream repeats, not model-seed uncertainty','Generic control has unmatched row/column exposure; cellular curves exclude 25% additional replay count'))
  ax=fig.add_subplot(gs[2,2:]);d=select(read('fig3__generic_tables_cases'),model_id=['tabicl_v2','c2b40k'],metric='balanced_accuracy',status='ok')

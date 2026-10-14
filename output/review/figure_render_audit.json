@@ -1,0 +1,148 @@
+{
+  "method": "PyMuPDF effective text span size after PDF text/form transforms",
+  "assets": [
+    {
+      "asset": "architecture",
+      "min_effective_pt": 7.370079040527344,
+      "text_spans": 53,
+      "clipped_text": []
+    },
+    {
+      "asset": "figure2",
+      "min_effective_pt": 6.0,
+      "text_spans": 138,
+      "clipped_text": []
+    },
+    {
+      "asset": "figure3",
+      "min_effective_pt": 6.0,
+      "text_spans": 151,
+      "clipped_text": []
+    },
+    {
+      "asset": "supp_figure1",
+      "min_effective_pt": 6.0,
+      "text_spans": 137,
+      "clipped_text": []
+    },
+    {
+      "asset": "supp_figure1_illustration",
+      "min_effective_pt": 6.0,
+      "text_spans": 26,
+      "clipped_text": []
+    },
+    {
+      "asset": "supp_figure2",
+      "min_effective_pt": 6.0,
+      "text_spans": 328,
+      "clipped_text": []
+    },
+    {
+      "asset": "supp_figure3",
+      "min_effective_pt": 6.0,
+      "text_spans": 113,
+      "clipped_text": []
+    },
+    {
+      "asset": "supp_figure4",
+      "min_effective_pt": 6.0,
+      "text_spans": 74,
+      "clipped_text": []
+    },
+    {
+      "asset": "supp_figure5",
+      "min_effective_pt": 6.0,
+      "text_spans": 113,
+      "clipped_text": []
+    },
+    {
+      "asset": "supp_figure6",
+      "min_effective_pt": 6.0,
+      "text_spans": 98,
+      "clipped_text": []
+    },
+    {
+      "asset": "supp_figure7_maps",
+      "min_effective_pt": 6.0,
+      "text_spans": 54,
+      "clipped_text": []
+    },
+    {
+      "asset": "supp_figure7_markers",
+      "min_effective_pt": 6.0,
+      "text_spans": 50,
+      "clipped_text": []
+    },
+    {
+      "asset": "supp_figure8",
+      "min_effective_pt": 5.999999523162842,
+      "text_spans": 227,
+      "clipped_text": []
+    },
+    {
+      "asset": "supp_figure9",
+      "min_effective_pt": 6.0,
+      "text_spans": 74,
+      "clipped_text": []
+    }
+  ],
+  "embedded_figure_pages": [
+    {
+      "manuscript_page": 10,
+      "min_effective_pt": 6.760204792022705
+    },
+    {
+      "manuscript_page": 11,
+      "min_effective_pt": 5.503499984741211
+    },
+    {
+      "manuscript_page": 12,
+      "min_effective_pt": 5.219880104064941
+    },
+    {
+      "manuscript_page": 62,
+      "min_effective_pt": 5.218319892883301
+    },
+    {
+      "manuscript_page": 63,
+      "min_effective_pt": 5.503499984741211
+    },
+    {
+      "manuscript_page": 64,
+      "min_effective_pt": 5.05325984954834
+    },
+    {
+      "manuscript_page": 65,
+      "min_effective_pt": 5.05325984954834
+    },
+    {
+      "manuscript_page": 66,
+      "min_effective_pt": 5.275619983673096
+    },
+    {
+      "manuscript_page": 67,
+      "min_effective_pt": 5.079959869384766
+    },
+    {
+      "manuscript_page": 68,
+      "min_effective_pt": 5.503499984741211
+    },
+    {
+      "manuscript_page": 69,
+      "min_effective_pt": 5.334239959716797
+    },
+    {
+      "manuscript_page": 70,
+      "min_effective_pt": 5.503499984741211
+    },
+    {
+      "manuscript_page": 71,
+      "min_effective_pt": 5.05325984954834
+    },
+    {
+      "manuscript_page": 72,
+      "min_effective_pt": 5.334239959716797
+    }
+  ],
+  "failures": []
+}

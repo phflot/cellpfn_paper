@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "applicable": true,
+  "auditable": true,
+  "verdict": "PASS",
+  "backend": "Saved Matplotlib figure JSON",
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "comparisons": 3,
+    "exemptions": 0
+  },
+  "tolerances": {
+    "alignment_pt": 1.5,
+    "gutter_pt": 1.5
+  },
+  "layout": {
+    "schema_version": 1,
+    "backend": "Saved Matplotlib figure JSON",
+    "figure": {
+      "width_pt": 510.23622047244095,
+      "height_pt": 496.0629921259843
+    },
+    "panels": [
+      {
+        "id": "axis-0",
+        "bbox_pt": [
+          40.818897637795274,
+          342.51386909384183,
+          130.15987009405924,
+          426.6141732283465
+        ],
+        "title": "PBMC coarse",
+        "role": "data"
+      },
+      {
+        "id": "axis-1",
+        "bbox_pt": [
+          164.10943962743957,
+          342.51386909384183,
+          253.45041208370353,
+          426.6141732283465
+        ],
+        "title": "PBMC fine",
+        "role": "data"
+      },
+      {
+        "id": "axis-2",
+        "bbox_pt": [
+          287.3999816170838,
+          342.51386909384183,
+          376.7409540733478,
+          426.6141732283465
+        ],
+        "title": "Cortex\ndevelopment",
+        "role": "data"
+      },
+      {
+        "id": "axis-3",
+        "bbox_pt": [
+          410.69052360672805,
+          342.51386909384183,
+          500.03149606299206,
+          426.6141732283465
+        ],
+        "title": "Cortex\nheld studies",
+        "role": "data"
+      },
+      {
+        "id": "axis-4",
+        "bbox_pt": [
+          40.818897637795274,
+          213.21525817398316,
+          500.03149606299206,
+          277.13148931620674
+        ],
+        "title": "Adapted \u2212 released balanced accuracy (percentage points)",
+        "role": "data"
+      },
+      {
+        "id": "axis-5",
+        "bbox_pt": [
+          40.818897637795274,
+          59.52755905511817,
+          253.45041208370353,
+          147.8328783963481
+        ],
+        "title": "Adaptation trajectory and generic control",
+        "role": "data"
+      },
+      {
+        "id": "axis-6",
+        "bbox_pt": [
+          287.3999816170838,
+          59.52755905511817,
+          500.03149606299206,
+          147.8328783963481
+        ],
+        "title": "Generic-task retention",
+        "role": "data"
+      }
+    ],
+    "row_groups": [
+      {
+        "id": "row-1",
+        "panels": [
+          "axis-0",
+          "axis-1",
+          "axis-2",
+          "axis-3"
+        ]
+      },
+      {
+        "id": "row-2",
+        "panels": [
+          "axis-5",
+          "axis-6"
+        ]
+      }
+    ],
+    "column_groups": [],
+    "boundary_groups": [],
+    "exemptions": []
+  },
+  "findings": [],
+  "figure_id": "figure2",
+  "figure_json_sha256": "ee021093c2cab43c87d8256657960299d45311fa507b7742205f64ea882f903a",
+  "pdf_sha256": "c8b8a6dd976f75ec8860bda3f14b600b74ed64df799dee2ca533ff6582b5b6cc",
+  "pdf_matches_render_manifest": true,
+  "named_design": "Four equal benchmark panels; full-width delta matrix; two equal trajectory/retention panels. Matrix height differs intentionally.",
+  "all_axis_roles": [
+    {
+      "id": "axis-0",
+      "bbox_pt": [
+        40.818897637795274,
+        342.51386909384183,
+        130.15987009405924,
+        426.6141732283465
+      ],
+      "title": "PBMC coarse",
+      "role": "data"
+    },
+    {
+      "id": "axis-1",
+      "bbox_pt": [
+        164.10943962743957,
+        342.51386909384183,
+        253.45041208370353,
+        426.6141732283465
+      ],
+      "title": "PBMC fine",
+      "role": "data"
+    },
+    {
+      "id": "axis-2",
+      "bbox_pt": [
+        287.3999816170838,
+        342.51386909384183,
+        376.7409540733478,
+        426.6141732283465
+      ],
+      "title": "Cortex\ndevelopment",
+      "role": "data"
+    },
+    {
+      "id": "axis-3",
+      "bbox_pt": [
+        410.69052360672805,
+        342.51386909384183,
+        500.03149606299206,
+        426.6141732283465
+      ],
+      "title": "Cortex\nheld studies",
+      "role": "data"
+    },
+    {
+      "id": "axis-4",
+      "bbox_pt": [
+        40.818897637795274,
+        213.21525817398316,
+        500.03149606299206,
+        277.13148931620674
+      ],
+      "title": "Adapted \u2212 released balanced accuracy (percentage points)",
+      "role": "data"
+    },
+    {
+      "id": "axis-5",
+      "bbox_pt": [
+        40.818897637795274,
+        59.52755905511817,
+        253.45041208370353,
+        147.8328783963481
+      ],
+      "title": "Adaptation trajectory and generic control",
+      "role": "data"
+    },
+    {
+      "id": "axis-6",
+      "bbox_pt": [
+        287.3999816170838,
+        59.52755905511817,
+        500.03149606299206,
+        147.8328783963481
+      ],
+      "title": "Generic-task retention",
+      "role": "data"
+    }
+  ],
+  "custom_shared_edge_checks": [
+    {
+      "edge": "left",
+      "axes": [
+        0,
+        4,
+        5
+      ],
+      "values_pt": [
+        40.818897637795274,
+        40.818897637795274,
+        40.818897637795274
+      ],
+      "spread_pt": 0.0,
+      "pass_check": true
+    },
+    {
+      "edge": "right",
+      "axes": [
+        3,
+        4,
+        6
+      ],
+      "values_pt": [
+        500.03149606299206,
+        500.03149606299206,
+        500.03149606299206
+      ],
+      "spread_pt": 0.0,
+      "pass_check": true
+    },
+    {
+      "edge": "left",
+      "axes": [
+        2,
+        6
+      ],
+      "values_pt": [
+        287.3999816170838,
+        287.3999816170838
+      ],
+      "spread_pt": 0.0,
+      "pass_check": true
+    }
+  ],
+  "global_axis_intersections": [],
+  "all_axes_within_canvas": true,
+  "scope_limit": "Panel-label anchors are absent from saved JSON; this audit checks plot-area alignment, not type baseline alignment. Actual text collisions are checked independently on rendered PDFs.",
+  "combined_verdict": "PASS"
+}

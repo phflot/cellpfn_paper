@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "applicable": true,
+  "auditable": true,
+  "verdict": "PASS",
+  "backend": "Saved Matplotlib figure JSON",
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "comparisons": 6,
+    "exemptions": 0
+  },
+  "tolerances": {
+    "alignment_pt": 1.5,
+    "gutter_pt": 1.5
+  },
+  "layout": {
+    "schema_version": 1,
+    "backend": "Saved Matplotlib figure JSON",
+    "figure": {
+      "width_pt": 510.23622047244095,
+      "height_pt": 538.5826771653543
+    },
+    "panels": [
+      {
+        "id": "axis-0",
+        "bbox_pt": [
+          91.84251968503936,
+          443.833501170276,
+          240.9740620657712,
+          517.0393700787401
+        ],
+        "title": "Attribution-method fidelity",
+        "role": "data"
+      },
+      {
+        "id": "axis-1",
+        "bbox_pt": [
+          348.3487725798981,
+          443.833501170276,
+          497.48031496062987,
+          517.0393700787401
+        ],
+        "title": "Selected correct-cell coverage",
+        "role": "data"
+      },
+      {
+        "id": "axis-2",
+        "bbox_pt": [
+          91.84251968503936,
+          310.23279041232894,
+          240.9740620657712,
+          395.63963747220373
+        ],
+        "title": "PBMC and cortex class fidelity",
+        "role": "data"
+      },
+      {
+        "id": "axis-3",
+        "bbox_pt": [
+          348.3487725798981,
+          310.23279041232894,
+          497.48031496062987,
+          395.63963747220373
+        ],
+        "title": "Finite-deletion magnitude error",
+        "role": "data"
+      },
+      {
+        "id": "axis-4",
+        "bbox_pt": [
+          91.84251968503936,
+          176.63207965438193,
+          240.9740620657712,
+          262.0389267142567
+        ],
+        "title": "Support-context sensitivity",
+        "role": "data"
+      },
+      {
+        "id": "axis-5",
+        "bbox_pt": [
+          348.3487725798981,
+          176.63207965438193,
+          497.48031496062987,
+          262.0389267142567
+        ],
+        "title": "Marker ranks vary with context",
+        "role": "data"
+      },
+      {
+        "id": "axis-6",
+        "bbox_pt": [
+          91.84251968503936,
+          51.165354330708645,
+          240.9740620657712,
+          128.4382159563097
+        ],
+        "title": "Gene-set sensitivity",
+        "role": "data"
+      },
+      {
+        "id": "axis-7",
+        "bbox_pt": [
+          348.3487725798981,
+          51.165354330708645,
+          497.48031496062987,
+          128.4382159563097
+        ],
+        "title": "Deletion across case configurations",
+        "role": "data"
+      }
+    ],
+    "row_groups": [
+      {
+        "id": "row-1",
+        "panels": [
+          "axis-0",
+          "axis-1"
+        ]
+      },
+      {
+        "id": "row-2",
+        "panels": [
+          "axis-2",
+          "axis-3"
+        ]
+      },
+      {
+        "id": "row-3",
+        "panels": [
+          "axis-4",
+          "axis-5"
+        ]
+      },
+      {
+        "id": "row-4",
+        "panels": [
+          "axis-6",
+          "axis-7"
+        ]
+      }
+    ],
+    "column_groups": [
+      {
+        "id": "column-1",
+        "panels": [
+          "axis-0",
+          "axis-2",
+          "axis-4",
+          "axis-6"
+        ]
+      },
+      {
+        "id": "column-2",
+        "panels": [
+          "axis-1",
+          "axis-3",
+          "axis-5",
+          "axis-7"
+        ]
+      }
+    ],
+    "boundary_groups": [],
+    "exemptions": []
+  },
+  "findings": [],
+  "figure_id": "supp_figure8",
+  "figure_json_sha256": "d4102fda3944fd00407f0daf27e4c2edc7728f7a932212f30038fa773b9b577c",
+  "pdf_sha256": "c6dc89093959d3865032e159c39c071b2e8543e4e5a3db3ba577780fec0e1abc",
+  "pdf_matches_render_manifest": true,
+  "named_design": "Four two-column rows with deliberately different heights; comparable row baselines and column edges align.",
+  "all_axis_roles": [
+    {
+      "id": "axis-0",
+      "bbox_pt": [
+        91.84251968503936,
+        443.833501170276,
+        240.9740620657712,
+        517.0393700787401
+      ],
+      "title": "Attribution-method fidelity",
+      "role": "data"
+    },
+    {
+      "id": "axis-1",
+      "bbox_pt": [
+        348.3487725798981,
+        443.833501170276,
+        497.48031496062987,
+        517.0393700787401
+      ],
+      "title": "Selected correct-cell coverage",
+      "role": "data"
+    },
+    {
+      "id": "axis-2",
+      "bbox_pt": [
+        91.84251968503936,
+        310.23279041232894,
+        240.9740620657712,
+        395.63963747220373
+      ],
+      "title": "PBMC and cortex class fidelity",
+      "role": "data"
+    },
+    {
+      "id": "axis-3",
+      "bbox_pt": [
+        348.3487725798981,
+        310.23279041232894,
+        497.48031496062987,
+        395.63963747220373
+      ],
+      "title": "Finite-deletion magnitude error",
+      "role": "data"
+    },
+    {
+      "id": "axis-4",
+      "bbox_pt": [
+        91.84251968503936,
+        176.63207965438193,
+        240.9740620657712,
+        262.0389267142567
+      ],
+      "title": "Support-context sensitivity",
+      "role": "data"
+    },
+    {
+      "id": "axis-5",
+      "bbox_pt": [
+        348.3487725798981,
+        176.63207965438193,
+        497.48031496062987,
+        262.0389267142567
+      ],
+      "title": "Marker ranks vary with context",
+      "role": "data"
+    },
+    {
+      "id": "axis-6",
+      "bbox_pt": [
+        91.84251968503936,
+        51.165354330708645,
+        240.9740620657712,
+        128.4382159563097
+      ],
+      "title": "Gene-set sensitivity",
+      "role": "data"
+    },
+    {
+      "id": "axis-7",
+      "bbox_pt": [
+        348.3487725798981,
+        51.165354330708645,
+        497.48031496062987,
+        128.4382159563097
+      ],
+      "title": "Deletion across case configurations",
+      "role": "data"
+    }
+  ],
+  "custom_shared_edge_checks": [],
+  "global_axis_intersections": [],
+  "all_axes_within_canvas": true,
+  "scope_limit": "Panel-label anchors are absent from saved JSON; this audit checks plot-area alignment, not type baseline alignment. Actual text collisions are checked independently on rendered PDFs.",
+  "combined_verdict": "PASS"
+}

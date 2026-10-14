@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "applicable": true,
+  "auditable": true,
+  "verdict": "PASS",
+  "backend": "Saved Matplotlib figure JSON",
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "comparisons": 6,
+    "exemptions": 0
+  },
+  "tolerances": {
+    "alignment_pt": 1.5,
+    "gutter_pt": 1.5
+  },
+  "layout": {
+    "schema_version": 1,
+    "backend": "Saved Matplotlib figure JSON",
+    "figure": {
+      "width_pt": 510.23622047244095,
+      "height_pt": 515.9055118110236
+    },
+    "panels": [
+      {
+        "id": "axis-0",
+        "bbox_pt": [
+          91.84251968503936,
+          260.69870459740923,
+          199.72491204556877,
+          459.15590551181106
+        ],
+        "title": "All genes",
+        "role": "data",
+        "grid_id": "supp_figure4",
+        "row_start": 0,
+        "row_stop": 1,
+        "col_start": 0,
+        "col_stop": 1
+      },
+      {
+        "id": "axis-1",
+        "bbox_pt": [
+          240.72022114256995,
+          260.69870459740923,
+          348.60261350309935,
+          459.15590551181106
+        ],
+        "title": "Up to 8,192 HVGs",
+        "role": "data",
+        "grid_id": "supp_figure4",
+        "row_start": 0,
+        "row_stop": 1,
+        "col_start": 1,
+        "col_stop": 2
+      },
+      {
+        "id": "axis-2",
+        "bbox_pt": [
+          389.5979226001005,
+          260.69870459740923,
+          497.48031496063,
+          459.15590551181106
+        ],
+        "title": "Up to 2k HVGs",
+        "role": "data",
+        "grid_id": "supp_figure4",
+        "row_start": 0,
+        "row_stop": 1,
+        "col_start": 2,
+        "col_stop": 3
+      },
+      {
+        "id": "axis-3",
+        "bbox_pt": [
+          91.84251968503936,
+          49.01102362204723,
+          348.60261350309935,
+          181.31582423164846
+        ],
+        "title": "Prespecified criterion: not supported",
+        "role": "data",
+        "grid_id": "supp_figure4",
+        "row_start": 1,
+        "row_stop": 2,
+        "col_start": 0,
+        "col_stop": 2
+      },
+      {
+        "id": "axis-4",
+        "bbox_pt": [
+          389.5979226001005,
+          49.01102362204723,
+          497.48031496063,
+          181.31582423164846
+        ],
+        "title": "Inference-only interventions",
+        "role": "data",
+        "grid_id": "supp_figure4",
+        "row_start": 1,
+        "row_stop": 2,
+        "col_start": 2,
+        "col_stop": 3
+      }
+    ],
+    "row_groups": [
+      {
+        "id": "row-1",
+        "panels": [
+          "axis-0",
+          "axis-1",
+          "axis-2"
+        ]
+      },
+      {
+        "id": "row-2",
+        "panels": [
+          "axis-3",
+          "axis-4"
+        ]
+      }
+    ],
+    "column_groups": [
+      {
+        "id": "column-1",
+        "panels": [
+          "axis-2",
+          "axis-4"
+        ]
+      }
+    ],
+    "boundary_groups": [
+      {
+        "id": "inferred-shared-left-1",
+        "edge": "left",
+        "panels": [
+          "axis-0",
+          "axis-3"
+        ]
+      },
+      {
+        "id": "inferred-shared-right-1",
+        "edge": "right",
+        "panels": [
+          "axis-1",
+          "axis-3"
+        ]
+      }
+    ],
+    "exemptions": []
+  },
+  "findings": [],
+  "figure_id": "supp_figure4",
+  "figure_json_sha256": "20cac2600fb59bef25d24012dcfc0ae3d24427d104f9bdb57b72141bd1aa91ec",
+  "pdf_sha256": "740d56180002cfaf8f882aa2b989cfc73dbaffc92dc526a00157c388b7823e8f",
+  "pdf_matches_render_manifest": true,
+  "named_design": "Three equal top panels; bottom prespecified criterion spans two columns, and inference interventions occupy the third. Widths are intentionally unequal below.",
+  "all_axis_roles": [
+    {
+      "id": "axis-0",
+      "bbox_pt": [
+        91.84251968503936,
+        260.69870459740923,
+        199.72491204556877,
+        459.15590551181106
+      ],
+      "title": "All genes",
+      "role": "data",
+      "grid_id": "supp_figure4",
+      "row_start": 0,
+      "row_stop": 1,
+      "col_start": 0,
+      "col_stop": 1
+    },
+    {
+      "id": "axis-1",
+      "bbox_pt": [
+        240.72022114256995,
+        260.69870459740923,
+        348.60261350309935,
+        459.15590551181106
+      ],
+      "title": "Up to 8,192 HVGs",
+      "role": "data",
+      "grid_id": "supp_figure4",
+      "row_start": 0,
+      "row_stop": 1,
+      "col_start": 1,
+      "col_stop": 2
+    },
+    {
+      "id": "axis-2",
+      "bbox_pt": [
+        389.5979226001005,
+        260.69870459740923,
+        497.48031496063,
+        459.15590551181106
+      ],
+      "title": "Up to 2k HVGs",
+      "role": "data",
+      "grid_id": "supp_figure4",
+      "row_start": 0,
+      "row_stop": 1,
+      "col_start": 2,
+      "col_stop": 3
+    },
+    {
+      "id": "axis-3",
+      "bbox_pt": [
+        91.84251968503936,
+        49.01102362204723,
+        348.60261350309935,
+        181.31582423164846
+      ],
+      "title": "Prespecified criterion: not supported",
+      "role": "data",
+      "grid_id": "supp_figure4",
+      "row_start": 1,
+      "row_stop": 2,
+      "col_start": 0,
+      "col_stop": 2
+    },
+    {
+      "id": "axis-4",
+      "bbox_pt": [
+        389.5979226001005,
+        49.01102362204723,
+        497.48031496063,
+        181.31582423164846
+      ],
+      "title": "Inference-only interventions",
+      "role": "data",
+      "grid_id": "supp_figure4",
+      "row_start": 1,
+      "row_stop": 2,
+      "col_start": 2,
+      "col_stop": 3
+    }
+  ],
+  "custom_shared_edge_checks": [],
+  "global_axis_intersections": [],
+  "all_axes_within_canvas": true,
+  "scope_limit": "Panel-label anchors are absent from saved JSON; this audit checks plot-area alignment, not type baseline alignment. Actual text collisions are checked independently on rendered PDFs.",
+  "combined_verdict": "PASS"
+}

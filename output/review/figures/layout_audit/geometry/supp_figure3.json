@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "applicable": true,
+  "auditable": true,
+  "verdict": "PASS",
+  "backend": "Saved Matplotlib figure JSON",
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "comparisons": 5,
+    "exemptions": 0
+  },
+  "tolerances": {
+    "alignment_pt": 1.5,
+    "gutter_pt": 1.5
+  },
+  "layout": {
+    "schema_version": 1,
+    "backend": "Saved Matplotlib figure JSON",
+    "figure": {
+      "width_pt": 510.23622047244095,
+      "height_pt": 538.5826771653543
+    },
+    "panels": [
+      {
+        "id": "axis-0",
+        "bbox_pt": [
+          91.84251968503936,
+          405.3619352160074,
+          241.91199629458086,
+          490.1102362204724
+        ],
+        "title": "Requested 8,192 HVGs",
+        "role": "data"
+      },
+      {
+        "id": "axis-1",
+        "bbox_pt": [
+          349.96201945345075,
+          405.3619352160074,
+          500.03149606299223,
+          490.1102362204724
+        ],
+        "title": "All genes \u2212 2k HVGs, 20 draws",
+        "role": "data"
+      },
+      {
+        "id": "axis-2",
+        "bbox_pt": [
+          91.84251968503936,
+          213.46756794161143,
+          241.91199629458086,
+          326.4653026142315
+        ],
+        "title": "Random and HVG controls",
+        "role": "data"
+      },
+      {
+        "id": "axis-3",
+        "bbox_pt": [
+          349.96201945345075,
+          213.46756794161143,
+          500.03149606299223,
+          326.4653026142315
+        ],
+        "title": "Stored-zero gene coverage",
+        "role": "data"
+      },
+      {
+        "id": "axis-4",
+        "bbox_pt": [
+          91.84251968503936,
+          53.85826771653548,
+          241.91199629458086,
+          134.5709353398356
+        ],
+        "title": "Remove genes unmeasured in any study",
+        "role": "data"
+      },
+      {
+        "id": "axis-5",
+        "bbox_pt": [
+          349.96201945345075,
+          53.85826771653548,
+          500.03149606299223,
+          134.5709353398356
+        ],
+        "title": "Processed versus reconstructed counts",
+        "role": "data"
+      }
+    ],
+    "row_groups": [
+      {
+        "id": "row-1",
+        "panels": [
+          "axis-0",
+          "axis-1"
+        ]
+      },
+      {
+        "id": "row-2",
+        "panels": [
+          "axis-2",
+          "axis-3"
+        ]
+      },
+      {
+        "id": "row-3",
+        "panels": [
+          "axis-4",
+          "axis-5"
+        ]
+      }
+    ],
+    "column_groups": [
+      {
+        "id": "column-1",
+        "panels": [
+          "axis-0",
+          "axis-2",
+          "axis-4"
+        ]
+      },
+      {
+        "id": "column-2",
+        "panels": [
+          "axis-1",
+          "axis-3",
+          "axis-5"
+        ]
+      }
+    ],
+    "boundary_groups": [],
+    "exemptions": []
+  },
+  "findings": [],
+  "figure_id": "supp_figure3",
+  "figure_json_sha256": "f12e346a4f5d4f1c54eb025899e57e362c204505eabfd5cb08a253fbd9b99263",
+  "pdf_sha256": "be6798d301775de118896c6c8abcf9e5818c65518d4b57c9d8372d437e331812",
+  "pdf_matches_render_manifest": true,
+  "named_design": "Three aligned two-column rows; middle row taller to accommodate 15 study labels.",
+  "all_axis_roles": [
+    {
+      "id": "axis-0",
+      "bbox_pt": [
+        91.84251968503936,
+        405.3619352160074,
+        241.91199629458086,
+        490.1102362204724
+      ],
+      "title": "Requested 8,192 HVGs",
+      "role": "data"
+    },
+    {
+      "id": "axis-1",
+      "bbox_pt": [
+        349.96201945345075,
+        405.3619352160074,
+        500.03149606299223,
+        490.1102362204724
+      ],
+      "title": "All genes \u2212 2k HVGs, 20 draws",
+      "role": "data"
+    },
+    {
+      "id": "axis-2",
+      "bbox_pt": [
+        91.84251968503936,
+        213.46756794161143,
+        241.91199629458086,
+        326.4653026142315
+      ],
+      "title": "Random and HVG controls",
+      "role": "data"
+    },
+    {
+      "id": "axis-3",
+      "bbox_pt": [
+        349.96201945345075,
+        213.46756794161143,
+        500.03149606299223,
+        326.4653026142315
+      ],
+      "title": "Stored-zero gene coverage",
+      "role": "data"
+    },
+    {
+      "id": "axis-4",
+      "bbox_pt": [
+        91.84251968503936,
+        53.85826771653548,
+        241.91199629458086,
+        134.5709353398356
+      ],
+      "title": "Remove genes unmeasured in any study",
+      "role": "data"
+    },
+    {
+      "id": "axis-5",
+      "bbox_pt": [
+        349.96201945345075,
+        53.85826771653548,
+        500.03149606299223,
+        134.5709353398356
+      ],
+      "title": "Processed versus reconstructed counts",
+      "role": "data"
+    }
+  ],
+  "custom_shared_edge_checks": [],
+  "global_axis_intersections": [],
+  "all_axes_within_canvas": true,
+  "scope_limit": "Panel-label anchors are absent from saved JSON; this audit checks plot-area alignment, not type baseline alignment. Actual text collisions are checked independently on rendered PDFs.",
+  "combined_verdict": "PASS"
+}

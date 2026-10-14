@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "applicable": true,
+  "auditable": true,
+  "verdict": "PASS",
+  "backend": "Saved Matplotlib figure JSON",
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "comparisons": 7,
+    "exemptions": 0
+  },
+  "tolerances": {
+    "alignment_pt": 1.5,
+    "gutter_pt": 1.5
+  },
+  "layout": {
+    "schema_version": 1,
+    "backend": "Saved Matplotlib figure JSON",
+    "figure": {
+      "width_pt": 510.23622047244095,
+      "height_pt": 433.7007874015748
+    },
+    "panels": [
+      {
+        "id": "axis-0",
+        "bbox_pt": [
+          45.92125984251968,
+          261.76649776188856,
+          159.4488188976378,
+          390.33070866141736
+        ],
+        "title": "Original Sayed oligodendrocytes",
+        "role": "data"
+      },
+      {
+        "id": "axis-1",
+        "bbox_pt": [
+          216.21259842519683,
+          261.76649776188856,
+          329.74015748031496,
+          390.33070866141736
+        ],
+        "title": "XY-eligible positive control",
+        "role": "data"
+      },
+      {
+        "id": "axis-2",
+        "bbox_pt": [
+          386.503937007874,
+          261.76649776188856,
+          500.0314960629921,
+          390.33070866141736
+        ],
+        "title": "Broader sex task",
+        "role": "data"
+      },
+      {
+        "id": "axis-3",
+        "bbox_pt": [
+          45.92125984251968,
+          47.70708661417322,
+          159.4488188976378,
+          182.69950805867842
+        ],
+        "title": "Existing age tasks",
+        "role": "data"
+      },
+      {
+        "id": "axis-4",
+        "bbox_pt": [
+          216.21259842519683,
+          47.70708661417322,
+          329.74015748031496,
+          182.69950805867842
+        ],
+        "title": "Cell-level age classification",
+        "role": "data"
+      },
+      {
+        "id": "axis-5",
+        "bbox_pt": [
+          386.503937007874,
+          47.70708661417322,
+          500.0314960629921,
+          182.69950805867842
+        ],
+        "title": "Age prediction log loss",
+        "role": "data"
+      }
+    ],
+    "row_groups": [
+      {
+        "id": "row-1",
+        "panels": [
+          "axis-0",
+          "axis-1",
+          "axis-2"
+        ]
+      },
+      {
+        "id": "row-2",
+        "panels": [
+          "axis-3",
+          "axis-4",
+          "axis-5"
+        ]
+      }
+    ],
+    "column_groups": [
+      {
+        "id": "column-1",
+        "panels": [
+          "axis-0",
+          "axis-3"
+        ]
+      },
+      {
+        "id": "column-2",
+        "panels": [
+          "axis-1",
+          "axis-4"
+        ]
+      },
+      {
+        "id": "column-3",
+        "panels": [
+          "axis-2",
+          "axis-5"
+        ]
+      }
+    ],
+    "boundary_groups": [],
+    "exemptions": []
+  },
+  "findings": [],
+  "figure_id": "supp_figure6",
+  "figure_json_sha256": "5910abd1ddfeeda83ed7599d72bc81816e05fce1ba3991c30d9e87d9691bae8d",
+  "pdf_sha256": "336ef8ec95677f6372cf2aa550c17491ec5d35a6022ca7fa58e64ca9ce2014a1",
+  "pdf_matches_render_manifest": true,
+  "named_design": "Three columns align across sex and age rows; row heights differ slightly by content.",
+  "all_axis_roles": [
+    {
+      "id": "axis-0",
+      "bbox_pt": [
+        45.92125984251968,
+        261.76649776188856,
+        159.4488188976378,
+        390.33070866141736
+      ],
+      "title": "Original Sayed oligodendrocytes",
+      "role": "data"
+    },
+    {
+      "id": "axis-1",
+      "bbox_pt": [
+        216.21259842519683,
+        261.76649776188856,
+        329.74015748031496,
+        390.33070866141736
+      ],
+      "title": "XY-eligible positive control",
+      "role": "data"
+    },
+    {
+      "id": "axis-2",
+      "bbox_pt": [
+        386.503937007874,
+        261.76649776188856,
+        500.0314960629921,
+        390.33070866141736
+      ],
+      "title": "Broader sex task",
+      "role": "data"
+    },
+    {
+      "id": "axis-3",
+      "bbox_pt": [
+        45.92125984251968,
+        47.70708661417322,
+        159.4488188976378,
+        182.69950805867842
+      ],
+      "title": "Existing age tasks",
+      "role": "data"
+    },
+    {
+      "id": "axis-4",
+      "bbox_pt": [
+        216.21259842519683,
+        47.70708661417322,
+        329.74015748031496,
+        182.69950805867842
+      ],
+      "title": "Cell-level age classification",
+      "role": "data"
+    },
+    {
+      "id": "axis-5",
+      "bbox_pt": [
+        386.503937007874,
+        47.70708661417322,
+        500.0314960629921,
+        182.69950805867842
+      ],
+      "title": "Age prediction log loss",
+      "role": "data"
+    }
+  ],
+  "custom_shared_edge_checks": [],
+  "global_axis_intersections": [],
+  "all_axes_within_canvas": true,
+  "scope_limit": "Panel-label anchors are absent from saved JSON; this audit checks plot-area alignment, not type baseline alignment. Actual text collisions are checked independently on rendered PDFs.",
+  "combined_verdict": "PASS"
+}

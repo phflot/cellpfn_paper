@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "applicable": true,
+  "auditable": true,
+  "verdict": "PASS",
+  "backend": "Saved Matplotlib figure JSON",
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "comparisons": 3,
+    "exemptions": 0
+  },
+  "tolerances": {
+    "alignment_pt": 1.5,
+    "gutter_pt": 1.5
+  },
+  "layout": {
+    "schema_version": 1,
+    "backend": "Saved Matplotlib figure JSON",
+    "figure": {
+      "width_pt": 510.23622047244095,
+      "height_pt": 538.5826771653543
+    },
+    "panels": [
+      {
+        "id": "axis-0",
+        "bbox_pt": [
+          127.55905511811024,
+          317.76377952755905,
+          494.92913385826773,
+          500.8818897637795
+        ],
+        "title": "",
+        "role": "data",
+        "grid_id": "supp_figure2",
+        "row_start": 0,
+        "row_stop": 1,
+        "col_start": 0,
+        "col_stop": 3
+      },
+      {
+        "id": "axis-1",
+        "bbox_pt": [
+          127.55905511811024,
+          86.1732283464567,
+          270.4251968503937,
+          253.1338582677165
+        ],
+        "title": "Finer tasks: CellPFN, up to 8,192 HVGs",
+        "role": "data",
+        "grid_id": "supp_figure2",
+        "row_start": 1,
+        "row_stop": 3,
+        "col_start": 0,
+        "col_stop": 1
+      },
+      {
+        "id": "axis-2",
+        "bbox_pt": [
+          352.06299212598424,
+          150.80314960629923,
+          494.92913385826773,
+          253.13385826771653
+        ],
+        "title": "Kidney, 100 supports/class",
+        "role": "data",
+        "grid_id": "supp_figure2",
+        "row_start": 1,
+        "row_stop": 2,
+        "col_start": 2,
+        "col_stop": 3
+      }
+    ],
+    "row_groups": [],
+    "column_groups": [],
+    "boundary_groups": [
+      {
+        "id": "inferred-shared-top-1",
+        "edge": "top",
+        "panels": [
+          "axis-1",
+          "axis-2"
+        ]
+      },
+      {
+        "id": "inferred-shared-left-1",
+        "edge": "left",
+        "panels": [
+          "axis-0",
+          "axis-1"
+        ]
+      },
+      {
+        "id": "inferred-shared-right-1",
+        "edge": "right",
+        "panels": [
+          "axis-0",
+          "axis-2"
+        ]
+      }
+    ],
+    "exemptions": []
+  },
+  "findings": [],
+  "figure_id": "supp_figure2",
+  "figure_json_sha256": "2bf60295ba0ab10ff6f75ed8a0decfca68f1cbad19386c91705af4886397b53d",
+  "pdf_sha256": "6b356cf7bb684bad994a477a4b4aa3237849933b6a3b521f00a376560d2ecf55",
+  "pdf_matches_render_manifest": true,
+  "named_design": "Full-width overview above a tall ten-task matrix and shorter kidney matrix. Their top edges and widths agree; different heights reflect row counts. Exposure box is text-only.",
+  "all_axis_roles": [
+    {
+      "id": "axis-0",
+      "bbox_pt": [
+        127.55905511811024,
+        317.76377952755905,
+        494.92913385826773,
+        500.8818897637795
+      ],
+      "title": "",
+      "role": "data",
+      "grid_id": "supp_figure2",
+      "row_start": 0,
+      "row_stop": 1,
+      "col_start": 0,
+      "col_stop": 3
+    },
+    {
+      "id": "axis-1",
+      "bbox_pt": [
+        127.55905511811024,
+        86.1732283464567,
+        270.4251968503937,
+        253.1338582677165
+      ],
+      "title": "Finer tasks: CellPFN, up to 8,192 HVGs",
+      "role": "data",
+      "grid_id": "supp_figure2",
+      "row_start": 1,
+      "row_stop": 3,
+      "col_start": 0,
+      "col_stop": 1
+    },
+    {
+      "id": "axis-2",
+      "bbox_pt": [
+        352.06299212598424,
+        150.80314960629923,
+        494.92913385826773,
+        253.13385826771653
+      ],
+      "title": "Kidney, 100 supports/class",
+      "role": "data",
+      "grid_id": "supp_figure2",
+      "row_start": 1,
+      "row_stop": 2,
+      "col_start": 2,
+      "col_stop": 3
+    },
+    {
+      "id": "axis-3",
+      "bbox_pt": [
+        316.34645669291336,
+        51.16535433070866,
+        494.92913385826773,
+        115.79527559055117
+      ],
+      "title": "Exposure and comparison boundaries",
+      "role": "legend_only"
+    }
+  ],
+  "custom_shared_edge_checks": [
+    {
+      "edge": "top",
+      "axes": [
+        1,
+        2
+      ],
+      "values_pt": [
+        253.1338582677165,
+        253.13385826771653
+      ],
+      "spread_pt": 2.842170943040401e-14,
+      "pass_check": true
+    },
+    {
+      "edge": "width",
+      "axes": [
+        1,
+        2
+      ],
+      "values_pt": [
+        142.8661417322835,
+        142.8661417322835
+      ],
+      "spread_pt": 0.0,
+      "pass_check": true
+    },
+    {
+      "edge": "left",
+      "axes": [
+        0,
+        1
+      ],
+      "values_pt": [
+        127.55905511811024,
+        127.55905511811024
+      ],
+      "spread_pt": 0.0,
+      "pass_check": true
+    },
+    {
+      "edge": "right",
+      "axes": [
+        0,
+        2,
+        3
+      ],
+      "values_pt": [
+        494.92913385826773,
+        494.92913385826773,
+        494.92913385826773
+      ],
+      "spread_pt": 0.0,
+      "pass_check": true
+    }
+  ],
+  "global_axis_intersections": [],
+  "all_axes_within_canvas": true,
+  "scope_limit": "Panel-label anchors are absent from saved JSON; this audit checks plot-area alignment, not type baseline alignment. Actual text collisions are checked independently on rendered PDFs.",
+  "combined_verdict": "PASS"
+}

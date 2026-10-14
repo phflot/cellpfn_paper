@@ -1,0 +1,305 @@
+{
+  "schema_version": 1,
+  "applicable": true,
+  "auditable": true,
+  "verdict": "PASS",
+  "backend": "Saved Matplotlib figure JSON",
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "comparisons": 4,
+    "exemptions": 0
+  },
+  "tolerances": {
+    "alignment_pt": 1.5,
+    "gutter_pt": 1.5
+  },
+  "layout": {
+    "schema_version": 1,
+    "backend": "Saved Matplotlib figure JSON",
+    "figure": {
+      "width_pt": 510.23622047244095,
+      "height_pt": 510.23622047244095
+    },
+    "panels": [
+      {
+        "id": "axis-0",
+        "bbox_pt": [
+          40.62071372285911,
+          334.20472440944883,
+          150.71786895430623,
+          454.1102362204725
+        ],
+        "title": "Reference labels",
+        "role": "data"
+      },
+      {
+        "id": "axis-1",
+        "bbox_pt": [
+          203.89630427404023,
+          334.20472440944883,
+          313.99345950548735,
+          454.1102362204725
+        ],
+        "title": "CellPFN predictions",
+        "role": "data"
+      },
+      {
+        "id": "axis-2",
+        "bbox_pt": [
+          367.1718948252213,
+          334.20472440944883,
+          477.26905005666845,
+          454.1102362204725
+        ],
+        "title": "Prediction errors",
+        "role": "data"
+      },
+      {
+        "id": "axis-3",
+        "bbox_pt": [
+          47.28422976950129,
+          181.13385826771653,
+          144.05435290766408,
+          301.03937007874015
+        ],
+        "title": "Reference labels",
+        "role": "data"
+      },
+      {
+        "id": "axis-4",
+        "bbox_pt": [
+          210.55982032068238,
+          181.13385826771653,
+          307.3299434588452,
+          301.03937007874015
+        ],
+        "title": "CellPFN predictions",
+        "role": "data"
+      },
+      {
+        "id": "axis-5",
+        "bbox_pt": [
+          373.8354108718634,
+          181.13385826771653,
+          470.60553401002625,
+          301.03937007874015
+        ],
+        "title": "Prediction errors",
+        "role": "data"
+      },
+      {
+        "id": "axis-6",
+        "bbox_pt": [
+          28.062992125984252,
+          49.12347938967687,
+          163.2755905511811,
+          132.01037887803966
+        ],
+        "title": "PBMC coarse: donor",
+        "role": "data"
+      },
+      {
+        "id": "axis-7",
+        "bbox_pt": [
+          216.43878449195972,
+          38.26771653543307,
+          301.45097928756786,
+          142.86614173228344
+        ],
+        "title": "Development cortex: study",
+        "role": "data"
+      }
+    ],
+    "row_groups": [
+      {
+        "id": "row-1",
+        "panels": [
+          "axis-0",
+          "axis-1",
+          "axis-2"
+        ]
+      },
+      {
+        "id": "row-2",
+        "panels": [
+          "axis-3",
+          "axis-4",
+          "axis-5"
+        ]
+      }
+    ],
+    "column_groups": [],
+    "boundary_groups": [],
+    "exemptions": []
+  },
+  "findings": [],
+  "figure_id": "supp_figure7_maps",
+  "figure_json_sha256": "895fa1c160ca4f87d1361874b688c83d83e5dec965b0cadd35f14cd2057dbf4f",
+  "pdf_sha256": "cc73d211b2c471797fefacb2f251254940874d0c2cae741b5dccc57c192f772a",
+  "pdf_matches_render_manifest": true,
+  "named_design": "Equal reference/prediction/error maps within each case. Different case aspect ratios change plot widths; centers stay on the same column grid. Donor/study context preserve aspect and align centers; the last axis is a fine-class legend.",
+  "all_axis_roles": [
+    {
+      "id": "axis-0",
+      "bbox_pt": [
+        40.62071372285911,
+        334.20472440944883,
+        150.71786895430623,
+        454.1102362204725
+      ],
+      "title": "Reference labels",
+      "role": "data"
+    },
+    {
+      "id": "axis-1",
+      "bbox_pt": [
+        203.89630427404023,
+        334.20472440944883,
+        313.99345950548735,
+        454.1102362204725
+      ],
+      "title": "CellPFN predictions",
+      "role": "data"
+    },
+    {
+      "id": "axis-2",
+      "bbox_pt": [
+        367.1718948252213,
+        334.20472440944883,
+        477.26905005666845,
+        454.1102362204725
+      ],
+      "title": "Prediction errors",
+      "role": "data"
+    },
+    {
+      "id": "axis-3",
+      "bbox_pt": [
+        47.28422976950129,
+        181.13385826771653,
+        144.05435290766408,
+        301.03937007874015
+      ],
+      "title": "Reference labels",
+      "role": "data"
+    },
+    {
+      "id": "axis-4",
+      "bbox_pt": [
+        210.55982032068238,
+        181.13385826771653,
+        307.3299434588452,
+        301.03937007874015
+      ],
+      "title": "CellPFN predictions",
+      "role": "data"
+    },
+    {
+      "id": "axis-5",
+      "bbox_pt": [
+        373.8354108718634,
+        181.13385826771653,
+        470.60553401002625,
+        301.03937007874015
+      ],
+      "title": "Prediction errors",
+      "role": "data"
+    },
+    {
+      "id": "axis-6",
+      "bbox_pt": [
+        28.062992125984252,
+        49.12347938967687,
+        163.2755905511811,
+        132.01037887803966
+      ],
+      "title": "PBMC coarse: donor",
+      "role": "data"
+    },
+    {
+      "id": "axis-7",
+      "bbox_pt": [
+        216.43878449195972,
+        38.26771653543307,
+        301.45097928756786,
+        142.86614173228344
+      ],
+      "title": "Development cortex: study",
+      "role": "data"
+    },
+    {
+      "id": "axis-8",
+      "bbox_pt": [
+        354.61417322834643,
+        7.653543307086614,
+        500.0314960629921,
+        145.4173228346457
+      ],
+      "title": "",
+      "role": "legend_only"
+    }
+  ],
+  "custom_shared_edge_checks": [
+    {
+      "edge": "center_x",
+      "axes": [
+        0,
+        3,
+        6
+      ],
+      "values_pt": [
+        95.66929133858267,
+        95.66929133858268,
+        95.66929133858267
+      ],
+      "spread_pt": 1.4210854715202004e-14,
+      "pass_check": true
+    },
+    {
+      "edge": "center_x",
+      "axes": [
+        1,
+        4,
+        7
+      ],
+      "values_pt": [
+        258.9448818897638,
+        258.9448818897638,
+        258.9448818897638
+      ],
+      "spread_pt": 0.0,
+      "pass_check": true
+    },
+    {
+      "edge": "center_x",
+      "axes": [
+        2,
+        5
+      ],
+      "values_pt": [
+        422.22047244094483,
+        422.22047244094483
+      ],
+      "spread_pt": 0.0,
+      "pass_check": true
+    },
+    {
+      "edge": "center_y",
+      "axes": [
+        6,
+        7
+      ],
+      "values_pt": [
+        90.56692913385827,
+        90.56692913385825
+      ],
+      "spread_pt": 1.4210854715202004e-14,
+      "pass_check": true
+    }
+  ],
+  "global_axis_intersections": [],
+  "all_axes_within_canvas": true,
+  "scope_limit": "Panel-label anchors are absent from saved JSON; this audit checks plot-area alignment, not type baseline alignment. Actual text collisions are checked independently on rendered PDFs.",
+  "combined_verdict": "PASS"
+}

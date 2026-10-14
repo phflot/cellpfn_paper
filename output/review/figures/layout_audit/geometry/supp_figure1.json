@@ -1,0 +1,369 @@
+{
+  "schema_version": 1,
+  "applicable": true,
+  "auditable": true,
+  "verdict": "PASS",
+  "backend": "Saved Matplotlib figure JSON",
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "comparisons": 11,
+    "exemptions": 0
+  },
+  "tolerances": {
+    "alignment_pt": 1.5,
+    "gutter_pt": 1.5
+  },
+  "layout": {
+    "schema_version": 1,
+    "backend": "Saved Matplotlib figure JSON",
+    "figure": {
+      "width_pt": 510.23622047244095,
+      "height_pt": 521.5748031496063
+    },
+    "panels": [
+      {
+        "id": "axis-0",
+        "bbox_pt": [
+          68.88188976377953,
+          394.46929133858265,
+          174.04033032456314,
+          451.16220472440943
+        ],
+        "title": "Strongest class marker",
+        "role": "data"
+      },
+      {
+        "id": "axis-1",
+        "bbox_pt": [
+          231.87747263299408,
+          394.46929133858265,
+          337.0359131937777,
+          451.16220472440943
+        ],
+        "title": "Large class effects",
+        "role": "data"
+      },
+      {
+        "id": "axis-2",
+        "bbox_pt": [
+          394.8730555022086,
+          394.46929133858265,
+          500.03149606299223,
+          451.16220472440943
+        ],
+        "title": "Task separability: 10 supports",
+        "role": "data"
+      },
+      {
+        "id": "axis-3",
+        "bbox_pt": [
+          68.88188976377953,
+          274.2803149606299,
+          174.04033032456314,
+          330.97322834645666
+        ],
+        "title": "Task separability: 100 supports",
+        "role": "data"
+      },
+      {
+        "id": "axis-4",
+        "bbox_pt": [
+          231.87747263299408,
+          274.2803149606299,
+          337.0359131937777,
+          330.97322834645666
+        ],
+        "title": "Within-study donor variation",
+        "role": "data"
+      },
+      {
+        "id": "axis-5",
+        "bbox_pt": [
+          394.8730555022086,
+          274.2803149606299,
+          500.03149606299223,
+          330.97322834645666
+        ],
+        "title": "Large donor on-switches",
+        "role": "data"
+      },
+      {
+        "id": "axis-6",
+        "bbox_pt": [
+          68.88188976377953,
+          154.09133858267714,
+          174.04033032456314,
+          210.78425196850392
+        ],
+        "title": "Donor silencing",
+        "role": "data"
+      },
+      {
+        "id": "axis-7",
+        "bbox_pt": [
+          231.87747263299408,
+          154.09133858267714,
+          337.0359131937777,
+          210.78425196850392
+        ],
+        "title": "Count overdispersion",
+        "role": "data"
+      },
+      {
+        "id": "axis-8",
+        "bbox_pt": [
+          394.8730555022086,
+          154.09133858267714,
+          500.03149606299223,
+          210.78425196850392
+        ],
+        "title": "Excess zeros",
+        "role": "data"
+      },
+      {
+        "id": "axis-9",
+        "bbox_pt": [
+          68.88188976377953,
+          33.90236220472438,
+          174.04033032456314,
+          90.59527559055117
+        ],
+        "title": "Gene detection",
+        "role": "data"
+      },
+      {
+        "id": "axis-10",
+        "bbox_pt": [
+          231.87747263299408,
+          33.90236220472438,
+          337.0359131937777,
+          90.59527559055117
+        ],
+        "title": "Gene\u2013gene signal: 10 supports",
+        "role": "data"
+      },
+      {
+        "id": "axis-11",
+        "bbox_pt": [
+          394.8730555022086,
+          33.90236220472438,
+          500.03149606299223,
+          90.59527559055117
+        ],
+        "title": "Gene\u2013gene signal: 100 supports",
+        "role": "data"
+      }
+    ],
+    "row_groups": [
+      {
+        "id": "row-1",
+        "panels": [
+          "axis-0",
+          "axis-1",
+          "axis-2"
+        ]
+      },
+      {
+        "id": "row-2",
+        "panels": [
+          "axis-3",
+          "axis-4",
+          "axis-5"
+        ]
+      },
+      {
+        "id": "row-3",
+        "panels": [
+          "axis-6",
+          "axis-7",
+          "axis-8"
+        ]
+      },
+      {
+        "id": "row-4",
+        "panels": [
+          "axis-9",
+          "axis-10",
+          "axis-11"
+        ]
+      }
+    ],
+    "column_groups": [
+      {
+        "id": "column-1",
+        "panels": [
+          "axis-0",
+          "axis-3",
+          "axis-6",
+          "axis-9"
+        ]
+      },
+      {
+        "id": "column-2",
+        "panels": [
+          "axis-1",
+          "axis-4",
+          "axis-7",
+          "axis-10"
+        ]
+      },
+      {
+        "id": "column-3",
+        "panels": [
+          "axis-2",
+          "axis-5",
+          "axis-8",
+          "axis-11"
+        ]
+      }
+    ],
+    "boundary_groups": [],
+    "exemptions": []
+  },
+  "findings": [],
+  "figure_id": "supp_figure1",
+  "figure_json_sha256": "f4b1e0b1dfd6deda47b73c26667e9df8113b64bff03aa34bb45fc684dda035f5",
+  "pdf_sha256": "0338e44afd4310686757c882db02fe9ef30d070f7d7b69601107677f4d5c018a",
+  "pdf_matches_render_manifest": true,
+  "named_design": "Twelve equal quantitative panels in a four-row, three-column grid.",
+  "all_axis_roles": [
+    {
+      "id": "axis-0",
+      "bbox_pt": [
+        68.88188976377953,
+        394.46929133858265,
+        174.04033032456314,
+        451.16220472440943
+      ],
+      "title": "Strongest class marker",
+      "role": "data"
+    },
+    {
+      "id": "axis-1",
+      "bbox_pt": [
+        231.87747263299408,
+        394.46929133858265,
+        337.0359131937777,
+        451.16220472440943
+      ],
+      "title": "Large class effects",
+      "role": "data"
+    },
+    {
+      "id": "axis-2",
+      "bbox_pt": [
+        394.8730555022086,
+        394.46929133858265,
+        500.03149606299223,
+        451.16220472440943
+      ],
+      "title": "Task separability: 10 supports",
+      "role": "data"
+    },
+    {
+      "id": "axis-3",
+      "bbox_pt": [
+        68.88188976377953,
+        274.2803149606299,
+        174.04033032456314,
+        330.97322834645666
+      ],
+      "title": "Task separability: 100 supports",
+      "role": "data"
+    },
+    {
+      "id": "axis-4",
+      "bbox_pt": [
+        231.87747263299408,
+        274.2803149606299,
+        337.0359131937777,
+        330.97322834645666
+      ],
+      "title": "Within-study donor variation",
+      "role": "data"
+    },
+    {
+      "id": "axis-5",
+      "bbox_pt": [
+        394.8730555022086,
+        274.2803149606299,
+        500.03149606299223,
+        330.97322834645666
+      ],
+      "title": "Large donor on-switches",
+      "role": "data"
+    },
+    {
+      "id": "axis-6",
+      "bbox_pt": [
+        68.88188976377953,
+        154.09133858267714,
+        174.04033032456314,
+        210.78425196850392
+      ],
+      "title": "Donor silencing",
+      "role": "data"
+    },
+    {
+      "id": "axis-7",
+      "bbox_pt": [
+        231.87747263299408,
+        154.09133858267714,
+        337.0359131937777,
+        210.78425196850392
+      ],
+      "title": "Count overdispersion",
+      "role": "data"
+    },
+    {
+      "id": "axis-8",
+      "bbox_pt": [
+        394.8730555022086,
+        154.09133858267714,
+        500.03149606299223,
+        210.78425196850392
+      ],
+      "title": "Excess zeros",
+      "role": "data"
+    },
+    {
+      "id": "axis-9",
+      "bbox_pt": [
+        68.88188976377953,
+        33.90236220472438,
+        174.04033032456314,
+        90.59527559055117
+      ],
+      "title": "Gene detection",
+      "role": "data"
+    },
+    {
+      "id": "axis-10",
+      "bbox_pt": [
+        231.87747263299408,
+        33.90236220472438,
+        337.0359131937777,
+        90.59527559055117
+      ],
+      "title": "Gene\u2013gene signal: 10 supports",
+      "role": "data"
+    },
+    {
+      "id": "axis-11",
+      "bbox_pt": [
+        394.8730555022086,
+        33.90236220472438,
+        500.03149606299223,
+        90.59527559055117
+      ],
+      "title": "Gene\u2013gene signal: 100 supports",
+      "role": "data"
+    }
+  ],
+  "custom_shared_edge_checks": [],
+  "global_axis_intersections": [],
+  "all_axes_within_canvas": true,
+  "scope_limit": "Panel-label anchors are absent from saved JSON; this audit checks plot-area alignment, not type baseline alignment. Actual text collisions are checked independently on rendered PDFs.",
+  "combined_verdict": "PASS"
+}

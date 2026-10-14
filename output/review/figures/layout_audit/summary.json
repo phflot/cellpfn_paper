@@ -1,0 +1,555 @@
+{
+  "geometry": [
+    {
+      "id": "figure2",
+      "verdict": "PASS",
+      "alignment_comparisons": 3,
+      "explicit_edge_checks": 3,
+      "failures": 0,
+      "warnings": 0,
+      "rationale": "Four equal benchmark panels; full-width delta matrix; two equal trajectory/retention panels. Matrix height differs intentionally."
+    },
+    {
+      "id": "figure3",
+      "verdict": "PASS",
+      "alignment_comparisons": 10,
+      "explicit_edge_checks": 4,
+      "failures": 0,
+      "warnings": 0,
+      "rationale": "Equal RNA pairs and three equal gene matrices; colorbars align with their matrices; bottom panels share baseline/height while retaining unequal widths."
+    },
+    {
+      "id": "supp_figure1",
+      "verdict": "PASS",
+      "alignment_comparisons": 11,
+      "explicit_edge_checks": 0,
+      "failures": 0,
+      "warnings": 0,
+      "rationale": "Twelve equal quantitative panels in a four-row, three-column grid."
+    },
+    {
+      "id": "supp_figure1_illustration",
+      "verdict": "PASS",
+      "alignment_comparisons": 1,
+      "explicit_edge_checks": 0,
+      "failures": 0,
+      "warnings": 0,
+      "rationale": "Two equal overlays of the same illustrative synthetic RNA coordinates."
+    },
+    {
+      "id": "supp_figure2",
+      "verdict": "PASS",
+      "alignment_comparisons": 3,
+      "explicit_edge_checks": 4,
+      "failures": 0,
+      "warnings": 0,
+      "rationale": "Full-width overview above a tall ten-task matrix and shorter kidney matrix. Their top edges and widths agree; different heights reflect row counts. Exposure box is text-only."
+    },
+    {
+      "id": "supp_figure3",
+      "verdict": "PASS",
+      "alignment_comparisons": 5,
+      "explicit_edge_checks": 0,
+      "failures": 0,
+      "warnings": 0,
+      "rationale": "Three aligned two-column rows; middle row taller to accommodate 15 study labels."
+    },
+    {
+      "id": "supp_figure4",
+      "verdict": "PASS",
+      "alignment_comparisons": 6,
+      "explicit_edge_checks": 0,
+      "failures": 0,
+      "warnings": 0,
+      "rationale": "Three equal top panels; bottom prespecified criterion spans two columns, and inference interventions occupy the third. Widths are intentionally unequal below."
+    },
+    {
+      "id": "supp_figure5",
+      "verdict": "PASS",
+      "alignment_comparisons": 6,
+      "explicit_edge_checks": 1,
+      "failures": 0,
+      "warnings": 0,
+      "rationale": "Left six-candidate endpoint panel spans the two distinct top-right endpoint panels. Lower rows form equal-width pairs. Endpoint units are intentionally separated."
+    },
+    {
+      "id": "supp_figure6",
+      "verdict": "PASS",
+      "alignment_comparisons": 7,
+      "explicit_edge_checks": 0,
+      "failures": 0,
+      "warnings": 0,
+      "rationale": "Three columns align across sex and age rows; row heights differ slightly by content."
+    },
+    {
+      "id": "supp_figure7_maps",
+      "verdict": "PASS",
+      "alignment_comparisons": 4,
+      "explicit_edge_checks": 4,
+      "failures": 0,
+      "warnings": 0,
+      "rationale": "Equal reference/prediction/error maps within each case. Different case aspect ratios change plot widths; centers stay on the same column grid. Donor/study context preserve aspect and align centers; the last axis is a fine-class legend."
+    },
+    {
+      "id": "supp_figure7_markers",
+      "verdict": "PASS",
+      "alignment_comparisons": 12,
+      "explicit_edge_checks": 4,
+      "failures": 0,
+      "warnings": 0,
+      "rationale": "Four equal maps per case and matching colorbar rows. PBMC/cortex plot widths differ to preserve aspect; all maps and bars share column centers."
+    },
+    {
+      "id": "supp_figure8",
+      "verdict": "PASS",
+      "alignment_comparisons": 6,
+      "explicit_edge_checks": 0,
+      "failures": 0,
+      "warnings": 0,
+      "rationale": "Four two-column rows with deliberately different heights; comparable row baselines and column edges align."
+    },
+    {
+      "id": "supp_figure9",
+      "verdict": "PASS",
+      "alignment_comparisons": 4,
+      "explicit_edge_checks": 0,
+      "failures": 0,
+      "warnings": 0,
+      "rationale": "Two-by-two grid separating measured, inferred and estimated costs."
+    }
+  ],
+  "collision": [
+    {
+      "id": "architecture",
+      "verdict": "FIX BEFORE DELIVERY",
+      "reviewed_verdict": "PASS",
+      "summary": {
+        "fail": 9,
+        "warn": 0,
+        "contained_fill_overlays": 83,
+        "contained_image_overlays": 0
+      },
+      "reviewed_false_positives": 9,
+      "unresolved_findings": 0,
+      "findings": [
+        {
+          "severity": "FAIL",
+          "kind": "text-text",
+          "page": 1,
+          "message": "Text boxes overlap by 97.2% of the smaller box",
+          "text": "Donor composition and covariates",
+          "text_bbox": [
+            19.842519760131836,
+            54.895118713378906,
+            156.12095642089844,
+            74.73764038085938
+          ],
+          "other_text": "Study-associated shifts",
+          "other_bbox": [
+            19.842519760131836,
+            65.76831817626953,
+            111.75308227539062,
+            74.99905395507812
+          ],
+          "object_count": 1,
+          "object_indexes": []
+        },
+        {
+          "severity": "FAIL",
+          "kind": "text-text",
+          "page": 1,
+          "message": "Text boxes overlap by 97.2% of the smaller box",
+          "text": "NumPy / PyTorch CPU backend",
+          "text_bbox": [
+            21.543306350708008,
+            237.89866638183594,
+            239.7919464111328,
+            257.7412109375
+          ],
+          "other_text": "Isolated seeds \u00b7 independent processes \u00b7 bounded prefetch",
+          "other_bbox": [
+            21.543306350708008,
+            249.4125518798828,
+            239.79348754882812,
+            257.98394775390625
+          ],
+          "object_count": 1,
+          "object_indexes": []
+        },
+        {
+          "severity": "FAIL",
+          "kind": "text-text",
+          "page": 1,
+          "message": "Text boxes overlap by 97.2% of the smaller box",
+          "text": "Compact neural predictor",
+          "text_bbox": [
+            28.34645652770996,
+            387.5679626464844,
+            122.77291107177734,
+            406.84356689453125
+          ],
+          "other_text": "Synthetic weight training",
+          "other_bbox": [
+            28.34645652770996,
+            398.514892578125,
+            121.2463150024414,
+            407.0863037109375
+          ],
+          "object_count": 1,
+          "object_indexes": []
+        },
+        {
+          "severity": "FAIL",
+          "kind": "text-text",
+          "page": 1,
+          "message": "Text boxes overlap by 97.2% of the smaller box",
+          "text": "Resolved con\ufb01guration",
+          "text_bbox": [
+            28.91338539123535,
+            204.44984436035156,
+            141.2351531982422,
+            223.1585235595703
+          ],
+          "other_text": "Reusable donor/program state",
+          "other_bbox": [
+            28.91338539123535,
+            214.82986450195312,
+            141.23341369628906,
+            223.40126037597656
+          ],
+          "object_count": 1,
+          "object_indexes": []
+        },
+        {
+          "severity": "FAIL",
+          "kind": "text-text",
+          "page": 1,
+          "message": "Text boxes overlap by 97.2% of the smaller box",
+          "text": "TabICL / Kumo",
+          "text_bbox": [
+            144.56692504882812,
+            387.5679626464844,
+            228.1790008544922,
+            406.84356689453125
+          ],
+          "other_text": "Cellular tasks + replay",
+          "other_bbox": [
+            144.56692504882812,
+            398.514892578125,
+            228.1804962158203,
+            407.0863037109375
+          ],
+          "object_count": 1,
+          "object_indexes": []
+        },
+        {
+          "severity": "FAIL",
+          "kind": "text-text",
+          "page": 1,
+          "message": "Text boxes overlap by 97.2% of the smaller box",
+          "text": "Hierarchical cell-type di\ufb00erences",
+          "text_bbox": [
+            186.51968383789062,
+            54.895118713378906,
+            317.11517333984375,
+            74.73764038085938
+          ],
+          "other_text": "Distributed and rare signals",
+          "other_bbox": [
+            186.51968383789062,
+            65.76831817626953,
+            296.8837585449219,
+            74.99905395507812
+          ],
+          "object_count": 1,
+          "object_indexes": []
+        },
+        {
+          "severity": "FAIL",
+          "kind": "text-text",
+          "page": 1,
+          "message": "Text boxes overlap by 97.2% of the smaller box",
+          "text": "Batched transformations",
+          "text_bbox": [
+            191.05511474609375,
+            204.44984436035156,
+            282.4072265625,
+            223.1585235595703
+          ],
+          "other_text": "Count sampling on CPU",
+          "other_bbox": [
+            191.05511474609375,
+            214.82986450195312,
+            277.808349609375,
+            223.40126037597656
+          ],
+          "object_count": 1,
+          "object_indexes": []
+        },
+        {
+          "severity": "FAIL",
+          "kind": "text-text",
+          "page": 1,
+          "message": "Text boxes overlap by 97.2% of the smaller box",
+          "text": "Depth, capture and dispersion",
+          "text_bbox": [
+            353.19683837890625,
+            54.895118713378906,
+            473.583740234375,
+            74.73764038085938
+          ],
+          "other_text": "Study and batch variation",
+          "other_bbox": [
+            353.19683837890625,
+            65.76831817626953,
+            456.14776611328125,
+            74.99905395507812
+          ],
+          "object_count": 1,
+          "object_indexes": []
+        },
+        {
+          "severity": "FAIL",
+          "kind": "text-text",
+          "page": 1,
+          "message": "Text boxes overlap by 18.3% of the smaller box",
+          "text": "Cells \u00d7 genes + metadata",
+          "text_bbox": [
+            353.19683837890625,
+            204.44984436035156,
+            450.5171813964844,
+            223.1585235595703
+          ],
+          "other_text": "Counts, expectations, pro\ufb01les",
+          "other_bbox": [
+            447.7550354003906,
+            215.78843688964844,
+            462.8194580078125,
+            223.1585235595703
+          ],
+          "object_count": 1,
+          "object_indexes": []
+        }
+      ]
+    },
+    {
+      "id": "figure2",
+      "verdict": "PASS",
+      "reviewed_verdict": "PASS",
+      "summary": {
+        "fail": 0,
+        "warn": 0,
+        "contained_fill_overlays": 46,
+        "contained_image_overlays": 36
+      },
+      "reviewed_false_positives": 0,
+      "unresolved_findings": 0,
+      "findings": []
+    },
+    {
+      "id": "figure3",
+      "verdict": "PASS",
+      "reviewed_verdict": "PASS",
+      "summary": {
+        "fail": 0,
+        "warn": 0,
+        "contained_fill_overlays": 3,
+        "contained_image_overlays": 1
+      },
+      "reviewed_false_positives": 0,
+      "unresolved_findings": 0,
+      "findings": []
+    },
+    {
+      "id": "supp_figure1",
+      "verdict": "PASS",
+      "reviewed_verdict": "PASS",
+      "summary": {
+        "fail": 0,
+        "warn": 0,
+        "contained_fill_overlays": 0,
+        "contained_image_overlays": 0
+      },
+      "reviewed_false_positives": 0,
+      "unresolved_findings": 0,
+      "findings": []
+    },
+    {
+      "id": "supp_figure1_illustration",
+      "verdict": "PASS",
+      "reviewed_verdict": "PASS",
+      "summary": {
+        "fail": 0,
+        "warn": 0,
+        "contained_fill_overlays": 0,
+        "contained_image_overlays": 0
+      },
+      "reviewed_false_positives": 0,
+      "unresolved_findings": 0,
+      "findings": []
+    },
+    {
+      "id": "supp_figure2",
+      "verdict": "PASS",
+      "reviewed_verdict": "PASS",
+      "summary": {
+        "fail": 0,
+        "warn": 0,
+        "contained_fill_overlays": 58,
+        "contained_image_overlays": 58
+      },
+      "reviewed_false_positives": 0,
+      "unresolved_findings": 0,
+      "findings": []
+    },
+    {
+      "id": "supp_figure3",
+      "verdict": "PASS",
+      "reviewed_verdict": "PASS",
+      "summary": {
+        "fail": 0,
+        "warn": 0,
+        "contained_fill_overlays": 4,
+        "contained_image_overlays": 0
+      },
+      "reviewed_false_positives": 0,
+      "unresolved_findings": 0,
+      "findings": []
+    },
+    {
+      "id": "supp_figure4",
+      "verdict": "PASS",
+      "reviewed_verdict": "PASS",
+      "summary": {
+        "fail": 0,
+        "warn": 0,
+        "contained_fill_overlays": 6,
+        "contained_image_overlays": 0
+      },
+      "reviewed_false_positives": 0,
+      "unresolved_findings": 0,
+      "findings": []
+    },
+    {
+      "id": "supp_figure5",
+      "verdict": "PASS",
+      "reviewed_verdict": "PASS",
+      "summary": {
+        "fail": 0,
+        "warn": 0,
+        "contained_fill_overlays": 16,
+        "contained_image_overlays": 0
+      },
+      "reviewed_false_positives": 0,
+      "unresolved_findings": 0,
+      "findings": []
+    },
+    {
+      "id": "supp_figure6",
+      "verdict": "PASS",
+      "reviewed_verdict": "PASS",
+      "summary": {
+        "fail": 0,
+        "warn": 0,
+        "contained_fill_overlays": 4,
+        "contained_image_overlays": 0
+      },
+      "reviewed_false_positives": 0,
+      "unresolved_findings": 0,
+      "findings": []
+    },
+    {
+      "id": "supp_figure7_maps",
+      "verdict": "PASS",
+      "reviewed_verdict": "PASS",
+      "summary": {
+        "fail": 0,
+        "warn": 0,
+        "contained_fill_overlays": 0,
+        "contained_image_overlays": 0
+      },
+      "reviewed_false_positives": 0,
+      "unresolved_findings": 0,
+      "findings": []
+    },
+    {
+      "id": "supp_figure7_markers",
+      "verdict": "PASS",
+      "reviewed_verdict": "PASS",
+      "summary": {
+        "fail": 0,
+        "warn": 0,
+        "contained_fill_overlays": 0,
+        "contained_image_overlays": 0
+      },
+      "reviewed_false_positives": 0,
+      "unresolved_findings": 0,
+      "findings": []
+    },
+    {
+      "id": "supp_figure8",
+      "verdict": "PASS",
+      "reviewed_verdict": "PASS",
+      "summary": {
+        "fail": 0,
+        "warn": 0,
+        "contained_fill_overlays": 99,
+        "contained_image_overlays": 87
+      },
+      "reviewed_false_positives": 0,
+      "unresolved_findings": 0,
+      "findings": []
+    },
+    {
+      "id": "supp_figure9",
+      "verdict": "PASS",
+      "reviewed_verdict": "PASS",
+      "summary": {
+        "fail": 0,
+        "warn": 0,
+        "contained_fill_overlays": 10,
+        "contained_image_overlays": 0
+      },
+      "reviewed_false_positives": 0,
+      "unresolved_findings": 0,
+      "findings": []
+    }
+  ],
+  "alignment_tolerance_pt": 1.5,
+  "tool_hashes": {
+    "audit_panel_alignment.py": "43958e6b49d897f326ff64e73cbed0bf057e17c06533b5b57d3dededf8111e76",
+    "audit_figure_collisions.py": "841ede7dcaefa3ab11576b5ba52375d1678a71f77d39f553d5464e81b0699283"
+  },
+  "contract_script_sha256": "18668c0c3cb88da42b698a3fd14f83e8218d2be4295ea12a7f3d6779b292b6fe",
+  "report_sha256": {
+    "output/review/figures/layout_audit/geometry/figure2.json": "7a1b42be40f111d9d5e95fe1cbc506e164f8606aa7a057f5582ce8348e9fb0b3",
+    "output/review/figures/layout_audit/geometry/figure3.json": "3e606d6919398ac755038faa779d8fca8ba4c2867fdf5f9ac0bac30523982b47",
+    "output/review/figures/layout_audit/geometry/supp_figure1.json": "aa74cc2f68c1c3bf1013e0ee0d246d05e4397e54215bdc0c114fe45df5184448",
+    "output/review/figures/layout_audit/geometry/supp_figure1_illustration.json": "8082a8cecc0951da7998237dfb555c26fced7456374522f89a045dffb537ba7c",
+    "output/review/figures/layout_audit/geometry/supp_figure2.json": "09a4a736ef5b2e7f32cde9c5a67d351486d02122ab7b7ae31fbf04a73975dc44",
+    "output/review/figures/layout_audit/geometry/supp_figure3.json": "b4446e2b10f7aadfe51811562ae0eff6ac1963c96b42e317a08a3789c17b1e49",
+    "output/review/figures/layout_audit/geometry/supp_figure4.json": "8d0806c43c5b9e0ff85a8909dbf856320b6859fa566f2ce64f3e85d91bb033fa",
+    "output/review/figures/layout_audit/geometry/supp_figure5.json": "88c4dfd6206b0afd8c6a1ba928b5b2655cdc7eb40d003d006c78089a619ed45b",
+    "output/review/figures/layout_audit/geometry/supp_figure6.json": "fafa5c7dd5f4949de804a2751d9cfb9544e02b14cacd8f284698f1f3b20a5e24",
+    "output/review/figures/layout_audit/geometry/supp_figure7_maps.json": "9184927e610f7c469d2ec752fa3939f371270efc9bdb1fc215352cc7223a5459",
+    "output/review/figures/layout_audit/geometry/supp_figure7_markers.json": "47fe4dffd06e03588becca724962bb672e144fd9381531144737265b56c34c5f",
+    "output/review/figures/layout_audit/geometry/supp_figure8.json": "0cbcefe2f3eb82da057c4229f7d0171dae39bf71bbef83b01bd7792d2d699b8f",
+    "output/review/figures/layout_audit/geometry/supp_figure9.json": "d5a88c045ee585fdc8256175e8bdfb59d5adf8839ae85f55e85a485d95729e74",
+    "output/review/figures/layout_audit/collisions/architecture.json": "60aae777966b99be2da76fdb9e7f280deb5ed7e743f04eaa494dc563d3d22e9e",
+    "output/review/figures/layout_audit/collisions/figure2.json": "8c6515b606f52d49e61e0019d71a15c7c627b0181c03a2bff15abcf505a10334",
+    "output/review/figures/layout_audit/collisions/figure3.json": "00758bbe7e1ff17ba0f4de5a262c073fc89ecaf00450523c586156e5a6b31c7a",
+    "output/review/figures/layout_audit/collisions/supp_figure1.json": "65c87b9751b822bca4cd9983df709d1d3586261dd6b36e6e62d102f9effa6edb",
+    "output/review/figures/layout_audit/collisions/supp_figure1_illustration.json": "fba607539ae50a128f2be92bf3a15a00595cb58558790137463eee0086964d0c",
+    "output/review/figures/layout_audit/collisions/supp_figure2.json": "f04bebbb742a8bdc561c810b142630aba2e236c7680e99acae0eeb68f9ba8042",
+    "output/review/figures/layout_audit/collisions/supp_figure3.json": "6bdf396bca10698c4602053303c1e4c42993b9dd55cc318767abe0e38b8b2897",
+    "output/review/figures/layout_audit/collisions/supp_figure4.json": "903ad9436809518bcef10c8c3d2a49a49e270498a1eba74c756d8dab1ecd37d3",
+    "output/review/figures/layout_audit/collisions/supp_figure5.json": "129008f2b44cc3c53e945b99f1e1efaf69e8378812c205d489ae4f0accc06354",
+    "output/review/figures/layout_audit/collisions/supp_figure6.json": "dd643a4bf5a9dad14f0094cd8789931f5f460dc3a87ef6da15cf704357ab89fe",
+    "output/review/figures/layout_audit/collisions/supp_figure7_maps.json": "1db84db8bb7d4552d5ef85cba82b7c20a316779f9d9236f34566fb18841d42ba",
+    "output/review/figures/layout_audit/collisions/supp_figure7_markers.json": "081b692c89130c17289d1b60565b7cab78baffe77f35ba346379e3b751d1251e",
+    "output/review/figures/layout_audit/collisions/supp_figure8.json": "783e7746225e4e76af7b773317dcc8c1deaac793993f6a4ca298f83f56a5c392",
+    "output/review/figures/layout_audit/collisions/supp_figure9.json": "cfffb91312f2354457e425344423dd252b6b9a56126e104f16df4f2afdb4f040"
+  },
+  "mutations": "Audit outputs only; no active figures, captions or source data changed",
+  "review_policy": "Raw skill findings retained. Any warning/failure needs individual visual interpretation; intentional overlays cannot be silently discarded."
+}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.7.14)  14 OCT 2026 17:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.7.14)  14 OCT 2026 17:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -505,7 +505,7 @@ File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count311
 \l__pdf_internal_box=\box62
 )
-(/tmp/cellpfn_pdf_k_vcl24w/main.aux)
+(/tmp/cellpfn_pdf_rjy362lj/main.aux)
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
@@ -608,7 +608,7 @@ Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
 Package hyperref Info: Link coloring OFF on input line 31.
 
-(/tmp/cellpfn_pdf_k_vcl24w/main.out) (/tmp/cellpfn_pdf_k_vcl24w/main.out)
+(/tmp/cellpfn_pdf_rjy362lj/main.out) (/tmp/cellpfn_pdf_rjy362lj/main.out)
 \@outlinefile=\write3
 \openout3 = `main.out'.
 
@@ -742,7 +742,7 @@ Package microtype Info: Loading generic protrusion settings for font family
  [19] [20] [21])
 (./sections/methods_evaluation.tex [22] [23] [24] [25] [26])
 (./sections/methods_visualization.tex [27]) [28]
-(/tmp/cellpfn_pdf_k_vcl24w/main.bbl [29
+(/tmp/cellpfn_pdf_rjy362lj/main.bbl [29
 
 ] [30] [31] [32] [33] [34]) [35]
 (./sections/supplementary.tex (./tables/s1.tex [36
@@ -1026,7 +1026,7 @@ Package pdftex.def Info: figures/supp_figure9.pdf  used on input line 78.
 (pdftex.def)             Requested size: 455.31938pt x 455.31938pt.
 
 (./sections/legend_supp_figure9.tex) (./sections/legend_supp_figure9.tex)
-[72 <./figures/supp_figure9.pdf>]) (/tmp/cellpfn_pdf_k_vcl24w/main.aux)
+[72 <./figures/supp_figure9.pdf>]) (/tmp/cellpfn_pdf_rjy362lj/main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -1035,11 +1035,11 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  )
 Here is how much of TeX's memory you used:
- 16708 strings out of 474222
- 271360 string characters out of 5748733
+ 16706 strings out of 474222
+ 271338 string characters out of 5748733
  1981975 words of memory out of 5000000
  37880 multiletter control sequences out of 15000+600000
- 698342 words of font info for 344 fonts, out of 8000000 for 9000
+ 698248 words of font info for 343 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  89i,14n,95p,2101b,755s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/ty
@@ -1058,7 +1058,7 @@ sy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy6.pfb></usr/share/texmf/fo
 nts/type1/public/lm/lmsy7.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb
 ></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on /tmp/cellpfn_pdf_k_vcl24w/main.pdf (72 pages, 2245636 bytes).
+Output written on /tmp/cellpfn_pdf_rjy362lj/main.pdf (72 pages, 2245559 bytes).
 
 PDF statistics:
  1559 PDF objects out of 1728 (max. 8388607)

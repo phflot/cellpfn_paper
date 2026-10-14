@@ -507,9 +507,9 @@
     }
   ],
   "outputs": {
-    "figures/supp_figure7_maps.pdf": "d644db039d0b47a969b7f15b00f9988d6c45f927ad5905672ae5bb950e38aeab",
-    "figures/supp_figure7_maps.svg": "406cafb2e347d93db16058e43d3f1cddf109a8b0b8ba2cec1fc0285e2b60aa94",
-    "figures/supp_figure7_maps.png": "032ffd559ea74f64aab37a7fffd70f41ec2c090bd0d60b8bc75ee1011785941c"
+    "figures/supp_figure7_maps.pdf": "cc73d211b2c471797fefacb2f251254940874d0c2cae741b5dccc57c192f772a",
+    "figures/supp_figure7_maps.svg": "c4c60e54f121e75d2ae2c12a39daa02e917d850289cd72585ec87e0bcdecfb21",
+    "figures/supp_figure7_maps.png": "98086167baafd841ec986547eb63ccafbe36977e2707e6d825acb1fd0d4d6df8"
   },
   "extra": {
     "numbered_figure": "S7",

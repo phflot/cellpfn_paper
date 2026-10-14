@@ -76,7 +76,7 @@ def errors(ax,d):
  ax.scatter(q.umap1,q.umap2,s=5 if len(d)<1000 else .6,color='#D5D9DB',linewidths=0,rasterized=True)
  ax.scatter(e.umap1,e.umap2,s=9 if len(d)<1000 else 2.2,color='#B44742',linewidths=0,rasterized=True)
  coords(ax,d)
- ax.text(.01,.01,f'{len(e):,} / {len(d):,} errors',transform=ax.transAxes,fontsize=6,color='#444444',ha='left',va='bottom')
+ ax.text(.01,-.065,f'{len(e):,} / {len(d):,} errors',transform=ax.transAxes,fontsize=6,color='#444444',ha='left',va='bottom',clip_on=False)
 
 
 def handles(palette):
@@ -130,7 +130,10 @@ def maps():
  for i,(case,var,letter,title) in enumerate([('pbmc_main','donor','g','PBMC coarse: donor'),('cortex_main','study','h','Development cortex: study')]):
   d,info=data[case];labs=sorted(d[var].dropna().unique());assert len(labs)==4
   palette={lab:c for lab,c in zip(labs,[BLUE,TEAL,PURPLE,'#CC6E3B'])}
-  ax=fig.add_axes([lefts[i],.075,width,.205]);category(ax,d,var,palette);tag(ax,letter,title)
+  ax=fig.add_axes([lefts[i],.075,width,.205]);category(ax,d,var,palette)
+  ax.set_title(title,visible=False)  # Preserve descriptive geometry metadata.
+  fig.text(lefts[i]-.025,.293,letter,fontsize=8,fontweight='bold',va='bottom')
+  fig.text(lefts[i],.293,title,fontsize=7,va='bottom')
   fig.legend(handles=handles(palette),loc='upper left',bbox_to_anchor=(lefts[i]-.007,.061),ncol=2,frameon=False,fontsize=6,handlelength=.7,handletextpad=.3,columnspacing=.8)
   source_csv.append(panel_source(letter,d,[var,'true_label','predicted_label','correct']))
   panels.append(meta(letter,'Biological maps retain donor/study context without integration',case,var,d,info,extra={'category_palette':palette,'draw_order':'fixed seed-42 permutation'}))
