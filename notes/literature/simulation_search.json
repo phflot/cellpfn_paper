@@ -1,0 +1,487 @@
+{
+  "searched_on": "2026-10-14",
+  "purpose": "Primary literature for CellPFN's procedural simulator as PFN training prior, its antecedents and boundaries; NBT Wave 1.",
+  "method": "Targeted literature search, not systematic-review coverage. Web search discovery across publisher, PubMed, PMC, arXiv, CVF and OpenAlex records; retained claims grounded only in original papers or their author/publisher records. Metadata extracted into structured records and BibTeX rendered programmatically.",
+  "queries": [
+    {
+      "id": "SIMQ01",
+      "query": "Splatter simulation of single-cell RNA sequencing data 2017 Zappia"
+    },
+    {
+      "id": "SIMQ02",
+      "query": "SymSim simulating multiple faceted variability single cell RNA sequencing 2019"
+    },
+    {
+      "id": "SIMQ03",
+      "query": "scDesign2 transparent simulator generates high-fidelity single-cell gene expression count data gene correlations 2021"
+    },
+    {
+      "id": "SIMQ04",
+      "query": "scDesign3 generates realistic in silico data multimodal single-cell spatial omics 2024"
+    },
+    {
+      "id": "SIMQ05",
+      "query": "SERGIO single-cell expression simulator guided by gene regulatory networks Dibaeinia Sinha 2020"
+    },
+    {
+      "id": "SIMQ06",
+      "query": "dyngen multi-modal simulator single cells Cannoodt 2021"
+    },
+    {
+      "id": "SIMQ07",
+      "query": "scMultiSim simulation single-cell multi-omics spatial guided gene regulatory networks cell cell interactions Li 2023"
+    },
+    {
+      "id": "SIMQ08",
+      "query": "The shaky foundations simulating single-cell RNA sequencing data Crowell 2023"
+    },
+    {
+      "id": "SIMQ09",
+      "query": "Systematic evaluation practical guidelines single-cell spatially resolved transcriptomics data simulation multiple scenarios 2024 Duo 03290"
+    },
+    {
+      "id": "SIMQ10",
+      "query": "scMultiSim nature methods 2025 Li Zhang 2023 published"
+    },
+    {
+      "id": "SIMQ11",
+      "query": "Fake It Till You Make It Face analysis wild synthetic data alone Wood 2021 CVF"
+    },
+    {
+      "id": "SIMQ12",
+      "query": "Domain Randomization Transferring Deep Neural Networks Simulation Real World Tobin 2017"
+    },
+    {
+      "id": "SIMQ13",
+      "query": "\"scMultiSim\" \"2025\" site:nature.com/articles"
+    },
+    {
+      "id": "SIMQ14",
+      "query": "FlowNet Learning Optical Flow Convolutional Networks Dosovitskiy 2015 site:openaccess.thecvf.com"
+    },
+    {
+      "id": "SIMQ15",
+      "query": "Realistic in silico generation augmentation single cell RNA seq data generative adversarial networks Marouf 2020 site:nature.com"
+    },
+    {
+      "id": "SIMQ16",
+      "query": "scDiffusion conditional generation high quality single-cell data diffusion model 2024 site:academic.oup.com"
+    },
+    {
+      "id": "SIMQ17",
+      "query": "\"Domain randomization for transferring\" \"10.1109\""
+    },
+    {
+      "id": "SIMQ18",
+      "query": "\"Confronting false discoveries in single-cell differential expression\" authors 2021"
+    },
+    {
+      "id": "SIMQ19",
+      "query": "\"scMultiSim\" \"Hechen Li\" \"Xi Chen\" 2025 site:nature.com/articles/s41592-025-02651-0"
+    },
+    {
+      "id": "SIMQ20",
+      "query": "\"scDesign3\" \"247–252\" site:nature.com/articles/s41587-023-01772-1"
+    },
+    {
+      "id": "SIMQ21",
+      "query": "splatPop simulating population scale single-cell RNA sequencing data 2021 authors DOI site:genomebiology.biomedcentral.com OR site:link.springer.com OR site:pubmed.ncbi.nlm.nih.gov"
+    },
+    {
+      "id": "SIMQ22",
+      "query": "\"scMultiSim\" \"2025\" site:pubmed.ncbi.nlm.nih.gov"
+    },
+    {
+      "id": "SIMQ23",
+      "query": "\"Simulating multiple faceted variability\" \"Xiuwei\" site:nature.com/articles/s41467-019-10500-w"
+    },
+    {
+      "id": "SIMQ24",
+      "query": "\"8202133\" \"23\" \"30\" site:ieeexplore.ieee.org"
+    },
+    {
+      "id": "SIMQ25",
+      "query": "\"Domain randomization for transferring deep neural networks\" \"23-30\" site:berkeley.edu OR site:josh-tobin.com OR site:openai.com"
+    }
+  ],
+  "access_limitations": [
+    "Direct Python urllib request to https://api.crossref.org/works/10.1186/s13059-017-1305-0 failed with temporary DNS resolution error. No Crossref API verification is claimed.",
+    "Several PMC opens returned CAPTCHA; publisher or indexed original full-text passages were used where available and recorded separately.",
+    "Final scMultiSim main text is subscription-only; retained claim is supported directly by final abstract and extended-data captions.",
+    "Full-paper reading is not claimed for every source; exact access level is recorded per entry.",
+    "DOIs for Wood 2021 and FlowNet 2015 were not independently verified and are intentionally omitted; their official CVF proceedings metadata is sufficient for identification."
+  ],
+  "metadata_decisions": [
+    "scDesign3: 2024 issue year retained, with 2023 online date documented.",
+    "scMultiSim: final 2025 Nature Methods article replaces the 2023 preprint.",
+    "Wood: final CVF proceedings author list has six authors; later arXiv author list differs. Final proceedings list retained.",
+    "Duo: complete 14-author list taken from PMC; OpenAlex search extract listed a shortened set and historical strategy note wrongly used Liu et al.",
+    "Marouf: original article identifies first author as Matteo, correcting legacy Mohamed.",
+    "dyngen: full published title retained.",
+    "Crowell: compound surname Morillo Leonardo preserved; updated publisher article lists a 2024 correction.",
+    "Article-number journals use their article identifiers in pages for standard BibTeX compatibility."
+  ],
+  "excluded_or_deferred": [
+    {
+      "item": "scMultiSim 2023 bioRxiv/PMC preprint",
+      "decision": "Superseded in bibliography",
+      "reason": "Final 2025 paper verified."
+    },
+    {
+      "item": "scDesign2 protocol/tutorial",
+      "decision": "Excluded",
+      "reason": "Original 2021 methods paper supports the needed claim."
+    },
+    {
+      "item": "Generic simulator reviews and third-party summaries",
+      "decision": "Excluded as claim sources",
+      "reason": "Original methods papers and original evaluation studies were available."
+    },
+    {
+      "item": "scDesignPop, PubMed 41808987",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41808987/",
+      "decision": "Discovered, not included",
+      "reason": "Recent population-simulation lead; bibliographic status and full text not fully verified in this bounded pass. No novelty claim may rely on its exclusion."
+    },
+    {
+      "item": "scReadSim, SPARSim, SPsimSeq",
+      "decision": "Deferred",
+      "reason": "Would be relevant for a comprehensive simulator comparison; current paragraph does not need an exhaustive taxonomy or unsupported speed comparison."
+    },
+    {
+      "item": "T-FAKE",
+      "decision": "Deferred",
+      "reason": "Wood, Tobin and FlowNet already support the cross-domain motivation; avoid expanding a secondary precedent paragraph."
+    }
+  ],
+  "sources": [
+    {
+      "key": "zappia2017splatter",
+      "type": "article",
+      "title": "Splatter: simulation of single-cell RNA sequencing data",
+      "author": "Zappia, Luke and Phipson, Belinda and Oshlack, Alicia",
+      "year": "2017",
+      "journal": "Genome Biology",
+      "volume": "18",
+      "pages": "174",
+      "doi": "10.1186/s13059-017-1305-0",
+      "url": "https://link.springer.com/article/10.1186/s13059-017-1305-0",
+      "secondary": "https://pubmed.ncbi.nlm.nih.gov/28899397/",
+      "access": "Full publisher HTML opened; Abstract, Background and Splatter framework inspected.",
+      "anchor": "Abstract; Background; Results: The Splatter framework; Results: Splat",
+      "claim": "Splatter provides reproducible count simulation, including gamma–Poisson Splat, controlled populations and trajectories. Parameters may be estimated from data or supplied by the user.",
+      "boundary": "Do not describe all existing simulators as necessarily reference-dependent: Splatter explicitly permits default or user-supplied parameters. Its presence does not establish any CellPFN speed advantage.",
+      "role": "Core: statistical simulation precedent.",
+      "decision": "include_or_group",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    },
+    {
+      "key": "zhang2019symsim",
+      "type": "article",
+      "title": "Simulating multiple faceted variability in single cell RNA sequencing",
+      "author": "Zhang, Xiuwei and Xu, Chenling and Yosef, Nir",
+      "year": "2019",
+      "journal": "Nature Communications",
+      "volume": "10",
+      "pages": "2611",
+      "doi": "10.1038/s41467-019-10500-w",
+      "url": "https://www.nature.com/articles/s41467-019-10500-w",
+      "secondary": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6565723/",
+      "access": "Full publisher HTML opened; Abstract, Introduction and variability sections inspected.",
+      "anchor": "Abstract; Introduction; Results: Allele intrinsic variation / Extrinsic variation / Technical variation",
+      "claim": "SymSim separates transcriptional stochasticity, cell-state variation and assay effects, with controls for discrete/continuous states and experimental steps.",
+      "boundary": "Explicit biological and technical randomization predates CellPFN. Cite as a foundation for controllable simulation, not as an inferior method without direct comparison.",
+      "role": "Core: biological/observation factors.",
+      "decision": "include_or_group",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    },
+    {
+      "key": "sun2021scdesign2",
+      "type": "article",
+      "title": "{scDesign2}: a transparent simulator that generates high-fidelity single-cell gene expression count data with gene correlations captured",
+      "author": "Sun, Tianyi and Song, Dongyuan and Li, Wei Vivian and Li, Jingyi Jessica",
+      "year": "2021",
+      "journal": "Genome Biology",
+      "volume": "22",
+      "pages": "163",
+      "doi": "10.1186/s13059-021-02367-2",
+      "url": "https://link.springer.com/article/10.1186/s13059-021-02367-2",
+      "secondary": "https://pubmed.ncbi.nlm.nih.gov/34034771/",
+      "access": "Full updated publisher HTML opened; Abstract and model overview inspected.",
+      "anchor": "Introduction: properties 4–6; Results: An overview of scDesign2",
+      "claim": "scDesign2 fits cell-type-specific count marginals and a Gaussian copula to real data, preserves gene correlations and permits different cell counts and sequencing depths.",
+      "boundary": "It also permits parameter adjustment; do not claim fitted models merely duplicate a fixed atlas. Publisher lists 2021 and 2023 corrections; use the updated article.",
+      "role": "Core: reference-fit statistical simulation.",
+      "decision": "include_or_group",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    },
+    {
+      "key": "song2024scdesign3",
+      "type": "article",
+      "title": "{scDesign3} generates realistic in silico data for multimodal single-cell and spatial omics",
+      "author": "Song, Dongyuan and Wang, Qingyang and Yan, Guanao and Liu, Tianyang and Sun, Tianyi and Li, Jingyi Jessica",
+      "year": "2024",
+      "journal": "Nature Biotechnology",
+      "volume": "42",
+      "number": "2",
+      "pages": "247--252",
+      "doi": "10.1038/s41587-023-01772-1",
+      "url": "https://www.nature.com/articles/s41587-023-01772-1",
+      "secondary": "https://pubmed.ncbi.nlm.nih.gov/37169966/",
+      "access": "Publisher metadata and PubMed abstract verified; indexed PMC author-manuscript body/Fig. 1–2 extracts read. Direct PMC open encountered CAPTCHA.",
+      "anchor": "Abstract; Fig. 1 overview; Fig. 2 experimental-design examples",
+      "claim": "scDesign3 learns interpretable parameters from real data to simulate varied cell states, feature modalities and experimental designs, including spatial and multimodal settings.",
+      "boundary": "Do not claim that reference-fit methods lack adjustable batch effects or customized controls. Bibliographic year is the 2024 issue year; online publication was 11 May 2023.",
+      "role": "Core: modern flexible statistical simulator and NBT precedent.",
+      "decision": "include_or_group",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    },
+    {
+      "key": "dibaeinia2020sergio",
+      "type": "article",
+      "title": "{SERGIO}: A Single-Cell Expression Simulator Guided by Gene Regulatory Networks",
+      "author": "Dibaeinia, Payam and Sinha, Saurabh",
+      "year": "2020",
+      "journal": "Cell Systems",
+      "volume": "11",
+      "number": "3",
+      "pages": "252--271.e11",
+      "doi": "10.1016/j.cels.2020.08.003",
+      "url": "https://doi.org/10.1016/j.cels.2020.08.003",
+      "secondary": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7530147/",
+      "access": "Indexed publisher and PMC full-text extracts read; direct publisher open failed and PMC open encountered CAPTCHA.",
+      "anchor": "Summary; Introduction; model description of stochastic transcription and user-specified GRNs",
+      "claim": "SERGIO uses specified regulatory networks and stochastic transcription to generate steady-state or differentiating single-cell expression with controlled noise.",
+      "boundary": "This is a mechanistic simulation precedent. CellPFN’s current prior must not be represented as a validated GRN-dynamics model merely because it includes correlated programs.",
+      "role": "Core or grouped citation: mechanistic simulation.",
+      "decision": "include_or_group",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    },
+    {
+      "key": "cannoodt2021dyngen",
+      "type": "article",
+      "title": "Spearheading future omics analyses using {dyngen}, a multi-modal simulator of single cells",
+      "author": "Cannoodt, Robrecht and Saelens, Wouter and Deconinck, Louise and Saeys, Yvan",
+      "year": "2021",
+      "journal": "Nature Communications",
+      "volume": "12",
+      "pages": "3942",
+      "doi": "10.1038/s41467-021-24152-2",
+      "url": "https://www.nature.com/articles/s41467-021-24152-2",
+      "access": "Full publisher HTML opened; Abstract and Introduction inspected.",
+      "anchor": "Abstract; Introduction: three simulation stages; Fig. 1",
+      "claim": "dyngen translates regulatory networks into reactions, simulates cellular dynamics and emulates measurement protocols to benchmark trajectory, regulatory-network and RNA-velocity methods.",
+      "boundary": "Known latent truth and controllable simulation are established capabilities; the CellPFN distinction is the use of a prior for learning inference across tasks.",
+      "role": "Core or grouped citation: dynamics and mechanistic ground truth.",
+      "decision": "include_or_group",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    },
+    {
+      "key": "li2025scmultisim",
+      "type": "article",
+      "title": "{scMultiSim}: simulation of single-cell multi-omics and spatial data guided by gene regulatory networks and cell--cell interactions",
+      "author": "Li, Hechen and Zhang, Ziqi and Squires, Michael and Chen, Xi and Zhang, Xiuwei",
+      "year": "2025",
+      "journal": "Nature Methods",
+      "volume": "22",
+      "pages": "982--993",
+      "doi": "10.1038/s41592-025-02651-0",
+      "url": "https://www.nature.com/articles/s41592-025-02651-0",
+      "secondary": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10543280/",
+      "access": "Final publisher metadata, Abstract and extended-data captions opened; main final article subscription-only. Earlier PMC preprint indexed, not substituted for final-version claims.",
+      "anchor": "Final Abstract; Extended Data Figs. 1–3",
+      "claim": "scMultiSim combines cell identity, regulatory networks, cell–cell interactions, chromatin accessibility and technical noise while generating linked modalities.",
+      "boundary": "Use final 2025 Nature Methods record, not the historical 2023 preprint. Multimodal or spatial capabilities are context, not demonstrated CellPFN capabilities.",
+      "role": "Core or grouped citation: current broad simulator capabilities.",
+      "decision": "include_or_group",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    },
+    {
+      "key": "crowell2023shaky",
+      "type": "article",
+      "title": "The shaky foundations of simulating single-cell {RNA} sequencing data",
+      "author": "Crowell, Helena L. and Morillo Leonardo, Sarah X. and Soneson, Charlotte and Robinson, Mark D.",
+      "year": "2023",
+      "journal": "Genome Biology",
+      "volume": "24",
+      "pages": "62",
+      "doi": "10.1186/s13059-023-02904-1",
+      "url": "https://link.springer.com/article/10.1186/s13059-023-02904-1",
+      "secondary": "https://pubmed.ncbi.nlm.nih.gov/36991470/",
+      "access": "Full updated publisher HTML opened; Abstract, Background and benchmark design inspected.",
+      "anchor": "Abstract Conclusions; Background paragraphs on de novo/reference-based trade-offs; Benchmark design",
+      "claim": "The evaluation of 16 simulators found artifacts in complex designs, optimistic integration performance and potentially unreliable clustering rankings; summary similarity alone was not an established guarantee of valid comparisons.",
+      "boundary": "Supports caution and downstream validation, not a claim that no simulator can be useful. Distinguish their benchmarking question from training a PFN prior. Publisher lists a July 2024 correction.",
+      "role": "Core: reason to test transfer rather than infer usefulness from fidelity.",
+      "decision": "include_or_group",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    },
+    {
+      "key": "duo2024systematic",
+      "type": "article",
+      "title": "Systematic evaluation with practical guidelines for single-cell and spatially resolved transcriptomics data simulation under multiple scenarios",
+      "author": "Duo, Hongrui and Li, Yinghong and Lan, Yang and Tao, Jingxin and Yang, Qingxia and Xiao, Yingxue and Sun, Jing and Li, Lei and Nie, Xiner and Zhang, Xiaoxi and Liang, Guizhao and Liu, Mingwei and Hao, Youjin and Li, Bo",
+      "year": "2024",
+      "journal": "Genome Biology",
+      "volume": "25",
+      "pages": "145",
+      "doi": "10.1186/s13059-024-03290-y",
+      "url": "https://link.springer.com/article/10.1186/s13059-024-03290-y",
+      "secondary": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11149245/",
+      "access": "Full PMC article opened; authors, Abstract, Background and Results framework inspected.",
+      "anchor": "Abstract Results/Conclusions; Results: overall benchmark framework; Fig. 1",
+      "claim": "A benchmark of 49 methods across 152 reference datasets assessed accuracy, functionality, scalability and usability, finding trade-offs and no best method on every criterion.",
+      "boundary": "Its method accuracy measures resemblance under the evaluated scenarios; these do not directly measure PFN training utility. Cite Duo, not the incorrect Liu-led attribution in the old strategy note.",
+      "role": "Core: multidimensional simulation evaluation.",
+      "decision": "include_or_group",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    },
+    {
+      "key": "wood2021fake",
+      "type": "inproceedings",
+      "title": "Fake It Till You Make It: Face Analysis in the Wild Using Synthetic Data Alone",
+      "author": "Wood, Erroll and Baltru{\\v{s}}aitis, Tadas and Hewitt, Charlie and Dziadzio, Sebastian and Cashman, Thomas J. and Shotton, Jamie",
+      "year": "2021",
+      "booktitle": "Proceedings of the IEEE/CVF International Conference on Computer Vision",
+      "pages": "3681--3691",
+      "url": "https://openaccess.thecvf.com/content/ICCV2021/html/Wood_Fake_It_Till_You_Make_It_Face_Analysis_in_the_ICCV_2021_paper.html",
+      "secondary": "https://openaccess.thecvf.com/content/ICCV2021/papers/Wood_Fake_It_Till_You_Make_It_Face_Analysis_in_the_ICCV_2021_paper.pdf",
+      "access": "Indexed official CVF article/BibTeX and accepted-paper PDF page-one extracts read; direct HTML open failed.",
+      "anchor": "Abstract; Introduction; official CVF BibTeX",
+      "claim": "Procedurally rendered faces train landmark and parsing models that transfer to real images, with label types that would be difficult or impossible to annotate manually.",
+      "boundary": "A precedent, not proof of CellPFN transfer. Use the six authors in the final CVF proceedings; the later arXiv record has a different author list. DOI not verified and omitted.",
+      "role": "Core short precedent for ground truth and synthetic-only learning.",
+      "decision": "include_or_group",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    },
+    {
+      "key": "tobin2017domain",
+      "type": "inproceedings",
+      "title": "Domain randomization for transferring deep neural networks from simulation to the real world",
+      "author": "Tobin, Josh and Fong, Rachel and Ray, Alex and Schneider, Jonas and Zaremba, Wojciech and Abbeel, Pieter",
+      "year": "2017",
+      "booktitle": "2017 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)",
+      "doi": "10.1109/IROS.2017.8202133",
+      "url": "https://doi.org/10.1109/IROS.2017.8202133",
+      "secondary": "https://arxiv.org/abs/1703.06907",
+      "access": "IEEE indexed Abstract/DOI verified; arXiv author Abstract page opened. Main paper not fully inspected.",
+      "anchor": "Abstract",
+      "claim": "Randomizing simulated visual properties enabled an object-localization model to transfer to real robotic settings despite non-photorealistic textures.",
+      "boundary": "Motivates domain randomization; does not guarantee that arbitrary or larger biological randomization improves transfer. Proceedings pages not independently verified and omitted.",
+      "role": "Core short precedent for task-relevant domain randomization.",
+      "decision": "include_or_group",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    },
+    {
+      "key": "dosovitskiy2015flownet",
+      "type": "inproceedings",
+      "title": "{FlowNet}: Learning Optical Flow With Convolutional Networks",
+      "author": "Dosovitskiy, Alexey and Fischer, Philipp and Ilg, Eddy and Hausser, Philip and Hazirbas, Caner and Golkov, Vladimir and van der Smagt, Patrick and Cremers, Daniel and Brox, Thomas",
+      "year": "2015",
+      "booktitle": "Proceedings of the IEEE International Conference on Computer Vision",
+      "pages": "2758--2766",
+      "url": "https://openaccess.thecvf.com/content_iccv_2015/html/Dosovitskiy_FlowNet_Learning_Optical_ICCV_2015_paper.html",
+      "secondary": "https://openaccess.thecvf.com/content_iccv_2015/papers/Dosovitskiy_FlowNet_Learning_Optical_ICCV_2015_paper.pdf",
+      "access": "Indexed official CVF article/BibTeX and accepted-paper PDF page-one extracts read; direct HTML open failed.",
+      "anchor": "Abstract; official CVF publication metadata",
+      "claim": "Flying Chairs supplied supervised optical-flow examples when available ground-truth data were insufficient; the trained networks generalized to other optical-flow datasets.",
+      "boundary": "Do not describe all evaluated datasets as real imagery: Sintel is synthetic, whereas KITTI supplies a real-world evaluation. DOI not verified and omitted.",
+      "role": "Reserve: one additional example if the simulator motivation needs it.",
+      "decision": "verified_reserve",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    },
+    {
+      "key": "marouf2020cscgan",
+      "type": "article",
+      "title": "Realistic in silico generation and augmentation of single-cell {RNA}-seq data using generative adversarial networks",
+      "author": "Marouf, Matteo and Machart, Pierre and Bansal, Vikas and Kilian, Christoph and Magruder, Daniel S. and Krebs, Christian F. and Bonn, Stefan",
+      "year": "2020",
+      "journal": "Nature Communications",
+      "volume": "11",
+      "pages": "166",
+      "doi": "10.1038/s41467-019-14018-z",
+      "url": "https://www.nature.com/articles/s41467-019-14018-z",
+      "access": "Full publisher HTML opened; Abstract, Introduction, conditional generation and Discussion inspected.",
+      "anchor": "Abstract; Results: Conditional generation of specific cell types; Discussion",
+      "claim": "cscGAN learns from measured multi-cell-type data to generate specified populations; augmentation improves analyses of sparse cell populations and classifier robustness.",
+      "boundary": "This is learned generation and augmentation from real observations, distinct from procedural-only parameter training. Do not imply prior single-cell simulation lacked downstream classification utility.",
+      "role": "Core: distinguish augmentation from the PFN-prior route.",
+      "decision": "include_or_group",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    },
+    {
+      "key": "luo2024scdiffusion",
+      "type": "article",
+      "title": "{scDiffusion}: conditional generation of high-quality single-cell data using diffusion model",
+      "author": "Luo, Erpai and Hao, Minsheng and Wei, Lei and Zhang, Xuegong",
+      "year": "2024",
+      "journal": "Bioinformatics",
+      "volume": "40",
+      "number": "9",
+      "pages": "btae518",
+      "doi": "10.1093/bioinformatics/btae518",
+      "url": "https://academic.oup.com/bioinformatics/article/40/9/btae518/7738782",
+      "secondary": "https://academic.oup.com/bioinformatics/advance-article-pdf/doi/10.1093/bioinformatics/btae518/58889831/btae518.pdf",
+      "access": "Indexed publisher full-text Methods extracts and PDF front matter read; direct HTML open failed.",
+      "anchor": "Abstract; Introduction final paragraphs; Section 2 Materials and methods / Fig. 1",
+      "claim": "scDiffusion uses a pretrained SCimilarity autoencoder, diffusion denoising and conditional guidance to generate expression under specified or combined conditions.",
+      "boundary": "Generation learns from real cell data and a pretrained foundation model. Cite for controlled neural generation, not synthetic-only pretraining without real-data-derived weights.",
+      "role": "Core or grouped citation: current learned synthetic generation.",
+      "decision": "include_or_group",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    },
+    {
+      "key": "squair2021false",
+      "type": "article",
+      "title": "Confronting false discoveries in single-cell differential expression",
+      "author": "Squair, Jordan W. and Gautier, Matthieu and Kathe, Claudia and Anderson, Mark A. and James, Nicholas D. and Hutson, Thomas H. and Hudelle, R{\\'e}mi and Qaiser, Taha and Matson, Kaya J. E. and Barraud, Quentin and Levine, Ariel J. and La Manno, Gioele and Skinnider, Michael A. and Courtine, Gr{\\'e}goire",
+      "year": "2021",
+      "journal": "Nature Communications",
+      "volume": "12",
+      "pages": "5692",
+      "doi": "10.1038/s41467-021-25960-2",
+      "url": "https://www.nature.com/articles/s41467-021-25960-2",
+      "secondary": "https://pubmed.ncbi.nlm.nih.gov/34584091/",
+      "access": "Indexed publisher Abstract/Results/Discussion extracts and PubMed complete authors verified; direct publisher open failed.",
+      "anchor": "Abstract; Results: False discoveries in single-cell DE; Discussion",
+      "claim": "Between-biological-replicate variability matters for valid differential-expression inference, and treating cell observations as substitutes for replicate-aware inference can create false discoveries.",
+      "boundary": "This is evidence about differential expression, not a direct experiment on CellPFN or atlas-pretraining diversity. Use narrowly for donor-aware motivation or later Methods.",
+      "role": "Reserve: supports donor structure and independent biological units.",
+      "decision": "verified_reserve",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    },
+    {
+      "key": "azodi2021splatpop",
+      "type": "article",
+      "title": "{splatPop}: simulating population scale single-cell {RNA} sequencing data",
+      "author": "Azodi, Christina B. and Zappia, Luke and Oshlack, Alicia and McCarthy, Davis J.",
+      "year": "2021",
+      "journal": "Genome Biology",
+      "volume": "22",
+      "pages": "341",
+      "doi": "10.1186/s13059-021-02546-1",
+      "url": "https://link.springer.com/article/10.1186/s13059-021-02546-1",
+      "secondary": "https://pubmed.ncbi.nlm.nih.gov/34911537/",
+      "access": "Full publisher HTML opened; Abstract and Background inspected; PubMed metadata cross-check.",
+      "anchor": "Abstract; Background; Results: model overview",
+      "claim": "splatPop already models population-scale expression with known eQTLs, batch/cell-group effects and conditional differences between individuals or cohorts.",
+      "boundary": "Donor/cohort-aware simulation is not novel by itself. CellPFN’s contribution should be the sampled task prior and its measured value for learning inference.",
+      "role": "Core or reserve: prevents overstating the novelty of donor-aware simulation.",
+      "decision": "include_or_group",
+      "verification": "Bibliographic identity and specified narrow claim checked against the cited primary source; access limitations retained."
+    }
+  ],
+  "validation": {
+    "tool": "citation-management/scripts/validate_citations.py --verbose",
+    "entries": 16,
+    "errors": 0,
+    "warnings": [
+      {
+        "key": "tobin2017domain",
+        "message": "Missing recommended pages field; retained as explicitly unverified against original source, rather than completing from third-party citations."
+      }
+    ],
+    "duplicates": 0,
+    "local_consistency": "JSON parsed; 16 unique BibTeX keys match source records; 14 DOI fields match source-verified identifiers; all claims carry access levels and anchors."
+  }
+}
