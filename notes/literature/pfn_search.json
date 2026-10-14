@@ -1,0 +1,491 @@
+{
+  "review_date": "2026-10-14",
+  "review_type": "documented narrative review",
+  "scope": "PFN foundations, exact tabular comparators, cellular PFN precedents, empirical single-cell foundation models and donor-diversity motivation",
+  "inclusion": "Primary methods papers, actual model-release documentation, and directly relevant published evidence; publication status checked to review date.",
+  "exclusion": "News, Reddit, aggregator summaries and secondary reviews are discovery leads only; duplicates superseded by published records; no relevance ranking by citation count.",
+  "queries": [
+    {
+      "date": "2026-10-14",
+      "query": "Müller Hollmann Arango Grabocka Hutter Transformers Can Do Bayesian Inference ICLR 2022",
+      "purpose": "PFN theory and original conference identity",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "Accurate predictions on small data with a tabular foundation model Nature 2025 Hollmann",
+      "purpose": "Synthetic-to-real tabular precedent",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "TabICLv2 2602.11139 35 million",
+      "purpose": "Actual comparator and reported exposure",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "Kumo 2026 tabular foundation model pretrained 2026 TabPFN 3.5",
+      "purpose": "Current release identities",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "MapPFN single cell prior data fitted network",
+      "purpose": "Closest cellular PFN precedent",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "PerturbPFN single cell",
+      "purpose": "Closest chemical-response PFN precedent",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "single cell foundation models simple baselines zero shot evaluation Nature Methods 2025",
+      "purpose": "Evaluation context; handed to parent reviewer",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "TranscriptFormer 2025 2026 Nature single cell",
+      "purpose": "Recent empirical foundation model",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "site.arxiv.org \"MapPFN\"",
+      "purpose": "Primary source resolution",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "site.nature.com \"TranscriptFormer\"",
+      "purpose": "Published version search",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "site.priorlabs.ai \"TabPFN-3.5\"",
+      "purpose": "Official report and release",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "site.arxiv.org \"Transformers Can Do Bayesian Inference\"",
+      "purpose": "Primary source resolution",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "\"Transfer learning enables predictions in network biology\" Geneformer Nature 2023",
+      "purpose": "Empirical pretraining precedent",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "\"scGPT\" \"s41592\" 2024",
+      "purpose": "Empirical pretraining precedent",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "\"Large-scale foundation model on single-cell transcriptomics\" scFoundation",
+      "purpose": "Empirical pretraining precedent",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "\"Universal Cell Embeddings\" \"Science\" 2024 2025",
+      "purpose": "Publication status search",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "site.nature.com/articles \"scGPT: toward building\"",
+      "purpose": "Primary paper metadata",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "\"Universal Cell Embeddings\" \"Rosen\" \"2024\"",
+      "purpose": "Identity and newer published version",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "\"TranscriptFormer\" \"Pearce\" \"Science\"",
+      "purpose": "Published version and PubMed",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "\"Universal cell embedding provides a foundation model for cell biology\" 2026 Nature",
+      "purpose": "Version-of-record replacement",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "\"TabICLv2\" \"35M\"",
+      "purpose": "Exact exposure location",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "site.proceedings.mlr.press \"TabICL: A Tabular Foundation Model\"",
+      "purpose": "Conference source",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "site.openreview.net \"TabPFN: A Transformer That Solves\"",
+      "purpose": "Conference source",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "\"TabICL\" \"Qu\" \"proceedings.mlr.press/v267\"",
+      "purpose": "Resolve correct PMLR slug",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "\"MapPFN\" \"ICML\" 2026",
+      "purpose": "Check subsequent conference publication",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "\"TranscriptFormer\" \"10.1126/science.aec8514\" \"393\"",
+      "purpose": "Cross-check bibliographic issue information",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "site.openreview.net \"Transformers Can Do Bayesian Inference\" \"KSugKcbNf9\"",
+      "purpose": "Original venue verification",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "site.openreview.net \"MapPFN: Learning Causal Perturbation Maps in Context\"",
+      "purpose": "Workshop status verification",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "site.pubmed.ncbi.nlm.nih.gov \"Universal cell embedding provides\"",
+      "purpose": "Independent metadata check",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "site.nature.com \"scGPT: toward building\" \"Maan\"",
+      "purpose": "Author list cross-check",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "site.pmc.ncbi.nlm.nih.gov \"scGPT: toward building a foundation model\"",
+      "purpose": "Lawful full-text availability",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "site.pmc.ncbi.nlm.nih.gov \"Transfer learning enables predictions in network biology\"",
+      "purpose": "Lawful author-manuscript availability",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "site.pmc.ncbi.nlm.nih.gov \"Large-scale foundation model on single-cell transcriptomics\"",
+      "purpose": "Lawful full-text availability",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "\"scLong: a billion-parameter foundation model\" nature 2026",
+      "purpose": "Transcriptome-scale precedent found while following related papers",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "\"scTab: scaling cross-tissue single-cell annotation models\" nature 2024",
+      "purpose": "Legacy motivation and donor-diversity evidence",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "\"scGPT\" \"gene token\" \"embedding\" site.nature.com/articles/s41592-024-02201-0",
+      "purpose": "Check accessible architecture support",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "\"scLong: a billion-parameter\" \"Authors\"",
+      "purpose": "Resolve published versus preprint author list",
+      "route": "public web search with primary-source follow-up"
+    },
+    {
+      "date": "2026-10-14",
+      "query": "site.arxiv.org/abs/2207.01848 \"Hollmann\"",
+      "purpose": "Original TabPFN author metadata",
+      "route": "public web search with primary-source follow-up"
+    }
+  ],
+  "included_records": [
+    {
+      "key": "muller2022pfn",
+      "status": "published_conference",
+      "sources": [
+        "https://arxiv.org/abs/2112.10510",
+        "https://arxiv.org/html/2112.10510v7",
+        "https://openreview.net/forum?id=KSugKcbNf9"
+      ],
+      "access_level": "full_text_arxiv",
+      "inspected_anchor": "Sections 2-3; equations 1-2; Algorithm 1"
+    },
+    {
+      "key": "hollmann2023tabpfn",
+      "status": "published_conference",
+      "sources": [
+        "https://arxiv.org/abs/2207.01848",
+        "https://openreview.net/forum?id=cp5PvcI6w8_"
+      ],
+      "access_level": "abstract_metadata",
+      "inspected_anchor": "Abstract; author list; original conference identity"
+    },
+    {
+      "key": "hollmann2025tabpfn",
+      "status": "published_journal",
+      "sources": [
+        "https://www.nature.com/articles/s41586-024-08328-6"
+      ],
+      "access_level": "full_text_publisher",
+      "inspected_anchor": "Principled in-context learning; Fig. 1; citation metadata"
+    },
+    {
+      "key": "qu2025tabicl",
+      "status": "published_conference",
+      "sources": [
+        "https://proceedings.mlr.press/v267/qu25d.html",
+        "https://github.com/soda-inria/tabicl/blob/main/README.md"
+      ],
+      "access_level": "proceedings_abstract_metadata",
+      "inspected_anchor": "Abstract; publisher BibTeX"
+    },
+    {
+      "key": "qu2026tabiclv2",
+      "status": "published_conference",
+      "sources": [
+        "https://proceedings.mlr.press/v306/qu26a.html",
+        "https://arxiv.org/abs/2602.11139",
+        "https://arxiv.org/html/2602.11139v1"
+      ],
+      "access_level": "full_text_arxiv_proceedings_metadata",
+      "inspected_anchor": "Section 4 Three pretraining stages; Appendix B.1; Section 7"
+    },
+    {
+      "key": "nvidia2026kumo",
+      "status": "official_model_card",
+      "sources": [
+        "https://build.nvidia.com/nvidia/kumo-tabular/modelcard",
+        "https://huggingface.co/nvidia/Kumo-Tabular"
+      ],
+      "access_level": "full_model_card",
+      "inspected_anchor": "Model Overview; Release Date; Training Dataset"
+    },
+    {
+      "key": "jaeger2026tabpfn35",
+      "status": "preprint",
+      "sources": [
+        "https://arxiv.org/abs/2609.17895",
+        "https://arxiv.org/html/2609.17895v2"
+      ],
+      "access_level": "full_text_arxiv",
+      "inspected_anchor": "Sections 3.1-3.3; complete author list from abstract page"
+    },
+    {
+      "key": "priorlabs2026tabpfn35card",
+      "status": "official_model_card",
+      "sources": [
+        "https://huggingface.co/Prior-Labs/tabpfn_3_5"
+      ],
+      "access_level": "full_model_card",
+      "inspected_anchor": "Checkpoints; Training Data and Priors; Licensing"
+    },
+    {
+      "key": "sextro2026mappfn",
+      "status": "preprint_and_workshop",
+      "sources": [
+        "https://arxiv.org/abs/2601.21092",
+        "https://arxiv.org/html/2601.21092v1",
+        "https://openreview.net/pdf?id=jbllvmVD0W"
+      ],
+      "access_level": "full_text_arxiv_workshop_front_matter",
+      "inspected_anchor": "Section 4; Appendix B.2 and B.3; Gen2 workshop front matter"
+    },
+    {
+      "key": "gao2026perturbpfn",
+      "status": "preprint_and_workshop",
+      "sources": [
+        "https://arxiv.org/abs/2607.23447",
+        "https://arxiv.org/html/2607.23447v1"
+      ],
+      "access_level": "full_text_arxiv",
+      "inspected_anchor": "Abstract; Section 5; arXiv comments identify FMSD workshop acceptance"
+    },
+    {
+      "key": "theodoris2023geneformer",
+      "status": "published_journal",
+      "sources": [
+        "https://www.nature.com/articles/s41586-023-06139-9",
+        "https://pubmed.ncbi.nlm.nih.gov/37258680/",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC10949956/"
+      ],
+      "access_level": "publisher_abstract_and_indexed_author_manuscript_passages",
+      "inspected_anchor": "Abstract; full author list; network dynamics passages"
+    },
+    {
+      "key": "cui2024scgpt",
+      "status": "published_journal",
+      "sources": [
+        "https://www.nature.com/articles/s41592-024-02201-0"
+      ],
+      "access_level": "publisher_abstract_metadata_figures",
+      "inspected_anchor": "Abstract; author list; citation metadata"
+    },
+    {
+      "key": "hao2024scfoundation",
+      "status": "published_journal",
+      "sources": [
+        "https://www.nature.com/articles/s41592-024-02305-7",
+        "https://pubmed.ncbi.nlm.nih.gov/38844628/"
+      ],
+      "access_level": "publisher_abstract_data_availability_pubmed_metadata",
+      "inspected_anchor": "Abstract; Data availability; full authors"
+    },
+    {
+      "key": "rosen2026uce",
+      "status": "published_journal",
+      "sources": [
+        "https://www.nature.com/articles/s41586-026-10689-z",
+        "https://pubmed.ncbi.nlm.nih.gov/42420460/"
+      ],
+      "access_level": "publisher_indexed_passages_pubmed_abstract_metadata_figure_captions",
+      "inspected_anchor": "Abstract; Main indexed text; PubMed Fig.1 and Fig.2"
+    },
+    {
+      "key": "pearce2026transcriptformer",
+      "status": "published_journal",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/42096520/",
+        "https://www.science.org/doi/10.1126/science.aec8514"
+      ],
+      "access_level": "pubmed_abstract_metadata",
+      "inspected_anchor": "Abstract; full authors; volume 393 issue 6806 article aec8514"
+    },
+    {
+      "key": "fischer2024sctab",
+      "status": "published_journal",
+      "sources": [
+        "https://www.nature.com/articles/s41467-024-51059-5",
+        "https://www.nature.com/articles/s41467-024-51059-5.pdf"
+      ],
+      "access_level": "publisher_indexed_full_text_passages_pdf_metadata",
+      "inspected_anchor": "Cross-tissue cell type classification scales with dataset and model size; Fig.2"
+    },
+    {
+      "key": "bai2026sclong",
+      "status": "published_journal",
+      "sources": [
+        "https://www.nature.com/articles/s41467-026-69102-y",
+        "https://pubmed.ncbi.nlm.nih.gov/41639087/"
+      ],
+      "access_level": "full_text_publisher_pubmed_metadata",
+      "inspected_anchor": "scLong overview; Fig.1; published 16-author list"
+    }
+  ],
+  "local_scan": {
+    "paths": [
+      "CellPFN_model_methods_revision(2)/old_reference_texts/cell_foundation/refs.bib",
+      "CellPFN_model_methods_revision(2)/old_reference_texts/hashprompt/refs.bib",
+      "paper_export_20261011/FIGURES.md"
+    ],
+    "findings": [
+      "UCE and TranscriptFormer legacy references are preprints now superseded by published versions.",
+      "smith2024benchmark is suspicious and excluded pending verification.",
+      "Do not confuse Kumo-Tabular 1.0 with KumoRFM relational models."
+    ]
+  },
+  "access_failures": [
+    {
+      "route": "scholarly MCP",
+      "reason": "Not advertised in available tool inventory",
+      "fallback": "Primary web sources"
+    },
+    {
+      "url": "https://api.crossref.org/works/10.1038/s41586-024-08328-6",
+      "reason": "Direct urllib request failed: temporary failure in name resolution",
+      "fallback": "Publisher metadata and PubMed"
+    },
+    {
+      "url": "https://openreview.net/forum?id=KSugKcbNf9",
+      "reason": "Browser verification challenge",
+      "fallback": "arXiv author manuscript explicitly states ICLR2022"
+    },
+    {
+      "url": "https://openreview.net/pdf?id=cp5PvcI6w8_",
+      "reason": "Browser verification challenge",
+      "fallback": "arXiv primary metadata and conference citations"
+    },
+    {
+      "url": "https://www.science.org/doi/10.1126/science.aec8514",
+      "reason": "Internal error from web open",
+      "fallback": "PubMed primary article metadata and abstract"
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10949956/",
+      "reason": "Direct open returned browser challenge",
+      "fallback": "Indexed PMC author-manuscript passages and publisher abstract"
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13441871/",
+      "reason": "Direct open returned browser challenge",
+      "fallback": "PubMed abstract and figure captions plus publisher-indexed text"
+    },
+    {
+      "url": "https://proceedings.mlr.press/v267/qu25a.html",
+      "reason": "Wrong candidate slug; resolves to unrelated RISE paper",
+      "fallback": "Resolved actual TabICL slug qu25d.html; excluded wrong page"
+    }
+  ],
+  "deduplication": [
+    {
+      "replace": "UCE bioRxiv 10.1101/2023.11.28.568918",
+      "with": "10.1038/s41586-026-10689-z"
+    },
+    {
+      "replace": "TranscriptFormer bioRxiv 10.1101/2025.04.25.650731",
+      "with": "10.1126/science.aec8514"
+    },
+    {
+      "replace": "TabICLv2 preprint-only citation",
+      "with": "ICML2026 PMLR306:102477-102555; preserve arXiv as full-text support"
+    },
+    {
+      "replace": "scLong preprint author list (17 names)",
+      "with": "Published author list (16 names)"
+    }
+  ],
+  "unresolved": [
+    "TranscriptFormer day/month conflicts between Nature Index and PubMed; use year/volume/article number in bibliography.",
+    "Comparable total TabPFN-3.5 pretraining-task count not verified.",
+    "No exhaustive independent citation-network or full-text audit of every sentence in every included article was performed."
+  ],
+  "output_files": [
+    "notes/literature/pfn_and_cells.md",
+    "notes/literature/pfn_references.bib"
+  ]
+}

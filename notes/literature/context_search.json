@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-14",
+  "scope": "Targeted narrative literature and original dataset/attribution sources",
+  "discovery_queries": [
+    "\"Evaluating the role of pretraining dataset size and diversity\" 03120",
+    "\"ZEBRA: a hierarchically integrated\" gkad990 authors",
+    "\"Religious Orders Study and Rush Memory and Aging Project\" 2018 Bennett DOI",
+    "\"Integrated analysis of multimodal single-cell data\" \"Yuhan Hao\" \"Mauck\" \"3573\"",
+    "\"Integrated analysis of multimodal single-cell data\" pdf satijalab",
+    "\"ZEBRA\" \"gkad990\" \"Matthias\"",
+    "\"Parameter-free representations outperform single-cell foundation models\"",
+    "\"Zero-shot evaluation reveals limitations of single-cell foundation models\"",
+    "\"Axiomatic Attribution for Deep Networks\"",
+    "\"Deep Sets\" Zaheer 2017 proceedings",
+    "\"Deep-learning-based gene perturbation effect prediction does not yet outperform simple linear baselines\""
+  ],
+  "queries_note": "Distinct productive query strings recorded; repeated opens and unsuccessful exact-URL-site queries are summarized in context.md. This is not a systematic-review search ledger.",
+  "primary_sources": [
+    "https://www.nature.com/articles/s41592-026-03120-y",
+    "https://link.springer.com/article/10.1186/s13059-025-03574-x",
+    "https://arxiv.org/abs/2602.16696",
+    "https://pubmed.ncbi.nlm.nih.gov/34062119/",
+    "https://pubmed.ncbi.nlm.nih.gov/37941147/",
+    "https://pubmed.ncbi.nlm.nih.gov/29865057/",
+    "https://proceedings.mlr.press/v70/sundararajan17a.html",
+    "https://proceedings.neurips.cc/paper_files/paper/2017/hash/f22e4747da1aa27e363d86d40ff442fe-Abstract.html"
+  ],
+  "claim_support": "context.md",
+  "metadata": "context_references.bib",
+  "access_limits": "Source-specific in context.md; primary indexed snippets used where direct retrieval was blocked."
+}

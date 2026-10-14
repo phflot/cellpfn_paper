@@ -1,0 +1,50 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{lmodern,microtype,setspace}
+\usepackage{amsmath,amssymb,xcolor}
+\usepackage[numbers,super,sort&compress]{natbib}
+\usepackage[hidelinks]{hyperref}
+\usepackage{lineno}
+\onehalfspacing
+\setlength{\parindent}{1.4em}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{2em}
+% Unresolved narrative remains visible in every build, including the abstract.
+% The ID is apparatus; the second argument is manuscript prose and is counted.
+\newcommand{\unresolvedclaim}[2]{\textcolor{red!80!black}{\textbf{#2}}\textsuperscript{\textcolor{red!80!black}{[#1]}}}
+\newif\ifdraftnotes
+\draftnotestrue
+\newcommand{\TODO}[1]{\ifdraftnotes\textcolor{red!80!black}{[TODO: #1]}\fi}
+\newcommand{\note}[1]{\ifdraftnotes\textcolor{blue!70!black}{[NOTE: #1]}\fi}
+\newcommand{\directive}[1]{\ifdraftnotes\textcolor{blue!70!black}{[REVISE: #1]}\fi}
+\newcommand{\superseded}[1]{\ifdraftnotes\textcolor{gray}{#1}\fi}
+\title{A cellular prior enables efficient and transferable single-cell inference with CellPFN}
+\author{Philipp Flotho\textsuperscript{1,2}, Matthias Flotho\textsuperscript{1,2},\\
+Pirya Rani\textsuperscript{1,2}, Andreas Keller\textsuperscript{1,2}}
+\date{}
+\begin{document}
+\maketitle
+\begin{center}\small
+\textsuperscript{1}Chair for Clinical Bioinformatics, Saarland University, Saarbr\"ucken, Germany\\
+\textsuperscript{2}Helmholtz Institute for Pharmaceutical Research Saarland (HIPS), Helmholtz Centre for Infection Research, Saarbr\"ucken, Germany
+\end{center}
+\begin{center}\small
+Wave 1 working draft: abstract, introduction and Results.\par
+\textcolor{red!80!black}{\textbf{Bold red prose is provisional or aspirational, not an established finding.}}\par
+Claim IDs refer to \texttt{notes/open\_claims.md}. Methods and figures follow in later waves.
+\end{center}
+\begin{abstract}
+\input{sections/abstract}
+\end{abstract}
+\linenumbers
+% Nature Biotechnology: introduction has no heading.
+\input{sections/introduction}
+\section*{Results}
+\input{sections/results}
+\clearpage
+\nolinenumbers
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+\end{document}
