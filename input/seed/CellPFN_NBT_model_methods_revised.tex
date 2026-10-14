@@ -1,0 +1,785 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{lineno}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\doublespacing
+\linenumbers
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{0pt}
+
+\newcommand{\resultplaceholder}[1]{\textcolor{red!75!black}{[RESULT: #1]}}
+\newcommand{\methodplaceholder}[1]{\textcolor{blue!70!black}{[METHOD: #1]}}
+\newcommand{\dataplaceholder}[1]{\textcolor{purple!70!black}{[DATA: #1]}}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\title{CellPFN: Gene-Anonymous Prior-Data Fitted Networks for Synthetic-to-Real Classification in Single-Cell Transcriptomics}
+
+\author{
+Philipp Flotho\textsuperscript{1,2},
+Matthias Flotho\textsuperscript{1,2},
+Pirya Rani\textsuperscript{1,2},
+Andreas Keller\textsuperscript{1,2}
+}
+
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\small
+\textsuperscript{1}Chair for Clinical Bioinformatics, Saarland University, Saarbr\"ucken, Germany\\
+\textsuperscript{2}Helmholtz Institute for Pharmaceutical Research Saarland (HIPS), Helmholtz Centre for Infection Research, Saarbr\"ucken, Germany\\
+Correspondence: \texttt{[corresponding author and email]}
+\end{center}
+
+\begin{abstract}
+Single-cell foundation models learn biological representations from millions of measured profiles, yet carefully normalized expression and linear classifiers often match them on downstream benchmarks. We asked whether learning is instead most useful at the support-conditioned inference layer. CellPFN is a prior-data fitted network meta-trained exclusively on procedurally simulated classification tasks. Gene identity is resampled between tasks, preventing marker memorization, whereas support and query cells retain task-local gene correspondence. CellPFN combines learned class summaries and same-gene relational features with a bounded correction to an assay-appropriate analytic expert. Without real-cell pretraining or target-domain parameter updates, CellPFN transfers to ROSMAP and cross-study cortex tasks, with the largest benefit when labelled support is scarce. Empirical Bayes remains competitive for count-faithful data, and additional task exposure does not improve every regime. These results place complexity at a specific abstraction layer: learning how to infer from sparse labelled context rather than learning a universal biological embedding.
+\end{abstract}
+
+
+% Nature Biotechnology Article format: the Introduction has no heading.
+Large single-cell foundation models seek to compress expression profiles, gene relationships and cellular context into representations that can be reused across tissues, species and downstream tasks. Geneformer, scGPT, scFoundation, UCE, SATURN, TranscriptFormer and related models differ in objective and biological prior, but share a central premise: sufficiently broad real-cell pretraining should produce a generally useful biological representation\cite{theodoris2023geneformer,cui2024scgpt,hao2024scfoundation,rosen2026uce,rosen2024saturn,pearce2025transcriptformer}. This strategy has yielded important capabilities, including cross-species transfer, perturbation modelling and network prediction. Yet increasingly careful evaluations show that atlas-scale pretraining does not guarantee downstream advantage. Normalized expression, highly variable genes, principal components and regularized linear classifiers can match or exceed much larger pretrained models on several annotation, disease and cross-species benchmarks\cite{souza2026parameterfree,boiarsky2024deeper,kedzierska2025zeroshot,ahlmann2025linear,denadel2026scaling,liu2026context}.
+
+The observation that low-complexity representations are competitive should not be read as a claim that cellular biology is linear. Cell identity and state arise from nonlinear regulatory, epigenetic, environmental and developmental processes, whereas a downstream benchmark observes one finite and noisy projection of those processes. Appropriate normalization and denoising can make a particular label linearly accessible without making the underlying biology linear. The more consequential implication is methodological: complex models should be assigned to the layer at which uncertainty remains. If normalized expression already exposes much of the discriminative geometry, a universal embedding may be unnecessary for that task; learning may instead be valuable in deciding how evidence from a small, study-specific labelled set should be combined.
+
+We distinguish three layers. The first is \emph{biological semantics}: stable gene identity, pathways, orthology, regulatory networks and cell ontologies. The second is \emph{observation}: sequencing depth, overdispersion, detection, donor and study structure, and assay-specific preprocessing. The third is \emph{inference}: given a labelled support set and unlabelled query cells, which support observations are reliable, how should heterogeneous classes be summarized, and when should a statistical estimate be corrected? Existing single-cell foundation models often learn across all three layers. Parameter-free and low-complexity pipelines clarify what can already be solved at the first two. Here we isolate the third. Our model receives labelled support cells at inference but performs no target-domain parameter optimization. The question is whether the support-conditioned inference rule itself can be learned from synthetic tasks.
+
+This setting connects few-shot metric learning, permutation-invariant set models and prior-data fitted networks. Prototypical and Matching Networks classify queries from labelled support examples, while Deep Sets, Set Transformer and attentive neural processes provide architectures for unordered context sets\cite{snell2017prototypical,vinyals2016matching,zaheer2017deepsets,lee2019settransformer,kim2019anp}. MARS demonstrated that meta-learning can discover and transfer cellular identities across heterogeneous single-cell experiments\cite{brbic2020mars}. Prior-data fitted networks (PFNs) take a complementary approach: they are trained over complete prediction problems sampled from a prior and then approximate Bayesian or task-adaptive inference for a new support/query problem in one forward pass\cite{muller2022pfn,hollmann2025tabpfn}. TabPFN and TabICL show that synthetic task priors can train general tabular in-context learners, and MapPFN applies synthetic-prior fitting to single-cell perturbation maps\cite{hollmann2025tabpfn,qu2026tabiclv2,sextro2026mappfn}. None of these methods directly addresses tens of thousands of sparse count features under the symmetry that gene identity is unavailable across tasks.
+
+Single-cell simulation provides a way to define such a prior. Statistical simulators including Splatter, SymSim and scDesign2/3 reproduce different aspects of marginal counts, dependence and experimental design; mechanistic simulators such as SERGIO generate expression from regulatory dynamics; generative models support augmentation and conditional synthesis\cite{zappia2017splatter,zhang2019symsim,dibaeinia2020sergio,sun2021scdesign2,song2024scdesign3,marouf2020cscgan,luo2024scdiffusion}. Their fidelity is multidimensional, and no single realism score predicts usefulness for every downstream analysis\cite{crowell2023shaky,duo2024simulation}. We use simulation differently. Rather than releasing one synthetic atlas, we sample a stream of complete classification problems. The simulator is a domain-randomized prior over biological signals, support regimes and observation processes; transfer to real tasks is the test of whether this prior teaches a useful algorithm\cite{tobin2017domainrandomization,wood2021fake,flotho2025tfake}.
+
+We introduce CellPFN, a cellular PFN trained exclusively on such procedural tasks. Within a task, labelled support and query cells share a gene coordinate; between tasks, labels and genes are independently permuted. Thus the model cannot memorize that one parameter corresponds to a canonical marker, but it can compare the same anonymous measurement in support and query. CellPFN first computes an assay-appropriate analytic prediction. For integer counts this is a shrinkage negative-binomial empirical-Bayes classifier; for processed expression it is a raw/Pearson prototype. The neural branch forms several support-derived class summaries, computes explicit same-gene query--summary relations, reduces genes with permutation-invariant statistics and integrates the resulting evidence through latent program tokens. Its output is a zero-initialized, bounded correction to the analytic expert.
+
+This design makes the learned contribution separately measurable. Assuming confirmation of the present development results, synthetic-only CellPFN transfers to ROSMAP and cross-study cortex classification without real-cell pretraining or target-domain gradient updates, with the clearest advantage when labelled support is scarce. The same experiments also define its limits: empirical Bayes remains a strong default on count-faithful data, support-trained linear and latent models become competitive when labels are abundant, and additional synthetic exposure or simple curriculum changes do not improve every target. The resulting contribution is neither a claim that biology is linear nor a claim that a larger embedding is always preferable. It is an operational answer to where learning can still help: at the support-conditioned inference layer, after transparent statistics have been given every reasonable advantage.
+
+
+\section*{Results}
+
+\subsection*{A procedural prior generates gene-anonymous cellular classification tasks}
+
+We represented each task by a labelled support set $S=\{(x_i,y_i)\}_{i=1}^{n_s}$ and unlabelled query matrix $X_Q$, with $x\in\mathbb{R}_{\geq0}^{G}$ and task-local classes. Support and query columns were jointly permuted within a task, whereas the permutation was redrawn between tasks. The contract therefore preserves the correspondence needed to compare a query gene with the same support gene but prevents any learned parameter from acquiring persistent marker identity (Fig.~1a).
+
+The frozen training prior sampled three principal biological task families: distributed mean programs, rare-marker/multimodal classes and signed-covariance classes. Optional trajectory and class-by-domain effects, continuous cell-state variation, donor/study/batch shifts, hierarchical library size and gene-wise gamma--Poisson overdispersion broadened the observation conditions. The claim-bearing stream contained 100,000 non-repeated tasks: 60,000 mean-program, 30,000 rare-marker/multimodal and 10,000 signed-covariance tasks; 80,032/11,102/8,866 tasks contained 2,048/4,096/8,192 genes; support budgets were balanced across one, ten and 100 labelled cells per class; and the number of classes ranged from two to 24. Support and query groups were disjoint by donor and study in the delivered task contract (Fig.~1b and Extended Data Fig.~1).
+
+Tasks were generated online from deterministic but non-repeating roots. A frozen task selector assigned positive gradient weight to 93,252 tasks and zero weight to 6,748 tasks classified as analytically trivial or perfect technical shortcuts; all scheduled tasks remained in exposure accounting. The resulting stream comprised 45.1 million cells for each 100K training arm. Construct-validity analyses quantified library size, mean--variance structure, zero fraction, class separability, nuisance predictability and task difficulty, but real transfer rather than a scalar realism score governed the scientific interpretation (Fig.~2).
+
+\subsection*{CellPFN learns task-local gene relations and support structure}
+
+CellPFN begins with an assay-eligible analytic expert derived only from the labelled support set. For integer counts, the expert estimates class-specific compositions with global empirical-Bayes shrinkage and scores queries with a common-dispersion negative-binomial likelihood. For processed noninteger expression, the expert averages raw log-composition and Pearson-standardized prototype logits. These logits remain fixed while the neural branch learns a bounded correction.
+
+The winning aligned class-inducing architecture contains 11,915,746 trainable parameters. It embeds each support cell through ten count-aware gene features and symmetric reductions, then uses four learned summary queries per class to form support-weighted class profiles in the original task-local gene space. For each query and class summary, a shared relation network compares the same gene through expression, detection, Pearson-standardized expression, composition and support/global statistics. Gene relations are aggregated through mean, root-mean-square, maximum and log-sum-exp operations, projected into eight latent program tokens and contextualized by a two-layer Transformer. A support- and base-confidence gate modulates a zero-initialized residual bounded to $\pm2$ logits (Fig.~1c).
+
+The final analysis will report same-gene derangement, deterministic one-, two- and four-summary replacements, residual-only predictions and summary diversity. These controls are required to distinguish the complete aligned hybrid from generic logit smoothing and to test whether multiple learned class modes contribute beyond the episode-local relation operator (Fig.~3). \resultplaceholder{Insert final derangement, summary and residual controls.}
+
+\subsection*{Synthetic-only meta-pretraining transfers to real classification tasks}
+
+We evaluated frozen CellPFN checkpoints on count-faithful ROSMAP and processed cross-study cortex (Zebra) tasks. No real cells were used for parameter training. Real support and query groups were frozen before evaluation, support sets were nested at one, ten and 100 labelled cells per class, and query cells were scored independently. ROSMAP was compared with exact empirical Bayes; the negative-binomial expert was ineligible for processed Zebra expression, for which raw/Pearson prototypes were the same-contract base. Support-only logistic regression and target-support-pool scVI/scANVI workflows were reported as information-advantaged practical references rather than equivalent baselines (Fig.~4).
+
+Assuming confirmation across final model and support seeds, CellPFN improves ROSMAP balanced accuracy over empirical Bayes by \resultplaceholder{effect, interval and view qualification}. The gain is \resultplaceholder{largest support regime}, while macro F1 and donor/study-shifted performance show \resultplaceholder{qualification}. On Zebra, CellPFN improves balanced accuracy over raw/Pearson prototypes by \resultplaceholder{three-seed effect and interval}, prevents one-shot class collapse and approaches \resultplaceholder{strongest information-advantaged reference}. A prospectively frozen external dataset and non-cell-type classification tasks provide the confirmatory generalization test (Fig.~4e and Fig.~5d).
+
+\subsection*{Transfer depends on support size and assay regime}
+
+The learned prior does not dominate every information regime. Count-aware empirical Bayes remains a strong default on ROSMAP, and support-trained linear or latent-variable models become more reliable as labelled support increases. By contrast, the largest CellPFN effects occur when one or a few labelled examples are available and direct target fitting is unstable. We therefore organize results by count eligibility, support size, dataset shift and label granularity rather than reporting one pooled leaderboard (Fig.~5a,b).
+
+This applicability map is tested across \dataplaceholder{prospectively frozen cell-type, state, disease/condition, perturbation or developmental tasks}. A broad classification claim requires that these tasks differ in biological target and grouping structure, not merely that the same cells are relabelled by a study-confounded attribute. \resultplaceholder{Insert task-specific results and information-matched references.}
+
+\subsection*{Additional synthetic exposure changes specialization rather than uniformly improving transfer}
+
+Held-synthetic balanced accuracy increased from 0.4621 at 50K tasks to 0.4655 at 100K tasks for the seed-42 development trajectory, but real transfer did not improve monotonically. Additional exposure produced a large one-shot Zebra increase while ROSMAP effects saturated or varied by evaluation view. Three isolated continuations from the same 25K state---less restrictive gradient clipping, broader native gene widths and a low-shot-weighted variable-support curriculum---did not yield a universal winner. \resultplaceholder{Replace development values with replicated model-seed estimates.}
+
+These findings argue against a simple “more synthetic cells” scaling law. The task prior and inference architecture must co-scale: additional tasks are useful only when they expose solvable mechanisms that correspond to deployment uncertainty. We retained the simplest validated static schedule and treat the negative curriculum experiments as boundaries of the present inference rule rather than hidden tuning attempts (Fig.~6).
+
+
+\section*{Discussion}
+
+CellPFN provides evidence that a support-conditioned classification rule can be learned in procedural single-cell worlds and transferred to real data without real-cell pretraining, persistent gene identities or target-domain parameter updates. The result is narrower than a universal cell foundation model and, for that reason, more interpretable. It isolates one reusable capability: given a small labelled set, determine which support observations are reliable and how a new query relates to each task-local class. Jointly permuting genes between tasks prevents marker-name memorization, while preserving the within-task correspondence required for inference. Thus the model learns neither a fixed cell ontology nor a universal atlas embedding; it learns a procedure over support--query relations.
+
+This distinction offers a constructive response to the observation that parameter-free or low-complexity representations can match single-cell foundation models\cite{souza2026parameterfree}. Those results show that much of the structure needed by current benchmarks is already accessible after appropriate normalization, denoising, feature selection or local fitting. They do not imply that the regulatory system generating cell states is linear, nor that learning is unnecessary. They identify what often need not be learned globally. CellPFN asks whether the remaining inference step can be amortized across tasks. The answer is conditional: transparent statistics resolve much of the problem when count data and sufficient support are available, whereas a synthetic learned prior can help when labelled context is too sparse to estimate a stable target-domain rule.
+
+The empirical-Bayes expert is therefore part of the scientific contribution rather than an inconvenient baseline. Its shrinkage makes explicit what follows from the observed support counts alone. The neural branch is zero-initialized and bounded, so every change to this expert must be earned during synthetic meta-training. Assuming the present findings are replicated, the balance differs by regime. On count-faithful ROSMAP data, empirical Bayes captures most transferable structure and CellPFN supplies a smaller, view-dependent correction. On processed cross-study cortex data, where the count likelihood is ineligible and one-shot prototypes are unstable, the learned correction is substantially larger. The appropriate deployment strategy is consequently conditional: use analytic count models or support-trained linear classifiers when they are well estimated, and invoke the learned prior where support uncertainty or class heterogeneity makes those estimates unreliable.
+
+The architecture expresses this division of labour. Support cells are not collapsed directly into one global embedding. Learned inducing queries form several class summaries in the task-local gene coordinate. Queries are then compared with those summaries gene by gene, using shared features that describe expression, detection, composition, variability and analytic evidence. Symmetric reductions make this comparison invariant to column order, and latent program tokens integrate sparse and distributed signals. These tokens are learned evidence slots, not claims about named biological pathways. Same-gene derangement and class-summary controls are consequently central: they test whether transfer depends on task-local alignment and support heterogeneity rather than generic calibration or ensemble smoothing.
+
+CellPFN is related to tabular in-context learning but is not simply TabPFN applied to a cell-by-gene matrix. Generic tabular PFNs are designed around moderate feature counts and heterogeneous columns. Atlas-pretrained cellular models, in contrast, profit from stable gene identity and real-cell scale. MapPFN shows that synthetic biological priors can support no-gradient perturbation inference, but addresses distributional perturbation maps rather than support-conditioned classification of individual cells\cite{sextro2026mappfn}. CellPFN occupies a different point: tens of thousands of exchangeable gene columns, an episode-local alignment operator, set-valued class context and an explicit assay-aware statistical base. The novelty lies in this information contract and architecture together; class induction, attention or PFNs in isolation are established ideas.
+
+The simulator should likewise be interpreted as a prior over inference problems rather than a digital replica of a cell. The frozen stream randomizes distributed mean programs, rare-marker mixtures, covariance structure, trajectories, class-by-domain effects, library sizes and gene-wise gamma--Poisson variation. Each component expresses a hypothesis about a capability the classifier may need. Realism remains important, but no marginal-fidelity score determines whether the resulting task prior teaches a useful algorithm\cite{crowell2023shaky,duo2024simulation}. This is illustrated by the negative scaling results. More tasks improved held-synthetic accuracy without uniformly improving real transfer, and simple changes to clipping, transcriptome width or support distribution did not generalize across targets. The limiting factor is therefore not exposure alone; it is alignment between the synthetic uncertainty, the model’s inference operator and the deployment regime.
+
+Several limitations define the current claim. First, anonymous genes remove persistent semantics but not the need for a common coordinate within each task. CellPFN does not solve missing-panel matching, orthology or arbitrary feature alignment. Second, ROSMAP and Zebra informed development and are meta-validation resources; final claims require multiple model seeds and prospectively frozen external datasets. Third, a broad title requires classification targets beyond cell identity, evaluated with sample-aware splits and information-matched references. Fourth, the hybrid residual can be useful even if the neural branch is not a strong standalone classifier; attribution must therefore include pure analytic, residual-only, deranged and summary-replacement controls. Finally, gene anonymity deliberately forgoes information that practical atlas mappers use. Anchored variants may add gene identity, pathways or ontologies, but should be reported separately because they answer a different question.
+
+The biotechnology use case is not the replacement of a mature reference atlas. It is rapid inference when a new study, rare population, disease cohort or perturbation provides only a handful of labelled cells and target-domain fitting is unstable. In that regime, synthetic tasks can encode a prior over how evidence should be aggregated before enough real data exist. The broader principle is that complexity should be placed where uncertainty remains. For many single-cell benchmarks, normalized expression and transparent statistical models already expose much of the relevant geometry. CellPFN adds complexity at a more specific layer: learning how to reason from sparse labelled context without memorizing the biological names of the features.
+
+
+\section*{Online Methods}
+
+\subsection*{Study design and information contract}
+
+A classification task $\mathcal{T}$ consisted of a labelled support set
+\begin{equation}
+S=\{(x_i,y_i)\}_{i=1}^{n_s},\qquad x_i\in\mathbb{R}_{\geq0}^{G},\quad y_i\in\{1,\ldots,C\},
+\end{equation}
+and an unlabelled query matrix $X_Q=(x_q)_{q=1}^{n_q}$. Labels were local to the task; neither their numeric values nor their biological names were shared across tasks. The network returned query logits $f_\theta(S,X_Q)\in\mathbb{R}^{n_q\times C}$ and was trained by query cross-entropy on synthetic labels.
+
+The anonymous-gene contract removed persistent feature semantics while preserving task solvability. Each synthetic task drew a permutation matrix $P_\mathcal{T}\in\{0,1\}^{G\times G}$ and exposed
+\begin{equation}
+X'_S=X_SP_\mathcal{T},\qquad X'_Q=X_QP_\mathcal{T}.
+\end{equation}
+The same permutation was applied to support and query, so column $g$ referred to the same measurement within a task. The permutation was independent between tasks, and no gene identifier, positional embedding, marker list, pathway or ontology feature entered the model. A valid anonymous model therefore satisfies $f_\theta(SP, X_QP)=f_\theta(S,X_Q)$ up to numerical tolerance for any joint column permutation $P$. This contract tests invariance to persistent gene identity; it does not address unaligned panels or orthology because support and query still require one shared coordinate.
+
+The primary regime was inductive. Query cells were scored independently; query labels were never inputs, and query cells did not contextualize one another. No target-domain gradient update was performed for CellPFN. Methods fitted on labelled real support cells, methods fitted unsupervised on a target support pool and methods pretrained on real atlases were reported separately because they use different information.
+
+\subsection*{Procedural prior over cellular tasks}
+
+\subsubsection*{Baseline composition and energy normalization}
+
+Each task began with an anonymous baseline composition $b\in\Delta^{G-1}$. Independent values were sampled as
+\begin{equation}
+\tilde b_g\sim\operatorname{Gamma}(\kappa_b,1),\qquad
+b_g=\frac{\tilde b_g+\epsilon_b}{\sum_h(\tilde b_h+\epsilon_b)},
+\end{equation}
+with $\kappa_b=0.35$ and $\epsilon_b=10^{-6}$ in the frozen task family. The baseline gives a heavy-tailed transcript-frequency distribution without assigning biological meaning to a column, following the broad statistical premise that single-cell simulators must reproduce highly unequal gene abundance while separating this from gene semantics\cite{zappia2017splatter,zhang2019symsim,sun2021scdesign2}.
+
+Effects were represented as additive shifts in log-composition space. To make different mechanisms comparable, a shift matrix $A\in\mathbb{R}^{R\times G}$ was measured by its baseline-weighted energy
+\begin{equation}
+\mathcal{E}_b(A)=\frac{1}{R}\sum_{r=1}^{R}\sum_{g=1}^{G} b_g A_{rg}^{2}.
+\end{equation}
+A nonzero proposal $A$ was rescaled to target energy $e$ by $A\leftarrow A\sqrt{e/\mathcal{E}_b(A)}$. This parameterization controls signal and nuisance strength independently of gene count and the heavy-tailed baseline.
+
+\subsubsection*{Sparse signed programs and class effects}
+
+For distributed mean-program tasks, $P=24$ sparse programs were sampled. Program $p$ selected a mask $M_p$ of $\max(Gf_p,m_{\min})$ genes without replacement. On the mask, signed loadings had independent signs and log-uniform magnitudes,
+\begin{equation}
+W_{pg}=s_{pg}\exp(u_{pg})\mathbf{1}[g\in M_p],\quad s_{pg}\in\{-1,1\},\quad u_{pg}\sim U(\log a_{\min},\log a_{\max}).
+\end{equation}
+Each program was centred under $b$, $\bar W_{pg}=W_{pg}-\sum_h b_hW_{ph}$. Class coefficients $a_{cp}\sim N(0,1)$ were centred across classes. The raw class log shift $A^{\mathrm{class}}=a\bar W$ was rescaled to the sampled class-signal energy. Independent cell coefficients, study coefficients, batch coefficients and donor coefficients were projected through the same program basis and rescaled to their respective energy targets. The resulting construction creates related but non-identical classes and structured nuisance directions rather than independent class centroids. Random gene programs and structured latent effects are common devices for representing coordinated biological variation in single-cell simulators, although their parameterization differs across statistical and regulatory-network-based approaches\cite{zhang2019symsim,dibaeinia2020sergio,song2024scdesign3}.
+
+For cell $r$ with class $c(r)$, donor $d(r)$, study $s(r)$ and batch $b(r)$, the generic log-composition predictor was
+\begin{equation}
+\eta_{rg}=\log b_g+A^{\mathrm{class}}_{c(r)g}+A^{\mathrm{cell}}_{rg}+A^{\mathrm{study}}_{s(r)g}+A^{\mathrm{batch}}_{b(r)g}+A^{\mathrm{donor}}_{d(r)g}+A^{\mathrm{interaction}}_{r g}+A^{\mathrm{trajectory}}_{r g},
+\end{equation}
+and the clean cellular composition was
+\begin{equation}
+p_{rg}=\frac{\exp(\eta_{rg})}{\sum_h\exp(\eta_{rh})}.
+\end{equation}
+All shifts were generated from task-local random variables and were hidden from the classifier.
+
+\subsubsection*{Rare-marker and multimodal tasks}
+
+Rare-marker tasks combined a stable distributed class effect with a stochastic class-specific marker component. Each class $c$ received a marker mask $R_c$. For cell $r$, activation $z_r\sim\operatorname{Bernoulli}(\rho)$ and lognormal amplitude $a_r=\exp(\xi_r)$, $\xi_r\sim N(0,\sigma_a^2)$, produced
+\begin{equation}
+\eta_{rg}\leftarrow\eta_{rg}+z_r a_r\beta\mathbf{1}[g\in R_{c(r)}].
+\end{equation}
+The activation probability, marker fraction, effect magnitude and amplitude variance were sampled per task. Cells of one label therefore formed a mixture of marker-active and marker-inactive states. The purpose was to make one class mean insufficient while retaining an explicit latent mechanism, consistent with the broader need for simulators and generators to represent within-label heterogeneity rather than only one centroid per population\cite{song2024scdesign3,marouf2020cscgan}.
+
+\subsubsection*{Signed-covariance tasks}
+
+Signed-covariance tasks were designed so that marginal means alone were insufficient. Six disjoint gene programs were drawn with signed loadings centred under $b$ and normalized to a fixed baseline-weighted energy. Each cell received a six-dimensional latent vector $z_r$ from a class-dependent correlation model with correlation magnitude $\rho$. The clean relative signal was
+\begin{equation}
+r_{rg}=1+\sum_{k=1}^{6}z_{rk}W_{kg},\qquad p_{rg}=\frac{b_gr_{rg}}{\sum_hb_hr_{rh}},
+\end{equation}
+with proposals rejected unless $r_{rg}>0$ for every cell and gene. This lane tests whether a classifier can use distributed joint structure rather than only class-specific means; preserving gene--gene dependence is a central distinction among modern single-cell simulators\cite{sun2021scdesign2,song2024scdesign3}.
+
+\subsubsection*{Trajectories and class-by-domain effects}
+
+Trajectory tasks added a continuous, class-specific direction $v_c$ in log-composition space. Each cell received a position $t_r$ determined by a discrete state, within-state index and Gaussian jitter, clipped to a fixed range; the contribution was $A^{\mathrm{trajectory}}_{rg}=t_rv_{c(r)g}$. Independently, a task could activate class-by-study and class-by-donor shifts. These interactions alter the apparent marker direction by domain and force a support-conditioned classifier to distinguish class evidence from domain-specific expression. Continuous trajectories and sample-level or condition-dependent effects are established components of single-cell simulation and multi-sample experimental design\cite{zhang2019symsim,song2024scdesign3}.
+
+In the frozen 100K campaign, trajectory and class-by-domain mechanisms were each activated with probability 0.25. Their energy ranges, together with all task-hyperparameter ranges, are listed in Supplementary Table~1.
+
+\subsubsection*{Hierarchical library size and gamma--Poisson counts}
+
+The claim-bearing observation model used one hierarchical library-size draw and one terminal gamma--Poisson count model. This choice follows the now-standard view of UMI counts as depth-scaled Poisson or negative-binomial observations, without requiring a separate zero-inflation component\cite{lopez2018scvi,hafemeister2019sctransform,townes2019multinomial,svensson2020zeroinflation}. For cell $r$,
+\begin{equation}
+\log L_r=\mu_L+u^{(s)}_{s(r)}+u^{(b)}_{b(r)}+\epsilon_r,
+\end{equation}
+where $u^{(s)}\sim N(0,\sigma_s^2)$, $u^{(b)}\sim N(0,\sigma_b^2)$ and $\epsilon_r\sim N(0,\sigma_{\mathrm{cell}}^2)$. The frozen aggregate values were $\mu_L=8.994$, $\sigma_s=0.443$, $\sigma_b=0.671$ and $\sigma_{\mathrm{cell}}=1.070$, estimated from real pseudobulk/count summaries used during simulator development.
+
+Gene-specific overdispersion shapes $\theta_g$ were sampled lognormally. Their geometric mean ranged from 2 to 80, log-standard deviation from 0.10 to 0.80, and values were clipped to $[2,160]$. For each cell and gene,
+\begin{equation}
+u_{rg}\sim\operatorname{Gamma}(\theta_g,\theta_g^{-1}),\qquad
+\lambda_{rg}=L_rp_{rg}u_{rg},\qquad
+x_{rg}\sim\operatorname{Poisson}(\lambda_{rg}).
+\end{equation}
+Thus $E[u_{rg}]=1$, $\operatorname{Var}(u_{rg})=1/\theta_g$, and marginalizing $u_{rg}$ gives a gene-wise negative-binomial-like count distribution. Negative-binomial modeling and empirical-Bayes stabilization are longstanding foundations of sequencing-count inference\cite{robinson2010edger}. Exactly one terminal Poisson draw was used; all public observations were nonnegative integer counts. The broader simulator platform contains additional ambient, dropout, panel and doublet modules, but those modules were not part of this frozen claim-bearing task path and are not included in the present method claim.
+
+\subsubsection*{Task coordinates, splits and hidden truth}
+
+Each task generated 16 donors. Support and query examples were drawn from disjoint donor and study groups by the delivered task contract; raw group identifiers were not exposed to the model. Within each label, the parent pool contained up to 100 support and ten query cells per class, from which nested labelled support budgets and four training queries per class were selected with deterministic task-specific seeds. Labels were independently permuted, and the public gene permutation was independent of the label permutation. Every task stored a hidden causal receipt containing the sampled lane, effects, gene masks, dispersion parameters, permutations and stochastic seeds; these receipts were used for audit and mechanistic evaluation, not as model inputs.
+
+\subsection*{Online task stream and selection}
+
+The claim-bearing stream contained 100,000 distinct scheduled tasks and no conventional epochs. This online design follows the PFN paradigm of fitting an inference procedure over newly sampled tasks rather than making repeated epochs over one fixed training table\cite{muller2022pfn,hollmann2025tabpfn,qu2026tabiclv2}. Four tasks formed one optimizer update, giving 25,000 updates. The lane mixture was 60\% distributed mean-program, 30\% rare-marker/multimodal and 10\% signed covariance. The delivered gene widths were 2,048 for 80,032 tasks, 4,096 for 11,102 tasks and 8,192 for 8,866 tasks. Support budgets were balanced across one (33,334 tasks), ten (33,333) and 100 (33,333) cells per class, and class counts ranged from two to 24. Each model arm processed 45,101,014 synthetic cells.
+
+A frozen selector assigned a nonnegative weight before candidate training. It used fixed analytic reference performance and technical-shortcut checks to set zero weight for tasks that were trivial for both references or perfectly classified by library depth/detection alone. Of 100,000 tasks, 93,252 contributed positive gradient and 6,748 received zero weight. For one update, positive task weights $w_t$ were normalized to sum to one, and the loss was
+\begin{equation}
+\mathcal{L}_{\mathrm{update}}=\sum_{t=1}^{4}\bar w_t\,\frac{1}{|Q_t|}\sum_{q\in Q_t}-\log p_\theta(y_q\mid S_t,x_q).
+\end{equation}
+Zero-weight tasks remained in exposure and receipt accounting. The selector and task schedule were frozen before comparing architectures. This filtering follows the generator-adaptation principle of emphasizing synthetic tasks that are informative relative to strong fixed experts while excluding trivial or shortcut-dominated tasks\cite{rtfm2025}.
+
+\subsection*{Analytic support-set experts}
+
+\subsubsection*{Empirical-Bayes count expert}
+
+For count-eligible data, support counts were aggregated by class. The expert uses a negative-binomial composition model with empirical-Bayes shrinkage, connecting the support-conditioned classifier to established overdispersed sequencing-count methods rather than asking the neural branch to relearn elementary count uncertainty\cite{robinson2010edger,lopez2018scvi,hafemeister2019sctransform}. Specifically,
+\begin{equation}
+N_{cg}=\sum_{i:y_i=c}x_{ig},\qquad N_c=\sum_gN_{cg}.
+\end{equation}
+A global gene composition used a symmetric pseudocount,
+\begin{equation}
+p^{(0)}_g=\frac{\sum_cN_{cg}+0.5}{\sum_{c,g}N_{cg}+0.5G}.
+\end{equation}
+Let $\tilde L$ be the median support-cell library size. A shrinkage mass equivalent to $m=4$ median-depth cells, $\tau=m\tilde L$, gave
+\begin{equation}
+p_{cg}=\frac{N_{cg}+\tau p^{(0)}_g}{N_c+\tau}.
+\end{equation}
+For query cell $q$ with depth $L_q$, the class mean was $\mu_{qcg}=L_qp_{cg}$. With common dispersion $\phi=0.1$, class-dependent terms of the negative-binomial log score were
+\begin{equation}
+\ell^{\mathrm{EB}}_{qc}=\sum_g\left[x_{qg}\log p_{cg}-\left(x_{qg}+\phi^{-1}\right)\log\left(1+\phi\mu_{qcg}\right)\right].
+\end{equation}
+Terms independent of class were omitted. Scores were centred and standardized across classes for every query before they were supplied as the neural base. When $\phi=0$, the corresponding multinomial/Poisson composition score is $\sum_gx_{qg}\log p_{cg}$.
+
+\subsubsection*{Raw and Pearson prototype experts}
+
+For every cell, raw normalized expression was
+\begin{equation}
+z_{ig}=\log\left(1+10^4\frac{x_{ig}}{\sum_hx_{ih}}\right).
+\end{equation}
+Rows were $L_2$ normalized and averaged within each support class to form raw prototypes. Pearson features used support-only global gene moments,
+\begin{equation}
+r_{ig}=\operatorname{clip}\left(\frac{z_{ig}-\bar z_g}{s_g},-8,8\right),
+\end{equation}
+followed by row normalization and class averaging. Query scores were cosine similarities to class prototypes. Raw+Pearson logits were the mean of row-standardized raw and Pearson scores. Depth normalization, negative-binomial variance stabilization and analytic Pearson residuals are strong low-complexity representations for single-cell counts\cite{hafemeister2019sctransform,townes2019multinomial,lause2021pearson}; here the Pearson view is computed only from the labelled support set. These experts require only within-task gene correspondence and are valid for noninteger processed expression. Their class-mean scoring is the transcriptomic analogue of prototypical few-shot classification\cite{snell2017prototypical}.
+
+\subsection*{CellPFN architecture}
+
+\subsubsection*{Architectural rationale and computation graph}
+
+CellPFN is a prior-data fitted network in the operational sense: its parameters are optimized across complete support--query problems drawn from a task prior, and the resulting network performs task-conditioned inference on a new support set in one forward computation without updating its parameters. PFNs were introduced as amortized approximations to Bayesian prediction over synthetically sampled learning problems and were subsequently scaled to general tabular in-context learning\cite{muller2022pfn,hollmann2025tabpfn,qu2026tabiclv2}. CellPFN keeps this task-level training principle but replaces a generic table encoder by an inference graph designed for sparse transcriptomic measurements and anonymous features.
+
+The architecture separates five operations. First, a support-row encoder $E_{\mathrm{row}}$ maps every labelled support cell to a gene-permutation-invariant embedding $h_i$. Second, $K$ learned inducing queries summarize the unordered support cells of each class while retaining their profiles in the original task-local gene coordinate. Third, a shared relation network compares each query with each class summary at corresponding anonymous genes. Fourth, symmetric gene reductions and latent program-token attention integrate sparse and distributed evidence. Finally, a support- and confidence-dependent gate produces a bounded residual over an assay-appropriate analytic score. In compact form,
+\begin{equation}
+ h_i=E_{\mathrm{row}}(x_i,S),\qquad
+ \bar v^{(m)}_{ckg}=\sum_{i:y_i=c}a_{cki}v^{(m)}_{ig},
+\end{equation}
+\begin{equation}
+ t_{qck}=P_{\mathrm{rel}}\!\left(\left\{R_{\mathrm{gene}}(x_{qg},\bar v_{ckg},S)\right\}_{g=1}^{G}\right),\qquad
+ z_{qc}=P_{\mathrm{prog}}\!\left(\{t_{qck}\}_{k=1}^{K}\right),
+\end{equation}
+\begin{equation}
+ s_{qc}=s^{\mathrm{base}}_{qc}+\Delta_\theta(z_{qc},s^{\mathrm{base}}_{qc},n_c,x_q).
+\end{equation}
+Here $m$ indexes the four observation views retained in gene space, $P_{\mathrm{rel}}$ is a permutation-invariant reduction over genes, $P_{\mathrm{prog}}$ is attention and pooling over a small latent set, and $\Delta_\theta$ is class-centred and bounded. The decomposition is deliberate. Prototypical and Matching Networks motivate inference from labelled support examples, Relation Networks motivate learning a task-conditional comparison, and Deep Sets, Set Transformer, attentive neural processes and Perceiver-style latent queries motivate invariant aggregation of variable-size sets\cite{snell2017prototypical,vinyals2016matching,sung2018relation,zaheer2017deepsets,lee2019settransformer,kim2019anp,jaegle2021perceiver}. CellPFN differs by carrying class summaries back into the shared gene coordinate before applying the relation operator, thereby preserving exact within-task gene correspondence while withholding persistent gene identity.
+
+Support summaries are computed without query information, and each query is then scored independently. The model therefore remains inductive: there is no query--query attention and no transductive adaptation. Because gene-wise networks share parameters and all gene-axis reductions are symmetric, the complete neural correction is invariant to a joint permutation of support and query columns. The design also avoids full self-attention over either genes or support rows. With fixed hidden dimensions and $K$ summaries, its dominant relation cost is linear in gene count and support construction is linear in support size, approximately $O(n_sG+n_qCKG)$, rather than $O(G^2)$ or $O(n_s^2)$.
+
+\subsubsection*{Support-row encoder}
+
+The winning aligned class-inducing CellPFN encoded each support cell before constructing class summaries. This stage determines which support cells should define each class mode; it is not intended to learn named gene embeddings. Every gene is processed by the same function, and only symmetric statistics are retained, following the invariance principle formalized by Deep Sets and attention-based set models\cite{zaheer2017deepsets,lee2019settransformer}. For support cell $i$ and gene $g$, ten input features were used:
+\begin{equation}
+\left[
+\frac{z_{ig}}{10},\frac{r_{ig}}{4},\mathbf{1}(x_{ig}>0),\sqrt{Gx_{ig}/L_i+\epsilon},
+\frac{\bar z_g}{10},\frac{s_g}{10},d_g,
+\frac{\bar z_{y_i g}}{10},\frac{s_{y_i g}}{10},d_{y_i g}
+\right],
+\end{equation}
+where $d_g$ and $d_{cg}$ denote global and class detection fractions, and class moments were computed from support cells only. The log-composition, Pearson-standardized, detection and square-root composition channels expose complementary depth-normalized and count-aware views without supplying gene identity\cite{hafemeister2019sctransform,townes2019multinomial,lause2021pearson}. A shared two-layer multilayer perceptron mapped every gene to a 64-dimensional token. Gene tokens were reduced by four symmetric statistics,
+\begin{equation}
+R(H)=\left[\operatorname{mean}_gH_g,\sqrt{\operatorname{mean}_gH_g^2+\epsilon},\max_gH_g,\log\sum_g e^{H_g}-\log G\right],
+\end{equation}
+then projected to a 448-dimensional support-row embedding and refined by three pre-normalized residual feed-forward blocks. The mean captures distributed evidence, the root-mean-square captures overall magnitude, the maximum captures a single extreme relation, and normalized log-sum-exp interpolates between distributed and maximal evidence. No gene position or identity entered this encoder.
+
+\subsubsection*{Class-inducing summaries}
+
+For class $c$, support embeddings $h_i$ with $y_i=c$ were packed as an unordered set. The class mean $\bar h_c$ was added to each of $K=4$ learned summary queries $q_k$. This operation is related to pooling by multihead attention in Set Transformer and to latent-query bottlenecks in attentive neural processes and Perceiver architectures\cite{lee2019settransformer,kim2019anp,jaegle2021perceiver}; unlike those generic modules, the resulting weights are used to reconstruct class profiles in the original task-local gene coordinate. Query and key projections produced attention weights
+\begin{equation}
+a_{cki}=\frac{\exp\left(\langle W_q(\bar h_c+q_k),W_kh_i\rangle/\sqrt{d}\right)}{\sum_{j:y_j=c}\exp\left(\langle W_q(\bar h_c+q_k),W_kh_j\rangle/\sqrt{d}\right)}.
+\end{equation}
+Only $\min(K,n_c)$ summaries were active for a class with $n_c$ support cells. For support view $m\in\{1,\ldots,4\}$, the class summary remained gene aligned,
+\begin{equation}
+ \bar v^{(m)}_{ckg}=\sum_{i:y_i=c}a_{cki}v^{(m)}_{ig},
+\end{equation}
+where the four views were log composition, Pearson-standardized expression, detection and square-root composition. Thus attention chooses which support cells define a class mode, but it never mixes or reorders gene coordinates. The summaries are query independent, preventing query composition from changing the fitted class representation. At one-shot support, all active summaries necessarily reduce to the single support cell; multi-summary effects can begin only at support two and above.
+
+\subsubsection*{Same-gene relation encoder}
+
+The central CellPFN operator is a learned relation evaluated at corresponding genes. Relation Networks learn task-specific comparison functions between support-derived representatives and queries in episodic few-shot learning\cite{sung2018relation}; CellPFN adapts this idea to a shared anonymous coordinate and exposes explicit count/statistical context. For query $q$, class $c$, summary $k$ and gene $g$, four query views $v^Q_{qg}\in\mathbb{R}^4$ and summary views $v^S_{qckg}\in\mathbb{R}^4$ were concatenated with their elementwise product and absolute difference:
+\begin{equation}
+\rho^{(0)}_{qckg}=\left[v^Q_{qg},v^S_{qckg},v^Q_{qg}\odot v^S_{qckg},|v^Q_{qg}-v^S_{qckg}|\right]\in\mathbb{R}^{16}.
+\end{equation}
+Twelve contextual features were appended. Writing $c_{qckg}\in\mathbb{R}^{12}$ for global mean, standard deviation and detection; class mean, standard deviation and detection; query depth and detection; summary depth and detection; log support size; and a fixed raw/Pearson per-gene retrieval contribution, the complete relation input was
+\begin{equation}
+ \rho_{qckg}=\left[v^Q_{qg},v^S_{qckg},v^Q_{qg}\odot v^S_{qckg},|v^Q_{qg}-v^S_{qckg}|,c_{qckg}\right]\in\mathbb{R}^{28}.
+\end{equation}
+A shared $28\rightarrow448\rightarrow224$ multilayer perceptron with GELU activation and layer normalization mapped $\rho_{qckg}$ to a relation token. The contextual channels allow an identical observed difference to be interpreted differently for a rarely detected gene, a low-depth query or a class estimated from one support cell. Because the same relation function is applied to every gene and the next operation is symmetric, the operator is equivariant to joint gene permutation; a deliberate support-gene derangement breaks only the within-task correspondence and therefore provides a direct mechanism control.
+
+The 224-dimensional relation vectors were reduced over genes by mean, root-mean-square, maximum and normalized log-sum-exp, yielding 896 features per class summary. These four reductions allow both sparse marker-like and distributed program-like evidence to influence a class score while preserving permutation invariance\cite{zaheer2017deepsets,lee2019settransformer}. The pooled vectors were projected to 448-dimensional summary tokens and augmented by summary-role embeddings; the role embeddings distinguish latent summary slots but contain no gene or pathway identity.
+
+\subsubsection*{Program-token attention and bounded residual}
+
+Eight learned program queries $Q_{\mathrm{prog}}\in\mathbb{R}^{8\times448}$ cross-attended to the $K$ class-summary tokens $T_{qc}\in\mathbb{R}^{K\times448}$ for every query--class pair,
+\begin{equation}
+ P^{(0)}_{qc}=\operatorname{LN}\!\left(Q_{\mathrm{prog}}+\operatorname{MHA}(Q_{\mathrm{prog}},T_{qc},T_{qc})\right),
+\end{equation}
+followed by a two-layer pre-normalized Transformer with eight heads, model dimension 448 and feed-forward dimension 1,792\cite{vaswani2017attention}. This latent-query construction is related to Set Transformer and Perceiver-style compression, but operates on four class summaries rather than directly attending over tens of thousands of genes\cite{lee2019settransformer,jaegle2021perceiver}. Mean and maximum pooling over the eight contextualized program tokens produced an 896-dimensional representation. The word ``program'' denotes a learned evidence slot: no pathway identity, gene set or biological annotation was supplied.
+
+A residual head combined this representation with the fixed raw/Pearson retrieval score and produced an unbounded class correction $u_{qc}$. A separate gate received six support/query diagnostics: analytic-base logit, analytic-base probability, fixed retrieval score, $\log(1+n_c)/\log(101)$, query log-depth and query detection fraction. With gate $g_{qc}\in(0,1)$,
+\begin{equation}
+\tilde u_{qc}=2g_{qc}u_{qc},\qquad
+\bar u_{qc}=\tilde u_{qc}-\frac{1}{C}\sum_{c'}\tilde u_{qc'},
+\end{equation}
+\begin{equation}
+\Delta_{qc}=B\tanh(\bar u_{qc}/B),\qquad
+s_{qc}=s^{\mathrm{base}}_{qc}+\Delta_{qc},\qquad B=2.
+\end{equation}
+The last residual layer was initialized to zero, so the initial model exactly reproduced the analytic base. All support routing, relation encoding, program attention and gating parameters were learned end to end from the weighted synthetic query cross-entropy; no simulator-hidden variable or auxiliary pathway label was required. The final architecture used 11,915,746 trainable parameters. Genes were processed in chunks of 1,024 and query--class pairs in chunks of 32. Activation checkpointing traded recomputation for bounded memory without changing the mathematical estimator\cite{chen2016checkpointing}.
+
+\subsection*{Architecture families and mechanistic controls}
+
+The development programme compared the following families under the same anonymous support/query contract.
+
+\begin{itemize}
+\item \textbf{Support-conditioned role-slot model.} Support-derived class-versus-rest means, variances, detection rates and effect statistics selected candidate genes, assigned them to sparse latent roles and classified queries through class-specific prototypes. This early working model tested episode-local gene roles but compressed support rows before learned context.
+\item \textbf{Program PFN.} Count-aware gene features were compressed into latent program tokens per cell, followed by support/query contextualization in the PFN sense\cite{muller2022pfn,hollmann2025tabpfn}. Pooled and row-preserving variants tested whether learned row-level context added beyond class summaries.
+\item \textbf{Aligned prototype PFN.} Four fixed query-conditioned class barycentres (uniform, raw retrieval, Pearson retrieval and mixed retrieval) were compared with each query through the same-gene relation encoder described above, linking prototype-based few-shot inference with a learned relation metric\cite{snell2017prototypical,sung2018relation}.
+\item \textbf{Generic class-inducing PFN.} Learned class summaries were formed from support-cell program embeddings using set-attention-style inducing queries\cite{lee2019settransformer,jaegle2021perceiver} but did not retain the successful same-gene relation surface.
+\item \textbf{Aligned class-inducing PFN.} The winning model combined support-derived gene-space summaries with the aligned relation encoder and bounded analytic residual.
+\item \textbf{Analytic-expert routing PFN.} A task-conditioned router combined eligible fixed experts and a separately bounded neural residual; it tested whether expert selection alone explained transfer.
+\item \textbf{Relation-order controls.} Barycentre-first and row-first variants determined whether the nonlinear gene relation should be applied before or after support aggregation.
+\item \textbf{Generic tabular PFN controls.} Released or adapted TabPFN/TabICL-style models on reduced or anonymous representations tested direct transfer from generic tabular in-context learning\cite{hollmann2025tabpfn,qu2026tabiclv2}.
+\end{itemize}
+
+Mechanistic inference controls replaced learned summaries by uniform one-summary and deterministic two-/four-summary partitions, deranged support genes while preserving task-local marginal statistics, and scored the bounded neural correction without the analytic base. These controls were performed on frozen checkpoints and did not alter training.
+
+\subsection*{Optimization and checkpointing}
+
+The claim-bearing 100K campaign used four tasks per optimizer update, AdamW with learning rate $10^{-4}$ and decoupled weight decay $10^{-4}$\cite{loshchilov2019adamw}, 250 warm-up updates, and cosine decay over 25,000 updates to a minimum learning-rate ratio of 0.1\cite{loshchilov2017sgdr}. Training used bfloat16 autocasting on H100 GPUs and global gradient clipping at norm 5. The aligned class-inducing model clipped 42.4\% of updates in the seed-42 development trajectory, motivating a predeclared clip-10 continuation; that intervention did not improve transfer uniformly. Checkpoints were written at 10K, 25K, 50K and 100K scheduled tasks. Held synthetic tasks, not real labels, governed checkpoint selection. The static 100K schedule was retained after isolated clipping, wider-gene and low-shot support continuations failed to produce a cross-target improvement.
+
+The final analysis uses \resultplaceholder{model seeds} and support seeds \resultplaceholder{support seeds}. Training and evaluation hardware, wall time, GPU-hours and energy proxies are reported in Supplementary Table~2.
+
+\subsection*{Real-data evaluation}
+
+ROSMAP evaluation used CellBender-corrected, post-quality-control integer count matrices with a frozen gene coordinate, class mapping and donor/study grouping. Zebra combined processed cortex expression from independent studies and contained noninteger values; negative-binomial and empirical-Bayes count methods were therefore declared ineligible. For every real task, support/query groups, eligible classes, nested support ranks and gene permutations were fixed before scoring. Support budgets were one, ten and 100 labelled cells per class. Query cells were evaluated independently, and no query labels informed normalization, model selection or fitting.
+
+ROSMAP and Zebra were used during development and are reported as meta-validation evidence. The confirmatory analysis uses \dataplaceholder{one or more prospectively frozen datasets} and \dataplaceholder{additional classification targets}. Dataset accessions, donor/study counts, genes, labels and exclusions are listed in Supplementary Table~3.
+
+\subsection*{Reference methods and information regimes}
+
+Same-contract references were raw prototypes, Pearson prototypes, their averaged logits, nearest support neighbour and the exact empirical-Bayes count expert. Support-only sparse multinomial logistic regression was fitted after count-per-10,000 log transformation for raw counts or on the supplied processed expression. Anonymous-column ties were canonicalized from labelled support values only, and $L_2$ regularization was held fixed or selected within support-side folds. A low-rank reference selected support-variable genes, fit truncated SVD on support rows and trained multinomial logistic regression in the resulting space.
+
+scVI encoded count data with a negative-binomial latent-variable model\cite{lopez2018scvi}. Fixed centroid, nearest-neighbour or logistic heads were trained from the selected labelled support cells. scANVI provided a semi-supervised practical reference with explicit target-support fitting\cite{xu2021scanvi}. These methods retain stable gene identity and, where stated, use the full unlabelled target support pool; they are information-advantaged practical comparisons rather than same-contract baselines. MARS, TOSICA, scTab or CellTypist-style systems are included where their training and label assumptions can be matched\cite{brbic2020mars,chen2023tosica,fischer2024sctab}.
+
+\subsection*{Metrics and statistical analysis}
+
+Balanced accuracy was the primary class-balanced endpoint,
+\begin{equation}
+\operatorname{BAcc}=\frac{1}{C}\sum_{c=1}^{C}\frac{TP_c}{TP_c+FN_c}.
+\end{equation}
+Macro F1, negative log likelihood, expected calibration error with 15 bins, worst-class recall, class-collapse count and per-class precision/recall/F1 were secondary endpoints. All contrasts were paired on dataset view, support rank, query cell and gene permutation. Cells were not treated as independent biological replicates. The final uncertainty analysis hierarchically resamples studies/donors and aggregates over independently trained model seeds and support seeds. The prospectively frozen dataset, primary contrasts and multiplicity strategy are specified before results are inspected.
+
+\subsection*{Reproducibility and software}
+
+Every synthetic task was identified by a deterministic task index, simulator root, support/query seeds, resolved configuration hash, public task hash and hidden causal receipt. Training recoveries stored model, optimizer, scheduler, random-number-generator state, completed task cursor and rolling task/selector receipt chains. Real evaluations stored checkpoint hashes, immutable support/query manifests and raw logits. Source commits for the claim-bearing seed-42 campaign were CellPFN codebase \code{8d31f2aa8958} and simulator \code{e81d5a6a062c}; full cryptographic hashes are retained in the release manifest. Final release tags, container or Conda locks and archival DOI are inserted after the replication and external-validation freeze.
+
+
+\section*{Data availability}
+
+ROSMAP data are available under \dataplaceholder{access conditions and accession}. Zebra component studies are listed in Supplementary Table~3 with original accessions. Synthetic task manifests, source data underlying figures and the prospectively frozen external evaluation will be deposited at \dataplaceholder{repository DOI}. No real single-cell profile is used for CellPFN parameter training.
+
+\section*{Code availability}
+
+CellPFN and pyScIntelligentDesign will be released at \methodplaceholder{repository URLs and immutable release tags}. The archive will include model checkpoints, training and simulator configurations, environment locks, evaluation manifests and source-data tables.
+
+\section*{Acknowledgements}
+
+\resultplaceholder{Funding, compute and data acknowledgements.}
+
+\section*{Author contributions}
+
+P.F. conceived the CellPFN study, developed the methodological framework and led software, analysis and writing. M.F. contributed the biological problem formulation, data resources, evaluation design and interpretation. P.R. contributed \resultplaceholder{specific experimental, analytical or validation contributions}. A.K. supervised the study, secured resources and contributed to interpretation and writing. All authors reviewed the manuscript. \resultplaceholder{Replace with final CRediT statement after author approval.}
+
+\section*{Competing interests}
+
+The authors declare no competing interests.
+
+% Bibliography embedded for Nature Portfolio single-file LaTeX submission.
+\begin{thebibliography}{50}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Theodoris et~al.(2023)]{theodoris2023geneformer}
+Christina~V. Theodoris et~al.
+\newblock Transfer learning enables predictions in network biology.
+\newblock \emph{Nature}, 618:\penalty0 616--624, 2023.
+\newblock \doi{10.1038/s41586-023-06139-9}.
+
+\bibitem[Cui et~al.(2024)]{cui2024scgpt}
+Haotian Cui et~al.
+\newblock scgpt: toward building a foundation model for single-cell multi-omics
+  using generative ai.
+\newblock \emph{Nature Methods}, 21:\penalty0 1470--1480, 2024.
+\newblock \doi{10.1038/s41592-024-02201-0}.
+
+\bibitem[Hao et~al.(2024)]{hao2024scfoundation}
+Minsheng Hao et~al.
+\newblock Large-scale foundation model on single-cell transcriptomics.
+\newblock \emph{Nature Methods}, 21:\penalty0 1481--1491, 2024.
+\newblock \doi{10.1038/s41592-024-02305-7}.
+
+\bibitem[Rosen et~al.(2026)]{rosen2026uce}
+Yanay Rosen et~al.
+\newblock Universal cell embedding provides a foundation model for cell
+  biology.
+\newblock \emph{Nature}, 2026.
+\newblock \doi{10.1038/s41586-026-10689-z}.
+
+\bibitem[Rosen et~al.(2024)]{rosen2024saturn}
+Yanay Rosen et~al.
+\newblock Toward universal cell embeddings: integrating single-cell rna-seq
+  datasets across species with saturn.
+\newblock \emph{Nature Methods}, 21:\penalty0 1492--1500, 2024.
+\newblock \doi{10.1038/s41592-024-02191-z}.
+
+\bibitem[Pearce et~al.(2025)]{pearce2025transcriptformer}
+James~D. Pearce et~al.
+\newblock A cross-species generative cell atlas across 1.5 billion years of
+  evolution: the transcriptformer single-cell model.
+\newblock \emph{bioRxiv}, 2025.
+\newblock \doi{10.1101/2025.04.25.650731}.
+
+\bibitem[Souza and Mehta(2026)]{souza2026parameterfree}
+Huan Souza and Pankaj Mehta.
+\newblock Parameter-free representations outperform single-cell foundation
+  models on downstream benchmarks.
+\newblock \emph{bioRxiv}, 2026.
+\newblock \doi{10.64898/2026.02.11.705358}.
+
+\bibitem[Boiarsky et~al.(2024)]{boiarsky2024deeper}
+Rebecca Boiarsky et~al.
+\newblock Deeper evaluation of a single-cell foundation model.
+\newblock \emph{Nature Machine Intelligence}, 6:\penalty0 1443--1446, 2024.
+\newblock \doi{10.1038/s42256-024-00949-w}.
+
+\bibitem[Kedzierska et~al.(2025)]{kedzierska2025zeroshot}
+Karolina~Z. Kedzierska et~al.
+\newblock Zero-shot evaluation reveals limitations of single-cell foundation
+  models.
+\newblock \emph{Genome Biology}, 26:\penalty0 101, 2025.
+\newblock \doi{10.1186/s13059-025-03574-x}.
+
+\bibitem[Ahlmann-Eltze et~al.(2025)Ahlmann-Eltze, Huber, and
+  Anders]{ahlmann2025linear}
+Constantin Ahlmann-Eltze, Wolfgang Huber, and Simon Anders.
+\newblock Deep-learning-based gene perturbation effect prediction does not yet
+  outperform simple linear baselines.
+\newblock \emph{Nature Methods}, 22:\penalty0 1657--1661, 2025.
+\newblock \doi{10.1038/s41592-025-02772-6}.
+
+\bibitem[DenAdel et~al.(2026)]{denadel2026scaling}
+Alan DenAdel et~al.
+\newblock Evaluating the role of pretraining dataset size and diversity on
+  single-cell foundation model performance.
+\newblock \emph{Nature Methods}, 23:\penalty0 1447--1457, 2026.
+\newblock \doi{10.1038/s41592-026-03120-y}.
+
+\bibitem[Liu et~al.(2026)]{liu2026context}
+Tianyuan Liu et~al.
+\newblock Context-dependent utility and robustness of pretrained single-cell
+  foundation model representations across analytical tasks.
+\newblock \emph{bioRxiv}, 2026.
+\newblock \doi{10.64898/2026.06.18.733285}.
+
+\bibitem[M{\"u}ller et~al.(2022)]{muller2022pfn}
+Samuel M{\"u}ller et~al.
+\newblock Transformers can do bayesian inference.
+\newblock \emph{International Conference on Learning Representations}, 2022.
+
+\bibitem[Hollmann et~al.(2025{\natexlab{a}})]{hollmann2025tabpfn}
+Noah Hollmann et~al.
+\newblock Accurate predictions on small data with a tabular foundation model.
+\newblock \emph{Nature}, 637:\penalty0 319--326, 2025{\natexlab{a}}.
+\newblock \doi{10.1038/s41586-024-08328-6}.
+
+\bibitem[Sextro et~al.(2026)Sextro, K{\l}os, and Dernbach]{sextro2026mappfn}
+Marvin Sextro, Weronika K{\l}os, and Gabriel Dernbach.
+\newblock Mappfn: Learning causal perturbation maps in context.
+\newblock \emph{arXiv}, 2026.
+
+\bibitem[Zappia et~al.(2017)Zappia, Phipson, and Oshlack]{zappia2017splatter}
+Luke Zappia, Belinda Phipson, and Alicia Oshlack.
+\newblock Splatter: simulation of single-cell rna sequencing data.
+\newblock \emph{Genome Biology}, 18:\penalty0 174, 2017.
+\newblock \doi{10.1186/s13059-017-1305-0}.
+
+\bibitem[Zhang et~al.(2019)]{zhang2019symsim}
+Xiuwei Zhang et~al.
+\newblock Symsim: simulating multi-faceted variability in single cell rna
+  sequencing.
+\newblock \emph{Nature Communications}, 10:\penalty0 2615, 2019.
+\newblock \doi{10.1038/s41467-019-10500-w}.
+
+\bibitem[Dibaeinia and Sinha(2020)]{dibaeinia2020sergio}
+Payam Dibaeinia and Saurabh Sinha.
+\newblock Sergio: a single-cell expression simulator guided by gene regulatory
+  networks.
+\newblock \emph{Cell Systems}, 11:\penalty0 252--271.e11, 2020.
+\newblock \doi{10.1016/j.cels.2020.08.003}.
+
+\bibitem[Sun et~al.(2021)Sun, Song, Li, and Li]{sun2021scdesign2}
+Tianyi Sun, Dongyuan Song, Wei~Vivian Li, and Jingyi~Jessica Li.
+\newblock scdesign2: a transparent simulator that generates high-fidelity
+  single-cell gene expression count data with gene correlations captured.
+\newblock \emph{Genome Biology}, 22:\penalty0 163, 2021.
+\newblock \doi{10.1186/s13059-021-02367-2}.
+
+\bibitem[Song et~al.(2024)]{song2024scdesign3}
+Dongyuan Song et~al.
+\newblock scdesign3 generates realistic in silico data for multimodal
+  single-cell and spatial omics.
+\newblock \emph{Nature Biotechnology}, 42:\penalty0 247--252, 2024.
+\newblock \doi{10.1038/s41587-023-01772-1}.
+
+\bibitem[Marouf et~al.(2020)]{marouf2020cscgan}
+Mohamed Marouf et~al.
+\newblock Realistic in silico generation and augmentation of single-cell
+  rna-seq data using generative adversarial networks.
+\newblock \emph{Nature Communications}, 11:\penalty0 166, 2020.
+\newblock \doi{10.1038/s41467-019-14018-z}.
+
+\bibitem[Luo et~al.(2024)Luo, Hao, Wei, and Zhang]{luo2024scdiffusion}
+Erpai Luo, Minsheng Hao, Lei Wei, and Xuegong Zhang.
+\newblock scdiffusion: conditional generation of high-quality single-cell data
+  using diffusion model.
+\newblock \emph{Bioinformatics}, 40:\penalty0 btae518, 2024.
+\newblock \doi{10.1093/bioinformatics/btae518}.
+
+\bibitem[Tobin et~al.(2017)]{tobin2017domainrandomization}
+Josh Tobin et~al.
+\newblock Domain randomization for transferring deep neural networks from
+  simulation to the real world.
+\newblock In \emph{IEEE/RSJ International Conference on Intelligent Robots and
+  Systems}, pages 23--30, 2017.
+
+\bibitem[Wood et~al.(2021)]{wood2021fake}
+Erroll Wood et~al.
+\newblock Fake it till you make it: face analysis in the wild using synthetic
+  data alone.
+\newblock In \emph{Proceedings of the IEEE/CVF International Conference on
+  Computer Vision}, pages 3681--3691, 2021.
+
+\bibitem[Flotho et~al.(2025)Flotho, Piening, Kukleva, and
+  Steidl]{flotho2025tfake}
+Philipp Flotho, Moritz Piening, Anna Kukleva, and Gabriele Steidl.
+\newblock T-fake: Synthesizing thermal images for facial landmarking.
+\newblock In \emph{Proceedings of the IEEE/CVF Conference on Computer Vision
+  and Pattern Recognition}, pages 26356--26366, 2025.
+\newblock \doi{10.1109/CVPR52734.2025.02454}.
+
+\bibitem[Lopez et~al.(2018)Lopez, Regier, Cole, Jordan, and
+  Yosef]{lopez2018scvi}
+Romain Lopez, Jeffrey Regier, Michael~B. Cole, Michael~I. Jordan, and Nir
+  Yosef.
+\newblock Deep generative modeling for single-cell transcriptomics.
+\newblock \emph{Nature Methods}, 15:\penalty0 1053--1058, 2018.
+\newblock \doi{10.1038/s41592-018-0229-2}.
+
+\bibitem[Hafemeister and Satija(2019)]{hafemeister2019sctransform}
+Christoph Hafemeister and Rahul Satija.
+\newblock Normalization and variance stabilization of single-cell rna-seq data
+  using regularized negative binomial regression.
+\newblock \emph{Genome Biology}, 20:\penalty0 296, 2019.
+\newblock \doi{10.1186/s13059-019-1874-1}.
+
+\bibitem[Townes et~al.(2019)Townes, Hicks, Aryee, and
+  Irizarry]{townes2019multinomial}
+F.~William Townes, Stephanie~C. Hicks, Martin~J. Aryee, and Rafael~A. Irizarry.
+\newblock Feature selection and dimension reduction for single-cell rna-seq
+  based on a multinomial model.
+\newblock \emph{Genome Biology}, 20:\penalty0 295, 2019.
+\newblock \doi{10.1186/s13059-019-1861-6}.
+
+\bibitem[Svensson(2020)]{svensson2020zeroinflation}
+Valentine Svensson.
+\newblock Droplet scrna-seq is not zero-inflated.
+\newblock \emph{Nature Biotechnology}, 38:\penalty0 147--150, 2020.
+\newblock \doi{10.1038/s41587-019-0379-5}.
+
+\bibitem[Crowell et~al.(2023)]{crowell2023shaky}
+Helena~L. Crowell et~al.
+\newblock The shaky foundations of simulating single-cell rna sequencing data.
+\newblock \emph{Genome Biology}, 24:\penalty0 62, 2023.
+\newblock \doi{10.1186/s13059-023-02904-1}.
+
+\bibitem[Duo et~al.(2024)]{duo2024simulation}
+Hongrui Duo et~al.
+\newblock Systematic evaluation with practical guidelines for single-cell and
+  spatially resolved transcriptomics data simulation under multiple scenarios.
+\newblock \emph{Genome Biology}, 25:\penalty0 145, 2024.
+\newblock \doi{10.1186/s13059-024-03294-6}.
+
+\bibitem[Qu et~al.(2026)]{qu2026tabiclv2}
+Y.~Qu et~al.
+\newblock Tabiclv2: a scalable tabular in-context learning foundation model.
+\newblock \emph{arXiv}, 2026.
+
+\bibitem[Hollmann et~al.(2025{\natexlab{b}})]{rtfm2025}
+Noah Hollmann et~al.
+\newblock Robust tabular foundation models through generator adaptation.
+\newblock \emph{arXiv}, 2025{\natexlab{b}}.
+
+
+
+\bibitem[Snell et~al.(2017)Snell, Swersky, and Zemel]{snell2017prototypical}
+Jake Snell, Kevin Swersky, and Richard~S. Zemel.
+\newblock Prototypical networks for few-shot learning.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2017.
+
+\bibitem[Vinyals et~al.(2016)]{vinyals2016matching}
+Oriol Vinyals et~al.
+\newblock Matching networks for one shot learning.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2016.
+
+\bibitem[Zaheer et~al.(2017)]{zaheer2017deepsets}
+Manzil Zaheer et~al.
+\newblock Deep sets.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2017.
+
+\bibitem[Lee et~al.(2019)]{lee2019settransformer}
+Juho Lee et~al.
+\newblock Set Transformer: a framework for attention-based permutation-invariant neural networks.
+\newblock In \emph{International Conference on Machine Learning}, pages 3744--3753, 2019.
+
+\bibitem[Kim et~al.(2019)]{kim2019anp}
+Hyunjik Kim et~al.
+\newblock Attentive neural processes.
+\newblock In \emph{International Conference on Learning Representations}, 2019.
+
+\bibitem[Brbi{\'c} et~al.(2020)]{brbic2020mars}
+Maria Brbi{\'c} et~al.
+\newblock MARS: discovering novel cell types across heterogeneous single-cell experiments.
+\newblock \emph{Nature Methods}, 17:\penalty0 1200--1206, 2020.
+\newblock \doi{10.1038/s41592-020-00979-3}.
+
+\bibitem[Xu et~al.(2021)]{xu2021scanvi}
+Chenling Xu et~al.
+\newblock Probabilistic harmonization and annotation of single-cell transcriptomics data with deep generative models.
+\newblock \emph{Molecular Systems Biology}, 17:\penalty0 e9620, 2021.
+\newblock \doi{10.15252/msb.20209620}.
+
+\bibitem[Chen et~al.(2023)]{chen2023tosica}
+Jiawei Chen et~al.
+\newblock Transformer for one stop interpretable cell type annotation.
+\newblock \emph{Nature Communications}, 14:\penalty0 223, 2023.
+\newblock \doi{10.1038/s41467-023-35923-4}.
+
+\bibitem[Fischer et~al.(2024)]{fischer2024sctab}
+Felix Fischer et~al.
+\newblock scTab: scaling cross-tissue single-cell annotation models.
+\newblock \emph{Nature Communications}, 15:\penalty0 6611, 2024.
+\newblock \doi{10.1038/s41467-024-51059-5}.
+
+
+\bibitem[Robinson et~al.(2010)Robinson, McCarthy, and Smyth]{robinson2010edger}
+Mark~D. Robinson, Davis~J. McCarthy, and Gordon~K. Smyth.
+\newblock edger: a bioconductor package for differential expression analysis of digital gene expression data.
+\newblock \emph{Bioinformatics}, 26:\penalty0 139--140, 2010.
+\newblock \doi{10.1093/bioinformatics/btp616}.
+
+\bibitem[Lause et~al.(2021)Lause, Berens, and Kobak]{lause2021pearson}
+Jan Lause, Philipp Berens, and Dmitry Kobak.
+\newblock Analytic Pearson residuals for normalization of single-cell rna-seq umi data.
+\newblock \emph{Genome Biology}, 22:\penalty0 258, 2021.
+\newblock \doi{10.1186/s13059-021-02451-7}.
+
+\bibitem[Sung et~al.(2018)]{sung2018relation}
+Flood Sung, Yongxin Yang, Li Zhang, Tao Xiang, Philip~H.~S. Torr, and Timothy~M. Hospedales.
+\newblock Learning to compare: relation network for few-shot learning.
+\newblock In \emph{Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition}, pages 1199--1208, 2018.
+\newblock \doi{10.1109/CVPR.2018.00131}.
+
+\bibitem[Jaegle et~al.(2021)]{jaegle2021perceiver}
+Andrew Jaegle, Felix Gimeno, Andy Brock, Oriol Vinyals, Andrew Zisserman, and Joao Carreira.
+\newblock Perceiver: general perception with iterative attention.
+\newblock In \emph{Proceedings of the 38th International Conference on Machine Learning}, volume 139, pages 4651--4664, 2021.
+
+\bibitem[Vaswani et~al.(2017)]{vaswani2017attention}
+Ashish Vaswani et~al.
+\newblock Attention is all you need.
+\newblock In \emph{Advances in Neural Information Processing Systems}, volume 30, pages 5998--6008, 2017.
+
+\bibitem[Chen et~al.(2016)Chen, Xu, Zhang, and Guestrin]{chen2016checkpointing}
+Tianqi Chen, Bing Xu, Chiyuan Zhang, and Carlos Guestrin.
+\newblock Training deep nets with sublinear memory cost.
+\newblock \emph{arXiv}, 2016.
+\newblock arXiv:1604.06174.
+
+\bibitem[Loshchilov and Hutter(2019)]{loshchilov2019adamw}
+Ilya Loshchilov and Frank Hutter.
+\newblock Decoupled weight decay regularization.
+\newblock In \emph{International Conference on Learning Representations}, 2019.
+
+\bibitem[Loshchilov and Hutter(2017)]{loshchilov2017sgdr}
+Ilya Loshchilov and Frank Hutter.
+\newblock Sgdr: stochastic gradient descent with warm restarts.
+\newblock In \emph{International Conference on Learning Representations}, 2017.
+
+\end{thebibliography}
+
+\clearpage
+\section*{Figure legends}
+
+\textbf{Figure 1 | CellPFN isolates support-conditioned inference from persistent biological semantics.}
+\textbf{a,} Three abstraction layers: biological semantics, observation and support-conditioned inference. \textbf{b,} Anonymous-gene task contract: support and query share task-local columns, while labels and gene identities change between tasks. \textbf{c,} Procedural cellular task prior. \textbf{d,} CellPFN architecture with empirical-Bayes or raw/Pearson base, learned class summaries, same-gene relation encoder, program tokens and bounded residual.
+
+\textbf{Figure 2 | The procedural prior spans biological and observational uncertainty.}
+\textbf{a,} Mean-program, rare-marker/multimodal and signed-covariance mechanisms. \textbf{b,} Donor, study, batch, trajectory and class-by-domain effects. \textbf{c,} Hierarchical library size and gene-wise gamma--Poisson count generation. \textbf{d,} Task distributions over genes, classes, support and cells. \textbf{e,} Real-versus-synthetic count diagnostics and shortcut/solvability filters.
+
+\textbf{Figure 3 | CellPFN uses episode-local gene alignment and class context.}
+\textbf{a,} Learned K=4 versus uniform K=1 and deterministic K=2/K=4 summaries. \textbf{b,} Same-gene derangement. \textbf{c,} Summary entropy, effective support and diversity. \textbf{d,} Residual-only, analytic-only and hybrid predictions. \textbf{e,} Held-task learning curves across model seeds.
+
+\textbf{Figure 4 | Synthetic-only meta-pretraining transfers to real single-cell classification.}
+\textbf{a,} ROSMAP balanced accuracy and macro F1 versus empirical Bayes across support budgets and dataset views. \textbf{b,} Zebra performance versus raw/Pearson prototypes and support-trained references. \textbf{c,} One-shot class-level recall and class-collapse analysis. \textbf{d,} Paired effects across model and support seeds. \textbf{e,} Prospectively frozen external dataset.
+
+\textbf{Figure 5 | The useful level of model complexity depends on the information regime.}
+\textbf{a,} Applicability map over count eligibility, support size, assay shift and label granularity. \textbf{b,} Analytic, CellPFN and target-fitted methods by regime. \textbf{c,} Synthetic-to-real method-ranking agreement. \textbf{d,} Classification beyond cell type: \dataplaceholder{state, disease, perturbation and developmental tasks}. \textbf{e,} Accuracy--calibration--compute frontier.
+
+\textbf{Figure 6 | Additional synthetic exposure changes specialization rather than uniformly improving transfer.}
+\textbf{a,} Held-synthetic and real performance at 10K, 25K, 50K and 100K tasks. \textbf{b,} Static, clip-10, gene-width and low-shot support continuations. \textbf{c,} Effects at B1/B10/B100. \textbf{d,} Task-family and optimizer diagnostics. \textbf{e,} Frozen replication and external-validation protocol.
+
+\clearpage
+\section*{Extended Data and Supplementary skeleton}
+
+\begin{itemize}
+\item Extended Data Fig. 1: Complete task hierarchy, parameter ranges and causal receipts.
+\item Extended Data Fig. 2: Real/simulated count diagnostics and selector outcomes.
+\item Extended Data Fig. 3: CellPFN architectures, parameter counts and computational complexity.
+\item Extended Data Fig. 4: Model/support-seed and class-level real results.
+\item Extended Data Fig. 5: Information contracts and hyperparameter selection for references.
+\item Extended Data Fig. 6: Schedule addendum and task-exposure analyses.
+\item Extended Data Fig. 7: Gene-width, support-size and permutation robustness.
+\item Extended Data Fig. 8: Additional classification tasks and negative results.
+\item Extended Data Fig. 9: Runtime, GPU utilization, memory and energy estimates.
+\item Extended Data Fig. 10: Frozen external protocol and sensitivity analyses.
+\item Supplementary Table 1: Simulator hyperparameter ranges and calibration values.
+\item Supplementary Table 2: Model architectures, optimization and compute.
+\item Supplementary Table 3: Real datasets, studies, donors, genes and labels.
+\item Supplementary Table 4: Complete reference-method matrix and information advantages.
+\item Supplementary Table 5: Per-class and per-group statistics.
+\item Supplementary Note 1: Derivation of the empirical-Bayes count expert.
+\item Supplementary Note 2: Anonymous-gene invariance and derangement controls.
+\item Supplementary Note 3: Task schedules, selector and scaling experiments.
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,250 @@
+\documentclass{article}
+
+\PassOptionsToPackage{numbers,compress}{natbib}
+\usepackage[preprint]{neurips_2024}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{siunitx}
+
+\title{HashPrompt: Sim-to-Real Transfer for Single-Cell Transcriptomics}
+
+\author{%
+  Philipp Flotho\thanks{Equal contribution.}
+  \And
+  Matthias Flotho\footnotemark[1]
+  \And
+  Pirya Rani
+  \And
+  Andreas Keller
+}
+
+\newcommand{\myparagraph}[1]{\noindent\textbf{#1.} }
+\newcommand{\phflo}[1]{\textcolor{blue}{#1}}
+\newcommand{\gpt}[1]{\textcolor{red}{#1}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Current single-cell annotation models typically rely on atlas-scale real datasets and a fixed gene vocabulary. We present a coupled alternative in which a new prompt-based annotator, HashPrompt, is trained entirely on data from a new streaming simulator, \textsc{pyScIntelligentDesign}. HashPrompt hashes dense input-feature indices, encodes cells with a DeepSets backbone, and predicts query labels from support-derived prototypes formed with a deterministic hashed class token and a single attention head. \textsc{pyScIntelligentDesign} generates synthetic scRNA-seq experiments with hierarchical cell types, donor-level covariates, and layered study-, batch-, plate-, and cell-level nuisance effects, making panel masking, ambient RNA, dropout, library-size shifts, protocol bias, and doublets explicit parts of the training distribution. The paper is therefore HashPrompt-first in emphasis, but it explicitly proposes both the annotation model and the simulator as coupled contributions: HashPrompt supplies the inference mechanism, while \textsc{pyScIntelligentDesign} supplies the controllable synthetic training environment and hidden ground truth needed for sim-to-real study. We evaluate the paired system against classical reference-mapping baselines and nuisance-shift ablations to ask which simulator ingredients are necessary for synthetic-only training to transfer to real scRNA-seq annotation.
+\end{abstract}
+
+\section{Introduction}
+
+Cell-type annotation is a central step in single-cell RNA sequencing (scRNA-seq) analysis. Classical workflows combine unsupervised clustering with marker-based manual curation, while supervised alternatives such as ACTINN \cite{ma2020actinn}, TOSICA \cite{chen2023transformer}, scGPT \cite{cui2024scgpt}, scTab \cite{fischer2024sctab}, and SCARF \cite{liu2025scarf} train directly on large reference atlases. Those systems have substantially improved annotation quality, but they also share two assumptions that are increasingly worth challenging. First, they depend on large real datasets whose labels, batch structure, and tissue coverage are expensive to acquire. Second, they assume that expression profiles can be aligned into a stable global gene vocabulary before any learning takes place.
+
+\gpt{Cell type classification is an important step in single-cell RNA sequencing (scRNA-seq) analysis and pre-processing that allows cell type specific analyses. Traditionally, researchers identify cell   by unsupervised clustering and then assign labels based on known marker genes, a process that is labor-intensive and can be inconsistent across studies \cite{ma2020actinn}. An early example for automated and machine learning-based approaches is \textit{Automated Cell Type Identification using Neural Networks} (ACTINN). The authors train neural networks on reference atlases and predicting cell identities in new datasets \cite{ma2020actinn}. ACTINN used a simple 3-layer network trained on mouse and human atlases to rapidly and accurately classify cell   in other tissues in a supervised way but rely on a predefined gene input space (e.g., using a fixed set of gene expression features), as well as real datasets for training.}
+
+\gpt{In recent years, deep learning has led to state-of-the-art performance in cell type annotation. transformer-based architectures have proven particularly effective. \textit{Transformer for One-Stop Interpretable Cell-type Annotation} (TOSICA) is a multi-head self-attention network that achieved top accuracy among 18 cell type annotation methods across diverse scRNA-seq benchmarks \cite{chen2023transformer}. By avoiding explicit dimensionality reduction and linking attention heads to known gene sets, TOSICA provides interpretable predictions with a high accuracy for cell subtype prediction. 
+Transformers alone can be task specific, unlike foundation models that are trained to solve various downstream tasks on classes that do not need to be in the training data. 
+scGPT is a generative pre-trained transformer model built on an atlas of over 33 million cells \cite{cui2024scgpt}. scGPT adapts techniques known from large language models and defines \textit{sentences} from cell-gene analogies and has a large capacity for fine-tuning on tasks like cell type annotation, batch integration, or perturbation response prediction
+Similarly, scTab introduced a TabNet-based deep learning model for tabular single-cell data, trained on 22.2 million cells spanning many human tissues \cite{fischer2024sctab}. The scTab study showed that moving to truly large training corpora and model sizes yields substantial gains in cross-tissue generalization, outperforming linear methods and earlier architectures. Through a novel data augmentation scheme, scTab improved the model's robustness to dataset biases. Both scGPT and scTab represent the new wave of large-scale models that treat scRNA-seq atlases as foundation data for broad biological tasks. While these models achieve high accuracy, they share a critical limitation: dependence on a fixed gene vocabulary and vast real datasets. Even state-of-the-art foundation models assume gene expression vectors of a particular dimensionality that is defined by the gene sets present in the training data and require careful curation to ensure all datasets use a consistent feature space \cite{fischer2024sctab}. For example, scTab leveraged the CELLxGENE data collection to train one unified model across many studies, which necessitated aligning each cell's gene features into one common index. Consequently, models struggle with missing or novel genes, as well as other alignment issues such as cross-species or cross-technology application. Moreover, assembling the huge real datasets for scGPT or scTab entails significant experimental effort and relies on the availability of expertly annotated cells at scale (e.g. compare \cite{flotho2024zebra, grandke2025single} (\textbf{TODO: AHA, ROSMAP})). The survey by Zhao \textit{et al.},\cite{zhao2023survey} catalogues over 60 single-cell annotators and notes the universal assumption of a fixed gene set. The latest of these, scRGCL, couples residual graph-convolution with contrastive learning for annotation, yet---like its peers---operates in a fixed gene index \cite{yuan2025scrgcl}.}
+
+\gpt{
+In a step towards cell type foundation models, multiple works explore few-shot or meta-learning approaches that can handle novel cell   from only a limited amount or no examples in the training data. \textit{Meta-learning Approach for Rare Cell  } (MARS) treats cell identification as a meta-learning problem \cite{brbic2020mars}. MARS trains across multiple reference datasets to learn a general cell embedding function and a set of prototypical \textit{landmark} representations in the latent space. By transferring these latent representations, MARS can recognize cells it never saw during training and even assign provisional names to new cell populations. MARS accurately identified rare and novel cells in a large mouse cell atlas demonstrating positive knowledge transfer across datasets. Other prototype-based frameworks \cite{snell2017prototypical} classify cells by distance to class prototypes in an embedding space. They mitigate rigid class vocabularies of classical classifiers by allowing new classes to be incorporated from a few reference examples.
+Recent pre-trained efforts such as \textit{Single Cell ATAC-seq and RNA-seq Foundation} model (SCARF) \cite{liu2025scarf} and scDeepSort \cite{shao2021scdeepsort} further illustrate this trend, yet both still depend on fixed gene or peak vocabularies extracted from large real atlases. While GPT-4--based marker-list prompts now offer a one-liner form of zero-shot annotation, they still depend on curated marker vocabularies and cannot ingest raw expression profiles directly, leaving the vocabulary problem unsolved. A complementary study demonstrates that GPT-4 can annotate cell types directly from marker-gene prompts with expert-level concordance, but still presupposes a curated marker vocabulary \cite{hou2024assessing}.
+Concurrent work on scRNA transfer learning under batch-mixing constraints \cite{yang2025mixmatch} still relies on a globally aligned gene index, underscoring the need for the vocabulary-agnostic approach we propose. A recent benchmarking study \cite{smith2024benchmark} confirms that all top-ranking annotators break when $\geq20\%$ of genes are missing, a failure mode HashPrompt is designed to avoid.
+}
+
+\gpt{Current cell classification models are generally trained on real biological datasets and require thousands to millions of measured and annotated cells. In related areas, however, in silico generated data has been demonstrated unmatched performance for many downstream tasks \cite{wood20223d, flotho2024t} and data augmentation is one of the most important operations for generalization, e.g. in computer vision. To address class imbalance in rare cell populations, Bej et al. (2021) proposed an oversampling technique that generates synthetic minority-cell examples from real gene expression profiles \cite{bej2021automated}. Their LoRAS-based algorithm sc-SynO takes a small set of rare cells and produces additional simulated cells with similar expression patterns, which can then help a classifier identify rare cell   in other datasets. Augmenting the training data with these synthetic rare examples improved the detection of rare cell   compared to training on the imbalanced real data alone. Deep generative models have been used to create realistic scRNA-seq data in silico. The \textit{conditional single-cell generative adversarial neural networks} (cscGAN) framework introduced a conditional GAN that learns the joint distribution of genes in single-cell data and generates new cells of specified cell   \cite{marouf2020realistic}. The authors demonstrated that augmenting small datasets with cscGAN-generated cells increases the performance and reliability of downstream analyses such as classifier accuracy and marker gene detection. Similar in scope, diffusion models have recently been applied in a similar way (e.g. scDiffusion \cite{luo2024scdiffusion}), which, similar to the GAN - diffusion relationship in computer vision, improves the realism of simulated data. However, to date, these synthetic data efforts have primarily been used as data augmentations in real world datasets or for benchmarking purposes \cite{treppner2021synthetic}. We found no peer-reviewed study that entirely trains a cell type classifier from scratch on procedurally generated scRNA-seq data and then successfully applies it to real data. 
+Nouri et al. presented scGFT, a train-free generative Fourier transformer that synthesises scRNA-seq cells for data augmentation but still operates in a fixed gene space, highlighting the momentum of synthetic approaches while leaving the vocabulary constraint unresolved \cite{nouri2025single}.}
+
+\phflo{In fields such as computer vision, natural language processing, and robotics, researchers have demonstrated that models trained predominantly or exclusively on synthetic data can achieve high performance on real-world tasks. Particularly, in computer vision, annotation quality is often a limiting factor. For example, manual facial landmark annotations can never be subpixel accurate bone structure projections. Hence, Wood et al. (2021) showed that a face analysis model can be trained on photo-realistic synthetic images alone and enables dense facial landmark annotations \cite{wood2021fake}. Building on that idea, recent work has extended synthetic training to new modalities -- for example, the T-FAKE dataset generated thermal infrared face images with ground-truth landmarks by style-transferring synthetic RGB faces \cite{flotho2024t}. These studies illustrate that with sufficient realism and diversity in simulation, models can be trained entirely on fake data and still excel on real data. Indeed, large synthetic image corpora like the FAKE dataset (100k generated face images) have proven invaluable for advancing state-of-the-art performance in vision tasks. 
+While sparse ground truth has traditionally been generated manually, methods such as \textit{optical flow} (OF) require dense ground truth displacement fields. The first proof-of-concept for deep learning-based OF estimation was only made possible with synthetic training datasets. FlowNet demonstrated that training on the synthetic Flying Chairs dataset generalizes to real-world images.
+Following this success, synthetic datasets like FlyingThings3D \cite{Mayer_2016_CVPR} and MPI-Sintel \cite{ButlerWSB12} further improved synthetic data for OF training and most top-performing OF algorithms today rely heavily on synthetic data for pretraining \cite{teed2020raft}.}
+
+\gpt{ In robotics and autonomy, simulation and domain randomization have become critical for training agents that operate in the real world. Tobin et al. (2017) demonstrated that by randomizing visual properties in a simulator (textures, lighting, object shapes, etc.), a model could be trained to detect objects entirely in simulation and deploy zero-shot in reality \cite{tobin2017domain}. Their robotic object localization system attained around \SI{1.5}{\centi\metre} precision in the real world using only non-photorealistic simulated images during training. This domain randomization strategy has since enabled sim-to-real transfer for tasks from grasping to navigation, often without any real data in training. Likewise in NLP, synthetic data augmentation is a well-established technique -- for example, machine translation systems routinely improve by training on back-translated sentences (target-language text synthetically translated to source-language) in addition to genuine parallel data. Including millions of these generated sentence pairs can boost translation quality by several BLEU points, comparable to having substantially more human-labeled data \cite{sennrich-etal-2016-improving,edunov-etal-2018-understanding,mcnamee-duh-2023-extensive,reheman-etal-2024-exploiting}.
+Across these domains, procedural generation and simulation have broken past bottlenecks of data collection, allowing models to tap virtually   training examples and generalize in ways previously thought to require real data.}
+
+\phflo{
+While recent advances of deep learning resulted in the generation of huge, curated datasets in many scientific areas, biological datasets and, particularly, scRNA-seq datasets were limited in size up until the past few years. This is in part due to the fact that data acquisition is very difficult. Even today, large human datasets contain only a few hundred donors as compared to thousands of individuals in state-of-the-art computer vision datasets. Alongside the development of synthetic datasets in related areas, approaches for the statistical simulation of spatial and single cell sequencing data have gained importance. 
+Common methods are often use pooling and the main focus is the reconstruction of existing datasets. This assumes that any given reference copula can be sufficiently well fitted and, while this produces proper ground truth, can only reproduce effects that can be estimated from the data. Hence, those approaches are often judged to be less complicated than real world data and require large datasets to reproduce difficult effects. }
+
+\phflo{Duo et al. tested 49 available approaches for data simulation of scRNA-seq and spatially resolved transcriptomics (SRT). }
+
+Existing simulators cover markedly different niches. Fast count simulators such as Splatter / Splat, SPARSim, and SPsimSeq are convenient baselines when the goal is quick count generation. Reference-fit statistical simulators such as scDesign2 and scDesign3 are strong when the objective is to mimic a given measured atlas. Mechanistic or process-driven tools such as SymSim, dyngen, and scMultiSim trade simplicity for richer biological structure, while read-level simulators such as scReadSim live at a different stage of the analysis stack. For HashPrompt, the relevant gap is not only realism in the abstract, but a simulator that can continuously stream new experiments while varying donor composition, gene coverage, protocol effects, and technical artefacts.
+
+\phflo{
+Benchmarking datasets have long been important \textbf{todo: cite 300w} often contain hidden ground truth of the test set \cite{baker2011database, butler2012naturalistic} and in the case of dense computer vision approaches have long been containing synthetic data \cite{baker2011database, butler2012naturalistic}. }
+
+\gpt{The scDesign family of simulators introduced a statistically rigorous approach to high-fidelity simulation. The original scDesign \cite{scdesign} was a \textit{statistical simulator for rational scRNA-seq experimental design}, focusing on powering DE analyses. scDesign treated each gene's count distribution in each cell type as a mixture of distributions and allowed flexible specification of DE genes. It was useful for determining how many cells are needed to detect a certain DE signal. scDesign2 greatly advanced this framework by capturing gene--gene correlations and learning all parameters from real data \cite{scdesign2}. scDesign2 fits each gene's expression marginal distribution (using a zero-inflated negative binomial or other chosen distribution) and also learns the correlation structure between genes via a copula or similar technique. By doing so, it generates \textit{high-fidelity single-cell gene expression count data with gene correlations captured}. In practice, scDesign2 can take an input dataset (with known cell type labels) and then simulate new datasets with the same properties -- same number of cell types (or user-specified cell count per type), similar gene means/variances, and realistic covariances. }
+
+In evaluations, scDesign2 was among the top methods for overall realism \cite{crowell2023shaky}, but it requires high-quality input data for training. scDesign3 extends this line with more flexible covariate handling, multimodal settings, and strong realism at additional computational cost \cite{scdesign3,duo2024systematic}. These simulators are essential comparators, but they were not designed primarily as endlessly refreshed training streams for a downstream prompt-based model.
+
+Even the fast end of the simulator literature remains slow once the target regime starts to resemble synthetic foundation-model training. As a simple lower-bound argument, a simulator that requires on the order of seconds for a $5\text{k}\times10\text{k}$ task is already pushed toward an hours-long regime under linear scaling when extrapolated toward $10^6$ cells and $3\times10^4$ genes; in practice, dense allocation, garbage collection, and memory pressure can make the regime even less forgiving. The key question for this paper is therefore feasibility under repeated training draws rather than an isolated one-off runtime benchmark.
+
+\phflo{Despite growing understanding of the performance in related fields, the idea of training a foundation model for single-cell biology on purely synthetic data is largely unexplored. 
+HashPrompt closes this gap: We use fully simulated scRNA-seq data from an high performance scRNA-seq simulator with full pytorch compatibility for efficient online training. We train a cell type classification model that is gene-vocabulary-agnostic in the sense that the model does not assume a fixed set of  a priori gene features. Instead, it can accept any gene identifiers using hashing and embedding techniques to handle gene inputs dynamically. Our use of fixed-size hash buckets to map arbitrary gene identifiers builds directly on the feature-hashing trick popularised in fastText for large-scale text classification \cite{joulin2017bag}. A similar vocabulary-free hashing strategy has recently been adopted in protein language models to accommodate out-of-schema amino-acid tokens \cite{nijkamp2023protbert}.
+This enables the model to generalize across organisms, studies, or modalities with differing gene sets. Moreover, by training exclusively on procedurally simulated cells, HashPrompt sidesteps the need for large labeled atlases and can generate training examples for cell   that are rare or even entirely novel and can exploit the high-accuracy ground truth that does not exist for real-world datasets, where annotations to-date remain noisy.
+Earlier, Chen et al. used the DenseFly locality-sensitive hashing scheme for ultra-fast cell-atlas search across millions of profiles, foreshadowing our vocabulary-free hash embedding \cite{chen2020using}.
+%The concept is analogous to the ``Fake it till you make it'' vision: if the simulation is rich enough, a model trained on fake single-cell data could perform competitively on real data. 
+With HashPrompt, we treat single-cell data with the same simulation-driven philosophy that has succeeded in vision and robotics and address the gene vocabulary constraint by our gene-agnostic design. 
+We demonstrate that large-scale in silico biology can yield models with real-world impact, much like synthetic data has done in other domains in recent years. 
+With this paper, we make the following contributions
+}
+
+The paper is HashPrompt-first in branding, but scientifically it proposes a paired system. HashPrompt is the annotation model. \textsc{pyScIntelligentDesign} is the simulator that makes synthetic-only training, controlled nuisance variation, and hidden clean/noisy supervision possible. The contributions are therefore most naturally read together rather than as a model paper with an incidental data source.
+
+\paragraph{Contributions.}
+\begin{itemize}
+    \item \textbf{HashPrompt.} We introduce a support-based annotation model that hashes input feature indices into a compact embedding table, encodes cells with a DeepSets backbone, and constructs class prototypes from support cells using a deterministic class token and single-head attention.
+    \item \textbf{\textsc{pyScIntelligentDesign}.} We introduce a streaming simulator for HashPrompt training that generates hierarchical cell types, donor-level covariates, and layered study-, batch-, plate-, and cell-level technical effects including panel masking, protocol bias, ambient RNA, dropout, library-size shifts, and doublets.
+    \item \textbf{Coupled synthetic-only training.} We formulate cell-type annotation as support-based classification learned entirely from procedurally generated transcriptomes rather than from curated real atlases, with the simulator and model optimized as one training pipeline.
+    \item \textbf{Sim-to-real evaluation.} We study transfer to real scRNA-seq annotation through classical reference-mapping baselines and nuisance-shift ablations, asking which simulator ingredients materially change downstream robustness.
+\end{itemize}
+
+\section{Related work}
+
+\myparagraph{Annotation models and reference mapping.}
+Recent supervised and foundation-style annotators have established strong performance on reference-based scRNA-seq labeling, including ACTINN \cite{ma2020actinn}, TOSICA \cite{chen2023transformer}, scGPT \cite{cui2024scgpt}, scTab \cite{fischer2024sctab}, and SCARF \cite{liu2025scarf}. For the support-based setting studied here, the relevant classical anchors are not only large neural models but also reference-mapping systems such as SingleR \cite{singleR}, scmap-cell \cite{scmapcell}, and Symphony \cite{symphony}, along with simple nearest-neighbor or nearest-centroid baselines in a common PCA space. These baselines are important because they expose whether synthetic training delivers genuine robustness or merely reproduces gains already available from careful classical transfer.
+
+\myparagraph{Vocabulary-relaxed and cross-species models.}
+The motivation for vocabulary-relaxed modeling is shared by several recent representation-learning systems. SATURN \cite{saturn}, Universal Cell Embeddings \cite{uce}, and TranscriptFormer \cite{transcriptformer} all explore broader feature alignment or cross-species transfer, while scDeepSort \cite{shao2021scdeepsort} and GPT-based marker-prompt approaches \cite{hou2024assessing} highlight the continuing interest in flexible cell annotation. Our claim is narrower than a general cross-species foundation model: we focus on reference-based annotation from raw expression profiles when feature coverage may be incomplete or permuted and the classifier should not depend on a learned parameter tied to each canonical gene name.
+
+\myparagraph{Synthetic single-cell data.}
+Synthetic scRNA-seq data has mainly been used for augmentation or benchmarking rather than as the sole basis for downstream-task training. The scDesign family \cite{scdesign,scdesign2,scdesign3} remains a strong reference point for realism, while broader evaluations show the trade-off between fidelity, flexibility, and scale \cite{crowell2023shaky,duo2024systematic}. Deep generative approaches such as cscGAN \cite{marouf2020realistic}, scDiffusion \cite{luo2024scdiffusion}, and related augmentation work \cite{bej2021automated,nouri2025single} further support the premise that synthetic diversity can improve robustness. HashPrompt differs in the stricter regime it targets: the model is trained from a procedural simulator directly, without any real-data pretraining and without a fixed gene index.
+
+\section{\textsc{pyScIntelligentDesign}: synthetic training environment}
+
+\phflo{While the current generation of scRNA-seq analysis pipelines can work with datasets in the order of 100 million cells already \cite{wolf2018scanpy, zhang2025tahoe}, simulators, on the other hand, usually operate on much smaller scales. }
+
+In this paper, \textsc{pyScIntelligentDesign} is a named contribution rather than a background utility. Its role is to provide a controllable source of synthetic support/query episodes whose nuisance structure can be switched on, off, or intensified during HashPrompt training. The simulator combines a hierarchical cell-type generator, donor-level meta-variables, and composable study, batch, and plate effect stacks. The resulting stream exposes precisely the kinds of perturbations that real scRNA-seq annotation models must survive, while retaining complete ground truth by construction.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.92\linewidth]{figures/abstract.png}
+    \caption{Coupled view of the two named components proposed in this paper. \textsc{pyScIntelligentDesign} generates hierarchical cell types together with donor-specific and technical nuisance factors; HashPrompt consumes this stream as support/query episodes and learns prototypes in a hash-indexed feature space.}
+    \label{fig:overview}
+\end{figure}
+
+\subsection{Hierarchical synthetic transcriptome generation}
+At the biological layer, pyScIntelligentDesign samples cell types from a tree-structured hierarchy rather than from a flat label list. Closely related leaves inherit similar baseline expression patterns, which makes the resulting classification problem more realistic than independent class templates. Donor-level meta-variables are simulated jointly through a correlated latent structure, allowing different donors to vary along multiple hidden axes before technical effects are applied. This pairing of hierarchy and correlated donor structure matters because it creates support sets in which within-class variability is present by design instead of being added as unstructured noise.
+
+The data stream is rebuilt repeatedly rather than drawn from one frozen synthetic atlas. In the current implementation, a \texttt{GeneralCellStream} reconstructs the underlying dataset after a fixed number of draws, so successive minibatches come from fresh synthetic experiments. This keeps the training distribution broad and makes the simulator closer to domain-randomized training than to static dataset release.
+
+\subsection{Marginal models, copulas, and donor structure}
+Beyond the cell-type tree, pyScIntelligentDesign assigns each gene a marginal count model and then overlays correlated structure through sparse copula-style dependencies. In the simulator manuscript, this is written as
+\[
+Y_{ij} \sim F_j\bigl(\mu_{ij}(\mathbf{x}_i),\sigma_{ij}(\mathbf{x}_i),\dots\bigr),
+\]
+where $F_j$ is a chosen count family and $\mathbf{x}_i$ collects covariates such as cell type, donor, batch, and study identity. Meta-variable augmentation then injects donor-level or hidden covariates that are correlated across cells before the technical noise stack is applied. In practice, this gives the synthetic stream a richer internal structure than simply drawing independent count vectors from per-class templates.
+
+The same design also controls how studies, batches, donors, and cell types are sampled. In the notation of the simulator paper,
+\[
+P(\text{study}=s)=\pi_s,\qquad P(\text{batch}=b\mid s)=\beta_{s,b},\qquad P(\text{donor}=d\mid b)=\delta_{b,d},
+\]
+and donor-specific cell-type assignment is modulated by batch biases
+\[
+P(\text{cell type}=i\mid d,b)=\frac{p_{d,i}\exp(\gamma_{b,i})}{\sum_j p_{d,j}\exp(\gamma_{b,j})}.
+\]
+These explicit sampling layers matter for HashPrompt because support sets should inherit structured donor and batch variability rather than only random label noise.
+
+\subsection{Layered nuisance model}
+Technical variation is injected through explicit effect stacks that operate at multiple levels of the simulated experiment. Table~\ref{tab:effect_stack} summarizes the current layers used by the code base.
+
+\begin{table}[t]
+    \centering
+    \small
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Level} & \textbf{Representative effects} & \textbf{Role in transfer experiments} \\
+        \midrule
+        Study & global library size, 5$'$/$3'$ bias, FFPE decay, panel mask & protocol-scale shifts and reduced gene coverage \\
+        Batch & ambient RNA, batch library size, gene-length bias, gene-scale bias, expression jitter, logistic dropout, count sampling & chemistry and acquisition variation within a study \\
+        Plate & cell library size, plate-specific gene scaling, doublet mixing & well-level and cell-level corruption inside a batch \\
+        Donor / label generation & correlated donor meta-variables, hierarchical cell-type tree & structured biological variability before technical noise \\
+        \bottomrule
+    \end{tabular}
+    \caption{Effect stack used by the fused HashPrompt training environment. The simulator makes nuisance factors first-class controls rather than hidden properties of a benchmark release.}
+    \label{tab:effect_stack}
+\end{table}
+
+Several features of this stack are especially relevant for the annotation task. Panel masking stresses vocabulary robustness under targeted or partial assays. Ambient contamination, dropout, and doublet mixing produce realistic distortions of sparse profiles. Library-size and gene-length effects simulate chemistry-dependent changes that can be confounded with biology if the model is overfit to clean expression templates. By logging these perturbations explicitly, the simulator makes it possible to ask not only whether a classifier transfers, but which nuisance families dominate the degradation curve.
+
+\subsection{Episode construction for prompt-based learning}
+HashPrompt does not consume synthetic cells as one flat supervised table. Instead, training batches are reorganized into support/query episodes. A collate stage groups leaf cell types into coarser classes on the fly, hashes each class identity from the set of contributing leaves, and retains only classes with enough observations to provide both support cells and queries. The same stage can overdraw and subset cells to enforce minimal diversity across donor, batch, and study identifiers. This detail connects the simulator directly to the learning problem: prototype formation is exposed to nuisance diversity during training rather than after the fact.
+
+\section{HashPrompt: annotation model}
+
+\subsection{Task definition}
+We study support-based cell-type annotation. For each class $c$, the model receives a support set
+\begin{equation}
+    \mathcal{S}_c = \{(x_i, y_i) : y_i = c\},
+\end{equation}
+and must assign a label to a query cell $x_q$ by comparing its embedding against class prototypes derived from the supports. This formulation keeps the problem tightly tied to reference mapping: new label sets can be introduced at inference time through support examples rather than by retraining a fixed classifier head.
+
+\subsection{Vocabulary-agnostic tokenization}
+Each observed gene identifier $g$ is mapped deterministically into one of $H=16{,}384$ hash buckets. The corresponding learned embedding is concatenated with the log-transformed expression value,
+\begin{equation}
+    t_g = \bigl[e_{h(g)} \,\Vert\, \log(1+x_g)\bigr] \in \mathbb{R}^{65},
+\end{equation}
+where $e_{h(g)} \in \mathbb{R}^{64}$ is the bucket embedding. In the current implementation, the hash is applied to the incoming feature index of the dense expression vector rather than to an external curated gene-identity table. This removes the need for a learned parameter tied to each canonical gene name and keeps the model compatible with masked or permuted feature spaces.
+
+\subsection{Cell encoder}
+HashPrompt uses a DeepSets cell encoder. A shared multilayer perceptron $\phi : \mathbb{R}^{65} \rightarrow \mathbb{R}^{256}$ is applied independently to every gene token, and the outputs are mean-pooled:
+\begin{equation}
+    z = \frac{1}{|G|}\sum_{g \in G} \phi(t_g).
+\end{equation}
+In the current implementation, $\phi$ has the structure $65 \rightarrow 1024 \rightarrow 256$ with a GELU non-linearity. This yields a compact cell representation without requiring self-attention over the full gene set.
+
+\subsection{Prompted prototype construction}
+For each class, HashPrompt selects $k$ support cells and computes their embeddings $\{z_i\}_{i \in \mathcal{S}_c}$. A deterministic class token $u_c \in \mathbb{R}^{256}$ is generated from the hashed class identity. Support embeddings and the class token are then pooled with a single attention head:
+\begin{equation}
+    p_c = \mathrm{AttnPool}\Bigl(\{u_c\} \cup \{z_i : (x_i, y_i) \in \mathcal{S}_c\}\Bigr).
+\end{equation}
+Queries are scored against class prototypes with a temperature-scaled dot product,
+\begin{equation}
+    s_{qc} = \frac{z_q^{\top} p_c}{\tau}, \qquad \hat{y}_q = \arg\max_c s_{qc}.
+\end{equation}
+Unlike a closed-set classifier, this head is label-count agnostic: changing the class set changes only the supports and their hashed identifiers.
+
+\subsection{Training objective and stream}
+Training uses only synthetic cells sampled online from pyScIntelligentDesign. Within each episode, the first $k$ examples per class become supports and the remainder act as queries. The classifier is optimized with cross-entropy on query labels plus a contrastive term on the class prototypes,
+\begin{equation}
+    \mathcal{L} = \mathcal{L}_{\mathrm{CE}} + 0.1\,\mathcal{L}_{\mathrm{proto}}.
+\end{equation}
+This objective encourages both accurate query classification and separation between class prototypes. Because the underlying stream is rebuilt repeatedly, the model is trained against a continually shifting synthetic distribution rather than memorizing one atlas-shaped dataset.
+
+\section{Experimental setup}
+
+\subsection{Synthetic-only training and real-data transfer}
+The training corpus is entirely synthetic. Real scRNA-seq datasets enter only at evaluation time, where the aim is to measure how well a model trained on procedurally generated transcriptomes transfers to held-out biological data. Following the original HashPrompt draft, natural transfer targets include Human Cell Atlas PBMC data and Tabula Sapiens-style reference collections, optionally with feature-index permutations or masked-feature settings to test whether the model truly relies on expression structure rather than on a fixed input ordering.
+
+\subsection{Comparator families}
+The evaluation is organized around a deliberately strong simple-baseline tier before heavier neural comparisons. The first tier contains log1p-PCA with nearest-centroid and k-nearest-neighbor classifiers, together with reference-mapping systems such as SingleR \cite{singleR} and scmap-cell \cite{scmapcell}. The second tier adds neural annotators such as ACTINN \cite{ma2020actinn}, TOSICA \cite{chen2023transformer}, scGPT \cite{cui2024scgpt}, and scTab \cite{fischer2024sctab} where preprocessing and protocol assumptions permit a fair comparison. This ordering is essential because the main scientific question is not whether HashPrompt looks modern, but whether synthetic-only training buys robustness beyond careful classical transfer.
+
+\subsection{Ablation axes}
+The fused manuscript makes nuisance sensitivity an explicit experimental object. Relevant ablations include: the size of the hash table; mean pooling versus attention pooling for class prototypes; removal of the prototype contrastive term; stripped-down versus full simulator curricula; and selective toggling of nuisance modules such as ambient RNA, panel masking, dropout, batch effects, or doublet generation. The most informative metric is therefore not only clean-set accuracy, but how rapidly performance degrades as synthetic training omits nuisance factors that reappear in real data.
+
+\subsection{Metrics}
+For support-based annotation, the primary readouts are overall accuracy, macro-F1, and recall on rare or compositionally disadvantaged classes. Under transfer, these metrics can be paired with robustness curves across nuisance-shift conditions. For the simulator-facing side of the study, the point is not merely to claim realism but to identify which parts of the synthetic environment change downstream behavior in measurable ways.
+
+\section{Discussion}
+
+\phflo{We propose a novel foundation model for celltype classification and discuss it's suitability for zero-shot learning cell type classification. While there is only a limited amount of real world cell types, zero-shot learning for cell type classification comes with multiple advantages. Firstly, it does not require to be trained on similar gene ordering conventions and is invariant under different alignments. More importantly, what we want to demonstrate here: Cell type classification foundation models can be trained on synthetic data alone. To that end, we train a foundation model with the \texttt{scIntelligentDesign} online mode, where each batch is simulated on the fly and returns a completely different dataset.}
+
+The main scientific contribution of the fused paper lies in the explicit pairing of two branded and implemented components: HashPrompt as the support-based prototype classifier and \textsc{pyScIntelligentDesign} as the streaming synthetic training environment with explicit nuisance structure. HashPrompt is intentionally compact. \textsc{pyScIntelligentDesign}, in turn, provides structured donor variability, hierarchical cell labels, and protocol-aware artefacts that can be switched on and off during training. This allows the paper to ask whether transfer from synthetic to real annotation depends mainly on model capacity or on exposure to the right nuisance families.
+
+The current implementation also fixes the scope of the claims. HashPrompt already supports fixed-index hashing, DeepSets cell encoding, deterministic class tokens, attention-pooled prototypes, and online synthetic training with repeated simulator rebuilds. pyScIntelligentDesign already supports hierarchical cell generation, donor meta-variables, paired clean/noisy outputs, and layered study, batch, and plate effects. By contrast, broader ambitions such as a separate billion-cell benchmark platform or integrated GRN augmentation are not required for the central annotation claim developed here.
+
+From this perspective, the decisive evidence is straightforward: whether a compact model trained only on synthetic transcriptomes can compete with strong classical reference mapping, and whether richer nuisance modeling changes transfer in a reproducible and interpretable way. If so, synthetic-only training becomes a credible route for single-cell annotation even without atlas-scale real pretraining.
+
+\section{Conclusion}
+
+HashPrompt reframes single-cell annotation around a concrete sim-to-real question: can support-based cell-type classification be learned from procedurally generated transcriptomes alone when the model is not allowed to rely on a fixed gene vocabulary? The fused manuscript addresses that question by explicitly proposing two coupled components: HashPrompt as the annotation model and \textsc{pyScIntelligentDesign} as the simulator. \textsc{pyScIntelligentDesign} supplies hierarchical biological structure and controllable nuisance factors; HashPrompt supplies the compact inference model that turns those synthetic episodes into an annotation system. Together they define a concrete path toward synthetic-only training for scRNA-seq annotation.
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}

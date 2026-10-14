@@ -1,0 +1,830 @@
+\documentclass{article}
+
+
+% if you need to pass options to natbib, use, e.g.:
+\PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2024
+
+
+% ready for submission
+% \usepackage{neurips_2024}
+
+
+% to compile a preprint version, e.g., for submission to arXiv, add add the
+% [preprint] option:
+\usepackage[preprint]{neurips_2024}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{graphicx}
+
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+%     \usepackage[final]{neurips_2024}
+
+
+% to avoid loading the natbib package, add option nonatbib:
+%    \usepackage[nonatbib]{neurips_2024}
+
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+
+
+\title{pyScInsilico: Streaming, hierarchical simulation of scRNA-seq data at billion-cell scale}
+%\title{GigaCell: A Scalable Synthetic Benchmark for Next-Generation scRNA-seq Analysis}
+
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to break the
+% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
+% authors names on the first line, and the last on the second line, try using
+% \AND instead of \And before the third author name.
+
+
+%\author{%
+%  Philipp\thanks{Use footnote for providing further information
+%    about author (webpage, alternative address)---\emph{not} for acknowledging
+%    funding agencies.} \\
+%  Department of Computer Science\\
+%  Cranberry-Lemon University\\
+%  Pittsburgh, PA 15213 \\
+%  \texttt{hippo@cs.cranberry-lemon.edu} \\
+%  % examples of more authors
+%  % \And
+%  % Coauthor \\
+%  % Affiliation \\
+%  % Address \\
+%  % \texttt{email} \\
+%  % \AND
+%  % Coauthor \\
+%  % Affiliation \\
+%  % Address \\
+%  % \texttt{email} \\
+%  % \And
+%  % Coauthor \\
+%  % Affiliation \\
+%  % Address \\
+%  % \texttt{email} \\
+%  % \And
+%  % Coauthor \\
+%  % Affiliation \\
+%  % Address \\
+%  % \texttt{email} \\
+%}
+
+\author{
+  Philipp\thanks{Corresponding author.}\,\ \thanks{Authors contributed equally and can cite their name first.}\\
+  \And
+  Matthias\footnotemark[2]
+  \And
+  Ian
+  \And
+  Simon
+  \And
+  Pascal
+  \And
+  Florian
+  \And
+  Andreas\\
+  % examples of more authors
+  % \And
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+  % \AND
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+  % \And
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+  % \And
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+}
+
+\newcommand{\myparagraph}[1]{\noindent\textbf{#1.} }
+
+\newcommand{\phflo}[1]{\textcolor{red}{#1}}
+\newcommand{\gpt}[1]{\textcolor{blue}{#1}}
+
+
+\begin{document}
+
+
+\maketitle
+
+\begin{abstract}
+
+Current single-cell RNA-seq simulators hit memory or realism limits once datasets pass a few hundred thousand or million cells, making it hard to benchmark analysis tools for modern cohort studies. At the same time, real biological datasets remain noisy and sparsely annotated, making it difficult to disentangle signal from artifact.
+By contrast, image and language models now train on billions of samples, while the largest human scRNA-seq resources still top out at $10^8$ cells from only a few hundred donors. In other domains, access to clean data with known ground truth has been a key driver of model progress something single-cell research still lacks because solutions synthetic data generation are scarce. As a remedy, we present pyScInsilico, a high throughput streaming simulator that produces single-cell transcriptomes at billion-cell scale while replaying the full technical noise stack from molecule dropout to study-wide batch effects—through a hierarchical effect-stack design. Each layer (study; batch; plate; cell type) is independently parameterized and switchable, enabling controlled injection of ambient RNA, doublets, library-size drift and FFPE decay. On a 128-core CPU node, pyScInsilico generates $1\times 10^6$ cells in 126s and $1 \times 10^9$ cells in 60-70h including compression of the output data. The outputs match 10x PBMC summary statistics (KDE divergence < 0.02) and preserve plate/batch offsets recoverable by Harmony (iLISI = 0.95). pyScInsilico is open source and provides a fast, tunable test-bed for next-generation single-cell RNA-seq method development and benchmarking.
+
+\end{abstract}
+
+
+\section{Introduction}
+
+\phflo{
+While recent advances of deep learning resulted in the generation of huge, curated datasets in many scientific areas, biological datasets and, particularly, scRNA-seq datasets were limited in size up until the past few years. This is in part due to the fact that data acquisition is very difficult. Even today, large human datasets contain only a few hundred donors as compared to thousands of individuals in state-of-the-art computer vision datasets. Alongside the development of synthetic datasets in related areas, approaches for the statistical simulation of spatial and single cell sequencing data have gained importance. 
+Common methods are often use pooling and the main focus is the reconstruction of existing datasets. This assumes that any given reference copula can be sufficiently well fitted and, while this produces proper ground truth, can only reproduce effects that can be estimated from the data. Hence, those approaches are often judged to be less complicated than real world data and require large datasets to reproduce difficult effects. }
+
+\phflo{Duo et al. tested 49 available approaches for data simulation of scRNA-seq and spatially resolved transcriptomics (SRT). }
+
+large biological datasets and atlases include 
+ZEBRA \cite{flotho2024zebra}, Friederike atlas \cite{grandke2025single}, AHA, ROSMAP, Tahoe-100M \cite{zhang2025tahoe}
+
+
+synthetic data: The synthetic data vault \cite{SDV}
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=0.9\linewidth]{figures/abstract.png}
+	\caption{We propose the pyScIntelligentDesign scRNA-seq simulator that scales well to the simulation of one billion synthetic cells with multilayered random effect modulation: The GigaCell dataset mimics efforts in scRNA-seq harmonization and atlases comprising of multiple studies, different batches and this way mixing different chemistry and acquisition protocols. }
+	\label{fig:abstract}
+\end{figure}
+
+
+
+\myparagraph{DEG analysis}
+Deep learning-based DEG analysis: \cite{boyeau2023empirical}, \cite{ye2019decent}, \cite{eraslan2019single}, \cite{brendel2022application}, \cite{nguyen2023benchmarking}, Memento (our baseline, because that's where the ROSMAP DEGs come from?) \cite{kim2024method}
+
+\myparagraph{Benchmark datasets}
+
+\myparagraph{Single cell dataset simulation} \gpt{The scDesign family of simulators introduced a statistically rigorous approach to high-fidelity simulation. The original scDesign \cite{scdesign} was a \textit{statistical simulator for rational scRNA-seq experimental design}, focusing on powering DE analyses. scDesign treated each gene’s count distribution in each cell type as a mixture of distributions and allowed flexible specification of DE genes. It was useful for determining how many cells are needed to detect a certain DE signal. scDesign2 greatly advanced this framework by capturing gene–gene correlations and learning all parameters from real data \cite{scdesign2}. scDesign2 fits each gene’s expression marginal distribution (using a zero-inflated negative binomial or other chosen distribution) and also learns the correlation structure between genes via a copula or similar technique. By doing so, it generates \textit{high-fidelity single-cell gene expression count data with gene correlations captured}. In practice, scDesign2 can take an input dataset (with known cell type labels) and then simulate new datasets with the same properties – same number of cell types (or user-specified cell count per type), similar gene means/variances, and realistic covariances. }
+
+It was shown to outperform many earlier simulators in reproducing multi-gene clustering structure. One trade-off is speed:
+
+scDesign2's parameter estimation is somewhat slow and memory-intensive for very large inputs, though the actual data generation step after fitting is fast. It is implemented in R (as a package on GitHub) and is reasonably efficient for moderate scales (e.g. simulating tens of thousands of cells for thousands of genes).
+
+In evaluations, scDesign2 was among the top methods for overall realism \cite{crowell2023shaky}, but it requires high-quality input data for training. It supports multiple cell types and can simulate new mixtures with different cell type proportions. Batch effects are not explicitly modeled in scDesign2, but one can apply it to one batch at a time or include batch as a covariate in an extended version. The success of scDesign2 in preserving complex gene relationships made it a foundation that newer versions build upon.
+
+\gpt{
+scDesign3 is the latest in the scDesign series, described as \textit{a single-cell and spatial omics simulator} \cite{scdesign3}. It extends the scDesign2 approach in two major ways: (1) it uses a GAMLSS (Generalized Additive Model for Location Scale and Shape) framework, allowing extremely flexible modeling of gene distributions, and (2) it supports multiple covariates and data modalities \cite{duo2024systematic}. scDesign3 can jointly model gene expression along with additional factors such as time or spatial coordinates by including those as covariates in the model. For example, one can simulate a spatial transcriptomics dataset by providing spatial location covariates and scDesign3 will generate gene counts with spatial patterns. Likewise, for a differentiation trajectory, one could use pseudotime as a covariate to smoothly vary gene expression means with progression. This essentially means scDesign3 can simulate hierarchies/trajectories and batch effects all in one unified model. It preserves gene correlations similar to scDesign2, but also lets means/dispersion vary according to smooth functions of covariates (capturing complex trends like lineage or spatial gradients). There is also a \textit{scDesign3-tree} mode noted in the literature, indicating it can simulate branching processes by using a tree-structured covariate or by simulating one branch at a time and merging. In the 2024 systematic evaluation of 49 simulators, scDesign3 was among the top for accuracy across diverse platforms \cite{duo2024systematic}. It was particularly praised for effectively characterizing gene expression heterogeneity from real data, thanks to its additive model flexibility. The trade-off is that scDesign3 is complex and somewhat heavy – it requires fitting potentially thousands of parameters and smoothing functions. Its execution was slower and more memory-intensive than simpler methods in benchmarks. Nevertheless, it represents a \textit{next-generation} simulator that can produce highly realistic data under a wide range of scenarios (single-cell, spatial, multi-batch, trajectories). Code for scDesign3 is available (from the authors' GitHub) and early adopters have started using it in multimodal benchmarking studies. If one needs a one-stop solution to simulate a custom scenario (e.g. 5 batches, 8 cell types in a lineage, spatial positions, and technical zeros), scDesign3 is one of the few that can handle all those aspects together in a statistically principled manner.
+}
+
+
+\begin{table}[ht]
+	\resizebox{\textwidth}{!}{
+\begin{tabular}{l l l l l l l}
+	\hline
+	\textbf{Simulator (Year)} & \textbf{Gene–gene dependence} & \textbf{Covariate handling} & \textbf{Technical noise tiers} & \textbf{Modalities} & \textbf{Scale} & \textbf{Implementation}\\
+	\hline\hline
+	Splatter (2017)       & none (independent)         & library-size scalar     & library\,+\,dropout      & RNA                                  & 10k          & R          \\
+	ZINB-WaVE (2017)      & low-rank ZINB factor       & design‐matrix covariates & ZINB with offsets        & RNA                                  & 10k          & R          \\
+	SymSim (2019)         & fixed GRN ODE              & trajectory time         & capture\,+\,PCR           & RNA (UMI/full)                       & 10k          & R\,+\,Py   \\
+	dyngen (2021)         & GRN ODE                     & user-defined lineage    & capture\,+\,PCR           & RNA + pre-mRNA + protein             & 10k         & R\,+\,C++  \\
+	ESCO (2021)           & copula co-expression        & limited (groups)        & library\,+\,dropout       & RNA                                  & <1k          & R          \\
+	scDesign2 (2021)      & Gaussian copula             & cell type only          & n/a (implicit)            & RNA                                  & <100k          & R          \\
+	VeloSim (2021)        & kinetic (per-gene)          & pseudo-time             & library\,+\,dropout       & RNA velocity (U,S)                   & 10k          & R          \\
+	scDesign3 (2024)      & copula residuals + GAMLSS   & arbitrary via GAM splines & smooth covariates       & RNA/ATAC/CITE/Spatial                & 100k         & R          \\
+	SRTsim (2023)         & empirical correlation        & spatial coordinates     & reference-derived         & spatial RNA                          & 100k         & R          \\
+	scMultiSim (2025)     & GRN\,+\,cross-modal GAN      & user sliders            & user-tuned tech/batch     & RNA, ATAC, velocity, spatial         & 10k          & Python     \\
+	\textbf{pyScIntelligentDesign} & vine copula + kernel edges & linear\,+ non-linear meta & Study$\to$Batch$\to$Plate$\to$Cell (11) & protocol-aware RNA & 1B & PyTorch  \\
+	(ours)
+\end{tabular}
+	}
+\caption{Key functionality of influential single-cell / spatial simulators. Notice how most simulators deliver multiple magnitudes lower than one billion cells. . }
+\end{table}
+
+
+
+
+\phflo{
+Benchmarking datasets have long been important \textbf{todo: cite 300w} often contain hidden ground truth of the test set \cite{baker2011database, butler2012naturalistic} and in the case of dense computer vision approaches have long been containing synthetic data \cite{baker2011database, butler2012naturalistic}. }
+
+We propose the GigaCell benchmark, a novel, biologically informed, synthetic benchmark containing of one billion simulated cells with thousands of virtual donors. The dataset contains very small effect sizes and bridges the gap between what is currently the state-of-the-art in biological datasets and next-generation scRNA-seq at scale. 
+To this end, we present a novel, high-throughput scRNA-seq simulation pipeline that focusses on large simulated donor counts, very difficult batch effects, simulation of gene regulatory networks. The dataset includes various hidden effects such as small cell type subpopulations and mislabeled cells that are not part of the public annotation. The benchmark includes various downstream tasks, namely
+\begin{itemize}
+	\item Cell type classification by providing a balanced test dataset with all cell types and subpopulations from the Gigacell benchmark
+	\item Zero-shot learning cell type classification with a dataset with unseen celltypes and new completely new, unmatched gene distribution
+	\item DEG estimation for certain meta variables and cohorts from the GigaCell benchmark designed in such a way that the effects are only visible from the complete dataset
+	\item GRN estimation where estimated GRNs are matched agains all present GRNs in the GigaCell dataset
+\end{itemize}
+The dataset is freely available and alongside, we host a scRNA-seq benchmarking arena, where different benchmarking results can be uploaded and will be compared against a hidden ground truth.
+
+\gpt{Our framework unifies hierarchical biology, donor heterogeneity and tier-specific technical artefacts within a single, modular engine. Unlike existing simulators that either model non-linear covariates or multi-batch noise, we marry the two through a registry of biologically-motivated kernels that are chosen automatically according to variable type, while a three-level Study–Batch–Plate stack reproduces the full workflow of modern single-cell experiments. The design keeps a matched ground-truth layer, scales to streaming data, and is already extensible to spatial transcriptomics via coordinate kernels such as Perlin noise. Together, these features make our simulator a uniquely comprehensive test-bed for denoising, batch-correction and causal-inference methods across complex multi-study designs.}
+
+ 
+\section{Background}
+
+
+\section{Simulating a billion cells}
+
+\phflo{While the current generation of scRNA-seq analysis pipelines can work with datasets in the order of 100 million cells already \cite{wolf2018scanpy, zhang2025tahoe}, simulators, on the other hand, usually operate on much smaller scales. }
+
+\subsection{Cell Type Hierarchy Generation}
+\label{sec:cell_type_hierarchy}
+
+In our simulation pipeline the cell type hierarchy is generated in a two‐stage process. First, an overspecified JSON tree is created with a minimal branching factor computed so that the maximum number of leaves exceeds the required base number of cell types. Next, the tree is pruned iteratively until the desired number of leaves is reached. The resulting hierarchy is then used both for classifying cells and for propagating noise‐free baseline gene expression values from the root to the leaves. This procedure is implemented in our Python module (see :contentReference[oaicite:0]{index=0}).
+
+Each node in the hierarchy is represented by an instance of the \texttt{CellType} class. A node stores:
+\begin{itemize}
+	\item A unique \emph{name} and its hierarchical \emph{level} (with the root at level 0).
+	\item A pointer to its \emph{parent} (except for the root) and a list of \emph{children}.
+	\item A boolean flag (\texttt{is\_leaf}) indicating if the node is terminal.
+\end{itemize}
+
+The core method, \texttt{simulate\_expression}, computes the node's noise-free mean expression vector (of length equal to the number of features) by propagating and perturbing the parent's expression. At the root (or when no parent expression is available) a random baseline is generated from a Normal distribution (e.g., with loc = 5.0 and scale = 1.0). For level 1 nodes, a new random baseline (with larger variance, e.g. scale = 1.5) is used so that sibling nodes are largely independent. For deeper levels ($\ge2$), the node's mean is computed as the parent's expression perturbed by:
+\begin{itemize}
+	\item A \emph{trajectory component}: A common drift value is sampled (using the configured \emph{trajectory\_drift\_scale} and \emph{trajectory\_noise\_scale}) and applied uniformly to a preselected set of trajectory genes.
+	\item A \emph{cluster component}: For the remaining genes, a discrete shift is applied by randomly choosing a value (from a set such as \{-2.0, 0.0, 2.0\}) and adding additional noise (scaled by \emph{cluster\_noise\_scale}).
+\end{itemize}
+Thus, the final mean expression for a node is the sum of its parent's mean and the combined perturbation. After computing the mean, each node simulates a set of individual cell expression profiles by sampling from a Normal distribution centered at the node's mean, with cell-specific noise.
+
+The recursive nature of the hierarchy ensures that information is transmitted from the root down to the leaves, and that similar cell types (i.e., those sharing a common parent) inherit similar baseline expression patterns. The simulated data from all nodes are later gathered and concatenated to form a full single-cell expression matrix, which can be stored in an \texttt{AnnData} object for further processing and benchmarking.
+
+This design not only supports the generation of hierarchical cell type labels but also provides a robust and biologically interpretable basis (the noise-free means) which is later modified by additional augmentation modules (e.g., donor, batch, and GRN augmentors) to introduce realistic effects.
+
+
+
+\subsection{Meta Variable Augmentation}
+\label{sec:meta_variable_augmentation}
+
+To capture additional sources of variation beyond the fixed effects modeled in the marginal layer, we introduce a hierarchical meta variable framework. Meta variables represent latent or measured covariates (e.g. donor-specific biases, batch effects, or hidden biological signals) that influence gene expression. By organizing these variables in a tree structure, similar to our cell type hierarchy, we allow for the propagation and modulation of effects across different levels.
+
+\paragraph{Hierarchical Structure.}
+Each meta variable is modeled as a node in a tree, with parent-child relationships representing the inheritance of effects. For example, a parent meta variable may set a global donor effect, and its children could represent finer-grained sub-donor variations. The propagation mechanism applies a small drift or noise term to the parent's value to simulate realistic, continuous variations across descendants.
+
+\paragraph{Types of Meta Variables.}
+Our framework supports three distinct types of meta variables:
+\begin{itemize}
+	\item \textbf{Continuous:} Variables with a continuous range (e.g., a donor quality score) are simulated from a Gaussian distribution. These values are propagated with additive noise from parent nodes.
+	\item \textbf{Categorical:} Discrete meta variables (e.g., donor identity groups or condition labels) are generated from a multinomial distribution with user-specified probabilities. These are stored as nominal values.
+	\item \textbf{Binary:} Representing on/off states (e.g., presence or absence of a technical bias), binary variables are sampled from a Bernoulli distribution.
+\end{itemize}
+
+\paragraph{Ground Truth Correlation.}
+Once each meta variable node has simulated values across cells, the complete set of meta features is collected into a matrix. The ground truth Pearson correlation matrix is computed, capturing the intrinsic dependencies across meta variables. This correlation matrix forms part of the overall simulation ground truth and is used to guide the augmentation of marginal gene expression parameters.
+
+\paragraph{Integration with the Marginal Model.}
+The meta variable framework integrates with the marginal model by modifying the noise-free expression values based on the meta-level effects. For each cell, the final baseline expression is obtained by combining the marginal prediction with adjustments computed from the corresponding meta variable values. In this way, even if the marginal model does not directly capture certain hidden variations, the meta variable augmentation layer injects these effects in a controlled and quantifiable manner.
+
+\paragraph{Implementation.}
+In our software architecture, the meta variable functionality is encapsulated within an abstract super class and three concrete subclasses, one for continuous, one for categorical, and one for binary variables. These classes support:
+\begin{enumerate}
+	\item Simulation of individual meta variable values using user-defined distributions specified in the configuration.
+	\item Propagation of effects via a tree structure, such that descendant nodes inherit and modulate their parent’s values.
+	\item Calculation of a ground truth correlation matrix for benchmarking purposes.
+\end{enumerate}
+This design allows the synthetic dataset to incorporate realistic, hierarchical covariate variations that drive subtle differential expression signals and batch effects.
+
+
+
+\subsection{Marginal Model Construction}
+\label{sec:marginalmodel}
+
+Before constructing a copula (Section~\ref{sec:randcopula}) to capture gene--gene dependencies, we first specify a \emph{marginal model} for each gene, incorporating known covariates such as cell type, donor, or batch. This step ensures that differences in mean expression or dispersion driven by these covariates are captured independently from inter-gene correlations.
+
+\paragraph{Choice of Distribution Family.}
+Each gene $j$ is assumed to follow a parametric family (e.g., Negative Binomial, Poisson, or Zero-Inflated variants), with parameters allowed to vary across cells according to covariates. Concretely, let $Y_{ij}$ be the count of gene $j$ in cell $i$. Then
+\[
+Y_{ij} \;\sim\; F_{j}\bigl(\,\mu_{ij}(\mathbf{x}_{i}),\;\sigma_{ij}(\mathbf{x}_{i}),\;\dots\bigr),
+\]
+where $F_{j}$ is the chosen distribution for gene $j$, and $\mathbf{x}_{i}$ are covariates (e.g., donor identity, cell type, batch ID, etc.). Depending on the distribution, there may be additional parameters such as zero-inflation.
+
+\paragraph{Incorporating Covariates.}
+We link each parameter (e.g.\ mean $\mu_{ij}$ or dispersion $\sigma_{ij}$) to covariates via generalized additive models (GAM) or GAMLSS-like formulations. For instance, a log-link for $\mu_{ij}$ might be
+\[
+\log(\mu_{ij}) \;=\;\beta_{j0} \;+\;\beta_{j1}(\text{cell type}_i)\;+\;\beta_{j2}(\text{donor}_i)\;+\;\dots,
+\]
+where each $\beta_{j\cdot}$ represents a coefficient or smooth function capturing a covariate's influence on gene $j$.
+
+\paragraph{Residual Extraction.}
+Once these per-gene models are fitted, we compute residuals that reflect gene--gene correlations beyond the covariate-driven variation. A typical approach is to transform each $Y_{ij}$ to a pseudo-uniform variable $U_{ij}$ via the empirical or theoretical CDF of $F_{j}$:
+\[
+U_{ij} \;=\; \tilde{F}_{j}\bigl(Y_{ij} \mid \widehat{\mu}_{ij}(\mathbf{x}_{i}),\dots\bigr),
+\]
+where $\tilde{F}_{j}$ denotes either a continuous adjustment for discrete data (e.g., distributional transformation). These uniform residuals $U_{ij}$ then serve as the basis for constructing the copula in higher dimensions (see Section~\ref{sec:randcopula}).
+
+\paragraph{Implications for Differential Expression.}
+Because each gene's marginal model explicitly encodes group-level shifts (e.g., cell-type or donor effects in $\mu_{ij}$), we can derive differential expression (DE) patterns by comparing parameter estimates across groups. In particular, differences in $\log(\mu_{ij})$ can directly yield fold changes. This allows the marginal model step to incorporate biologically relevant covariates and set the stage for a more realistic simulation of gene counts, whether or not we subsequently include random effects (Section~\ref{sec:randfxaugment}) or copula-based correlations.
+
+
+\subsection{Random Sparse Correlation and Copula Generation}
+\label{sec:randcopula}
+
+A flexible way to simulate large-scale single-cell data is to generate synthetic correlation structures (or \emph{copulas}) rather than relying exclusively on real reference datasets. Below we outline a general approach for creating random, sparse correlation matrices suitable for both Gaussian and vine copulas, and we describe a method for structuring these correlations hierarchically.
+
+\paragraph{Random Gaussian Correlation.}
+One straightforward technique for synthesizing an $m\times m$ correlation matrix $\mathbf{R}$ is via the Wishart distribution:
+\begin{enumerate}
+	\item Sample a random matrix $\mathbf{W} \in \mathbb{R}^{m\times m}$ from a Wishart distribution, $\mathbf{W}\sim\text{Wishart}(\mathbf{I},\,\nu)$, with $\nu \ge m$ degrees of freedom.
+	\item Convert $\mathbf{W}$ into a correlation matrix by normalizing:
+	\[
+	\mathbf{R} = \text{diag}(\mathbf{W})^{-\tfrac12}\,\mathbf{W}\,\text{diag}(\mathbf{W})^{-\tfrac12}.
+	\]
+	\item Introduce sparsity by thresholding or shrinking off-diagonal entries. For instance, set
+	\[
+	R_{ij} \leftarrow \begin{cases}
+		R_{ij} & \text{if } |R_{ij}| > \lambda, \\
+		0      & \text{otherwise,}
+	\end{cases}
+	\]
+	where $\lambda$ is a user-chosen threshold controlling the number of nonzero correlations.
+\end{enumerate}
+This yields a random, positive semi-definite (PSD) correlation matrix $\mathbf{R}$ with controllable sparsity.
+
+\paragraph{Vine Copula Generation.}
+While Gaussian copulas assume a single global correlation matrix, vine copulas enable more detailed, high-dimensional dependency structures:
+\begin{enumerate}
+	\item Decide on a \emph{vine structure} (e.g., \emph{C}-vine or \emph{D}-vine), which organizes $m$ variables into a nested sequence of bivariate copulas.
+	\item For each edge or node in the vine, sample parameters for a chosen copula family (e.g., Gaussian, Student-$t$, or Clayton). One can also vary the family itself across edges.
+	\item The vine construction ensures the resulting joint distribution is a valid $m$-dimensional copula. In practice, software libraries (e.g., \texttt{pyvinecopulib}) can automatically generate random vine trees.
+\end{enumerate}
+This approach provides finer-grained control over pairwise interactions, allowing distinct correlation patterns in different gene--gene subsets.
+
+\paragraph{Hierarchical Block Structure.}
+In many single-cell benchmarks, gene--gene dependencies exhibit a \emph{clustered} or \emph{hierarchical} pattern, reflecting biological pathways or functional modules. To incorporate such structure:
+\begin{enumerate}
+	\item Partition $m$ genes into $B$ blocks (e.g., $m_1, \dots, m_B$ genes each) according to a hierarchical or known functional grouping.
+	\item For each block $b$, generate a random correlation submatrix $\mathbf{R}_b$ (e.g., with Wishart sampling as above). Place these submatrices on the diagonal to form a block-diagonal matrix.
+	\item Optionally add small cross-block correlations to mimic inter-pathway interactions:
+	\[
+	R_{ij} \leftarrow \alpha \times \tilde{R}_{ij}, 
+	\quad \text{for } i \text{ in block } p, \, j \text{ in block } q, \, p \neq q,
+	\]
+	where $0<\alpha <1$ controls the magnitude of inter-block dependence, and $\tilde{R}_{ij}$ are sampled from a low-variance distribution or set to $0$ outside certain known edges.
+\end{enumerate}
+By combining block-wise random correlation with optional cross-block terms, one obtains a realistic and \emph{hierarchically} sparse correlation matrix that can be used directly in a Gaussian copula or decomposed into pairwise components for vine construction.
+
+\paragraph{Usage in Simulation.}
+Once a random (or block-structured) correlation matrix $\mathbf{R}$ is created, it can serve as the basis for a Gaussian copula. Specifically, one transforms independent $\mathcal{N}(0,1)$ samples $\mathbf{z}\in\mathbb{R}^m$ by setting
+\[
+\mathbf{x} = \mathbf{L} \mathbf{z}, 
+\quad \text{where } \mathbf{R} = \mathbf{L}\mathbf{L}^\top.
+\]
+Applying the standard Gaussian CDF $\Phi(\cdot)$ elementwise to $\mathbf{x}$ yields uniform marginals $\mathbf{u} = [\Phi(x_1), \dots, \Phi(x_m)]^\top$ that capture the prescribed correlation structure. Afterward, any marginal distributions of interest (e.g., Negative Binomial) may be applied to each dimension, enabling flexible single-cell count data simulation that extends beyond what is strictly observed in real-world reference datasets.
+
+
+\subsection{Modeling random effects}
+\label{sec:randfxaugment}
+
+
+
+
+Beyond generating gene--gene dependencies via copulas, simulating realistic single-cell data often entails introducing \emph{random effects} that capture unobserved or partly known variations among donors, batches, and cell types. We conceptualize each random effect as a modular \emph{augmentation}, which probabilistically alters baseline parameters (e.g., gene expression means or cell-type frequencies) to produce more biologically plausible synthetic datasets. Below, we outline three categories of random effects commonly used to model skewed or biased data, ultra-rare cell types, and missing cell types within specific donors or subpopulations.
+
+\paragraph{Skewed Donor Effects.}
+In many real-world studies, donors exhibit heterogeneous molecular profiles beyond what can be fully explained by fixed covariates. To emulate such variability:
+\begin{enumerate}
+	\item Assign each cell to a donor via a multinomial sampling step, where the vector of donor probabilities may be fixed (from real data) or drawn from a user-defined prior (e.g., Dirichlet).
+	\item For each donor $d$, sample a donor-level intercept or scale factor:
+	\[
+	\delta_d \sim F(\boldsymbol{\theta}) \quad\text{(e.g., }\delta_d \sim \mathcal{N}(0,\sigma^2)\text{)},
+	\]
+	where $F(\boldsymbol{\theta})$ is a chosen distribution (normal, lognormal, etc.).
+	\item During count simulation, each cell $i$ assigned to donor $d$ has its baseline gene expression means or dispersions adjusted by $\delta_d$. For instance,
+	\[
+	\mu_{ij} \leftarrow \mu_{ij} \times e^{\,\delta_d},
+	\]
+	thus creating skewed donor effects that reflect between-donor heterogeneity.
+\end{enumerate}
+
+\paragraph{Ultra-Rare Cell Type Probabilities.}
+Certain biomedical contexts involve extremely rare cell types, representing only a fraction of one percent of total cells. To simulate ultra-rare populations:
+\begin{enumerate}
+	\item Define a baseline frequency vector $\mathbf{p} = (p_1, \ldots, p_C)$ for $C$ cell types. One or more entries in $\mathbf{p}$ may be set to very small values (e.g., $10^{-3}$ or lower).
+	\item During simulation, each cell is assigned a type by sampling from $\mathbf{p}$:
+	\[
+	\text{cell type} \sim \text{Multinomial}(\mathbf{p},1).
+	\]
+	\item Optional augmentations may further shrink or inflate these rare-type frequencies, for instance:
+	\[
+	p_{\text{rare}} \leftarrow p_{\text{rare}} \times \kappa \quad\text{(where }0 < \kappa < 1\text{)},
+	\]
+	if we wish to mimic even greater rarity or partial sub-sampling. This yields ultra-rare cell populations that can be used to benchmark methods for detecting low-frequency phenotypes.
+\end{enumerate}
+
+\paragraph{Missing Cell Types Within Certain Donors.}
+A more nuanced effect occurs when some cell types are present in one donor but absent (or drastically reduced) in another---commonly observed in disease conditions, partial sampling artifacts, or technical dropouts. We implement this via a conditional cell-type assignment:
+\begin{enumerate}
+	\item For each donor $d$, define a donor-specific vector $\mathbf{p}^d$ indicating the probability of each cell type in that donor:
+	\[
+	\mathbf{p}^d = (p^d_1,\ldots,p^d_C), \quad \text{where } \sum_{c=1}^{C} p^d_c = 1.
+	\]
+	\item If a cell type $c$ is hypothesized to be missing in donor $d$, set $p^d_c = 0$. Alternatively, to model partial reduction, assign $p^d_c$ an extremely small value.
+	\item Sample each cell's donor and cell-type assignment in tandem:
+	\[
+	\text{(donor},\text{ cell type)} \sim \mathcal{P}(\text{donor freq}) \;\land\; \mathbf{p}^d.
+	\]
+\end{enumerate}
+This augmentation cleanly integrates with skewed donor effects: once a donor is chosen, that donor's cell-type distribution is used. By setting certain $p^d_c=0$, the simulator enforces missing or negligible cell types in specific subpopulations, recreating realistic scenarios of partial coverage or disease-induced absence.
+
+\paragraph{Integration Into the Pipeline.}
+Each random effect---whether donor-level skew, ultra-rare cell types, or missing types in particular donors---is treated as a standalone augmentation layer applied before drawing final counts. In practice:
+\begin{enumerate}
+	\item \emph{Baseline Generation:} Compute or sample baseline parameters (e.g., from reference data or a random copula).
+	\item \emph{Random Effects Injection:} Apply each augmentation sequentially to modify parameters or cell assignments. For example, add a donor-level intercept to gene expression means, then reshape cell-type frequencies based on donor or disease status.
+	\item \emph{Sampling:} Generate the final single-cell counts by combining the updated parameters (with any augmentations) and the global correlation/copula structure.
+\end{enumerate}
+By logging each augmentation's applied values, we obtain a clear ``ground truth'' record of random effects, enabling rigorous benchmarking of downstream methods (e.g., differential expression or donor-effect detection). This modular design ensures flexible, targeted simulations that can reflect real-world complexities such as donor bias, missing lineages, or extremely rare cell phenotypes.
+
+\subsection{Gene Regulatory Network (GRN) Augmentation}
+\label{sec:grn_augmentation}
+
+To enhance the biological realism of synthetic single-cell data, we introduce an additional augmentation layer that simulates gene regulatory network (GRN) effects. While the baseline simulation pipeline uses marginal models and copulas to capture global gene--gene dependencies, these models do not explicitly incorporate regulatory interactions. We therefore propose a GRN augmentation module that modifies baseline parameters based on a regulatory topology.
+
+\paragraph{Regulator and Target Identification.}
+We assume that a subset of genes act as \emph{regulators}. For each regulator, a set of target genes is defined (either based on prior knowledge or randomly generated to form functional modules). The regulatory influence is modeled such that any perturbation in a regulator gene results in a coordinated shift in the expression parameters (e.g., mean, dispersion) of its targets.
+
+\paragraph{Augmentation via Network-Based Priors.}
+Given a regulator \(g_r\) and its targets \(T(g_r)\), we introduce a regulatory effect parameter \(\eta_{g_r}\) sampled from a distribution such as 
+\[
+\eta_{g_r} \sim \mathcal{N}(0,\tau^2).
+\]
+For each target gene \(g_t \in T(g_r)\), its baseline parameter (e.g., the noise-free expression mean \(\mu_{ig_t}\)) is augmented as:
+\[
+\mu_{ig_t}^{\prime} = \mu_{ig_t} \times \exp\left( \lambda_{g_t}\eta_{g_r}\right),
+\]
+where \(\lambda_{g_t}\) controls the sensitivity of target gene \(g_t\) to the regulatory effect. This augmentation can occur hierarchically: genes within the same regulatory module may share a block-wise effect, and inter-module interactions can be kept minimal or modeled with lower amplitude.
+
+\paragraph{Integration into the Simulation Pipeline.}
+The GRN augmentation is applied after generating the baseline marginal parameters and prior to the copula-based simulation of gene--gene correlations. This allows the GRN module to inject realistic regulatory relationships, ensuring that downstream analytical methods can test their ability to recover both global and network-driven gene dependencies. Additionally, the complete set of GRN effects (i.e., which regulators affect which targets and with what magnitude) is recorded as ground truth for benchmarking.
+
+
+\paragraph{Sketch 2}
+
+\gpt{\[
+	\underbrace{x_i^{(0)}}_{\substack{\text{initial}\\\text{(baseline + donor)}}}
+	\;=\;
+	x_i^{\rm baseline} \;+\;\Delta_i^{(d)},
+	\]
+	\[
+	\text{for }t=0,1,\dots,T-1:\quad
+	x_i^{(t+1)}
+	\;=\;
+	\sum_{j\in\mathcal N(i)}
+	w_{ji}\,\bigl(\mathbf{W}x_j^{(t)} + b\bigr)
+	\quad\Longleftrightarrow\quad
+	x^{(t+1)} \;=\; \mathrm{GRNConvNet}\bigl(x^{(t)},E,\,w\bigr).
+	\]
+	\[
+	\boxed{
+		\text{Continuous limit: }
+		\frac{\partial x_i}{\partial t}(t)
+		\,=\,
+		\underbrace{\sum_{j}w_{ji}\,\bigl(\mathbf{W}x_j(t)+b\bigr)}_{\text{GNN‐reaction}}
+		\;+\;
+		\underbrace{D_i\,\nabla^2x_i(t)}_{\text{diffusion term}}
+	}
+	\]
+	$
+	\begin{aligned}
+		& w_{ji} \quad\text{are your known regulatory strengths (edge weights).}\\
+		& W,\,b \quad\text{come from the learnable linear layer in \texttt{GRNConvNet}.}\\
+		& \text{In the discrete GNN you stack }T\text{ layers as proxies for }T\text{ time‐steps.}\\
+		& \text{In the continuous interpretation you recover a reaction–diffusion PDE with}\\
+		& \qquad f_i(x)
+		= \sum_{j} w_{ji}\,\bigl(W\,x_{j} + b\bigr)\,.  
+	\end{aligned}$
+}
+
+\subsection{Cell type and donor distributions}
+
+\gpt{
+\[
+P(\text{study}=s) \;=\; \pi_s,
+\quad
+P(\text{batch}=b \mid s) \;=\; \beta_{s,b},
+\quad
+P(\text{donor}=d \mid b) \;=\; \delta_{b,d},
+\]
+\[
+P(\text{cell type}=i \mid d,b)
+\;=\;
+\frac{\,p_{d,i}\,\exp(\gamma_{b,i})\,}{\sum_{j}p_{d,j}\,\exp(\gamma_{b,j})}
+\]
+\[
+\boxed{
+	P(s,b,d,i)
+	\;=\;
+	\underbrace{\pi_s}_{\substack{\text{Study-}\\\text{marginal}}}
+	\;\times\;
+	\underbrace{\beta_{s,b}}_{\substack{\text{Batch-}\\\text{weight inside}s}}
+	\;\times\;
+	\underbrace{\delta_{b,d}}_{\substack{\text{Donor-}\\\text{weight inside batch}b}}
+	\;\times\;
+	\underbrace{\frac{p_{d,i}\,e^{\gamma_{b,i}}}{\sum_{j}p_{d,j}\,e^{\gamma_{b,j}}}}_{\substack{\text{Donor specific}\\\text{cell type choice}d\text{ with batch bias }\gamma_{b,\cdot}}}
+}
+\]
+}
+
+
+\subsection{Effects}
+
+\begin{table}[!ht]
+	\centering
+	\begin{tabular}{lll}
+		\toprule
+		\multicolumn{3}{c}{Cell type frequencies $\Downarrow$} \\
+		\midrule
+		\textbf{Stage} & \textbf{Effect} & \textbf{Parameters} \\
+		\midrule
+		\multirow{4}{*}{Study‐level} 
+		& \texttt{LibrarySize}         & $\gamma_{st}$ \\
+		& \texttt{FivePrimeBias}       & $\alpha,\ \text{gene\_lengths}$ \\
+		& \texttt{FFPEDecay}           & $\lambda,\ \text{gene\_lengths}$ \\
+		& \texttt{PanelMask}           & $\text{mask}$ \\
+		\midrule
+		Cell‐level       & \texttt{CellLibrarySize}     & $\sigma_{c}$ \\
+		\midrule
+		\multirow{2}{*}{Plate‐level} 
+		& \texttt{GeneScale}           & $\text{vec}$ \\
+		& \texttt{DoubletMixEffect}    & $\text{rate},\ w_{\text{dist}},\ \text{buffer\_size},\ \text{partner\_sampler}$ \\
+		\midrule
+		\multirow{7}{*}{Batch‐level} 
+		& \texttt{AmbientMix}          & $\text{ambient\_vector},\ \alpha_{\text{amb}}$ \\
+		& \texttt{LibrarySize}         & $\gamma$ \\
+		& \texttt{GeneLengthBias}      & $\text{gene\_lengths},\ \text{protocol}$ \\
+		& \texttt{GeneScale}           & $\text{gene\_vec}$ \\
+		& \texttt{ExpressionJitter}    & $\sigma_{\text{expr}}$ \\
+		& \texttt{LogisticDropout}     & $a,\ b$ \\
+		& \texttt{PoissonSampling}/\texttt{NegativeBinomialSampling}
+		& {dispersion (only for NB)} \\
+		\bottomrule
+	\end{tabular}
+	\caption{Ordered effect stack for scRNA‐seq simulation}
+	\label{tab:effect_stack}
+\end{table}
+
+
+\paragraph{Noise model overview.}
+All synthetic counts are generated by sequentially applying the
+additive–multiplicative effects listed in Supplementary material.  Each effect is grounded in empirical
+measurements reported for droplet or full-length scRNA-seq protocols
+(e.g.\ 25–40 \% ambient contamination \cite{Young2020}, 5 \% doublet
+rate at standard loading \cite{Zheng2017}) and is sampled
+hierarchically: a global study-level library size anchor
+($\log\gamma_s$) is first drawn, followed by batch-,
+plate- and cell-specific deviations.  The resulting chain
+mirrors the physical experiment—capture efficiency, amplification
+bias, dropout, and finally Poisson sequencing noise—while keeping all
+drawn parameters as part of the hidden ground truth, enabling exact
+quantitative evaluation of downstream algorithms.  Full parameter
+ranges, distributions and literature sources are provided in the
+supplement.
+
+\begin{table}[h!]
+	\centering\small
+	\caption{Parametrisation of technical and biological noise sources used in the
+		GigaCell simulator.  See text for symbol definitions; ranges refer
+		to uniform draws unless noted otherwise.}
+	\label{tab:noise_effects}
+	\begin{tabular}{@{}lp{3.5cm}p{6.6cm}@{}}
+		\toprule
+		\textbf{Effect} & \textbf{Parameter / range} & \textbf{Biological justification} \\ \midrule
+		Library size (study) & $\log\gamma_s\!\sim\!\mathcal N(\mu\!=\!8.5,\;\sigma\!=\!0.25)$ &
+		Between-protocol variation; CV $\approx25\%$ is typical for droplet vs.\ plate kits \cite{Ziegenhain2017}.\\
+		Library size (batch) & $\log\gamma_b\!\sim\!\mathcal N(0,0.15)$ &
+		Run-to-run loading differences within one protocol \cite{Hicks2018}.\\
+		Library size (cell) & $\log\gamma_c\!\sim\!\mathcal N(0,0.35)$ &
+		Per-cell capture efficiency spread measured across 10x Chromium lanes \cite{Zheng2017}.\\
+		Gene-scale amp.\ bias & $\sigma_{\text{UMI}}\!\in\![0.05,0.10]$;
+		$\sigma_{\text{FL}}\!\in\![0.08,0.15]$ &
+		PCR and reverse-transcription biases; heavier tails in full-length protocols \cite{Phipson2017}.\\
+		5$^\prime$ / 3$^\prime$ bias & $\alpha\!\sim\!\mathcal N(-0.30,0.10)$ &
+		Length-dependent coverage in 3$^\prime$ kits, slope $\approx -0.25$ … $-0.5$ \cite{Parekh2016}.\\
+		FFPE decay & $\lambda\!\sim\!\text{LogNormal}(\mu=-3.5,\sigma=0.5)$ &
+		Fragmentation of formalin-fixed RNA; 0.01–0.08 kb$^{-1}$ range \cite{Srinivasan2002}.\\
+		Ambient RNA mix & $\alpha\!\sim\!\text{Beta}(2,6)$; 10 \% of batches $\times1.5$ &
+		Droplet background 15–40 \% UMIs after decontamination \cite{Young2020}.\\
+		Logistic dropout & $a\!\sim\!\mathcal N(-2.0,0.05)$;
+		$b_{\text{UMI}}\!\sim\!\mathcal N(4.0,0.05)$ &
+		Slope intercepts fitted in DECENT for 10x v2 data \cite{Ye2019}.\\
+		Doublet rate & $\rho\!\sim\!\text{Beta}(2,38)$ (mean 0.05) &
+		Empirical 5 \% doublets in 10x Chromium at 1000 cells/µl loading \cite{Zheng2017}.\\
+		Panel mask & keep‐fraction $f\!\sim\!\mathcal U(0.95,1.00)$ &
+		4–12 k gene “targeted” panels derived from Visium-HT statistics \cite{Andrews2021}.\\
+		Ultra-rare cell types & $p_{\text{rare}}\le10^{-3}$ &
+		Reported frequencies of tuft cells or ionocytes in airway epithelium \cite{Plasschaert2018}.\\ \bottomrule
+	\end{tabular}
+\end{table}
+
+
+\section{The GigaCell benchmark}
+\label{sec:1Bbenchmark}
+
+This section describes how to design a single-cell dataset of unprecedented scale (\(\sim 10^9\) cells) that incorporates multiple challenging scenarios, all with an available ``ground truth.'' By systematically injecting subtle or large perturbations in cell identities, gene expression means, batch biases, and hidden subpopulations, we create a rich playground for testing modern single-cell analytic pipelines. We propose five key tasks:
+
+\subsection{Cell Type Classification Under Extreme Class Imbalances}
+\label{sec:1B_celltype}
+
+\paragraph{Baseline Cell Type Distribution.}
+First, define a distribution of $C$ cell types. Most types will have moderate probabilities (say, 5--15\%) but introduce \emph{ultra-rare} types at probabilities as low as $10^{-3}$ or even lower. Over $10^9$ cells, these ultra-rare populations still yield millions of examples while remaining only a tiny fraction of the entire data.
+
+\paragraph{Twists and Overlaps.}
+To ensure classification is non-trivial:
+\begin{enumerate}
+	\item \emph{Partial Overlap}: Some cell types share similar expression profiles, forcing classifiers to disentangle subtle differences.
+	\item \emph{Missing or Donor-Specific Types}: Make certain rare types appear in only one or two donors, mimicking partial sampling of specific subpopulations.
+	\item \emph{Noisy Labels}: Optionally, introduce a small label-switch probability (e.g., $1$--2\%) during simulation to simulate labeling or annotation errors.
+\end{enumerate}
+
+\paragraph{Evaluation.}
+Since the simulator stores the true cell type for each cell, methods can be assessed on overall accuracy, macro F1, or recall for ultra-rare classes. Tools must handle large, imbalanced populations, ideally without discarding small clusters.
+
+\subsection{Difficult Differential Expression (DEG) Detection}
+\label{sec:1B_deg}
+
+\paragraph{Tiny Effects Visible Only at Large Scale.}
+DE analyses at $10^5$ cells can miss extremely subtle expression changes. Here, we embed:
+\begin{enumerate}
+	\item \emph{Micro-shifts}: For a set of genes $G_{\text{subtle}}$, shift the mean expression by a small log fold change (e.g., 0.05--0.1) in specific donors or cell types. 
+	\item \emph{Partial Penetrance}: Only a fraction of cells in a group show the DE shift, making the effect detectable \emph{only} via massive sample sizes and sensitive methods.
+\end{enumerate}
+
+\paragraph{Strong DE as a Control.}
+Additionally, some genes experience larger changes (e.g., log fold $\geq 1$) across conditions or cell types, ensuring standard methods can detect something straightforward, while truly subtle signals require large $n$.
+
+\paragraph{Ground Truth.}
+Because the simulator manipulates each gene’s mean across specific groups, it logs precisely which groups and genes have changes. DE tools are then scored on recall, precision, and false discovery rates for both strong and subtle shifts.
+
+\subsection{Complex Batch Effects}
+\label{sec:1B_batch}
+
+\paragraph{Many Batches and Subbatches.}
+Simulate $B$ labeled batches (e.g., $B=5$), each containing hundreds of millions of cells. For each batch:
+\begin{enumerate}
+	\item Add large offsets to some genes, mild offsets to others.
+	\item Possibly subdivide each batch into micro-batches with continuous drift over time or sub-sections, to mimic fluid changes in experimental conditions.
+\end{enumerate}
+
+\paragraph{Hidden or Unlabeled Bias.}
+Include a hidden factor, $h\in\{1,\dots,H\}$, that systematically alters expression in a small fraction of cells. Do \emph{not} label $h$ explicitly---batch-correction algorithms must discover and remove it if they are robust.
+
+\paragraph{Evaluation with Compressed Outputs.}
+Because $10^9$ cells are unwieldy, we encourage participants to provide:
+\begin{itemize}
+	\item A low-dimensional latent space (e.g., 50D or 2D UMAP) reflecting corrected data.
+	\item A cluster-by-gene “corrected” matrix, aggregating cells. 
+\end{itemize}
+Metrics like local inverse Simpson’s index (LISI), kBET, or silhouette width measure how well the batch effect is removed, while still preserving genuine biological differences. The simulator’s logs detail each batch’s offsets and drift, enabling ground-truth checking of correction accuracy.
+
+\subsection{Subpopulation Discovery}
+\label{sec:1B_subpop}
+
+\paragraph{Hidden Subclusters Within Major Cell Types.}
+To challenge clustering or trajectory methods, embed a minor subpopulation (or multiple) within a cell type’s distribution. This subpopulation might:
+\begin{enumerate}
+	\item Differ in only a handful of marker genes or spliced isoforms.
+	\item Occupy 1--5\% of the “parent” cell type, making it a rare subcluster.
+\end{enumerate}
+
+\paragraph{Trajectory-Like Variation.}
+Alternatively, impose a continuous expression drift within a cell type, creating a hidden gradient or pseudotime trajectory. With 1B cells, it becomes feasible to discover such subtle continuous transitions.
+
+\paragraph{Evaluation.}
+Because the simulator labels each cell’s subpopulation or pseudotime, we can measure how well downstream algorithms identify or partition the subgroups. ARI, NMI, or silhouette-based scores can confirm whether an algorithm recovers the correct hidden structure.
+
+\subsection{Rare Variants or Synthetic “Mutations”}
+\label{sec:1B_variants}
+
+\paragraph{Isoform/Variant Shifts.}
+In real scRNA-seq or multi-omics data, small subsets of cells may harbor single-nucleotide variants or alternative splicing events. To emulate this:
+\begin{enumerate}
+	\item Choose a set of variants or spliced isoforms; each occurs in a fraction (e.g., 0.01--0.1\%) of the population. 
+	\item Possibly couple variant presence with subtle expression changes (e.g., \emph{cis}-effects).
+\end{enumerate}
+
+\paragraph{Ground Truth.}
+A separate log indicates which cells harbor each variant. Tools must detect or genotype these extremely sparse events in massive data.
+
+\paragraph{Integration.}
+Such events can also intersect with the subpopulation or batch effects: perhaps variant “X” is more frequent in a hidden subcluster or absent in certain batches. Evaluating variant detection at scale tests a tool’s memory efficiency and noise robustness.
+
+---
+
+\paragraph{Overall Benchmark Flow.}
+\begin{enumerate}
+	\item \emph{Parameter Setup}: Define cell types, donors, and conditions. Introduce subtle or strong DE changes. Create $B$ labeled batches (plus hidden drift) for multi-level batch effects. Optionally embed subpopulations or variants.
+	\item \emph{Marginal/Copula Simulation}: Generate gene--gene correlation patterns using either real data or random block copulas (Section~\ref{sec:randcopula}), then combine with the marginal model (Section~\ref{sec:marginalmodel}) that encodes all desired biological and technical effects.
+	\item \emph{Output \& Logging}: Produce $10^9$ synthetic cells in a chunked manner. Record the “ground truth” for each effect: which genes shift for DE, which rare cell types exist, batch offsets, hidden subpopulations, and so on.
+	\item \emph{Compressed Sharing}: Encourage participants to return either (i) a latent space or (ii) cluster-level corrected matrix, facilitating manageable data sizes. 
+\end{enumerate}
+
+\paragraph{Conclusion.}
+A billion-cell benchmark that weaves together classification with imbalanced cell types, subtle DE detection at scale, intricate batch effects, subpopulation discovery, and rare variants provides a holistic stress-test for single-cell pipelines. Through careful logging of every simulated effect, researchers can quantitatively assess where methods succeed or fail, pushing the boundaries of single-cell computational tool development.
+
+
+
+\section{Experiments}
+\label{sec:experiments}
+
+In this section, we outline the experimental design for benchmarking methods on the GigaCell synthetic dataset and discuss how the dataset will be hosted, shared, and evaluated. The goals are: (i) to demonstrate the feasibility and challenges of detecting subtle and large-scale differential expression, and (ii) to provide standardized procedures for hosting the dataset and collecting downstream results.
+
+\subsection{Differential Expression (DEG) Estimation}
+\label{subsec:deg_estimation}
+
+\paragraph{Overview.}
+One of the main tasks in our benchmark is to assess whether methods can identify subtle gene-expression differences (DEGs) in massive single-cell data. Recall from Section~\ref{sec:1B_deg} that we injected both large-effect DE and micro-shifts only visible at large $n$.
+
+\paragraph{Candidate Methods.}
+We plan to compare both established and emerging single-cell DE methods:
+\begin{itemize}
+	\item \textbf{edgeR} and \textbf{DESeq2}: widely used in bulk RNA-seq, adapted for single-cell.
+	\item \textbf{MAST}: a popular single-cell framework dealing with zero-inflation.
+	\item \textbf{Wilcoxon-based approaches}: e.g. Seurat’s default method for cluster-based DE.
+	\item \textbf{Bayesian or mixed-model approaches}: such as \texttt{scVI}-based DE or \texttt{muscat}, to handle complex designs with multiple covariates.
+	\item \textit{[TODO: Expand with any new or advanced scRNA-seq DE methods relevant to the project.]}
+\end{itemize}
+
+\paragraph{Experimental Steps.}
+\begin{enumerate}
+	\item \textbf{Subset/Chunk Processing:} Because $10^9$ cells are too large to process in one shot, we will partition data into manageable batches or rely on distributed frameworks. 
+	\item \textbf{Known Contrasts:} We define multiple comparisons (e.g. cell type~A vs. B, subtle donor micro-shifts, etc.) where ground-truth logs specify which genes are truly DE.
+	\item \textbf{Scalability Tests:} We increase subset sizes from $10^5$ to $10^7$ to $10^8$ cells, measuring runtime and memory footprints.  
+	\item \textbf{Evaluation Metrics:} We use precision/recall (at multiple FDR thresholds), F1, and area under the precision–recall curve to gauge how well each method recovers known DE at both large and small effect sizes.
+\end{enumerate}
+
+\paragraph{TODO.}
+\begin{itemize}
+	\item \emph{Hyperparameters and Normalization:} Finalize if standard log-transforms or offset-based normalization will be used. 
+	\item \emph{Library-Size Correction:} Decide whether each method does its own normalization or if we supply a single “pre-normalized” input.
+	\item \emph{Include Additional Tools:} Expand candidate methods if new single-cell DE frameworks emerge.
+\end{itemize}
+
+
+\subsection{Dataset Hosting and Evaluation}
+\label{subsec:dataset_hosting}
+
+\paragraph{Hosting Platform.}
+Given the size of the dataset (potentially exceeding terabytes), we aim to provide multiple access routes:
+\begin{itemize}
+	\item \textbf{Public Cloud Storage}: e.g., AWS S3 buckets, with simple \texttt{wget} or \texttt{aws} CLI commands for data retrieval.
+	\item \textbf{Academic Repositories}: Zenodo or Figshare hosting chunked releases (e.g. 10M-cell partitions).
+	\item \textit{[TODO: Confirm final cloud or HPC mirror partnerships.]}
+\end{itemize}
+
+\paragraph{Compressed Formats.}
+To facilitate partial downloads and sub-sampling:
+\begin{itemize}
+	\item \textbf{HDF5/AnnData Partitions}: Each partition might contain $10^7$--$10^8$ cells, stored in a sparse matrix format.
+	\item \textbf{Optional Summaries}: We may also release pre-aggregated cluster-level means or a reduced dimension version.
+\end{itemize}
+
+\paragraph{Evaluation Procedure.}
+Users are asked to:
+\begin{enumerate}
+	\item \emph{Download} the dataset (or selected chunks).
+	\item \emph{Run} their chosen pipeline (DE, classification, batch correction, etc.).
+	\item \emph{Upload} compressed outputs (Section~\ref{sec:1B_batch} proposed cluster-level or latent embeddings) to a designated server.
+\end{enumerate}
+We then compute quantitative metrics:
+\begin{itemize}
+	\item \textbf{Cell Type Classification:} Evaluate classification F1, recall for ultra-rare types, etc.
+	\item \textbf{DE Identification:} Compare predicted DEGs with logs of known DE genes, compute precision/recall at multiple thresholds.
+	\item \textbf{Batch Effect Correction:} Use mixing metrics (e.g., kBET, LISI) or silhouette width in the provided embeddings to measure success.
+	\item \textbf{Subpopulation Discovery and Rare Variants:} ARI or NMI for hidden cluster discovery, accuracy for variant calling, etc.
+\end{itemize}
+
+\paragraph{Publication of Results.}
+A \emph{leaderboard} system will display method performances in each sub-task. We plan to maintain a rolling submission format for new tools, with a short-turnaround server-side evaluation:
+\begin{itemize}
+	\item \textbf{Top-Performing Tools}: highlighted in periodic reports or leaderboards.
+	\item \textbf{Interactive Reports}: an online interface for exploring success/failure across subpopulations, batch factors, or expression states.
+\end{itemize}
+
+\paragraph{TODO.}
+\begin{itemize}
+	\item \emph{Finalize Cloud/Local Storage Splits:} Decide if subsets for memory-limited systems will be 1\% or 10\% of the total.
+	\item \emph{Standard Format for Outputs}: Possibly specify H5 or CSV-based submission for embeddings or corrected expression.
+	\item \emph{Compute Resources}: Evaluate whether to provide HPC scripts or container images to handle chunking and partial dataset usage.
+\end{itemize}
+
+
+\subsection{Zero-shot cell type classification}
+
+\phflo{We propose a novel foundation model for celltype classification and discuss it's suitability for zero-shot learning cell type classification. While there is only a limited amount of real world cell types, zero-shot learning for cell type classification comes with multiple advantages. Firstly, it does not require to be trained on similar gene ordering conventions and is invariant under different alignments. More importantly, what we want to demonstrate here: Cell type classification foundation models can be trained on synthetic data alone. To that end, we train a foundation model with the \texttt{scIntelligentDesign} online mode, where each batch is simulated on the fly and returns a completely different dataset.}
+
+
+\clearpage
+\section{Discussion}
+
+In this work, we presented the GigaCell benchmark, a fully synthetic benchmark dataset for various downstream tasks to develop and benchmark the next generation of scRNA-seq methods at scale. Established approaches such as scDesign family of statistical simulators \cite{scdesign, scdesign2, scdesign3} depend on the complexity of the underlying model as well as the reference datasets. While simple models fail in realism, complex models are difficult to scale to hundreds of millions or a billion cells \cite{duo2024systematic}. Hence, we focused on modeling difficult effects that are not observable in smaller datasets rather than the replication of the statistics in existing datasets. This includes very rare cell types, niche sub-populations, significant DEGs with very small effect sizes and rare cell variants. 
+
+To demonstrate the biological validity, we used the GigaCell dataset to train a prompt-based cell type classification foundation model. As to our knowledge, this is the first demonstration that fully synthetic data can be sufficient to train a scRNA-seq downstream task, and, as of early 2025, we are unaware of any prompt-based foundation model approaches for scRNA-seq cell type classification. 
+
+We have thoroughly evaluated existing methods on the dataset. NoiCe2DEG and singlerust \textbf{[finish and cite!]}, in particular, have shown robustness under very large dataset. NoiCe2DEG was able to learn the prediction of difficult DEGs and singlerust scaled well to 1 billion cells for traditional scRNA-req analysis tasks. 
+
+\textbf{TODO:} Include this as potential future work for the benchmark: \cite{smbatyan2025can}.
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}

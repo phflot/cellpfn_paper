@@ -1,0 +1,449 @@
+\documentclass{article}
+
+\PassOptionsToPackage{numbers,compress}{natbib}
+\usepackage[preprint]{neurips_2024}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{siunitx}
+
+\title{HashPrompt: Sim-to-Real Cell-Type Transfer from Procedural Single-Cell Worlds}
+
+\author{%
+  Philipp Flotho\thanks{Equal contribution.}
+  \And
+  Matthias Flotho\footnotemark[1]
+  \And
+  Pirya Rani
+  \And
+  Andreas Keller
+}
+
+\newcommand{\myparagraph}[1]{\noindent\textbf{#1.} }
+\newcommand{\phflo}[1]{\textcolor{blue}{#1}}
+\newcommand{\gpt}[1]{\textcolor{red}{#1}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\softmax}{\operatorname{softmax}}
+\newcommand{\sparsemax}{\operatorname{sparsemax}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\argmax}{\operatorname*{arg\,max}}
+\newcommand{\BAcc}{\operatorname{BAcc}}
+\newcommand{\Fmacro}{F_{1,\operatorname{macro}}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Synthetic data have enabled sim-to-real learning in vision and robotics, but single-cell RNA sequencing has mostly used simulation for benchmarking, power analysis, or augmentation of real datasets. We ask whether a cell-type annotator can instead be trained \emph{only} in procedurally generated single-cell worlds and then transfer to real biology. HashPrompt is a support-conditioned few-shot classifier trained on streaming episodes from \textsc{pyScIntelligentDesign}, a simulator that randomizes hierarchical cell types, donor composition, library effects, ambient RNA, dropout, batch/study/plate effects, and gene coverage. To prevent the result from collapsing into marker-name memorization, we evaluate an anonymous-gene transfer contract: gene identities are episode-local, and the model must infer gene roles from support statistics. On real PBMC and human cortex/zebra evaluations, synthetic-only training produces nontrivial real-data transfer and approaches the main fair raw-gene prototype baseline on zebra balanced accuracy (0.693 vs. 0.704), while remaining below target-trained scVI (0.787). The central contribution is therefore not another simulator fidelity metric, but a controlled demonstration that procedural single-cell simulation can train a transferable biological decision rule, together with a precise account of the remaining gap to reference-trained methods.
+\end{abstract}
+
+\section{Introduction}
+
+Single-cell annotation models are usually built from real atlases. This is sensible: the measured atlas contains real marker genes, real nuisance factors, and real cell-type structure. It is also limiting. Atlas construction is expensive, annotations are noisy, rare cell populations are underrepresented, donor diversity is incomplete, and most supervised systems bind their parameters to a stable gene vocabulary. These constraints are awkward if the goal is a transferable annotator rather than a classifier tuned to one reference panel.
+
+This paper studies a more radical training source. We ask whether a model trained only on procedurally simulated single-cell experiments can acquire a reusable annotation procedure that works on real cells. The analogy is sim-to-real learning: in computer vision and robotics, randomized simulators and synthetic worlds can train systems that later operate in reality. In single-cell biology, simulators have usually played a different role. They are used to test methods under known ground truth, estimate power, compare pipelines, or augment measured datasets. They are rarely treated as the sole environment in which an annotation model learns its decision rule.
+
+\phflo{In fields such as computer vision, natural language processing, and robotics, researchers have demonstrated that models trained predominantly or exclusively on synthetic data can achieve high performance on real-world tasks. Particularly in computer vision, annotation quality is often a limiting factor. For example, manual facial landmark annotations can never be subpixel-accurate bone-structure projections. Wood et al. showed that face-analysis models can be trained on photo-realistic synthetic images alone and still enable dense facial landmark annotation~\cite{wood2021fake}. Building on that idea, synthetic thermal-infrared face data can be produced by style transfer from synthetic RGB faces~\cite{flotho2024t}. These examples motivate the same question in single-cell biology: when labels, perturbations, and hidden factors are known in simulation, can we train an annotator without consuming real atlas cells?}
+
+The difficulty is that a single-cell simulator cannot be judged by visual plausibility alone. A training simulator must generate the particular invariances and nuisance variation that a downstream annotator needs: related but non-identical cell types, donor-level heterogeneity, changing cell-type proportions, batch effects, incomplete panels, ambient RNA, dropout, library-size variation, and gene-level effects. If these factors are too weak, the model learns shortcuts that fail on real data. If they are too hard or miscalibrated, the model learns noise. The simulator is therefore part of the learning problem rather than a passive data source.
+
+HashPrompt is our mechanism for this test. It is a support-conditioned few-shot classifier: given a labeled support set and an unlabeled query set, it selects candidate genes, infers episode-local gene roles, builds class prototypes, and scores query cells. The strongest version studied here, \texttt{role\_slots\_v2}, is deliberately not a closed-set classifier. Its parameters are not tied to a fixed output taxonomy, and in the anonymous-gene setting they are not tied to stable gene identities either. This anonymous-gene contract is not a gimmick. It is the anti-leakage device that separates real sim-to-real transfer from marker-name memorization. If the model works when genes are episode-local, then the learned object is closer to a transferable procedure for reading support statistics than to a lookup table over canonical marker genes.
+
+The current results are not a solved annotation system. They are a controlled sim-to-real demonstration. On zebra, the best saved synthetic-only HashPrompt checkpoint reaches 0.693 balanced accuracy at support 100, compared with 0.704 for the main fair no-training raw-gene prototype baseline and 0.787 for a target-trained scVI centroid reference. HashPrompt exceeds raw-gene nearest neighbors and improves accuracy and macro-F1 over the prototype baseline, but does not yet beat it on the main rare-class-sensitive metric. This is exactly the regime in which the question becomes scientifically sharp: a simulator-trained anonymous model is close enough to be meaningful, but the remaining gap exposes what procedural worlds still fail to teach.
+
+\myparagraph{Contributions}
+\begin{itemize}
+    \item \textbf{Synthetic-only training for real cell annotation.} We frame cell-type annotation as a sim-to-real problem and train the model entirely on procedurally generated scRNA-seq episodes. Real PBMC and cortex/zebra cells are held out for evaluation.
+    \item \textbf{Anonymous-gene transfer contract.} We remove stable gene identities across episodes so that transfer cannot be explained by memorized marker names. The model must infer gene roles from the support set.
+    \item \textbf{HashPrompt / RoleSlotsV2.} We describe the implemented support-conditioned role-slot classifier: candidate-gene selection, descriptor construction, sparse role assignment, evidence weights, role-pooled cell embeddings, and prototype/evidence scoring.
+    \item \textbf{Simulator-as-domain-randomization.} We describe \textsc{pyScIntelligentDesign} in the way it is actually used during training: as a streaming source of new synthetic experiments, not as one static synthetic atlas.
+    \item \textbf{Evidence and limits.} We give a transfer ladder, fair baselines, and current frontier numbers that distinguish what has been shown from what remains aspirational.
+\end{itemize}
+
+\section{Related work}
+
+\myparagraph{Reference-trained annotation and atlas mapping.}
+Most high-performing single-cell annotation systems assume real reference cells and a stable gene coordinate system. Classical and neural examples include ACTINN~\cite{ma2020actinn}, TOSICA~\cite{chen2023transformer}, scGPT~\cite{cui2024scgpt}, scTab~\cite{fischer2024sctab}, and SCARF~\cite{liu2025scarf}. Generative latent-variable references such as scVI-style centroid classifiers are strong because they learn from the target or reference domain, but they do not answer whether a procedural simulator can replace atlas training. Taxonomy-driven mappers, including recent brain-reference systems such as MapMyCells, compress a real atlas into marker sets, centroids, or hierarchical reference artifacts. HashPrompt is complementary: it tests whether real reference cells and stable marker identities can be removed from model training altogether.
+
+\myparagraph{Few-shot and vocabulary-relaxed annotation.}
+Few-shot and meta-learning methods such as MARS~\cite{brbic2020mars} and prototypical networks~\cite{snell2017prototypical} motivate support-based classification: a class can be introduced through examples rather than by changing a closed-set head. Cross-species and vocabulary-relaxed systems such as SATURN~\cite{saturn}, Universal Cell Embeddings~\cite{uce}, and TranscriptFormer~\cite{transcriptformer} address feature alignment at larger scale. HashPrompt makes a stricter but narrower assumption: within an episode, gene measurements are available; across episodes, the model must not assume a persistent gene identity. This converts vocabulary relaxation into a test of role inference.
+
+\myparagraph{Synthetic single-cell data.}
+Synthetic scRNA-seq work has produced a rich ecosystem of simulators and generators. Splatter and related count simulators provide convenient statistical baselines; scDesign, scDesign2, and scDesign3 fit rich distributions to measured data~\cite{scdesign,scdesign2,scdesign3}; SymSim and SERGIO-style tools are more mechanistic; cscGAN~\cite{marouf2020realistic}, scDiffusion~\cite{luo2024scdiffusion}, and rare-cell augmentation systems~\cite{bej2021automated,nouri2025single} generate synthetic cells for augmentation or representation learning. Evaluations such as Crowell et al. and Duo et al. emphasize that simulator realism is multidimensional and fragile~\cite{crowell2023shaky,duo2024systematic}. Our claim is different from high-fidelity generation: we ask whether the simulator can be a \emph{training environment} whose randomized nuisance structure induces transfer to real biological classification.
+
+\phflo{Duo et al. tested 49 available approaches for simulation of scRNA-seq and spatially resolved transcriptomics. This is important context for the simulator claim: realism alone is not a scalar property. For our use case, the relevant simulator property is not only distributional fidelity to one dataset, but whether controllable biological and technical perturbations teach a downstream annotator to transfer.}
+
+\myparagraph{Sim-to-real learning.}
+The conceptual precedent comes from domains where labeled real data are difficult or incomplete. Synthetic face data, optical-flow benchmarks such as FlyingChairs and Sintel, and robotic domain randomization show that broad procedural variation can substitute for real labels when the simulator covers the relevant invariances~\cite{Mayer_2016_CVPR,ButlerWSB12,teed2020raft}. Single-cell annotation has no direct visual analogue of lighting or texture, but it does have nuisance axes: donor composition, sequencing depth, panel coverage, ambient RNA, dropout, and batch effects. HashPrompt treats these as the domain-randomization variables for biological annotation.
+
+\section{Problem: what counts as sim-to-real transfer?}
+
+Let an episode consist of a support set \(\mathcal{S}=\{(\mathbf{x}_i,y_i)\}_{i=1}^{n_s}\) and a query set \(\mathcal{Q}=\{(\mathbf{x}_j,y_j)\}_{j=1}^{n_q}\), where \(\mathbf{x}\in\R_{\ge 0}^{G}\) is a cell-by-gene expression vector and labels are episode-local cell types. The model sees support labels and query expression, and predicts query labels. In the anonymous-gene setting, every episode may apply a shared permutation \(\pi\) to all support and query gene columns:
+\begin{equation}
+    \mathbf{x}'_{ig}=\mathbf{x}_{i,\pi(g)}.
+\end{equation}
+The model never receives \(\pi\), and no learned parameter can rely on gene \(g\) having the same biological identity across episodes. Support and query share the permutation so the episode remains solvable.
+
+This contract distinguishes several levels of transfer, summarized in Table~\ref{tab:transfer_ladder}. The present paper aims primarily at Level 2 and Level 3: real biological transfer under the anonymous-gene contract, with the raw-gene prototype as the main fair no-training comparator. Target-trained scVI and taxonomy mappers are important references, but they are not fair baselines because they use stable gene identities and real target or reference cells.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Transfer ladder used to interpret the experiments. The paper is a sim-to-real study: success is not defined by synthetic validation alone.}
+\label{tab:transfer_ladder}
+\begin{tabularx}{\textwidth}{@{}p{0.12\textwidth}p{0.28\textwidth}X@{}}
+\toprule
+\textbf{Level} & \textbf{Evidence} & \textbf{Interpretation} \\
+\midrule
+0 & Synthetic validation only & Shows the model can solve the simulator, but says little about biology. \\
+1 & Real PBMC evaluation & First real-data transfer check; still vulnerable to immune-marker and dataset-specific luck. \\
+2 & Cross-dataset zebra/cortex evaluation & Stronger biological transfer check; central for this paper. \\
+3 & Beats raw-gene prototype on balanced accuracy & Strong fair win against a no-training baseline using stable gene space. \\
+4 & Matches target-trained scVI / reference mappers & Aspirational unfair comparison; requires stable gene identities or real target/reference training. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Datasets and metrics}
+
+The two real benchmarks used throughout the project are summarized in Table~\ref{tab:datasets}. PBMC provides a familiar immune benchmark; zebra is the more important transfer check because it stresses cross-dataset and cross-label-structure generalization. The table reports the current transfer-harness splits rather than the larger raw downloaded artifacts.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Real datasets used in the current transfer harness. Zebra is evaluated as a held-out real support/query task; PBMC supplies meta-train/meta-validation/test splits for selection and reporting.}
+\label{tab:datasets}
+\begin{tabularx}{\textwidth}{@{}lrrrrX@{}}
+\toprule
+\textbf{Dataset} & \textbf{Train / meta-train} & \textbf{Val} & \textbf{Test} & \textbf{Genes} & \textbf{Evaluation notes} \\
+\midrule
+human\_cortex\_zebra & 19{,}949 & -- & 4{,}986 & 21{,}158 & Five eligible classes under \texttt{cell\_type1}: Glia, Immune cell, Neural, Vascular cell, and unID. This is the main cross-dataset transfer check. \\
+pbmcpedia\_slim & 31{,}209 & 7{,}802 & 9{,}748 & 2{,}000 & Seven-class PBMC benchmark used for real validation, test reporting, and PBMC-based checkpoint selection. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+For reporting, we use accuracy, balanced accuracy, and macro-F1. With \(K\) classes, true positives \(TP_c\), false positives \(FP_c\), and false negatives \(FN_c\),
+\begin{equation}
+    \BAcc=\frac{1}{K}\sum_{c=1}^{K}\frac{TP_c}{TP_c+FN_c},
+    \qquad
+    \Fmacro=\frac{1}{K}\sum_{c=1}^{K}\frac{2TP_c}{2TP_c+FP_c+FN_c}.
+\end{equation}
+Balanced accuracy is the primary metric because it weights rare and abundant cell types equally.
+
+\section{The simulator as a training environment}
+
+\phflo{While the current generation of scRNA-seq analysis pipelines can work with datasets in the order of 100 million cells already~\cite{wolf2018scanpy, zhang2025tahoe}, simulators usually operate on much smaller scales. HashPrompt uses the simulator differently: not as one static release, but as a streaming source whose configurations are repeatedly rebuilt during model training.}
+
+\textsc{pyScIntelligentDesign} is not used to generate one synthetic atlas and then stop. It is used as an online source of experiments. The HashPrompt training harness wraps the simulator through \texttt{hashprompt/synthetic\_episodes.py}: each YAML source creates a \texttt{CellStream}; a \texttt{SyntheticEpisodeReservoir} buffers cells by simulated cell type; once enough cells exist for a sampled support/query episode, the reservoir emits an episode and continues streaming. Reservoirs are periodically restarted, so revisiting the same source rebuilds a new synthetic experiment rather than replaying a fixed matrix.
+
+The current synthetic curriculum is defined by YAML source families that vary gene count, cell-type count, and nuisance strength. Intended training proceeds through easy, medium, and very-hard families for 20/140/20 steps. Each step consumes one episode. Thus the simulator distribution, not a static synthetic dataset, is the training distribution.
+
+\subsection{Domain-randomization axes}
+
+Table~\ref{tab:domain_randomization} states the transfer hypothesis behind each simulator component. This table is intentionally more important than a generic simulator feature list: for sim-to-real learning, each randomized axis should correspond to a nuisance or biological structure expected at evaluation time.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{Simulator components interpreted as domain-randomization axes for real annotation transfer.}
+\label{tab:domain_randomization}
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}p{0.34\textwidth}X@{}}
+\toprule
+\textbf{Axis} & \textbf{Implemented mechanism} & \textbf{Why it should affect transfer} \\
+\midrule
+Cell-type hierarchy & Rooted tree, inherited multiplicative expression profiles, leaf pruning & Exposes the model to related labels, sibling contrasts, and broad-vs-fine markers. \\
+Gene panel and scale & YAML families vary \(G\in\{2000,8000,30000\}\); panel masks and gene scaling effects & Prevents overfitting to one gene count or one complete panel. \\
+Donor biology & Vine-copula donor covariates, donor fold-changes, donor-specific cell-type proportions & Forces separation of label signal from donor-specific variation. \\
+Study and batch structure & Study weights, batch weights, donor-sharing masks, batch cell-type bias & Creates realistic confounding between sample origin and labels. \\
+Technical corruption & Library-size shifts, ambient RNA, dropout, count sampling, protocol bias, doublets & Teaches robustness to measurement artifacts rather than clean template matching. \\
+Episode construction & Random class subsets, support/query splits, anonymous gene permutation & Converts synthetic matrices into the same few-shot decision problem used at evaluation. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Hierarchical biological template}
+
+The simulator first builds a rooted cell-type tree and prunes it to a target number of leaf cell types. Each node \(v\) receives a non-negative expression-frequency vector \(\mathbf{m}_v\in\Delta^{G-1}\). For the root and first-level nodes, the code draws a fresh log-normal baseline and normalizes it. Deeper nodes inherit from the parent through multiplicative perturbations,
+\begin{equation}
+    \tilde{\mathbf{m}}_v = \mathbf{m}_{\operatorname{pa}(v)}\odot\exp(\boldsymbol{\Delta}_v),
+    \qquad
+    \mathbf{m}_v = \frac{\tilde{\mathbf{m}}_v}{\sum_g \tilde{m}_{vg}}.
+\end{equation}
+The perturbation \(\boldsymbol{\Delta}_v\) combines trajectory-like shared drift for a subset of genes with gene-level and cluster-level shifts for the remaining genes. This creates families of related leaves rather than independent class templates.
+
+\subsection{Donors, studies, batches, and cell-type composition}
+
+Donor covariates are sampled by a vine-copula meta-variable generator. For donor \(d\), the simulator computes a donor-specific fold-change vector \(\mathbf{r}_d\) from its meta variables and applies it to baseline leaf profiles:
+\begin{equation}
+    \mathbf{m}_{c,d}=\mathbf{m}_c\odot\mathbf{r}_d.
+\end{equation}
+Cell-type frequencies are donor- and batch-dependent. The code samples a global composition and donor-specific compositions,
+\begin{equation}
+    \boldsymbol{\rho}\sim\operatorname{Dirichlet}(5\mathbf{1}),
+    \qquad
+    \mathbf{p}_d\sim\operatorname{Dirichlet}(200\boldsymbol{\rho}),
+\end{equation}
+then applies a batch-specific log-bias \(\boldsymbol{\gamma}_b\sim\mathcal{N}(0,0.3^2I)\). Conditional on donor and batch,
+\begin{equation}
+    P(c\mid d,b)=\frac{p_{d,c}\exp(\gamma_{b,c})}{\sum_{c'}p_{d,c'}\exp(\gamma_{b,c'})}.
+\end{equation}
+Study and batch sampling are explicit. Study weights are log-normal and normalized; batch weights inside a study are Dirichlet-distributed. Donor sharing across studies is controlled by study-specific Bernoulli masks with \(\rho_s\sim\operatorname{Beta}(1,4)\), with a fallback that guarantees at least one donor per study.
+
+\subsection{Layered technical effects}
+
+A sampled clean expression vector receives a study effect stack, a batch effect stack, and a plate/cell effect stack. Table~\ref{tab:effect_stack} summarizes the implemented layers.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{Effect stack used by \textsc{pyScIntelligentDesign} in the HashPrompt training environment.}
+\label{tab:effect_stack}
+\begin{tabularx}{\textwidth}{@{}lllX@{}}
+\toprule
+\textbf{Level} & \textbf{Code class} & \textbf{Representative effects} & \textbf{Transfer role} \\
+\midrule
+Study & \texttt{StudyEffectStack} & global library size, 5'/3' bias, FFPE decay, panel mask & protocol-scale shifts and reduced gene coverage \\
+Batch & \texttt{BatchEffectStack} & ambient mix, batch library size, gene-length bias, gene-scale bias, expression jitter, logistic dropout, count sampling & chemistry and acquisition variation \\
+Plate/cell & \texttt{PlateEffectStack} & cell library size, plate-specific gene scaling, doublet mixing & well-level and cell-level corruption \\
+Donor/label & \texttt{Donor}, \texttt{Batch} & donor meta-fold-changes, donor cell-type proportions, batch cell-type bias & structured biological variation before technical noise \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Ambient contamination mixes a cell profile with a normalized ambient vector,
+\begin{equation}
+    \mathbf{x}\leftarrow(1-\alpha)\mathbf{x}+\alpha\mathbf{a},
+\end{equation}
+where \(\alpha\) is beta-distributed and may be amplified in high-contamination batches. Library-size effects multiply by study-, batch-, or cell-level log-normal scalars. Logistic dropout uses an expression-dependent keep probability,
+\begin{equation}
+    P(\operatorname{keep}_{ng}=1\mid x_{ng})=\sigma(a+b\log(1+x_{ng}+\eps)),
+    \qquad
+    x_{ng}\leftarrow x_{ng}\operatorname{keep}_{ng}.
+\end{equation}
+For UMI protocols, final counts are Poisson; for full-length protocols, the simulator uses a negative-binomial count draw. Doublets replace a cell by \(w\mathbf{x}+(1-w)\mathbf{x}'\) with probability drawn at the plate level and partners sampled from a rolling buffer.
+
+\subsection{From simulation to anonymous episodes}
+
+Training episodes use noisy simulated outputs. A reservoir buffers cells by raw simulated cell type until at least \(k_{\mathrm{sup}}+q_{\mathrm{qry}}\) cells are available for enough classes, samples an episode-local class set, emits support and query cells, and optionally applies one random gene permutation shared by support and query. The default synthetic-transfer setting uses \(k_{\mathrm{sup}}=100\), \(q_{\mathrm{qry}}=10\), seven classes per episode, and anonymous genes. Because each training step draws from one YAML source and sources are cycled online, the model experiences a sequence of new synthetic tasks rather than repeated mini-batches from one fixed dataset.
+
+This is the simulator-to-model contract. The biological template creates related cell types; the nuisance stack corrupts them; the reservoir converts them into few-shot tasks; the anonymous permutation prevents stable-gene shortcuts. A simulator component matters only insofar as it improves this downstream transfer contract.
+
+\section{HashPrompt: support-conditioned role-slot classifier}
+
+The implemented HashPrompt model family is \texttt{role\_slots\_v2}. It is not the earlier hash-table/DeepSets prototype. The current model builds class-conditioned gene roles from the support set and uses those roles to encode support and query cells.
+
+\subsection{Support statistics and candidate genes}
+
+Given support matrix \(X\in\R_{\ge0}^{N_s\times G}\), the model computes log-expression and detection indicators,
+\begin{equation}
+    \ell_{ig}=\log(1+x_{ig}),
+    \qquad
+    d_{ig}=\mathbf{1}[x_{ig}>0].
+\end{equation}
+For each class \(c\) and gene \(g\), it computes class and one-vs-rest means, variances, and detection rates. Let \(\mu_{cg}\), \(\sigma^2_{cg}\), and \(\delta_{cg}\) denote class statistics, and let \(\mu_{\neg c,g}\), \(\sigma^2_{\neg c,g}\), and \(\delta_{\neg c,g}\) denote one-vs-rest statistics. The effect size and saliency score are
+\begin{equation}
+    e_{cg}=\frac{\mu_{cg}-\mu_{\neg c,g}}{(\sigma^2_{cg}/n_c+\sigma^2_{\neg c,g}/n_{\neg c}+\eps)^{1/2}},
+\end{equation}
+\begin{equation}
+    a_{cg}=|e_{cg}|+0.25|\mu_{cg}-\mu_{\neg c,g}|+0.25|\delta_{cg}-\delta_{\neg c,g}|.
+\end{equation}
+The model selects the top \(L\) genes per class, unions them across classes, and caps the candidate set at \(K\). This support-conditioned shortlist is the only set of genes used downstream.
+
+\subsection{Descriptors, role slots, and evidence}
+
+For each candidate gene \(k\) and class \(c\), the model builds a 12-dimensional descriptor
+\begin{equation}
+\mathbf{u}_{kc}=\bigl[\mu_{ck},\delta_{ck},\sigma^2_{ck},\mu_{\neg c,k},\delta_{\neg c,k},\sigma^2_{\neg c,k},
+\Delta\mu_{ck},\Delta\delta_{ck},\log\mathrm{FC}_{ck},e_{ck},a_{ck},\tilde a_{ck}\bigr],
+\end{equation}
+where \(\tilde a_{ck}\) is saliency normalized by the class maximum. A shared descriptor MLP maps \(\mathbf{u}_{kc}\) to \(\mathbf{h}_{kc}\). Two heads then produce a sparse role assignment and an evidence weight:
+\begin{equation}
+    \mathbf{r}_{kc}=\sparsemax(W_r\mathbf{h}_{kc})\in\Delta^{M-1},
+    \qquad
+    w_{kc}=\tanh(W_e\mathbf{h}_{kc})\in[-1,1].
+\end{equation}
+The role vector \(\mathbf{r}_{kc}\) assigns an episode-local candidate gene to one or more class-conditioned roles. These roles are not stable biological gene programs by construction; they are inferred from support statistics.
+
+\subsection{Cell encoding and prototypes}
+
+For a cell \(\mathbf{x}\), the model extracts candidate-gene features
+\begin{equation}
+    \mathbf{v}_k(\mathbf{x})=\bigl[\log(1+x_k),\mathbf{1}[x_k>0],\tilde{x}_k\bigr],
+\end{equation}
+where \(\tilde{x}_k\) is the within-cell z-score over selected log-expression values. A gene-feature MLP maps \(\mathbf{v}_k\) to a token \(\mathbf{t}_k\in\R^{d_s}\). For each class \(c\) and role \(m\), role pooling forms
+\begin{equation}
+    \mathbf{s}_{cm}(\mathbf{x})=\frac{\sum_{k=1}^{K}r_{kcm}\mathbf{t}_k}{\sum_{k=1}^{K}r_{kcm}+\eps}+\mathbf{b}_m,
+\end{equation}
+where \(\mathbf{b}_m\) is a learned slot embedding. The \(M\) role vectors are flattened and passed through a class encoder:
+\begin{equation}
+    \mathbf{z}_c(\mathbf{x})=\operatorname{enc}\bigl(\mathbf{s}_{c1}(\mathbf{x}),\ldots,\mathbf{s}_{cM}(\mathbf{x})\bigr)\in\R^d.
+\end{equation}
+The class prototype is the normalized mean of support embeddings from cells labeled \(c\):
+\begin{equation}
+    \mathbf{p}_c=\frac{1}{|\mathcal{S}_c|}\sum_{i\in\mathcal{S}_c}\mathbf{z}_c(\mathbf{x}_i),
+    \qquad
+    \hat{\mathbf{p}}_c=\frac{\mathbf{p}_c}{\|\mathbf{p}_c\|_2}.
+\end{equation}
+
+\subsection{Query scoring and loss}
+
+A query cell is scored by a prototype path and an evidence path:
+\begin{equation}
+    s_{qc}=\underbrace{\tau\,\hat{\mathbf{z}}_c(\mathbf{x}_q)^\top\hat{\mathbf{p}}_c}_{\text{prototype path}}
+    +
+    \underbrace{\frac{\gamma}{\sqrt{K}}\sum_{k=1}^{K}\tilde{x}_{qk}w_{kc}}_{\text{evidence path}},
+    \qquad
+    \hat y_q=\argmax_c s_{qc}.
+\end{equation}
+The prototype and evidence scales \(\tau\) and \(\gamma\) are learned positive scalars initialized to 10 and 0.25. Training minimizes query cross-entropy plus a margin-style prototype loss and role-usage regularizers:
+\begin{equation}
+    \mathcal{L}=\mathcal{L}_{\mathrm{CE}}+
+    \lambda_{\mathrm{margin}}\mathcal{L}_{\mathrm{margin}}+
+    \lambda_{\mathrm{ent}}\mathcal{L}_{\mathrm{slot\text{-}ent}}+
+    \lambda_{\mathrm{occ}}\mathcal{L}_{\mathrm{occ}}.
+\end{equation}
+In the current synthetic-transfer experiments, \(\lambda_{\mathrm{margin}}=0.1\), \(\lambda_{\mathrm{ent}}=10^{-3}\), and \(\lambda_{\mathrm{occ}}=5\times10^{-3}\). The occupancy term penalizes collapse below a minimum effective number of slots; the entropy term controls sparsity of role assignments.
+
+\section{Baselines and regimes}
+
+The main no-training comparator is the raw-gene prototype classifier. It operates on log-normalized, L2-normalized expression vectors \(\hat{\mathbf{x}}\). For each class,
+\begin{equation}
+    \mathbf{p}^{\mathrm{GS}}_c=\frac{1}{|S_c|}\sum_{i\in S_c}\hat{\mathbf{x}}_i,
+    \qquad
+    \hat y_q=\argmax_c \hat{\mathbf{x}}_q^\top\mathbf{p}^{\mathrm{GS}}_c.
+\end{equation}
+The nearest-neighbor baseline transfers the label of the most similar support or training cell:
+\begin{equation}
+    \hat y_q=y_{\argmax_{i\in\mathrm{train}}\hat{\mathbf{x}}_q^\top\hat{\mathbf{x}}_i}.
+\end{equation}
+These baselines are deliberately simple and strong. The prototype baseline uses stable real gene identities and is therefore not anonymous, but it is the main fair no-training performance bar. Target-trained scVI centroid classifiers and taxonomy-based mappers use real target or reference cells and stable gene semantics, so they are useful upper references rather than apples-to-apples baselines.
+
+The thesis benchmark distinguishes three HashPrompt regimes (Table~\ref{tab:hashprompt_variants}). The present paper focuses on the synthetic-only setting.
+
+\begin{table}[t]
+\centering
+\small
+\caption{HashPrompt configurations adapted from the thesis protocol.}
+\label{tab:hashprompt_variants}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Variant} & \textbf{Checkpoint initialization} & \textbf{Per-dataset training} & \textbf{Training steps} \\
+\midrule
+HashPrompt (synth.) & Synthetic pre-trained & No & -- \\
+HashPrompt (real) & Random & Yes & 200 \\
+HashPrompt (ft.) & Synthetic pre-trained & Yes & 200 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Current sim-to-real evidence}
+
+The experimental program should be read causally: changes to the simulator/training distribution are evaluated by real transfer, not by synthetic accuracy alone. Table~\ref{tab:current_frontier} reports the current zebra frontier and reference points under the newer anonymous-gene protocol. The key result is close but not complete: synthetic-only HashPrompt approaches the raw-gene prototype baseline on balanced accuracy, exceeds raw nearest neighbors, and remains far below target-trained scVI.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Current zebra support-100 frontier under the anonymous-gene synthetic-transfer protocol. scVI is shown as an unfair target-trained reference; raw-gene prototype is the main no-training reference.}
+\label{tab:current_frontier}
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+\textbf{Model} & \textbf{Regime} & \textbf{Accuracy} & \textbf{Macro-F1} & \textbf{BAcc} \\
+\midrule
+scVI centroid quick & Target-trained, stable genes & 0.729 & 0.675 & 0.787 \\
+raw-gene prototype & No training, stable genes & 0.572 & 0.567 & 0.704 \\
+HashPrompt / RoleSlotsV2 & Synthetic-only, anonymous genes & 0.632 & 0.592 & 0.693 \\
+raw-gene nearest neighbor & No training, stable genes & -- & -- & 0.508 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The most important positive evidence is that synthetic-only training is not vacuous. The initial simple synthetic setting reached PBMC test balanced accuracy@100 around 0.415; the diverse18 pilot moved this to about 0.478; later curriculum and schedule variants reached 0.564 on PBMC and 0.693 saved zebra balanced accuracy. The model therefore learns something that transfers from procedural worlds to real cells. The most important negative evidence is equally clear: the saved synthetic-only frontier has not yet beaten the raw-gene prototype baseline on zebra balanced accuracy.
+
+The training trajectories reveal additional headroom. In the schedule ablation, \texttt{bins32\_largecc\_\_const\_1e4} selected step 10 by PBMC meta-validation and achieved zebra balanced accuracy 0.691 at that checkpoint, but its best online zebra checkpoint reached 0.714 at step 30. This does not by itself constitute a benchmark win, because online zebra evaluation and final support/gene-permutation averaging differ. It does show that checkpoint selection and transfer stability are not secondary bookkeeping details: PBMC-only selection can discard better cross-dataset transfer states.
+
+\section{Ablation interpretation}
+
+\myparagraph{Simulator diversity.}
+The move from simple synthetic sources to diverse18 improved real PBMC transfer. This supports the sim-to-real hypothesis: the model benefits from seeing varied synthetic worlds. However, diversity alone does not close the fair zebra gap, so the current simulator does not yet span the full real decision distribution.
+
+\myparagraph{Simulator hardness.}
+Moderate synthetic difficulty improved many variants, but harder curricula were not monotone. Some very-hard configurations create useful robustness; others induce collapse or distortions. The right question is therefore not whether the simulator should be more realistic in the abstract, but which nuisance axes produce transferable invariances and which axes only inject unhelpful noise.
+
+\myparagraph{Capacity.}
+Capacity scaling by bins and parameter count is not the primary frontier. Across 56k to 1.16M parameters, transfer is non-monotone. Strong runs use role slots nontrivially, but larger slot counts can underuse capacity or collapse. This motivates architectural diagnostics such as contextualizing candidate-gene descriptors, but it does not justify another broad parameter sweep.
+
+\myparagraph{Selection and cross-dataset mismatch.}
+PBMC validation is not a perfect proxy for zebra transfer. The schedule suite contains many runs where the zebra-best step differs from the PBMC-selected step. A publishable protocol should therefore retain all evaluation checkpoints, report both PBMC-selected and transfer-diagnostic checkpoints during development, and freeze a zebra-blind selection rule before final evaluation.
+
+\section{Thesis benchmark table}
+
+Table~\ref{tab:classification_performance_prelim} carries over the compact performance summary from the thesis benchmark. It uses an earlier protocol and should not be confused with the current anonymous-gene frontier in Table~\ref{tab:current_frontier}. Its purpose here is to document the broader comparison framework and the metric definitions integrated from the thesis.
+
+\begin{table}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\caption{Mean classification metrics across three seeds from the thesis benchmark. This is a historical/protocol-level table, not the current headline result.}
+\label{tab:classification_performance_prelim}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}llrrrrrr@{}}
+\toprule
+\textbf{Tool} & \textbf{Dataset} & \textbf{Acc.} & \textbf{BAcc.} & \textbf{F1} & \textbf{Train s} & \textbf{Total s} & \textbf{RAM MB} \\
+\midrule
+ACTINN & human\_cortex\_zebra & 0.919 & 0.609 & 0.629 & 127 & 138 & 2{,}496 \\
+TOSICA & human\_cortex\_zebra & 0.882 & 0.716 & 0.685 & 4{,}103 & 4{,}129 & 9{,}520 \\
+scGPT & human\_cortex\_zebra & 0.763 & 0.434 & 0.436 & 1{,}637 & 1{,}705 & 4{,}494 \\
+SCARF & human\_cortex\_zebra & 0.859 & \textbf{0.851} & \textbf{0.691} & 460 & 571 & 4{,}946 \\
+scVI-Centroid & human\_cortex\_zebra & 0.765 & 0.829 & 0.567 & 206 & 216 & 3{,}995 \\
+GS-Proto & human\_cortex\_zebra & 0.587 & 0.769 & 0.594 & -- & 61 & 10{,}855 \\
+HashPrompt (synth.) & human\_cortex\_zebra & 0.598 & 0.753 & 0.534 & -- & 29 & 8{,}640 \\
+HashPrompt (real) & human\_cortex\_zebra & 0.620 & 0.792 & 0.579 & 12 & 41 & 7{,}493 \\
+HashPrompt (ft.) & human\_cortex\_zebra & 0.635 & 0.788 & 0.579 & -- & 27 & 8{,}703 \\
+\midrule
+ACTINN & pbmcpedia\_slim & \textbf{0.778} & 0.255 & \textbf{0.289} & 16 & 33 & 2{,}207 \\
+TOSICA & pbmcpedia\_slim & 0.643 & 0.325 & 0.244 & 399 & 410 & 3{,}165 \\
+scGPT & pbmcpedia\_slim & 0.683 & 0.104 & 0.091 & 1{,}617 & 1{,}637 & 2{,}484 \\
+SCARF & pbmcpedia\_slim & 0.453 & 0.570 & 0.209 & 251 & 301 & 1{,}654 \\
+scVI-Centroid & pbmcpedia\_slim & 0.296 & 0.518 & 0.154 & 137 & 152 & 3{,}053 \\
+GS-Proto & pbmcpedia\_slim & 0.470 & \textbf{0.597} & 0.221 & -- & 16 & 2{,}130 \\
+HashPrompt (synth.) & pbmcpedia\_slim & 0.430 & 0.447 & 0.202 & -- & 14 & 2{,}323 \\
+HashPrompt (real) & pbmcpedia\_slim & 0.400 & 0.391 & 0.197 & -- & 13 & 2{,}353 \\
+HashPrompt (ft.) & pbmcpedia\_slim & 0.362 & 0.499 & 0.217 & -- & 17 & 2{,}451 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\section{Discussion}
+
+\phflo{We propose a novel foundation-style model for cell-type classification and discuss its suitability for zero-shot and few-shot cell-type transfer. While the number of broad real-world cell types is limited, zero-shot learning for cell-type classification has multiple advantages. It does not require the model to be trained on the same gene-ordering convention and is invariant under different alignments. More importantly, the central claim we want to test is that cell-type classification models can be trained on synthetic data alone. To that end, we use \texttt{scIntelligentDesign} online mode, where each batch is simulated on the fly and returns a different synthetic experiment.}
+
+The correct reading of the current evidence is neither triumphalist nor dismissive. HashPrompt does not yet dominate stable-gene baselines. It does show that a model trained without real atlas cells can acquire a real biological annotation rule under a deliberately harsh feature contract. That is a meaningful sim-to-real result: a procedural single-cell world can teach a downstream classifier enough structure to approach a raw-gene prototype on an imbalanced cross-dataset benchmark.
+
+This framing also clarifies what the next result must prove. A NeurIPS-level version should not merely add a larger model. It should demonstrate which part of the simulator-to-model contract causes transfer. The cleanest package would include: a fixed bug-free curriculum with non-overlapping source families; full checkpoint retention; a zebra-blind checkpoint rule; a diversity/hardness ablation tied to real transfer; and per-class zebra recall to expose whether the remaining balanced-accuracy gap is rare-class recall, support scarcity, or biological mismatch.
+
+The strongest limitation is that anonymous-gene transfer deliberately forbids stable biological priors. Reference mappers and scVI-style systems exploit stable gene identities and real cell distributions; HashPrompt does not. This makes the comparison unfair in both directions. The anonymous setting is scientifically useful because it isolates role inference, but it is not the fastest path to maximum absolute annotation performance. A natural extension is a separate, explicitly unfair branch that adds taxonomy- or marker-derived gene prompts. That branch should be evaluated honestly as a bridge toward reference mappers, not as evidence for anonymous-gene transfer.
+
+\section{Conclusion}
+
+HashPrompt reframes single-cell annotation as sim-to-real learning. The model is trained only in procedural single-cell worlds and evaluated on real biological support/query tasks. Anonymous genes prevent marker-name memorization and force the model to infer episode-local gene roles. \textsc{pyScIntelligentDesign} supplies the randomized training environment: hierarchical cell types, donor covariates, cell-type composition shifts, batch/study/plate effects, library-size variation, ambient RNA, dropout, panel masks, and repeated online regeneration of synthetic experiments. Together these components provide a concrete test of synthetic-only training for real cell annotation. The current frontier is promising but unfinished: synthetic-only HashPrompt is close to the raw-gene prototype on zebra balanced accuracy, beats weaker raw-gene baselines, and remains below target-trained scVI. The next milestone is therefore sharp: convert this near-miss into a reproducible fair win, or identify precisely which simulator or architecture assumption prevents it.
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}
