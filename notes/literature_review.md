@@ -1,10 +1,10 @@
 # Literature synthesis for the CellPFN argument
 
-This targeted narrative review supports the Wave1 research-article argument. It is not a systematic review and makes no exhaustive-coverage claim. Three packages contain41 retained bibliographic records, with source-specific access, metadata, claim support and exclusion boundaries:
+This targeted narrative review supports the Wave1 research-article argument. It is not a systematic review and makes no exhaustive-coverage claim. Three packages contain42 retained bibliographic records, with source-specific access, metadata, claim support and exclusion boundaries:
 
 - [Cellular simulators and synthetic-to-real motivation](literature/simulation.md), with16 records and [query log](literature/simulation_search.json).
 - [PFNs, tabular models and cellular foundation models](literature/pfn_and_cells.md), with17 records and [query log](literature/pfn_search.json).
-- [Benchmark context, datasets and attribution](literature/context.md), with8 records and [query log](literature/context_search.json).
+- [Benchmark context, datasets and attribution](literature/context.md), with9 records and [query log](literature/context_search.json).
 
 The active `references.bib` combines these records without inheriting the legacy bibliography wholesale. Published versions replace stale preprints where verified. In particular, scMultiSim is2025; scDesign3 uses its2024 issue year; UCE and TranscriptFormer have2026 published records; TabICLv2 is an ICML2026 paper. MapPFN/PerturbPFN retain their preprint/workshop status, and Kumo/TabPFN feature and exposure details use labelled official model documentation. The suspicious legacy `smith2024benchmark` entry was excluded, not silently repaired with guessed metadata.
 

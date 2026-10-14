@@ -12,7 +12,8 @@
     "\"Zero-shot evaluation reveals limitations of single-cell foundation models\"",
     "\"Axiomatic Attribution for Deep Networks\"",
     "\"Deep Sets\" Zaheer 2017 proceedings",
-    "\"Deep-learning-based gene perturbation effect prediction does not yet outperform simple linear baselines\""
+    "\"Deep-learning-based gene perturbation effect prediction does not yet outperform simple linear baselines\"",
+    "MARS discovering novel cell types across heterogeneous single-cell experiments Brbic 2020 Nature Methods"
   ],
   "queries_note": "Distinct productive query strings recorded; repeated opens and unsuccessful exact-URL-site queries are summarized in context.md. This is not a systematic-review search ledger.",
   "primary_sources": [
@@ -23,7 +24,9 @@
     "https://pubmed.ncbi.nlm.nih.gov/37941147/",
     "https://pubmed.ncbi.nlm.nih.gov/29865057/",
     "https://proceedings.mlr.press/v70/sundararajan17a.html",
-    "https://proceedings.neurips.cc/paper_files/paper/2017/hash/f22e4747da1aa27e363d86d40ff442fe-Abstract.html"
+    "https://proceedings.neurips.cc/paper_files/paper/2017/hash/f22e4747da1aa27e363d86d40ff442fe-Abstract.html",
+    "https://www.nature.com/articles/s41592-020-00979-3",
+    "https://snap.stanford.edu/mars/"
   ],
   "claim_support": "context.md",
   "metadata": "context_references.bib",

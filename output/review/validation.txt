@@ -1,0 +1,106 @@
+$ python3 scripts/check_sources.py
+PASS: 359 original source hashes and 14 preserved copies unchanged.
+
+$ python3 scripts/check_results.py
+EXTERNAL T06: 35000000 synthetic_training_datasets; not locally verified
+ARITHMETIC ONLY T07: external numerator not locally verified
+EXTERNAL T11: 35000000 synthetic_training_tables; not locally verified
+UNAVAILABLE T12: no numerical pretraining claim
+EXTERNAL T13: 137000000 synthetic_training_tables; not locally verified
+Checked 66 local extractions/calculations (1 externally dependent); 3 external source, 1 unavailable; 0 failures.
+
+$ python3 scripts/check_manuscript.py
+PASS: 5 actionable claim IDs, 0 factual TODOs, no citation placeholders.
+Word counts: {'abstract': 138, 'introduction': 488, 'results': 1644, 'main_text_so_far': 2132, 'remaining_of_3000': 868}
+
+$ python3 scripts/vendor/audit_bib.py --bib references.bib --tex main.tex --tex sections/*.tex
+references.bib: 42 entries
+
+--- 1. duplicate citation keys ---
+  none
+
+--- 2. same work under different keys ---
+  none
+
+--- 3. missing required fields ---
+  none
+
+--- 3b. standards carrying no edition year ---
+  none
+
+--- 4. DOI status ---
+  10 entries with no DOI yet
+  32 entries carry a DOI. EVERY ONE still needs external
+  verification against CrossRef; this script does not resolve them:
+      kedzierska2025zeroshot             10.1186/s13059-025-03574-x
+      denadel2026scaling                 10.1038/s41592-026-03120-y
+      souza2026parameterfree             10.48550/arXiv.2602.16696
+      hao2021multimodal                  10.1016/j.cell.2021.04.048
+      flotho2024zebra                    10.1093/nar/gkad990
+      bennett2018rosmap                  10.3233/JAD-179939
+      brbic2020mars                      10.1038/s41592-020-00979-3
+      hollmann2025tabpfn                 10.1038/s41586-024-08328-6
+      jaeger2026tabpfn35                 10.48550/arXiv.2609.17895
+      sextro2026mappfn                   10.48550/arXiv.2601.21092
+      gao2026perturbpfn                  10.48550/arXiv.2607.23447
+      theodoris2023geneformer            10.1038/s41586-023-06139-9
+      cui2024scgpt                       10.1038/s41592-024-02201-0
+      hao2024scfoundation                10.1038/s41592-024-02305-7
+      rosen2026uce                       10.1038/s41586-026-10689-z
+      pearce2026transcriptformer         10.1126/science.aec8514
+      fischer2024sctab                   10.1038/s41467-024-51059-5
+      bai2026sclong                      10.1038/s41467-026-69102-y
+      zappia2017splatter                 10.1186/s13059-017-1305-0
+      zhang2019symsim                    10.1038/s41467-019-10500-w
+      sun2021scdesign2                   10.1186/s13059-021-02367-2
+      song2024scdesign3                  10.1038/s41587-023-01772-1
+      dibaeinia2020sergio                10.1016/j.cels.2020.08.003
+      cannoodt2021dyngen                 10.1038/s41467-021-24152-2
+      li2025scmultisim                   10.1038/s41592-025-02651-0
+      crowell2023shaky                   10.1186/s13059-023-02904-1
+      duo2024systematic                  10.1186/s13059-024-03290-y
+      tobin2017domain                    10.1109/IROS.2017.8202133
+      marouf2020cscgan                   10.1038/s41467-019-14018-z
+      luo2024scdiffusion                 10.1093/bioinformatics/btae518
+      squair2021false                    10.1038/s41467-021-25960-2
+      azodi2021splatpop                  10.1186/s13059-021-02546-1
+
+--- 5. cited vs defined ---
+  scanned 4 file(s), 39 distinct keys cited
+  every cited key is defined
+  3 defined but never cited: bai2026sclong, squair2021false, tobin2017domain
+
+--- 6. entries flagged for human verification ---
+  none
+
+--- 7. author concentration ---
+  project rule, not a journal rule: no single author above 15% of 42 entries
+      zhang                  6/42  14.3%
+      wang                   5/42  11.9%
+      li                     5/42  11.9%
+      hao                    4/42   9.5%
+      hollmann               4/42   9.5%
+      hutter                 4/42   9.5%
+  note: the fix is to enlarge the denominator, not to delete
+  self-citations. The stricter structural form of the rule is that
+  no subsection may rest on a single group's work alone.
+
+============================================================
+BLOCKING problems : 0
+needs human check : 0
+
+No blocking problem. Items under 4, 6 and 7 still need a human,
+and nothing here checks whether a source supports its claim.
+
+$ python3 scripts/count_words.py
+abstract: 138
+introduction: 488
+results: 1644
+main_text_so_far: 2132
+remaining_of_3000: 868
+
+$ python3 scripts/check_export.py
+1375 checks, 0 mismatches; wrote CHECKS.md and checks/recomputed.csv
+
+$ python3 scripts/check_sources.py
+PASS: 359 original source hashes and 14 preserved copies unchanged.

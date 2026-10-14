@@ -6,7 +6,7 @@ Each source paragraph has a stable comment ID. IDs survive reordering. This tabl
 |---|---|---|
 | P-I01 | Motivate varied experimental context and donor diversity | Author-marked legacy motivation, scTab donor-vs-cell experiment |
 | P-I02 | Establish representation-learning achievements and bounded opportunity | Geneformer, scGPT, scFoundation, UCE, TranscriptFormer; Kedzierska, DenAdel, Souza |
-| P-I03 | Explain PFN principle and closest cellular precedents | PFN, TabPFN, TabICL; MapPFN and PerturbPFN |
+| P-I03 | Explain PFN principle and closest cellular precedents | MARS; PFN, TabPFN, TabICL; MapPFN and PerturbPFN |
 | P-I04 | Explain simulation as a prior over tasks and why transfer is the test | Statistical/mechanistic/donor-aware simulators; synthesis; synthetic-to-real precedents; simulator evaluations |
 | P-I05 | State two contributions and supporting architectural capabilities | Current export, no novelty superlative |
 | P-R01 | What varies in the prior and why | fig1 facts; qualitative keys in result_summary |

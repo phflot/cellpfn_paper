@@ -16,3 +16,7 @@ Verified 2026-10-14. This is targeted narrative-literature research, not a syste
 Deep Sets and Integrated Gradients are proceedings records without a verified publisher DOI here; canonical proceedings URLs are retained rather than fabricated identifiers. Other included records have verified DOI/title/year correspondence. Full author lists use primary records. Research papers take precedence over reviews and bibliographies of other papers.
 
 Other retrieved leads omitted from active claims: a 2026 bioRxiv multi-model benchmark (10.64898/2026.06.18.733285), a perturbation prediction benchmark (10.1038/s41592-025-02772-6), and a 2024 deeper-evaluation commentary. They add overlapping or different-task evidence and are not needed for this concise introduction.
+
+## Annotation meta-learning precedent added in the completeness pass
+
+**brbic2020mars** — Brbić et al., Nature Methods17,1200–1206 (2020), DOI10.1038/s41592-020-00979-3. Verified2026-10-14 against [publisher metadata/abstract](https://www.nature.com/articles/s41592-020-00979-3), [author project overview and BibTeX](https://snap.stanford.edu/mars/) and PubMed33077966. The publisher main text is subscription-restricted; the abstract and author overview explicitly describe meta-learning across heterogeneous annotated and unannotated experiments. This supports the brief annotation-transfer precedent. It does not identify MARS as a synthetic-only PFN or as the same labelled-support deployment protocol as CellPFN; no head-to-head result is claimed.

@@ -1,0 +1,9 @@
+{
+  "command": "python3 scripts/count_words.py",
+  "method": "Brace-unwrapped claim narrative; skill prose_wordcount.py with detex -n; headings included; IDs, editorial apparatus, comments and floats excluded",
+  "abstract": 138,
+  "introduction": 488,
+  "results": 1644,
+  "main_text_so_far": 2132,
+  "remaining_of_3000": 868
+}

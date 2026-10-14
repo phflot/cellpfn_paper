@@ -1,0 +1,455 @@
+     A cellular prior enables compact and transferable single-cell inference
+                                                    with CellPFN
+                                         Philipp Flotho1,2 , Matthias Flotho1,2 ,
+                                           Pirya Rani1,2 , Andreas Keller1,2
+
+
+                      1
+                       Chair for Clinical Bioinformatics, Saarland University, Saarbrücken, Germany
+     2
+         Helmholtz Institute for Pharmaceutical Research Saarland (HIPS), Helmholtz Centre for Infection Research,
+                                                  Saarbrücken, Germany
+
+                                Wave 1 working draft: abstract, introduction and Results.
+                    Bold red prose is provisional or aspirational, not an established finding.
+                  Claim IDs refer to notes/open_claims.md. Methods and figures follow in later waves.
+
+                                                           Abstract
+                  Single-cell prediction often requires learning from limited labelled context across heterogeneous
+              experiments. We developed CellPFN, a prior-data fitted network trained on a procedural
+              cellular prior that varies biological signals, donor structure and measurement noise. The
+              12.33-million-parameter model uses task-local gene correspondence without persistent gene
+              identities and requires no target-task gradient updates. After 384,000 scheduled synthetic
+              episodes, CellPFN achieved competitive cell-type classification relative to pretrained tabular
+              models, with approximately 90-fold less reported task exposure than TabICLv2. The cellular
+              prior improved three pretrained tabular models through continued training, improving one-shot
+              balanced accuracy by 5.6–10.8 percentage points. CellPFN also accepted transcriptome-scale
+              inputs and supported efficient gene-deletion explanations. The framework further identifies
+              neuropathology-associated cellular states and reproducible predictive expression
+              signatures across independent cohorts.[O04] These results position a cellular task prior as a
+              reusable resource for learning biological inference with limited labelled data.
+
+ 1   Single-cell atlases provide increasingly broad reference maps, yet annotating a new experiment
+ 2   often requires inference from a small labelled set collected under different biological and technical
+ 3   conditions. More profiled cells do not necessarily supply more independent donors or more varied
+ 4   experimental settings. In supervised single-cell annotation, increasing donor diversity can contribute
+ 5   more to generalization than increasing cell count alone 1 . This distinction motivates models that
+ 6   learn how to interpret limited experimental context across heterogeneous tasks.
+ 7         Single-cell foundation models such as Geneformer, scGPT, scFoundation, UCE and Transcript-
+ 8   Former learn reusable representations from large collections of measured profiles 2–6 . Their breadth
+ 9   supports transfer across biological settings, but large-scale pretraining does not guarantee an advan-
+10   tage on each downstream task. Evaluations have found limitations in frozen representations and
+
+                                                               1
+11   saturation as pretraining collections expand 7,8 ; recent preprint evidence also shows that normaliza-
+12   tion and linear methods can remain competitive across several benchmarks 9 . These findings motivate
+13   a complementary question: can learning improve the inference rule that combines a few labelled
+14   examples, even when the expression measurements themselves already provide useful features?
+15      Meta-learning already supports transfer across heterogeneous single-cell experiments, as demon-
+16   strated by MARS 10 . Prior-data fitted networks (PFNs) provide a complementary way to learn
+17   inference rules. They are trained across prediction problems drawn from a generative prior, amortiz-
+18   ing support-conditioned inference into a forward pass 11 . TabPFN and TabICL demonstrate that
+19   synthetic task distributions can produce effective general-purpose tabular learners 12–15 . Recent
+20   MapPFN and PerturbPFN work further applies prior-based learning to cellular perturbation predic-
+21   tion 16,17 . For transcriptomic classification, the opportunity is to encode the variation encountered
+22   across cellular experiments directly into the training prior, while accommodating thousands of
+23   sparse features and scarce labels.
+24      Single-cell simulators already model count distributions, dependence, donor variation and
+25   regulatory dynamics through complementary statistical and mechanistic approaches 18–25 . Learned
+26   generative models also support conditional synthesis and augmentation 26,27 . For PFN training,
+27   the design objective extends beyond reproducing a reference dataset to generating diverse labelled
+28   inference problems. Controlled variation in signal strength, hidden subpopulations, donor effects
+29   and measurement noise can expose a learner to experimental configurations without requiring
+30   each configuration to be measured and annotated. Synthetic-to-real learning in optical flow and
+31   face analysis provides precedents for learning from known simulated structure 28,29 . Nevertheless,
+32   simulator fidelity depends on the statistic and scenario being evaluated 30,31 . The relevant test is
+33   whether the induced prior teaches inference that transfers to real biological data.
+34      Here we introduce CellPFN and its procedural cellular prior. CellPFN learns from synthetic
+35   tasks while preserving gene correspondence within each task and omitting persistent gene identities
+36   across tasks. We test two consequences of this prior: whether a compact cellular model can
+37   achieve competitive biological inference after substantially fewer training episodes than a general
+38   tabular model, and whether tasks from the same simulator can improve released tabular models
+39   through continued training. We further examine transcriptome-scale inputs and efficient query-gene
+40   explanations. The aim is a reusable method for learning from limited labelled biological context,
+41   with the prior’s usefulness established through downstream inference rather than simulation scale
+42   alone.
+
+
+43   Results
+44   A cellular prior teaches inference from labelled context
+45   We constructed a procedural prior over single-cell prediction problems, varying biological differences
+46   together with the conditions under which they are observed. The generator samples hierarchical cell
+47   identities, distributed expression programs, rare markers, correlated variation and donor-dependent
+
+
+                                                       2
+48   states. Donor composition, study and batch shifts, sequencing depth and overdispersed count
+49   sampling produce heterogeneous observations of these latent signals. Different labels and support
+50   budgets turn each simulated dataset into multiple inference problems. This makes experimental
+51   variation part of the training distribution, with known task labels and controllable nuisance factors.
+52   Aggregate statistics from real datasets, including those later evaluated here, informed the prior’s
+53   ranges. All examples used to optimize CellPFN’s weights were synthetic.
+54      Each problem comprises labelled support cells and unlabelled queries. Genes retain their
+55   correspondence between support and query but have no persistent identity across problems. CellPFN
+56   compares each query gene with support-derived class summaries, pools the resulting relations through
+57   permutation-invariant statistics and integrates this evidence into class scores. This use of unordered
+58   features follows the principle of set-based learning 32 , while preserving the within-task correspondence
+59   required for expression comparisons. A covariance estimate fitted to the support cells supplies an
+60   additional statistical channel when support is sufficient. The pooled evidence produces direct neural
+61   class predictions. Prediction on a new task requires labelled context but no gradient updates, and
+62   queries do not condition on other query cells.
+63      The reference model has 12.33 million trainable parameters and was trained over 384,000
+64   scheduled episodes drawn from 12,000 simulated dataset banks. Reused banks supplied distinct task
+65   views; 276,828 episodes carried nonzero loss weight. The first 320,000 scheduled episodes used prior
+66   v1, followed by 64,000 using the revised v2.2-B prior. For scale, TabICLv2 reports approximately 35
+67   million synthetic pretraining datasets 15 , about 90 times CellPFN’s scheduled episode count. This
+68   comparison describes training-task exposure across different priors and architectures; it does not
+69   measure a matched-compute advantage.
+
+70   Compact CellPFN is competitive across biological inference regimes
+71   We evaluated coarse and fine cell-type annotation in peripheral blood mononuclear cells (PBMCs) 33 ,
+72   together with cortex annotation within the development collection and on queries from held-out
+73   studies in ZEBRA 34 . Each panel used one, ten or 100 labelled support cells per class. Comparators
+74   included support-trained statistical classifiers, released tabular models, and logistic classifiers fitted
+75   to Geneformer and scGPT embeddings 2,3,15,35,36 . The main comparisons used the same three
+76   support draws. PBMC inputs were counts for CellPFN and normalized expression for tabular
+77   comparators; the cortex analysis used the exported processed-expression view. Model-specific input
+78   routes were retained for the single-cell foundation models; the Geneformer logistic classifier used
+79   standardized embeddings, whereas the scGPT classifier used unscaled embeddings.
+80      Across the four panels and three support sizes, CellPFN using all available genes reached a
+81   mean balanced accuracy of 72.9%. Released TabICLv2 and Kumo large reached 66.8% and 70.1%,
+82   respectively, using 2,000 highly variable genes, while cellular continued training brought Kumo large
+83   to 72.4%. Geneformer and scGPT with logistic classifiers reached 74.9% and 69.4% through their
+84   native input routes. These descriptive averages place the compact cellular model in a competitive
+85   range without establishing statistical equivalence or a universal ranking.
+
+
+                                                         3
+86       Support-trained low-rank linear discriminant analysis (LDA) remained strong when labels were
+87    abundant. At 100 support cells per class, LDA using all genes reached 84.6% mean balanced accuracy
+88    across the four panels, compared with 85.4% for CellPFN; at ten supports, the corresponding values
+89    were 75.3% and 79.6%. LDA received processed expression throughout and was not evaluated with
+90    one support cell per class.
+91       The ranking depended on the biological task and the amount of labelled context. For fine PBMC
+92    annotation with one support cell per class, Geneformer reached 68.8% balanced accuracy versus
+93    51.1% for CellPFN. For cortex queries from held-out studies with ten support cells per class, CellPFN
+94    reached 91.9%, compared with 87.4% for Geneformer and 87.2% for scGPT. Both foundation models
+95    likely encountered the exact PBMC cells during unlabelled pretraining; Geneformer also encountered
+96    source studies contributing most held-out cortex queries. This exposure does not establish label
+97    leakage or explain the performance differences, which also reflect preprocessing and classifier settings.
+98    Moreover, model variants were selected on these development panels, and each training arm currently
+99    has one training seed. A frozen evaluation on additional, independently held-out cohorts
+100   will determine how consistently this competitive performance generalizes.[O01]
+
+101   The cellular prior also improves pretrained tabular models
+102   To test whether the prior’s utility extends beyond CellPFN, we continued training released TabICLv2,
+103   Kumo small and Kumo large on tasks from the same simulator, using prior v2.2-B throughout
+104   cellular adaptation. Each model received 40,000 additional cellular tasks and 10,000 generic replay
+105   tasks over 2,500 updates. With 2,000 highly variable genes at evaluation, one-shot balanced accuracy
+106   improved by 7.3, 10.8 and 5.6 percentage points, respectively, averaged across the four core panels.
+107   Changes at 100 support cells per class were smaller than one percentage point in magnitude. Thus
+108   the largest benefits arose where labelled biological context was most limited.
+109      A generic-table continued-training control for Kumo small changed mean balanced accuracy
+110   by approximately zero across the eight low-support panel–budget combinations, compared with a
+111   6.1-point gain for cellular continued training. This comparison supports a contribution from the
+112   training distribution, although the controls differed in rows and columns per update and equivalent
+113   controls were unavailable for the other architectures. The experiments therefore demonstrate two
+114   uses of the cellular prior: training a compact specialist from scratch and adapting already pretrained
+115   tabular learners.
+
+116   Gene-anonymous inference extends to transcriptome-scale inputs
+117   We next asked whether CellPFN could use more genes than it encountered during training. The
+118   largest training tasks contained 8,192 genes, whereas the PBMC and processed cortex evaluations
+119   contained 33,538 and 21,158 genes, respectively. The same shared per-gene computations and
+120   symmetric aggregation accepted these larger inputs without expanding a learned gene vocabulary.
+121   Across the matched benchmark draws, balanced accuracy increased from 71.2% with 2,000 highly
+122   variable genes to 73.8% with 8,192, and was 72.9% with all genes. Additional genes therefore
+
+                                                         4
+123   remained usable, although retaining every gene did not maximize aggregate accuracy and was not
+124   beneficial in every task.
+125      Released TabICLv2 declined from 66.8% to 48.3% and Kumo large from 70.1% to 66.4% when
+126   moving from 2,000 highly variable genes to all genes. TabPFN-3.5, evaluated under its non-
+127   commercial research terms, refused the all-gene cases at its default feature guard 36,37 . These
+128   outcomes describe the tested inference configurations, including their column handling; they do not
+129   establish a fundamental limit of tabular architectures. CellPFN’s advantage here is the ability to
+130   retain transcriptome-scale input under its existing inference procedure.
+
+131   Prior and architecture changes have regime-dependent effects
+132   We examined whether explicitly exposing cross-gene structure accounted for CellPFN’s performance.
+133   The support-fitted covariance channel supplied both per-gene variance information and low-rank
+134   relationships between genes. Later comparisons of separately trained models with no operator,
+135   diagonal information alone or the full operator showed gains in several support-rich settings. However,
+136   the prespecified operator test did not support its primary claim: an operator-attributable loss
+137   exceeded the allowed threshold on a primary task. The later descriptive improvements therefore do
+138   not establish the operator as uniformly beneficial, and variation across independent training runs
+139   remains unmeasured.
+140      Changing the simulated task distribution also produced a tradeoff. Continuation on tasks selected
+141   as learnable improved some low-support accuracies but worsened predictive log loss at larger support
+142   sizes; the comparison additionally changed the number of cells per update. Simulator diagnostics
+143   likewise showed partial agreement with real data rather than uniform fidelity: the prior covered
+144   the observed strongest-marker range, while its few-cell discrimination tasks were easier than the
+145   real reference. Together, these results motivate judging the prior through transfer and targeted
+146   controls, alongside distributional checks, rather than treating greater simulated realism or a stronger
+147   statistical channel as sufficient evidence of better inference.
+
+148   Query-gene deletion explains predictions efficiently
+149   Gene anonymity still permits gene-level explanations because feature names can be restored after
+150   prediction. We developed DeepSets leave-one-gene-out (DS-LOO), which estimates how setting an
+151   individual query gene to zero changes the logit margin between the initially predicted class and its
+152   runner-up. The support set and fitted covariance remain fixed. In contrast to gradient attribution
+153   along an input path 38 , the target is this finite query-side deletion. DS-LOO uses the pooled gene
+154   statistics and a linearization of the prediction head, with corrections for changes in depth and
+155   detected-gene fraction. It is an approximation to a model intervention, not a simulated biological
+156   gene knockout.
+157      Against exact deletions in six evaluated cases and two model states, the case-level medians of
+158   within-cell rank correlation ranged from 0.979 to 0.998. For the reference model, case-level corrected
+159   relative L2 errors ranged from 0.5% to 4.9%. These checks used selected genes and correctly
+
+                                                         5
+160   classified cells in full precision. Under matched load, computing all-gene explanations
+161   cost approximately 10–13 single-gene exact forward passes. For the PBMC example,
+162   DS-LOO took 67.9 seconds; the corresponding 61-hour exhaustive-deletion runtime was
+163   extrapolated from individual forward timings rather than measured directly. Shared-
+164   GPU timings remain provisional.[O05]
+165      Despite the absence of gene-name embeddings, IL7R ranked second for CD4 T cells and NKG7
+166   seventh for natural killer cells in the evaluated class-margin rankings. Removing each PBMC
+167   query’s 50 most influential genes reversed its margin against the original runner-up class in 45.0%
+168   of evaluated cells, compared with 0.3% for random expressed genes. This supports faithfulness to
+169   the classifier’s decisions. It does not show that the same deletions would change biological identity
+170   or predict experimental perturbation responses.
+
+171   A provisional application examines neuropathology-associated expression
+172   We extended the framework to donor-level neuropathology contrasts in ROSMAP-
+173   derived single-nucleus data 39 . In the exported analysis with case and control support
+174   matched within sex, microglial predictions distinguished the CERAD 4-versus-1 donor
+175   groups with an AUC of 0.745 and a reported corrected 95% repeated-split interval of
+176   0.700–0.790. This result remains provisional pending completion of the donor-label
+177   audit and a frozen rerun. It measures association with neuropathology, not prospective
+178   diagnosis or clinical utility.[O02]
+179      Applying query-gene deletion to the corrected disease analysis and testing the
+180   findings in independent cohorts will test whether this approach can connect donor-level
+181   prediction to reproducible cellular expression signatures.[O03]
+
+
+
+
+                                                        6
+References
+[1] Felix Fischer, David S. Fischer, Roman Mukhin, Andrey Isaev, Evan Biederstedt, Alexandra-
+   Chloé Villani, and Fabian J. Theis. scTab: Scaling cross-tissue single-cell annotation models.
+   Nature Communications, 15:6611, 2024. doi: 10.1038/s41467-024-51059-5. URL https:
+   //www.nature.com/articles/s41467-024-51059-5.
+
+[2] Christina V. Theodoris, Ling Xiao, Anant Chopra, Mark D. Chaffin, Zeina R. Al Sayed,
+   Matthew C. Hill, Helene Mantineo, Elizabeth M. Brydon, Zexian Zeng, X. Shirley Liu, and
+   Patrick T. Ellinor. Transfer learning enables predictions in network biology. Nature, 618(7965):
+   616–624, 2023. doi: 10.1038/s41586-023-06139-9. URL https://www.nature.com/articles/
+   s41586-023-06139-9.
+
+[3] Haotian Cui, Chloe Wang, Hassaan Maan, Kuan Pang, Fengning Luo, Nan Duan, and Bo Wang.
+   scGPT: toward building a foundation model for single-cell multi-omics using generative AI.
+   Nature Methods, 21(8):1470–1480, 2024. doi: 10.1038/s41592-024-02201-0. URL https:
+   //www.nature.com/articles/s41592-024-02201-0.
+
+[4] Minsheng Hao, Jing Gong, Xin Zeng, Chiming Liu, Yucheng Guo, Xingyi Cheng, Taifeng
+   Wang, Jianzhu Ma, Xuegong Zhang, and Le Song. Large-scale foundation model on single-cell
+   transcriptomics. Nature Methods, 21(8):1481–1491, 2024. doi: 10.1038/s41592-024-02305-7.
+   URL https://www.nature.com/articles/s41592-024-02305-7.
+
+[5] Yanay Rosen, Yusuf Roohani, Ayush Agrawal, Leon Samotorčan, Tabula Sapiens Consortium,
+   Stephen R. Quake, and Jure Leskovec. Universal cell embedding provides a foundation model
+   for cell biology. Nature, 656(8126):183–191, 2026. doi: 10.1038/s41586-026-10689-z. URL
+   https://www.nature.com/articles/s41586-026-10689-z.
+
+[6] James D. Pearce, Sara E. Simmonds, Gita Mahmoudabadi, Lakshmi Krishnan, Giovanni Palla,
+   Ana-Maria Istrate, Alexander Tarashansky, Benjamin Nelson, Omar Valenzuela, Donghui Li,
+   Stephen R. Quake, and Theofanis Karaletsos. TranscriptFormer: A generative cell atlas across
+   1.5 billion years of evolution. Science, 393(6806):aec8514, 2026. doi: 10.1126/science.aec8514.
+   URL https://www.science.org/doi/10.1126/science.aec8514.
+
+[7] Kasia Z. Kedzierska, Lorin Crawford, Ava P. Amini, and Alex X. Lu. Zero-shot evaluation
+   reveals limitations of single-cell foundation models. Genome Biology, 26:101, 2025. doi:
+   10.1186/s13059-025-03574-x. URL https://doi.org/10.1186/s13059-025-03574-x.
+
+[8] Alan DenAdel, Madeline Hughes, Akshaya Thoutam, Anay Gupta, Andrew W. Navia, Nicolo
+   Fusi, Srivatsan Raghavan, Peter S. Winter, Ava P. Amini, and Lorin Crawford. Evaluating
+   the role of pretraining dataset size and diversity on single-cell foundation model performance.
+   Nature Methods, 23:1447–1457, 2026. doi: 10.1038/s41592-026-03120-y. URL https://www.
+   nature.com/articles/s41592-026-03120-y.
+
+
+                                               7
+ [9] Huan Souza and Pankaj Mehta. Parameter-free representations outperform single-cell foundation
+    models on downstream benchmarks. Preprint at arXiv, 2026. URL https://arxiv.org/abs/
+    2602.16696.
+
+[10] Maria Brbić, Marinka Zitnik, Sheng Wang, Angela O. Pisco, Russ B. Altman, Spyros Darma-
+    nis, and Jure Leskovec. MARS: discovering novel cell types across heterogeneous single-cell
+    experiments. Nature Methods, 17(12):1200–1206, 2020. doi: 10.1038/s41592-020-00979-3. URL
+    https://www.nature.com/articles/s41592-020-00979-3.
+
+[11] Samuel Müller, Noah Hollmann, Sebastian Pineda Arango, Josif Grabocka, and Frank Hutter.
+    Transformers can do Bayesian inference. In International Conference on Learning Representa-
+    tions, 2022. URL https://openreview.net/forum?id=KSugKcbNf9.
+
+[12] Noah Hollmann, Samuel Müller, Katharina Eggensperger, and Frank Hutter. TabPFN: A
+    transformer that solves small tabular classification problems in a second. In International
+    Conference on Learning Representations, 2023. URL https://openreview.net/forum?id=
+    cp5PvcI6w8_.
+
+[13] Noah Hollmann, Samuel Müller, Lennart Purucker, Arjun Krishnakumar, Max Körfer, Shi Bin
+    Hoo, Robin Tibor Schirrmeister, and Frank Hutter. Accurate predictions on small data with a
+    tabular foundation model. Nature, 637:319–326, 2025. doi: 10.1038/s41586-024-08328-6. URL
+    https://www.nature.com/articles/s41586-024-08328-6.
+
+[14] Jingang Qu, David Holzmüller, Gaël Varoquaux, and Marine Le Morvan. TabICL: A tabular
+    foundation model for in-context learning on large data. In Proceedings of the 42nd International
+    Conference on Machine Learning, volume 267 of Proceedings of Machine Learning Research,
+    pages 50817–50847. PMLR, 2025. URL https://proceedings.mlr.press/v267/qu25d.html.
+
+[15] Jingang Qu, David Holzmüller, Gaël Varoquaux, and Marine Le Morvan. TabICLv2: A better,
+    faster, scalable, and open tabular foundation model. In Proceedings of the 43rd International
+    Conference on Machine Learning, volume 306 of Proceedings of Machine Learning Research,
+    pages 102477–102555. PMLR, 2026. URL https://proceedings.mlr.press/v306/qu26a.
+    html.
+
+[16] Marvin Sextro, Weronika Kłos, and Gabriel Dernbach. MapPFN: Learning causal perturbation
+    maps in context, 2026. URL https://arxiv.org/abs/2601.21092. Preprint; also presented
+    at the ICLR 2026 Workshop on Generative AI in Genomics.
+
+[17] Yuche Gao, José Miguel Hernández-Lobato, and Siyuan Guo. PerturbPFN: Probing the limits
+    of synthetic priors in drug perturbation modelling, 2026. URL https://arxiv.org/abs/2607.
+    23447. Preprint; accepted at the ICML 2026 Workshop on Foundation Models for Structured
+    Data.
+
+
+
+                                                 8
+[18] Luke Zappia, Belinda Phipson, and Alicia Oshlack. Splatter: simulation of single-cell rna
+    sequencing data. Genome Biology, 18:174, 2017. doi: 10.1186/s13059-017-1305-0. URL
+    https://link.springer.com/article/10.1186/s13059-017-1305-0.
+
+[19] Xiuwei Zhang, Chenling Xu, and Nir Yosef. Simulating multiple faceted variability in single
+    cell rna sequencing. Nature Communications, 10:2611, 2019. doi: 10.1038/s41467-019-10500-w.
+    URL https://www.nature.com/articles/s41467-019-10500-w.
+
+[20] Tianyi Sun, Dongyuan Song, Wei Vivian Li, and Jingyi Jessica Li. scDesign2: a transparent
+    simulator that generates high-fidelity single-cell gene expression count data with gene cor-
+    relations captured. Genome Biology, 22:163, 2021. doi: 10.1186/s13059-021-02367-2. URL
+    https://link.springer.com/article/10.1186/s13059-021-02367-2.
+
+[21] Dongyuan Song, Qingyang Wang, Guanao Yan, Tianyang Liu, Tianyi Sun, and Jingyi Jessica
+    Li. scDesign3 generates realistic in silico data for multimodal single-cell and spatial omics.
+    Nature Biotechnology, 42(2):247–252, 2024. doi: 10.1038/s41587-023-01772-1. URL https:
+    //www.nature.com/articles/s41587-023-01772-1.
+
+[22] Christina B. Azodi, Luke Zappia, Alicia Oshlack, and Davis J. McCarthy. splatPop: sim-
+    ulating population scale single-cell RNA sequencing data. Genome Biology, 22:341, 2021.
+    doi: 10.1186/s13059-021-02546-1. URL https://link.springer.com/article/10.1186/
+    s13059-021-02546-1.
+
+[23] Payam Dibaeinia and Saurabh Sinha. SERGIO: A single-cell expression simulator guided by gene
+    regulatory networks. Cell Systems, 11(3):252–271.e11, 2020. doi: 10.1016/j.cels.2020.08.003.
+    URL https://doi.org/10.1016/j.cels.2020.08.003.
+
+[24] Robrecht Cannoodt, Wouter Saelens, Louise Deconinck, and Yvan Saeys. Spearheading future
+    omics analyses using dyngen, a multi-modal simulator of single cells. Nature Communications,
+    12:3942, 2021. doi: 10.1038/s41467-021-24152-2. URL https://www.nature.com/articles/
+    s41467-021-24152-2.
+
+[25] Hechen Li, Ziqi Zhang, Michael Squires, Xi Chen, and Xiuwei Zhang. scMultiSim: simulation
+    of single-cell multi-omics and spatial data guided by gene regulatory networks and cell–cell
+    interactions. Nature Methods, 22:982–993, 2025. doi: 10.1038/s41592-025-02651-0. URL
+    https://www.nature.com/articles/s41592-025-02651-0.
+
+[26] Matteo Marouf, Pierre Machart, Vikas Bansal, Christoph Kilian, Daniel S. Magruder, Chris-
+    tian F. Krebs, and Stefan Bonn. Realistic in silico generation and augmentation of single-
+    cell RNA-seq data using generative adversarial networks.       Nature Communications, 11:
+    166, 2020. doi: 10.1038/s41467-019-14018-z. URL https://www.nature.com/articles/
+    s41467-019-14018-z.
+
+
+
+                                               9
+[27] Erpai Luo, Minsheng Hao, Lei Wei, and Xuegong Zhang. scDiffusion: conditional generation
+    of high-quality single-cell data using diffusion model. Bioinformatics, 40(9):btae518, 2024.
+    doi: 10.1093/bioinformatics/btae518. URL https://academic.oup.com/bioinformatics/
+    article/40/9/btae518/7738782.
+
+[28] Alexey Dosovitskiy, Philipp Fischer, Eddy Ilg, Philip Hausser, Caner Hazirbas, Vladimir Golkov,
+    Patrick van der Smagt, Daniel Cremers, and Thomas Brox. FlowNet: Learning optical flow
+    with convolutional networks. In Proceedings of the IEEE International Conference on Computer
+    Vision, pages 2758–2766, 2015. URL https://openaccess.thecvf.com/content_iccv_2015/
+    html/Dosovitskiy_FlowNet_Learning_Optical_ICCV_2015_paper.html.
+
+[29] Erroll Wood, Tadas Baltrušaitis, Charlie Hewitt, Sebastian Dziadzio, Thomas J. Cashman,
+    and Jamie Shotton. Fake it till you make it: Face analysis in the wild using synthetic data
+    alone. In Proceedings of the IEEE/CVF International Conference on Computer Vision, pages
+    3681–3691, 2021. URL https://openaccess.thecvf.com/content/ICCV2021/html/Wood_
+    Fake_It_Till_You_Make_It_Face_Analysis_in_the_ICCV_2021_paper.html.
+
+[30] Helena L. Crowell, Sarah X. Morillo Leonardo, Charlotte Soneson, and Mark D. Robinson.
+    The shaky foundations of simulating single-cell RNA sequencing data. Genome Biology, 24:
+    62, 2023. doi: 10.1186/s13059-023-02904-1. URL https://link.springer.com/article/10.
+    1186/s13059-023-02904-1.
+
+[31] Hongrui Duo, Yinghong Li, Yang Lan, Jingxin Tao, Qingxia Yang, Yingxue Xiao, Jing
+    Sun, Lei Li, Xiner Nie, Xiaoxi Zhang, Guizhao Liang, Mingwei Liu, Youjin Hao, and
+    Bo Li. Systematic evaluation with practical guidelines for single-cell and spatially resolved
+    transcriptomics data simulation under multiple scenarios. Genome Biology, 25:145, 2024.
+    doi: 10.1186/s13059-024-03290-y. URL https://link.springer.com/article/10.1186/
+    s13059-024-03290-y.
+
+[32] Manzil Zaheer, Satwik Kottur, Siamak Ravanbakhsh, Barnabas Poczos, Ruslan Salakhutdinov,
+    and Alexander J. Smola. Deep sets. In Advances in Neural Information Processing Systems,
+    volume 30, 2017. URL https://proceedings.neurips.cc/paper_files/paper/2017/hash/
+    f22e4747da1aa27e363d86d40ff442fe-Abstract.html.
+
+[33] Yuhan Hao, Stephanie Hao, Erica Andersen-Nissen, William M. Mauck, III, Shiwei Zheng,
+    Andrew Butler, Maddie J. Lee, Aaron J. Wilk, Charlotte Darby, Michael Zager, Paul Hoffman,
+    Marlon Stoeckius, Efthymia Papalexi, Eleni P. Mimitou, Jaison Jain, Avi Srivastava, Tim Stuart,
+    Lamar M. Fleming, Bertrand Yeung, Angela J. Rogers, Juliana M. McElrath, Catherine A.
+    Blish, Raphael Gottardo, Peter Smibert, and Rahul Satija. Integrated analysis of multimodal
+    single-cell data. Cell, 184(13):3573–3587.e29, 2021. doi: 10.1016/j.cell.2021.04.048. URL
+    https://pubmed.ncbi.nlm.nih.gov/34062119/.
+
+
+
+                                                10
+[34] Matthias Flotho, Jérémy Amand, Pascal Hirsch, Friederike Grandke, Tony Wyss-Coray, Andreas
+    Keller, and Fabian Kern. ZEBRA: a hierarchically integrated gene expression atlas of the
+    murine and human brain at single-cell resolution. Nucleic Acids Research, 52(D1):D1089–D1096,
+    2024. doi: 10.1093/nar/gkad990. URL https://pubmed.ncbi.nlm.nih.gov/37941147/.
+
+[35] NVIDIA. Kumo-Tabular 1.0 model card, 2026. URL https://build.nvidia.com/nvidia/
+    kumo-tabular/modelcard. Released 23 September 2026; accessed 14 October 2026.
+
+[36] Benjamin Jäger, Nick Erickson, Léo Grinsztajn, Felix Birkel, Klemens Flöge, Oscar Key, Kürşat
+    Kaya, Jonas Kübler, Adèle Frankel, Tobias Schröder, Anurag Garg, Jan Hendrik Metzen, David
+    Salinas, Simon Bing, Kristina Collins, Tuana Çelik, Vahid Balazadeh, Lydia Sidhoum, Tomás
+    Pereda, Brendan Roof, Andrej Tschalzev, Siyuan Guo, Philipp Singer, Lennart Purucker, Jake
+    Robertson, Marie Salmon, Philipp Jund, Jerry Chen, Diana Kriuchkova, Arthur Cahu, Eliott
+    Kalfon, Adrian Hayler, Georg Grab, Vitor Monteiro, Lilly Wehrhahn, Dominik Safaric, Clara
+    Cornu, Alan Arazi, Rylee Grace, Simone Alessi, Mihir Manium, Bernhard Schölkopf, Yann
+    LeCun, Madelon Hulsebos, Sauraj Gambhir, Noah Hollmann, and Frank Hutter. TabPFN-3.5:
+    Technical report, 2026. URL https://arxiv.org/abs/2609.17895. Preprint, version 2.
+
+[37] Prior Labs. TabPFN-3.5 model card, 2026. URL https://huggingface.co/Prior-Labs/
+    tabpfn_3_5. Accessed 14 October 2026.
+
+[38] Mukund Sundararajan, Ankur Taly, and Qiqi Yan. Axiomatic attribution for deep networks.
+    In Proceedings of the 34th International Conference on Machine Learning, volume 70 of
+    Proceedings of Machine Learning Research, pages 3319–3328. PMLR, 2017. URL https:
+    //proceedings.mlr.press/v70/sundararajan17a.html.
+
+[39] David A. Bennett, Aron S. Buchman, Patricia A. Boyle, Lisa L. Barnes, Robert S. Wilson,
+    and Julie A. Schneider. Religious orders study and rush memory and aging project. Journal
+    of Alzheimer’s Disease, 64(s1):S161–S189, 2018. doi: 10.3233/JAD-179939. URL https:
+    //pubmed.ncbi.nlm.nih.gov/29865057/.
+
+
+
+
+                                               11
+

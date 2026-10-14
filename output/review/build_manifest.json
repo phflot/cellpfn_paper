@@ -1,0 +1,13 @@
+{
+  "source_files_and_pdf": {
+    "main.tex": "4f02aec0b2d00a5629c3365672f9b9a45fafb5ac974b72daa21d89b26f8fcf87",
+    "references.bib": "48ab36bc5dab3287e7e8b3cdb0969ce03284a8a45db65811358c334340d9d353",
+    "sections/abstract.tex": "e104ace32daf7fb32023843fedbf5b8155accb9fcd481a10173e311a4890265d",
+    "sections/introduction.tex": "11c73119a218e5163591a8c53498dac33bfa93416a31ac367a524bd42b7d60e8",
+    "sections/results.tex": "00d5c5a0d76fc15d4ad3365cef848eb5c777c8374b79e73f5cad997ca9b8994a",
+    "output/cellpfn_wave1.pdf": "1ac613fc1575adbac156f2bef7a83fe801b3838609ad74432f6be95ac149eb09"
+  },
+  "build": "make pdf",
+  "checks": "make check",
+  "word_count": "make words"
+}
