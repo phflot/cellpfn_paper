@@ -8,12 +8,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 commands = [
     ["scripts/check_sources.py"],
+    ["scripts/index_export.py", "--check"],
     ["scripts/check_results.py"],
+    ["scripts/check_tables.py"],
     ["scripts/check_manuscript.py"],
-    ["scripts/vendor/audit_bib.py", "--bib", "references.bib", "--tex", "main.tex", "--tex", "sections/*.tex"],
+    ["scripts/vendor/audit_bib.py", "--bib", "references.bib", "--tex", "main.tex", "--tex", "sections/*.tex", "--tex", "tables/*.tex"],
     ["scripts/count_words.py"],
     ["scripts/check_export.py"],
     ["scripts/check_sources.py"],
+    ["scripts/check_artifacts.py"],
 ]
 logs, records = [], []
 for args in commands:

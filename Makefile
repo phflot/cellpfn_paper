@@ -1,10 +1,14 @@
-.PHONY: all pdf check words
+.PHONY: all pdf check words tables index
 all: pdf check
 
 pdf:
-	mkdir -p build output/review
-	latexmk -pdf -interaction=nonstopmode -halt-on-error -outdir=build main.tex
-	cp build/main.pdf output/cellpfn_wave1.pdf
+	python3 scripts/build_pdf.py
+
+tables:
+	python3 scripts/build_tables.py
+
+index:
+	python3 scripts/index_export.py
 
 words:
 	python3 scripts/count_words.py
