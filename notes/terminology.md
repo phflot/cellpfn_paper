@@ -16,3 +16,14 @@
 | DS-LOO deletion | Query gene set to zero while support and its covariance fit remain fixed | Mechanistic perturbation prediction or biological gene knockout |
 | Margin reversal | Original predicted class versus its original runner-up crosses zero | Complete multiclass error-rate change |
 | Provisional neuropathology association | Existing export under label/provenance review | Clinical diagnosis, clinical utility, demonstrated sex difference |
+
+## Wave 2 names and interfaces
+
+| Use | Meaning | Avoid |
+|---|---|---|
+| Baseline prior | Prior used in the 320K-episode initial stage and comparison diagnostics; raw export ID `v1_late`/`v1` | Project version labels in scientific prose |
+| Cellular prior | Prior used in the final 64K reference episodes and tabular cellular adaptation; raw export ID `v2.2-B` | Implying every historical CellPFN episode used this configuration |
+| PyTorch-compatible streaming simulator | CPU generator with NumPy/PyTorch computation and native tensor/IterableDataset interfaces | Fully Torch/GPU-native or automatically differentiable simulator |
+| Gene–gene operator | Support-fitted pooled covariance channel with learned integration | A learned causal gene-regulatory graph |
+| Program tokens | Learned computational summaries in CellPFN | Identified biological pathways |
+| Simulator throughput | Direct measured generator performance under declared hardware/output contract | Model-job runtime, legacy unverified numbers, code capability as completed benchmark |

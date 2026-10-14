@@ -1,0 +1,106 @@
+\subsection*{CellPFN feature definitions and tensor dimensions}
+\label{supp:model-details}
+The feature definitions below specify the count and processed branches of the same predictor. Let $b_{ig}=\mathbf1(x_{ig}>0)$, $f_i=G^{-1}\sum_g b_{ig}$, and let $\bar b_g$ and $\bar b_{cg}$ denote support-wide and class-specific detection fractions. Support-wide and class-specific population moments of $\ell$ are $(\bar\ell_g,s_g)$ and $(\bar\ell_{cg},s_{cg})$, respectively. Only the support-wide standard deviation in the denominator of equation~\ref{eq:model-standardization} is floored at $10^{-6}$; class-specific standard deviations are descriptive features and can be zero. For count inputs, define $v_{ig}=(\ell_{ig}/10,z_{ig}/4,b_{ig},\sqrt{Gp_{ig}+10^{-6}})$. The processed view omits the fourth component. All row depths and detection fractions use the delivered gene panel, rather than a gene chunk.
+
+The support-gene input consists, in order, of $v_{ig}$, $(\bar\ell_g/10,s_g/10,\bar b_g)$ and $(\bar\ell_{y_i g}/10,s_{y_i g}/10,\bar b_{y_i g})$. This gives ten count channels or nine processed channels. The support summary is $\tilde v_{ckg}=\sum_{i:y_i=c}a_{cki}v_{ig}$. The relation input begins with $[v_{qg},\tilde v_{ckg},v_{qg}\odot\tilde v_{ckg},|v_{qg}-\tilde v_{ckg}|]$. It then appends the three support-wide and three class-specific gene statistics above. In count mode, its row-level features are $\log(1+d_q)/12$, $f_q$, the summary-weighted support $\log(1+d_i)/12$, and the summary-weighted support $f_i$; processed mode contains only the two detection features. Both modes finish with $\log(1+n_c)/\log(101)$ and the alignment channel $\tfrac12(v_{qg,1}\tilde v_{ckg,1}+v_{qg,2}\tilde v_{ckg,2})$. Thus the dimensions are $16+6+4+1+1=28$ and $12+6+2+1+1=22$.
+
+Support-row and relation reductions use population RMS, not standard deviation, and log-mean-exp, not unnormalized log-sum-exp. Gene chunks accumulate sums, sums of squares, maxima and log-sum-exp before normalization by the total gene count. The reference configuration uses 1,024 genes and 32 query--class pairs per chunk. The padded summary dimension is eight, of which at most four entries per class are active. Relation representations therefore have logical dimensions $Q\times C\times8\times G\times224$, but are reduced in chunks rather than materialized in full. Summary tokens have dimensions $Q\times C\times8\times448$, program tokens $Q\times C\times8\times448$, and logits $Q\times C$. Masks exclude inactive summaries from cross-attention. No positional encoding is attached to gene columns, support rows or query rows. Joint permutation of support and query genes leaves the prediction unchanged up to floating-point arithmetic; support-row permutations and relabelling classes have the corresponding invariant/equivariant action.
+
+The gene--gene fit uses the class means of clipped standardized expression, which generally differ from standardizing the un-clipped class means. For a support-variable gene with zero within-class variance, the shared diagonal floor remains active. A gene constant across every support row is excluded even if a query value differs. Eigenvectors are obtained from the $N\times N$ support Gram matrix and mapped to gene coordinates; the implementation does not construct a dense $G\times G$ covariance. Float64 factors are detached from automatic differentiation, while the gene channel and three pair scalars are returned in float32. The operator's two learned integration maps remain differentiable. The operator therefore represents statistical dependence estimated from the prompt, without interpreting covariance as a directed or causal gene network.
+
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{p{0.29\textwidth}p{0.46\textwidth}r}
+\caption{CellPFN architecture and learned parameter counts. The diagonal and full gene--gene arms have the same learned parameter shapes and counts. The covariance estimator itself has no learned parameters.}\label{tab:model-architecture}\\
+\toprule
+Component & Dimensions and computation & Parameters\\
+\midrule
+\endfirsthead
+\multicolumn{3}{l}{Supplementary Table~\ref{tab:model-architecture} (continued)}\\
+\toprule Component & Dimensions and computation & Parameters\\\midrule
+\endhead
+Support-gene encoder & Count $10\to64$; processed $9\to64$; GELU; shared $64\to64$; layer normalization & 5,632\\
+Support-row projection & Four 64-channel reductions; $256\to448$; GELU; layer normalization & 116,032\\
+Support-row residual blocks & Three blocks: layer normalization; $448\to1,792\to448$; GELU & 4,826,304\\
+Summary query projection & $448\to448$ & 201,152\\
+Summary key projection & $448\to448$ & 201,152\\
+Summary queries & Eight learned vectors of width 448 & 3,584\\
+Summary roles & Eight learned vectors of width 448 & 3,584\\
+Relation encoder & Count $28\to448$; processed $22\to448$; GELU; shared $448\to224$; layer normalization; includes 448 operator-stem parameters & 124,768\\
+Relation reduction projection & Four 224-channel reductions; $896\to448$; GELU; layer normalization & 402,752\\
+Program queries & Eight learned vectors of width 448 & 3,584\\
+Program cross-attention & Width 448; eight heads & 804,608\\
+Cross-attention normalization & Layer normalization, width 448 & 896\\
+Observation-mode embeddings & Two learned vectors of width 448 & 896\\
+Program transformer & Two pre-normalized layers; width 448; eight heads; feed-forward width 1,792; GELU; no dropout & 4,828,544\\
+Direct classifier & Program mean/max; $896\to448\to1$; GELU & 402,305\\
+Operator scalar head & Three scalars; $3\to448\to896$; GELU & 404,096\\
+\midrule
+Total, diagonal or full operator & Includes the operator's 448-weight gene stem and 404,096-parameter scalar head & \textbf{12,329,889}\\
+Total, no operator & Same backbone with both operator integration paths absent & \textbf{11,925,345}\\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\subsection*{Training distributions, objectives and checkpoint reconstruction}
+\label{supp:training-details}
+For zero-based bank index $j$, define $p_j=\operatorname{clip}((j-1,000)/9,000,0,1)$. The probabilities of binary metadata, categorical metadata, cell type and donor identity are $(1-0.4p_j,0.2p_j,0.15p_j,0.05p_j)$. Binary and categorical tasks have two and four classes, respectively; cell-type and donor-identity tasks draw uniformly from two, four, six and eight classes. Requested panel width is 2,048 before bank 1,000 and thereafter has probabilities $(1-0.7p_j,0.35p_j,0.35p_j)$ for 2,048, 4,096 and 8,192 genes. These are requested widths; the memory cap can reduce them. Natural-frequency query allocation imposes a floor of ten cells per class, caps allocations by available cells and adjusts rounding to retain the nominal $100C$ total when feasible. Metadata targets select the bank's dominant non-age covariate with probability one-half and otherwise draw an eligible metadata field. Age can be a target from bank 10,000; its generative effects need not be absent before it becomes a supervised target.
+
+In the baseline-prior phase, admission is applied with probability $1-j/10,000$. On separate diagnostic cells (16 support and 16 query cells per class), the better of the empirical-Bayes negative-binomial and combined raw/standardized-expression similarity controls must achieve accuracy at least $1/C+0.10$. A nearest-class-mean rule using only support-standardized log depth and detection fraction must score strictly more than 0.025 lower than that best control. Balanced diagnostic class sizes make accuracy equal balanced accuracy here. A rejected episode has zero training weight. The filter is inactive from bank 10,000. It does not use CellPFN predictions or the cells used to calculate its training loss. Admission labels indicate performance of these diagnostic rules, not a proof that rejected tasks contain no biological information.
+
+Let $\mathcal A_t$ be accepted tasks in optimizer opportunity $t$, and $Q_e$ the query count in task $e$. The objective is
+\begin{equation}
+ L_t=\frac{1}{|\mathcal A_t|}\sum_{e\in\mathcal A_t}
+ \left[-\frac{1}{Q_e}\sum_{q=1}^{Q_e}\log p_\theta(y_{eq}\mid X_{eS},y_{eS},x_{eq})\right].
+\end{equation}
+The normalization is over tasks, rather than pooling all query cells across tasks; within a task it is ordinary query cross-entropy, without class weighting. No auxiliary distillation, reconstruction or contrastive objective is applied to the direct model. For $t\leq8,000$, the learning-rate multiplier is $t/8,000$; subsequently it is $0.1+0.45[1+\cos(\pi(t-8,000)/192,000)]$. The continuation retains this global schedule rather than restarting the warm-up. Its operator group multiplies the backbone rate by $10\min(1,\max(0,t-80,000)/1,000)$.
+
+The baseline-prior stage includes the specified retention of the early biological task distribution in one-half of banks after bank 5,000. This is a sampling component of that stage. In the cellular-prior continuation, the early-prior flag is retained in task records but does not activate the baseline expression generator. Each continuation restores model weights, Adam moments, random-number states, task positions and receipt chains. This state restoration matters because parameters can have different optimizer step counters after admission filtering or mode-specific updates. The full and diagonal operators retain the parent tensor values and add only their declared, initially silent integration paths. Full training reproducibility therefore requires the staged recipe and parent state, rather than training a randomly initialized final architecture for 384,000 episodes on a single stationary prior.
+
+The task-mixture comparison adds 16,000 episodes (4,000 update opportunities) to the same full-operator endpoint. Its targeted distribution assigns cell type and donor identity in a 3:1 ratio and skips signed-covariance banks. The reference continuation keeps the parent distribution. Both retain the architecture and optimization policy. The targeted arm keeps 500 banks but skips 166 intervening candidates, so its bank index reaches 12,665; its training receipt's 12,500 cumulative accepted-bank count must not be interpreted as the largest candidate index. The arms also deliver different cell counts per update, which is part of this distributional intervention.
+
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.13}
+\begin{longtable}{p{0.27\textwidth}p{0.65\textwidth}}
+\caption{Training and adaptation recipes. Counts distinguish independent simulated banks, scheduled tasks, tasks contributing loss and optimizer opportunities. The nominal 5,000-task adaptation milestone is update 313 and therefore contains 5,008 cellular task slots.}\label{tab:training-recipe}\\
+\toprule
+Setting & Evaluated configuration\\\midrule
+\endfirsthead
+\multicolumn{2}{l}{Supplementary Table~\ref{tab:training-recipe} (continued)}\\
+\toprule Setting & Evaluated configuration\\\midrule
+\endhead
+Simulated bank & Eight donors $\times$ eight cell types $\times$ 256 cells, 8,192 genes; first 32 cells per donor--type reserved for diagnostics\\
+Reuse and batch & 32 task views per bank; four interleaved banks; four scheduled tasks per optimizer opportunity\\
+Support sizes & $B=1,10,100$: probability 0.25 each; $B=2,4,8,16$: 0.04 each; $B=32,64$: 0.045 each\\
+Query and element budget & Nominal 100 queries per class; frequency-weighted allocation for cellular-prior cell-type tasks; at most 12.5 million delivered matrix elements\\
+Observation mixture & 70\% raw-count and 30\% processed-expression tasks\\
+Initial baseline-prior stage & 10,000 banks; 320,000 scheduled and 212,828 loss-bearing episodes; 80,000 optimizer opportunities\\
+Cellular-prior continuation & 2,000 additional banks; 64,000 scheduled and loss-bearing episodes; 16,000 additional optimizer opportunities\\
+Principal endpoint & 12,000 banks; 384,000 scheduled and 276,828 loss-bearing episodes; 96,000 optimizer opportunities\\
+CellPFN random seeds & Model seed 42; task-stream seed 15113; one model initialization lineage\\
+CellPFN optimizer & AdamW; $\beta=(0.9,0.999)$; weight decay $10^{-4}$; groupwise gradient norm clipping at 5\\
+CellPFN learning rate & Base $10^{-4}$ through opportunity 40,000, $10^{-5}$ thereafter; 8,000-step warm-up; cosine floor 0.1; horizon 200,000; operator group $10\times$ backbone rate with a 1,000-step ramp from 80,000\\
+CellPFN numerical policy & Float32 parameters/statistics/losses; bfloat16 neural autocast; float64 support covariance; gene/pair chunks 1,024/32\\
+Task-mixture continuation & Additional 500 accepted banks and 16,000 episodes; 4,000 opportunities; standard distribution versus cell type:donor identity $3:1$ with signed-covariance banks excluded\\
+Tabular initialization & Released TabICL, 27,552,258 parameters; Kumo small, 27,458,266; Kumo large, 213,668,250\\
+Tabular task stream & Shared 40,000 cellular tasks plus 10,000 generic replay tables; 16+4 tasks per update; 2,500 updates\\
+Tabular task geometry & Support 1/10/100 in exact thirds; 32 queries per class; at most eight cellular classes; support-fitted 2k HVGs or at most 100 principal components\\
+Tabular optimization & AdamW; model seed 42; $\beta=(0.9,0.999)$; zero weight decay; peak rate $3\times10^{-5}$; 125 warm-up updates; cosine to zero at 2,500; norm clipping 1; float32 training\\
+Adaptation milestones & Updates 313, 625, 1,250 and 2,500; approximately 5,000 and exactly 10,000, 20,000 and 40,000 cellular task slots\\
+Prior-content proxy endpoint & Update 625 (10,000 cellular tasks), retaining the 2,500-update learning-rate horizon; task-draw replicates distinguished from model-seed replicates\\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\subsection*{Tabular preprocessing and adaptation interfaces}
+\label{supp:adaptation-interfaces}
+Cellular episodes are converted to tables with support rows first, followed by query rows. The view builder normalizes counts to log1p counts per 10,000 before selecting genes using support-derived mean-binned dispersion statistics. The PCA view standardizes support rows, clips standardized values to $[-10,10]$ and retains $\min(100,N-1,H)$ components, where $H$ is the selected feature count. Each component is oriented so its largest absolute loading is positive. Queries undergo the corresponding support-fitted transformations. For TabICL, preprocessing returns an array with dimensions $E\times(N+Q)\times H$, support labels $E\times N$, and query targets $E\times Q$, where $E\in\{1,2\}$ is the ensemble-member count and $H$ is the resulting feature width. Feature permutations, shifted class-label patterns and normalization settings are recorded, allowing probabilities to be returned to the original class order. These arrays are produced deterministically from the task plan, independently of worker completion order.
+
+Kumo consumes the same support-fitted cellular views but applies its own support-fitted default recipe, rather than TabICL's transforms. Its four recipe members and the one/two differentiated members are distinct quantities. One forward/backward pass is accumulated per selected member; their losses are averaged within task before the task average. Gradient checkpointing is applied to model blocks. Deployment evaluation uses the released library route, including the class-count wrapper, with eight or 16 members for small or large models. Thus a single training member, a cellular episode, an optimizer update and an inference ensemble are not interchangeable exposure units. The adaptation interfaces retain checkpoint identity, task and replay array hashes, the consumed task chain, preprocessing settings and invalid-task reasons. External model libraries supply the pretrained model implementations; hashprompt supplies reproducible cellular task construction, model-specific training adapters and evaluation wrappers.
+
+\subsection*{Software reference and experimental provenance}
+The software description is bound to hashprompt main commit \texttt{c06f99d} and pyScIntelligentDesign main commit \texttt{6c4d2d0}. The principal exported experiment is bound to model-source commit \texttt{9e50f8e} and simulator commit \texttt{76ba3a3}. Optional capabilities available in the software reference are identified separately from enabled experimental components. Experiment records retain resolved configuration, model/checkpoint identifiers, initialization and task seeds, bank and task receipts, preprocessing settings, and source-array hashes. Full source identifiers and the claim-to-implementation crosswalk accompany the reproducibility record. These bindings distinguish the software resource from the exact configuration evaluated in each result.

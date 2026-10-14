@@ -1,0 +1,85 @@
+\subsection*{Support summaries and same-gene neural relations}
+\label{methods:cellpfn-backbone}
+The support encoder applies a shared multilayer perceptron independently to each cell--gene pair. Its features include expression, standardized expression and detection, support-wide and class-specific moments, and, for count inputs, square-root composition (full definitions below). The two input projections have widths $10\rightarrow64$ and $9\rightarrow64$ for count and processed inputs, respectively, followed by GELU, a $64\rightarrow64$ linear map and layer normalization. For a sequence of gene features $h_g$, both the support and relation encoders use the symmetric reduction
+\begin{equation}
+ \mathcal R(h)=\left[\frac1G\sum_g h_g,\;
+ \sqrt{\frac1G\sum_g h_g^{\odot2}+\epsilon},\;
+ \max_g h_g,\;\log\sum_g e^{h_g}-\log G\right],
+ \label{eq:gene-reduction}
+\end{equation}
+with componentwise operations. This retains average, energy, extreme and smoothly aggregated responses while allowing arbitrary gene counts and permutations, in the spirit of set-based representations\citep{zaheer2017deepsets}. The resulting 256-dimensional support-row vector is projected to 448 dimensions, followed by three residual, pre-normalized multilayer perceptron blocks with hidden width 1,792.
+
+Within class $c$, learned inducing queries assign weights to support rows. If $e_i$ is the row embedding and $\bar e_c$ its class mean, summary $k$ has weights
+\begin{equation}
+ a_{cki}=\operatorname{softmax}_{i:y_i=c}
+ \left[\frac{\langle f_q(\bar e_c+q_k),f_k(e_i)\rangle}{\sqrt{448}}\right].
+ \label{eq:class-summary}
+\end{equation}
+Here $f_q$ and $f_k$ are learned affine maps from 448 to 448 dimensions. The implementation allocates eight summary slots and activates $\min(n_c,4)$, where $n_c$ is class support size; inactive slots are masked. At one support cell per class, precisely one summary is active. Each summary is a weighted average of the per-gene support views, retaining the correspondence between a query gene and that same gene in the support.
+
+For every query $q$, class $c$, summary $k$ and gene $g$, the relation input concatenates the query view, the weighted support view, their elementwise product and absolute difference, and additional support statistics and row-level covariates. It has 28 channels for counts or 22 for processed expression. Separate $28/22\rightarrow448$ projections feed a shared GELU--linear--layer-normalization network producing 224 relation channels. Applying equation~\ref{eq:gene-reduction} across genes yields an 896-dimensional vector for each query--class--summary combination. A linear projection, GELU and layer normalization map this vector to 448 dimensions, and a learned summary-role embedding is added.
+
+Eight learned program queries cross-attend to the active summary tokens using eight attention heads. The attended output is added to the program queries and layer-normalized. A learned token specifying count or processed mode is prepended, and the resulting nine tokens pass through two pre-normalized transformer layers\citep{vaswani2017attention}, each with eight heads, width 448, feed-forward width 1,792, GELU and zero dropout. Mean and maximum pooling over the eight transformed program tokens, excluding the mode token, yields an 896-dimensional vector $h_{qc}$. The direct classifier is a $896\rightarrow448\rightarrow1$ multilayer perceptron with GELU, producing one unbounded neural logit per class. Its output contains no fixed analytic score or residual correction to an external classifier. Support-derived analytic quantities are input features only. The backbone without the gene--gene operator has 11,925,345 learned parameters.
+
+\subsection*{Support-fitted gene--gene operator}
+\label{methods:gene-operator}
+The operator supplies joint gene information to the neural relation and classification paths. It estimates pooled within-class covariance from the support-standardized vectors in equation~\ref{eq:model-standardization}. Let $\mu_c$ be the class mean of these vectors, $r_i=z_i-\mu_{y_i}$, and $\nu=\sum_c\max(n_c-1,0)$. A gene is support-variable if its maximum and minimum standardized support values differ. All other genes are masked from the operator, including its distances and channels. On the $G_\ast$ support-variable genes, for $\nu>0$, define
+\begin{equation}
+ v_g=\frac1\nu\sum_i r_{ig}^2,\qquad
+ D_g=v_g+0.01\,\frac1{\max(G_\ast,1)}\sum_{g'}v_{g'}.
+ \label{eq:operator-diagonal}
+\end{equation}
+If the additive floor is at most $10^{-10}$, it is replaced by 1; if $\nu=0$, the diagonal is the identity. These safeguards keep completely constant or within-class constant support finite. Masked genes have zero inverse scale.
+
+We diagonalize the support-row Gram matrix of $R D^{-1/2}/\sqrt\nu$ in float64. From its leading eigenvalues $\eta_j$ and eigenvectors, we recover orthonormal gene loadings $U$ in the diagonally standardized coordinates. The number of candidate components is at most $\min(32,\lfloor\nu/2\rfloor,N)$; retained spikes are $\lambda_j=\max(\eta_j-1,0)$, with zero-spike components discarded. The implied covariance is
+\begin{equation}
+ \widehat\Sigma=D^{1/2}\left(I+U\operatorname{diag}(\lambda)U^\mathsf{T}\right)D^{1/2}.
+ \label{eq:operator-covariance}
+\end{equation}
+This pooled estimator has no per-class low-rank subspaces. It is fitted without gradients from support cells alone; no trainable covariance matrix or gene-identity embedding is introduced.
+
+For query--class difference $d_{qc}=z_q-\mu_c$, put $a_{qc}=D^{-1/2}d_{qc}$ and $b_{qc}=U^\mathsf{T}a_{qc}$. The squared Mahalanobis distance and whitened difference are
+\begin{align}
+ M_{qc}&=\|a_{qc}\|^2-\sum_j\frac{\lambda_j}{1+\lambda_j}b_{qcj}^{2},\label{eq:operator-mahalanobis}\\
+ w_{qc}&=\left[I-U\operatorname{diag}\!\left(1-(1+\lambda)^{-1/2}\right)U^\mathsf{T}\right]a_{qc}.
+ \label{eq:operator-whitening}
+\end{align}
+Before clipping, $\|w_{qc}\|^2=M_{qc}$; computed distances are lower-bounded by zero to remove round-off artifacts. The gate
+\begin{equation}
+ \gamma_c=\begin{cases}(n_c-1)/(n_c+3),&n_c\geq2,\\0,&n_c\leq1\end{cases}
+ \label{eq:operator-gate}
+\end{equation}
+sets the operator's contribution to exactly zero for one-shot classes. The gene channel is $\gamma_c\operatorname{clip}(w_{qcg},-8,8)/4$. A bias-free $1\rightarrow448$ projection adds this channel to the relation network's input projection, shared across summaries.
+
+The second path provides class-comparative operator information to the classifier. With $\mathcal C_+=\{c:n_c\geq2\}$, define
+\begin{align}
+ t_{qc}&=\frac{M_{qc}-|\mathcal C_+|^{-1}\sum_{c'\in\mathcal C_+}M_{qc'}}{\sqrt{2\max(G_\ast,1)}},\\
+ s_{qc}&=\operatorname{asinh}(t_{qc})-
+ \frac{\sum_{c'}\gamma_{c'}\operatorname{asinh}(t_{qc'})}{\sum_{c'}\gamma_{c'}}.
+ \label{eq:operator-centered}
+\end{align}
+Empty-set denominators are replaced by 1; all contributions then vanish through the gate. If $r$ is the retained pooled rank, the three inputs are $u_{qc}=(\gamma_cs_{qc},\gamma_cr/32,\gamma_c)$. A $3\rightarrow448\rightarrow896$ GELU multilayer perceptron $f$ modifies the classifier input as $h_{qc}+\gamma_cf(u_{qc})$. Thus both the scalar inputs and the head output are gated. The second centering in equation~\ref{eq:operator-centered} ensures $\sum_c\gamma_cs_{qc}=0$ even for unequal support sizes. The gene projection and the output layer of $f$ are initialized to zero, preserving the common parent model's predictions at initialization. These paths add 404,544 parameters, giving 12,329,889 parameters in total.
+
+We distinguish three trained arms: no operator, diagonal operator and full operator. The diagonal arm uses equations~\ref{eq:operator-diagonal}--\ref{eq:operator-centered} with no low-rank correction, $\widehat\Sigma=D$, while retaining the full support fit's rank scalar $r/32$. Its neural dimensions, gate and initialization match the full arm. The no-operator arm omits both added neural paths. All three arms continue from the same no-operator parent with matched task schedules. Separately, operator-off and rank-zero interventions remove pathways or low-rank corrections during inference with trained parameters fixed. These interventions measure dependence of an existing predictor on its operator; they are not substitutes for training the corresponding ablation. One-shot gating likewise does not require independently trained arms to agree, because their shared backbone parameters can diverge during training.
+
+\subsection*{Reusable simulated banks, task sampling and optimization}
+\label{methods:model-training}
+The trainer receives simulated counts from pyScIntelligentDesign through a deterministic bank interface. Each independently seeded bank contains eight donors, eight cell types and 256 cells per donor--type combination at 8,192 parent genes. Thirty-two episodes reuse each bank with separately sampled targets, cells, gene panels, gene orders and class-label permutations. Four banks are interleaved, with one episode per bank in each four-task optimizer opportunity. Reuse therefore increases task exposure without creating additional independent biological datasets.
+
+Targets comprise binary donor metadata, four-category donor metadata, cell type and donor identity. Metadata targets use one query donor per label and other eligible donors as support, within one selected cell type. Cell-type targets use two query donors and six support donors. Donor-identity tasks use the same donor classes but disjoint support and query cells. They consequently train identification, not transfer of a phenotype to unseen donors. The first 32 cells of every donor--type combination are reserved for diagnostics. Support cells are sampled by cycling across eligible donors. Metadata values are assigned native binary labels or rank-based binary/four-category labels without splitting ties; incompatible target fields are replaced by other eligible fields, and a bank with no compatible target produces a recorded zero-weight task.
+
+Support budgets are drawn from 1, 10 and 100 cells per class with probability 0.25 each, 2, 4, 8 and 16 with probability 0.04 each, and 32 and 64 with probability 0.045 each. Requested gene panels contain 2,048, 4,096 or 8,192 genes, sampled without replacement and permuted jointly for support and query. A 12.5-million-element cap reduces gene width when necessary while preserving requested cell counts. The nominal query budget is 100 cells per class; in the cellular prior's cell-type tasks, the total $100C$ is distributed according to available class frequencies. The curriculum laws, target allocation and admission rules are specified in Supplementary Table~\ref{tab:training-recipe}.
+
+The evaluated model was trained on 320,000 scheduled episodes from 10,000 baseline-prior banks, followed by 64,000 episodes from 2,000 banks of the cellular prior. The gene--gene paths were added at the start of this 64,000-episode stage. There were 96,000 optimizer opportunities in total; 276,828 episodes contributed nonzero loss, including all 64,000 final-stage episodes. These are distinct from the number of banks or simulated cells. All CellPFN arms use model seed 42 and task-stream seed 15113. The endpoint was the declared training milestone, rather than a checkpoint selected by maximum real-panel accuracy. Real summaries informed simulator calibration, and development panels informed design decisions; synthetic-only optimization does not imply that the complete research process was independent of real data.
+
+The objective is mean query cross-entropy within each task, averaged uniformly over accepted tasks in an optimizer opportunity. Rejected tasks contribute zero weight; an opportunity with no accepted task does not apply an optimizer step. AdamW\citep{loshchilov2019adamw} uses $\beta_1=0.9$, $\beta_2=0.999$ and weight decay $10^{-4}$. Its learning-rate multiplier has 8,000 warm-up opportunities and cosine decay to a 0.1 floor over a 200,000-opportunity horizon. The base rate is $10^{-4}$ for the first 40,000 opportunities and $10^{-5}$ thereafter. At the operator stage, pre-existing Adam moments and counters are restored by parameter name; new operator parameters start with fresh optimizer state and use ten times the backbone rate, multiplied by a linear 1,000-opportunity ramp. Backbone and operator parameter groups are separately clipped to gradient norm 5. Training uses PyTorch\citep{paszke2019pytorch} with bfloat16 autocast on NVIDIA H100 80-GB GPUs; feature statistics and losses use float32 and the covariance fit uses float64. Gene and query--class chunking, and activation checkpointing during training, bound working memory without changing the mathematical reduction.
+
+\subsection*{Continued training of tabular foundation models}
+\label{methods:tabular-adaptation}
+We initialized TabICL and the small and large Kumo Tabular models from their released weights\citep{qu2026tabiclv2,nvidia2026kumo}. The three adaptation arms consumed the same cellular task stream and generic replay tables. Each of 2,500 updates contained 16 cellular tasks and four generic tables: 40,000 cellular tasks and 10,000 replay tasks. Cellular tasks retained the simulator's target construction, used 1, 10 or 100 support cells per class in exact thirds over consecutive triples of tasks, and used 32 query cells per class. Task families followed the final curriculum probabilities (60\% binary metadata, 20\% categorical metadata, 15\% cell type and 5\% donor identity), with no more than eight classes.
+
+Cellular counts were log-normalized and transformed using support-fitted 2k HVGs or a principal-component view with at most 100 components. View choice, preprocessing ensemble choice and randomness were recorded per task. Neither feature selection, standardization nor projection was fitted to query rows. TabICL used its support-fitted ensemble generator, with identity or power normalization, Latin feature shuffling, shifted class labels and outlier threshold 4. Training used one or two ensemble members per cellular task, averaging their query cross-entropies. Kumo used its own default preprocessing recipe fitted to support rows: four recipe members expose its four numerical transformations, and the task plan selects one or two members for gradient accumulation. Gradients pass through the classifier behind Kumo's class-count wrapper. The module remains in evaluation mode during this differentiable route, which has no dropout or batch-statistic update.
+
+Generic replay tables were drawn from TabICL's mixed structural-causal-model prior with 5--100 features, at most ten classes, at most 1,024 rows and support fractions between 0.1 and 0.9. For Kumo, replay query rows whose class is absent from support are masked. The update loss averages valid task losses. All three principal adaptation arms used float32 training, AdamW with peak learning rate $3\times10^{-5}$, zero weight decay, $\beta=(0.9,0.999)$, 125 linear warm-up updates, cosine decay to zero at update 2,500 and global norm clipping at 1. Recorded invalid tasks were bounded by a cap of 40, rather than silently replaced. Checkpoints at updates 313, 625, 1,250 and 2,500 correspond to approximately 5,000 and exactly 10,000, 20,000 and 40,000 cellular tasks. Evaluation used each model's deployment preprocessing; Kumo used eight ensemble members for the small model and 16 for the large model, with seed 0. No additional supervised head was fitted for these in-context predictions.
+
+The generic-only Kumo control replaced the 16 cellular slots with generic tables and retained four replay slots; its row and column counts were not matched to the cellular stream. Two further cellular task draws retained the same released initialization and model seed, quantifying task-sampling variation rather than independent initialization variation. Prior-content proxy comparisons used the same adaptation machinery and a declared 10,000-cellular-task endpoint on the 2,500-update schedule. Changes in task family, donor count or class composition are reported as interventions in that distribution, not architectural changes.

@@ -8,13 +8,17 @@ ROOT = Path(__file__).resolve().parents[1]
 sources = [(ROOT / "sections" / f"{n}.tex").read_text() for n in ("abstract", "introduction", "results")]
 for text in sources:
     unwrap_claims(text)  # raises on truncated nested argument
-ids = re.findall(r"\\unresolvedclaim\{([^}]+)\}", "\n".join(sources))
-registered = re.findall(r"^\| (O\d+) \|", (ROOT / "notes/open_claims.md").read_text(), re.M)
-assert len(ids) == len(set(ids)), "Duplicate claim ID"
+all_sections = "\n".join(p.read_text() for p in sorted((ROOT / "sections").glob("*.tex")))
+unwrap_claims(all_sections)
+ids = re.findall(r"\\unresolvedclaim\{([^}]+)\}", all_sections)
+registered = re.findall(r"^\| ([OM]\d+) \|", (ROOT / "notes/open_claims.md").read_text(), re.M)
+# A single unresolved scientific question can qualify more than one section.
+# Its register row is unique; repeated prose occurrences do not create new issues.
+assert len(registered) == len(set(registered)), "Duplicate claim register row"
 assert set(ids) == set(registered), f"Claim/register mismatch: {set(ids)^set(registered)}"
 assert not re.search(r"\\cite\w*\{", sources[0]), "Abstract must be unreferenced"
 assert not re.search(r"\\section", sources[1]), "Introduction must have no heading"
-assert not re.search(r"CITATION NEEDED|PLACEHOLDER_|\\cite\{\s*\}", "\n".join(sources)), "Unresolved citation placeholder"
+assert not re.search(r"CITATION NEEDED|PLACEHOLDER_|\\cite\{\s*\}", all_sections), "Unresolved citation placeholder"
 assert "\\textbf{#2}" in (ROOT / "main.tex").read_text(), "Claim marker must retain bold prose"
 manuscript = "\n".join(p.read_text() for p in [ROOT / "main.tex", *sorted((ROOT / "sections").glob("*.tex")), *sorted((ROOT / "tables").glob("*.tex"))])
 labels = re.findall(r"\\label\{([^}]+)\}", manuscript)
@@ -25,6 +29,6 @@ assert {"table:overview", "table:gene_ablation", *(f"tab:s{i}" for i in range(1,
 word_counts = counts()
 assert word_counts["abstract"] <= 150, "Abstract exceeds150 words"
 assert word_counts["remaining_of_3000"] >= 0, "Main text exceeds3000 words"
-todos = re.findall(r"\\TODO\{([^}]*)\}", "\n".join(sources))
-print(f"PASS: {len(ids)} actionable claim IDs, {sum(bool(t.strip()) for t in todos)} factual TODOs, no citation placeholders.")
+todos = re.findall(r"\\TODO\{([^}]*)\}", all_sections)
+print(f"PASS: {len(set(ids))} distinct actionable claim IDs ({len(ids)} occurrences), {sum(bool(t.strip()) for t in todos)} factual TODOs, no citation placeholders.")
 print("Word counts:", word_counts)

@@ -1,0 +1,81 @@
+\subsection*{Cellular task prior and simulator architecture}
+\label{sec:simulator}
+
+pyScIntelligentDesign separates the definition of a synthetic experiment from the production of individual cells. A configuration specifies a distribution over gene abundance, cell populations, donor attributes and observation processes. Instantiating this distribution fixes the biological parameters of one experiment; repeated sampling then produces cells sharing its population and donor structure. The resulting prior supplies both CellPFN training episodes and the cellular tasks used to adapt tabular models (Fig.~\ref{fig:architecture}). The implementation also exposes an independent simulation interface for annotated single-cell datasets. We describe the cellular prior used in the principal training endpoint below; the baseline prior is a comparison specification, and optional software capabilities are distinguished in Supplementary Table~\ref{tab:software-capabilities}.
+
+Let $G$ denote the number of anonymous genes, $c_i$ the cell type, $d_i$ the donor, and $s_i$ and $b_i$ the study and batch of cell $i$. An experiment contains a positive baseline composition $\boldsymbol\pi$ with $\sum_g\pi_g=1$, cell-type programs, donor metadata and shared nuisance parameters. Gene identities are procedural indices. A single permutation is applied consistently to all cells in a delivered task; no correspondence to named real genes is required. The experiment hierarchy has four studies with one batch per study and 16 generated donors. Fixed training banks use eight donors, eight cell types and 8,192 genes; bank construction and the subsequent selection of task targets are separate operations.
+
+\subsection*{Biological variation and gene programs}
+\label{sec:simulator-biology}
+
+The abundance distribution combines a lognormal body with a sparse high-abundance component, following the use of heterogeneous gene means and outliers in single-cell simulation\cite{zappia2017splatter}. It is normalized to a composition and constrained so that no gene exceeds 10\% of baseline mass. Three biological task families generate distinct relationships between expression and cell type: distributed mean programs, intermittently expressed markers superimposed on stable mean programs, and signed covariance programs. The bank schedule allocates these families in a 2:1:1 ratio. Biological parameters and technical randomness have separate seed namespaces, permitting controlled changes to observation conditions without redefining the underlying experiment.
+
+For mean-program tasks, sparse gene loadings are combined into class-dependent shifts, with a hierarchy producing shared variation among related classes. For a normalized gene-weight vector $\boldsymbol w$, the implementation centres a shift $\boldsymbol v$ by $v_g-\sum_h w_hv_h$ and scales its weighted squared magnitude to the configured energy. Class shifts use $w_g\propto\pi_g^{1/2}$; their final values are smoothly bounded by $L\tanh(v_g/L)$, with $L=4.5$. A class template is proportional to $\pi_g\exp(v_{cg})$. A construction is admitted only if every class template has maximum gene share at most 0.35, with at most 16 construction attempts. These bounds apply to the class template, rather than imposing the same bound on every fully perturbed cell.
+
+The marker family adds a class-specific sparse marker set. A Bernoulli draw controls whether the marker program is expressed in a cell, and a lognormal multiplier varies its amplitude. Marker and class shifts are combined before saturation, preserving the same class-shift ceiling. Hidden subtypes add within-class modes whose offsets are centred using their Dirichlet mixture weights. This permits multimodality without introducing an arbitrary unweighted class-mean shift. Optional trajectories vary position along class-centred program directions, with cell-specific position jitter; class-by-study and class-by-donor interactions provide domain-dependent changes in expression. Both trajectory and interaction blocks are independently enabled with probability 0.25 in the principal specification.
+
+The covariance family isolates information carried by relationships between genes. Six sparse programs $V_{jg}$ are arranged in three pairs. For each pair, $u_j$ is a Rademacher variable and $e_j\in\{-1,1\}$ has expectation $\rho$; the private class code supplies a sign $a_{cj}\in\{-1,1\}$. The latent coordinates are $z_{2j-1}=u_j$ and $z_{2j}=a_{cj}u_je_j$, so their marginal means are zero and their paired correlations have class-dependent signs. The biological profile is
+\begin{equation}
+ p^{\mathrm{bio}}_{ig}\propto\pi_g\left(1+\sum_{j=1}^{6}z_{ij}V_{jg}\right).
+ \label{eq:simulator-covariance}
+\end{equation}
+Program construction enforces positivity and weighted centring. Thus the class signal is placed in covariance at this biological layer; downstream nuisance transformations and count sampling remain part of the complete observation model.
+
+Within-type cell state combines an independent residual with shared sparse programs and a weaker quality-associated direction. If $r_{ig}$ is the energy-normalized residual and $h_{ig}$ the centred structured state, the combined shift is
+\begin{equation}
+ u_{ig}=\sqrt{1-f}\,r_{ig}+\sqrt f\,\kappa h_{ig}-o_g.
+ \label{eq:simulator-state}
+\end{equation}
+Here $f$ is the structured fraction, $\kappa$ is fixed once per experiment using a separate reference sample of 256 cells per class, and $o_g$ partially compensates the mean introduced by exponentiating structured variation. Program genes are sampled with probabilities proportional to baseline abundance raised to an experiment-specific power. Programs can be shared across classes or restricted to one class. Their activation probabilities vary by donor through a Gaussian donor-by-program logit shift. Fixing the normalization reference before cell production prevents the state scale from depending on the requested batch size or cell order.
+
+Donor metadata are generated using the simulator's vine-copula machinery. Continuous latent metadata are transformed to their public measurement scales, including age and sex. Centred, standardized metadata act through sparse anonymous gene directions, normalized by baseline-weighted energy; configurable nonlinear kernels introduce additional shared gene responses. Selected-target and other-metadata contributions are retained separately and multiplied without renormalizing the combined effect. These metadata generate labels and expression jointly; task labels are not imposed independently on a completed expression matrix. The distinction between donor-disjoint phenotype tasks and closed-set donor-identity tasks is maintained during episode construction.
+
+The donor aging component adapts stochastic perturbations in normalized log-count coordinates\cite{meyer2024stochasticaging}. A profile is placed at fixed reference depth 1,500, transformed by $q_g=\log(1+x_g)/\max_h\log(1+x_h)$, perturbed by an initial Gaussian increment and a sequence of clipped Gaussian increments, and transformed back. Chronological age maps from the fixed 5--110-year coordinate system to 0--105 steps; generated donor ages span 60--90 years. Initial and per-step standard deviations are 0.01 and 0.005, respectively, with a lognormal donor rate of mean one and log-standard deviation 0.2. Gene-specific rate mixtures and donor jitter vary susceptibility. A donor's entire clipped walk is prepared once as an equivalent offset and lower/upper clipping map, then reused for all its cells; this preserves the sequential clipping operation while amortizing the step loop. Before compositional renormalization, expression is bounded to $e^{-1}$--$e^1$ times the unaged input. The direct metadata age direction is disabled when the clock is active. Separate configured components add directional age shifts and age-dependent cell-noise scaling; the latter scales deviations around the expected cell state, preserving that expectation. Parameter distributions are given in Supplementary Table~\ref{tab:simulator-parameters}.
+
+\subsection*{Observation model and calibration}
+\label{sec:simulator-observation}
+
+The biological profile, metadata/aging effects, cell state, donor effects and study/batch effects are combined in log-expression space and normalized:
+\begin{equation}
+ p_{ig}=\frac{p^{\mathrm{bio}}_{ig}\exp(\Delta_{ig})}
+ {\sum_h p^{\mathrm{bio}}_{ih}\exp(\Delta_{ih})}.
+ \label{eq:simulator-profile}
+\end{equation}
+Here $\Delta_{ig}$ comprises the enabled shifts, with the aging component inserted through the log-ratio of aged to unaged biology so that metadata are not applied twice. Library size has a log-additive study--batch--donor--cell hierarchy,
+\begin{equation}
+ \log L_i=\ell_0+\ell^{\mathrm{study}}_{s_i}
+ +\ell^{\mathrm{batch}}_{b_i}+\ell^{\mathrm{donor}}_{d_i}
+ +\epsilon_i+\delta_0,
+ \label{eq:simulator-library}
+\end{equation}
+with experiment-specific scale multipliers and a lower library bound of 50. The normalized profile is converted to counts through a gamma--Poisson model:
+\begin{equation}
+ A_{ig}\sim\operatorname{Gamma}(k_{c_i g},1/k_{c_i g}),\qquad
+ \lambda_{ig}=L_ip_{ig}A_{ig},\qquad
+ X_{ig}\mid\lambda_{ig}\sim\operatorname{Poisson}(\lambda_{ig}).
+ \label{eq:simulator-counts}
+\end{equation}
+The second gamma argument is scale, giving unit mean and variance $1/k_{cg}$. Conditional on $L_i$ and $p_{ig}$, integrating the gamma draw yields mean $L_ip_{ig}$ and variance $L_ip_{ig}+(L_ip_{ig})^2/k_{cg}$. The terminal Poisson sampler is applied exactly once.
+
+Dispersion follows the realized class template where a class-mean template exists, and otherwise the baseline profile. At nominal mean $m_{cg}$,
+\begin{equation}
+ k_{cg}=\operatorname{clip}\!\left[
+ \frac{J_g}{\phi_0+a\max(m_{cg},m_0)^{-\alpha}},\;0.01,\;160\right],
+ \label{eq:simulator-dispersion}
+\end{equation}
+where $J_g$ is lognormal gene jitter, $\phi_0=0.1$, $m_0=0.1$, $\alpha=1.2$, and $a$ is drawn log-uniformly from 0.05--2.0. Age-dependent dispersion modifies these shapes when enabled. The fitted dispersion is an effective observed-variation model; it does not identify all real overdispersion as technical noise. The principal cellular prior has explicit observation dropout disabled. Study-specific detection and structural gene absence are available for their named prior ablations. The general simulator additionally supports composable observation effects, described separately in the supplement.
+
+Real data inform the prior through aggregate calibration targets. The principal ranges were selected to cover bank-matched summaries from ROSMAP, ZEBRA, PBMC CITE-seq and kidney, rather than reproduce one panel's medians. These summaries concern depth, dispersion, donor variation, abundance concentration, marker structure and separability. The calibrated objects are scalar parameters and distributions; the generator does not load real donor expression profiles or named-gene templates into training banks. Nevertheless, calibration and repeatedly inspected development evaluations used the same real datasets that contribute to the reported evaluations. Synthetic-only model training therefore does not imply a development procedure independent of real data, and the realism comparison is a prior-predictive diagnostic rather than independent validation. Baseline-prior comparisons retain their own configuration and population definitions.
+
+\subsection*{Tensor interfaces, streaming and software extensibility}
+\label{sec:simulator-software}
+
+The software exposes three coordinated interfaces: configurable experiment objects, PyTorch-compatible cell streams\cite{paszke2019pytorch}, and annotated dataset export. A donor-expression provider supplies cell types, gene identifiers and donor-conditioned expression; an external provider can be registered through a Python factory without changing the experiment orchestrator. Generic observation effects implement a tensor-valued forward operation and compose in an owned \texttt{EffectStack}; governed stacks validate their topology and terminal count sampler. The cellular-prior provider instead owns its complete observation process, preventing a second application of technical noise through the generic stack.
+
+The common output contract distinguishes normalized expected profiles, realized pre-sampling intensities and observed counts. All are matrices with shape cells $\times$ genes; profiles and intensities use float32 and counts use int32. Their dimensions, positivity, integer range and profile normalization are checked at the interface. Public metadata, sampling groups and provenance accompany the tensors, while hidden biological state and training-only sidecars remain separately controlled. This contract prevents a normalized profile from being silently interpreted as observed UMI counts.
+
+\texttt{CellStream} is a PyTorch \texttt{IterableDataset}. It first reserves cell coordinates and then materializes a microbatch; the generic path groups cells sharing an effect stack before applying tensor operations. The cellular-prior kernel combines NumPy computations\cite{harris2020numpy} with PyTorch tensor interfaces and returns CPU tensors. The current stream implementation uses CPU generation and requires \texttt{num\_workers=0} in a local PyTorch DataLoader. Process-global Python, NumPy and Torch random states are isolated, activated and restored for each simulator instance. Concurrent generation is provided by independently seeded processes, rather than cloning an active simulator into DataLoader workers.
+
+CellPFN's task producer uses spawned CPU workers with bounded prefetch and deterministic result delivery. Fixed biology banks amortize experiment initialization across multiple support/query views, while prefetch permits CPU production to overlap model consumption. Counts are stored as uint16 only when all values are exactly representable, otherwise retaining int32; there is no count clipping to meet a storage width. Task receipts bind configurations, seeds, shapes and array contents. The model-neutral adaptation bank stores expression views and local labels before model-specific preprocessing, allowing the same cellular tasks to be consumed in different model environments.
+
+For independent simulation use, collators convert streamed output to AnnData\cite{virshup2024anndata}, preserving count layers, cell/gene annotations and runtime provenance. Public-data and hidden-ground-truth loggers support H5AD, Zarr and Loom outputs. Dense and sparse observed-count exports are available, but the sparse path retains dense expected profiles and intensities. Working memory for direct generation scales with the microbatch's cell-by-gene arrays plus fixed biological state; exported datasets and prefetched banks add their own storage. Thus scalability depends on the selected output contract as well as the sampler. The supplement specifies these memory terms and provides a minimal usage example. Architecture alone is not interpreted as a measured speedup or a completed million-cell benchmark.

@@ -6,6 +6,8 @@
 \usepackage{amsmath,amssymb,xcolor}
 \usepackage{booktabs,longtable,tabularx,array}
 \usepackage{pdflscape}
+\usepackage{graphicx}
+\usepackage[font={small,stretch=1.0},labelfont=bf]{caption}
 \usepackage[numbers,super,sort&compress]{natbib}
 \usepackage[hidelinks]{hyperref}
 \usepackage{lineno}
@@ -33,9 +35,9 @@ Pirya Rani\textsuperscript{1,2}, Andreas Keller\textsuperscript{1,2}}
 \textsuperscript{2}Helmholtz Institute for Pharmaceutical Research Saarland (HIPS), Helmholtz Centre for Infection Research, Saarbr\"ucken, Germany
 \end{center}
 \begin{center}\small
-Wave 1 working draft: abstract, introduction, Results and supporting tables.\par
+Working draft: abstract, introduction, Results, Methods and architecture overview.\par
 \textcolor{red!80!black}{\textbf{Bold red prose is provisional or aspirational, not an established finding.}}\par
-Claim IDs refer to \texttt{notes/open\_claims.md}. Methods and figures follow in later waves.
+Claim IDs refer to \texttt{notes/open\_claims.md}. Discussion and remaining figures are deferred.
 \end{center}
 \begin{abstract}
 \input{sections/abstract}
@@ -46,9 +48,29 @@ Claim IDs refer to \texttt{notes/open\_claims.md}. Methods and figures follow in
 \section*{Results}
 \input{sections/results}
 \clearpage
+\input{sections/architecture_figure}
+\clearpage
+\section*{Methods}
+\input{sections/methods_overview}
+\input{sections/methods_simulator}
+\input{sections/methods_model}
+\input{sections/methods_evaluation}
+\clearpage
 \nolinenumbers
 \bibliographystyle{unsrtnat}
 \bibliography{references}
 \clearpage
 \input{sections/supplementary}
+\clearpage
+\section*{Supplementary Methods}
+\begingroup
+\setstretch{1.0}
+\small
+\setcounter{table}{9}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\theHtable}{supp.\arabic{table}}
+\input{sections/technical_simulator}
+\input{sections/technical_model}
+\input{sections/technical_evaluation}
+\endgroup
 \end{document}

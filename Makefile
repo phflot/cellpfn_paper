@@ -1,8 +1,11 @@
-.PHONY: all pdf check words tables index
+.PHONY: all pdf check words tables index figure
 all: pdf check
 
 pdf:
 	python3 scripts/build_pdf.py
+
+figure:
+	python3 scripts/build_architecture.py
 
 tables:
 	python3 scripts/build_tables.py

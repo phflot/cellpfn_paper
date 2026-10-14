@@ -43,7 +43,8 @@ def main():
     for old in (output / "cellpfn_wave1.pdf", ROOT / "build/main.pdf"):
         old.unlink(missing_ok=True)
     sources = [ROOT / "main.tex", ROOT / "references.bib", *sorted((ROOT / "sections").glob("*.tex")),
-               *sorted((ROOT / "tables").glob("*.tex")), output / "cellpfn.pdf"]
+               *sorted((ROOT / "tables").glob("*.tex")), ROOT / "figures/architecture.pdf",
+               ROOT / "figures/architecture.svg", ROOT / "scripts/build_architecture.py", output / "cellpfn.pdf"]
     hashes = {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in sources}
     manifest = {"source_files_and_pdf": hashes, "build": "make pdf", "checks": "make check",
                 "word_count": "make words", "temporary_build_removed": True}

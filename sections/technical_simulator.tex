@@ -1,0 +1,113 @@
+\subsection*{Simulator parameter distributions and reusable software interfaces}
+\label{sec:technical-simulator}
+
+Supplementary Table~\ref{tab:simulator-parameters} describes the principal cellular-prior configuration. Intervals denote distributions across independently seeded experiments, not confidence intervals. The baseline prior and named ablation arms retain separate configuration records; values in this table must not be retroactively assigned to every training phase. Integer counts are drawn on inclusive integer ranges. Class-signal, residual-cell, group-nuisance, class/domain-interaction and trajectory energies are log-uniform, as are intermittent-marker log-effect/amplitude SD and the dispersion jitter's log-SD. Fractions, correlation magnitude, hierarchy/subtype parameters, structured-state parameters and donor-library hyperparameters use uniform draws on their stated ranges. Program activation probabilities are uniform draws per program. Program size is lognormal around the drawn median with log-SD 0.7, clipped to 2--$G/4$ genes; positive state-program loadings have lognormal log-SD 0.5. Nonlinear-metadata density and energy are uniform, whereas kernel-reuse size is an integer draw. The resolved configuration and source-to-equation audit accompany the manuscript.
+
+\begingroup\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{p{0.24\textwidth}p{0.35\textwidth}p{0.32\textwidth}}
+\caption{Principal cellular-prior parameters.}\label{tab:simulator-parameters}\\
+\toprule Component & Specification & Interpretation \\
+\midrule\endfirsthead
+\multicolumn{3}{l}{\tablename\ \thetable, Principal cellular-prior parameters (continued)}\\
+\toprule Component & Specification & Interpretation \\
+\midrule\endhead
+Experiment topology & 4 studies; 1 batch/study; 16 generated donors; training bank uses 8 donors & Group identities are generated before episode selection. \\
+Training bank & $8\times8\times256$ cells; 8,192 genes & Donor $\times$ cell type $\times$ cells per type; 16,384 cells/bank. \\
+Biological families & Mean programs : marker multimodality : signed covariance, 2:1:1 & Fixed family schedule for consecutive bank roots. \\
+Baseline body & Lognormal log-SD 1.5--2.3 & Procedural anonymous gene abundance. \\
+High-abundance component & Probability 0.001--0.025; log-location 4.0--6.3; log-scale 0.3--1.0 & Maximum normalized baseline gene share 0.1. \\
+Mean programs & 24 programs; gene fraction 0.015--0.16; at least 24 genes; loading 0.30--3.00 & Class energy 0.03--2.0. \\
+Marker-family stable programs & 24 programs; gene fraction 0.03--0.08; at least 24 genes; loading 0.5--2.0 & Stable class energy 0.05--2.0. \\
+Intermittent markers & Gene fraction 0.002--0.05; at least 8 genes; activation 0.15--0.85 & Log-effect 0.35--2.0; log-amplitude SD 0.05--0.60. \\
+Class hierarchy & 2--4 levels; level SD ratio 0.3--1.0 & Marker fraction 0.003--0.02; log-effect 1.75--3.25. \\
+Class bounds & Metric proportional to baseline$^{0.5}$; saturation 4.5 & Maximum class-template gene share 0.35; 16 admission attempts. \\
+Hidden subtypes & Activation probability 0.3--0.8; 2--4 subtypes; energy ratio 0.2--2.0 & Dirichlet-weighted centring after saturation. \\
+Covariance family & 6 programs; gene fraction 0.05--0.08; loading 0.9--1.1 & Energy 0.07--0.12; pair correlation magnitude 0.75--0.95. \\
+Cell-state energy & 0.03--0.12 for each family & Baseline-weighted energy metric. \\
+Structured cell state & Fraction 0.7--0.95; 8--20 programs; median size 80--250 genes & Activation 0.1--0.5; shared fraction 0.7--0.95. \\
+Structured-state modifiers & Quality weight 0.02--0.1; abundance power 0.6--1.0 & Mean compensation 0.3--0.7; donor program-logit SD 0.5--1.0. \\
+Group nuisance energy & Study 0.003--0.03; batch 0.003--0.03; donor 0.002--0.015 & Gene-wise shifts independent of target labels. \\
+Class/domain interactions & Enabled probability 0.25 & Study energy 0.001--0.035; donor energy 0.001--0.045. \\
+Trajectory & Probability 0.25; energy 0.001--0.040 & Position-jitter SD 0--0.20. \\
+Linear metadata & Selected-target multiplier 0.25; other-metadata multiplier 0.6 & Scaling follows effect normalization; donor aging is separate. \\
+Nonlinear metadata & Gene density 0.02--0.05; shared-kernel group size 20--100; energy 0.003--0.02 & Direct age kernels excluded while the clock is active. \\
+Age and sex & Age 60--90, rounded; binary sex threshold 0.5 and steepness 10 & Public variables derived from generated copula metadata. \\
+Aging coordinate & Fixed depth 1,500; normalized log1p counts; 105 maximum steps & Ages mapped using fixed bounds 5--110. \\
+Aging noise & Initial SD 0.01; step SD 0.005; donor-rate log-SD 0.2 & Prepared donor-specific clipped maps; pre-normalization fold bounds $e^{-1}$--$e^1$. \\
+Aging gene-rate mixture & Noisy fraction 0.1--0.3; noisy log-SD 0.5--1.0 & Quiet scale maximum 0.2; donor jitter SD 0.1. \\
+Age-dependent cell noise & Gene fraction 0.05--0.2; increasing fraction 0.6--0.67 & Susceptible-class fraction 0.5--0.8; slope 0.05--0.25; mean preserved. \\
+Directional age effects & Gene fraction 0.02--0.1; negative fraction 0.6--0.9 & Energy 0.001--0.01. \\
+Library hierarchy & Global log-mean 7.53; base study/batch/cell SD 0.443/0.45/0.50 & Study/batch multipliers 0.3--1.0; cell multiplier 1.0--1.65. \\
+Donor library & SD 0.2--0.45; global log-offset $-0.6$--0 & Minimum library 50. \\
+Mean-dependent dispersion & $\phi_0=0.1$, $m_0=0.1$, exponent 1.2; amplitude log-uniform 0.05--2.0 & Class-template reference; gamma-shape bounds 0.01--160; lognormal jitter SD 0.3--0.8. \\
+Observation dropout & Disabled in principal configuration & Study-specific detection and absence belong to named ablations. \\
+Bank composition & Global Dirichlet concentration 1--3; donor concentration 2--10 & At least 64 available rows; age-composition class fraction 0.2--0.3 and log-effect $-0.5$--0.5. \\
+Low-count bank QC & Redraw cells below 20 observed counts, up to 8 technical redraws & Keep the highest-count candidate; zero-count final banks are rejected. \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\paragraph{Reusable components and execution boundaries.}
+The package separates biological generation, observation policies, delivery and logging. The provider protocol comprises \texttt{cell\_types}, \texttt{gene\_ids} and \texttt{expression\_for\_donor(meta\_values)}; a configured dotted Python factory can supply an external implementation. Generic effects implement \texttt{forward(x)} on cell-by-gene tensors and can be composed at plate, batch and study levels. Their order is scientifically meaningful: a terminal count draw cannot be interchanged with a continuous intensity transformation. Optional capabilities in Supplementary Table~\ref{tab:software-capabilities} are software interfaces or separately evaluated interventions, not additional unreported components of the principal prior.
+
+\begingroup\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{p{0.24\textwidth}p{0.36\textwidth}p{0.31\textwidth}}
+\caption{Simulator software capabilities and their relationship to the evaluated system.}\label{tab:software-capabilities}\\
+\toprule Component & Implemented capability & Usage boundary \\
+\midrule\endfirsthead
+\multicolumn{3}{l}{\tablename\ \thetable, Simulator software capabilities (continued)}\\
+\toprule Component & Implemented capability & Usage boundary \\
+\midrule\endhead
+Experiment assembly & Configurable cell hierarchy, donor metadata, studies, batches and plates & Principal tasks use the controlled four-study topology. \\
+Biological providers & Procedural task families and external donor-expression factories & CellPFN uses the mixed cellular task provider; external providers are an extension interface. \\
+Observation effects & Library scaling, overdispersion, dropout, ambient mixture, doublets, panel masks, 5$'$/$3'$ bias and FFPE decay & General simulator options; the principal task-owned observation model is specified in Methods. \\
+Controlled prior interventions & Additional donor cohorts, donor-private on-switches, study detection and gene absence & Used only where the named ablation activates the corresponding block. \\
+Spatial/noise utilities & Three-dimensional value, fractal, Gaussian-feature, Perlin and simplex noise fields & Standalone utilities; no spatial training claim is made for CellPFN. \\
+Calibration modules & Transcriptome, library, dispersion, ambient, dropout, doublet and study-effect fitting; diagnostic interfaces & Availability does not imply all fitted effects were active in training. \\
+PyTorch delivery & Dense cell tensors through \texttt{IterableDataset}; count-contract validation & CPU generation; local DataLoader workers disabled. \\
+Independent producers & Spawned CPU processes, bounded prefetch, deterministic task order and timeouts & Implemented by the CellPFN adapter around independently initialized DGPs. \\
+Task reuse & Immutable count banks, metadata and content receipts & Different targets and support/query views reuse fixed biological counts. \\
+Native acceleration & Optional C++ batched latent draws with exact reference checks and fallback & Specific shared-topic backend, not the complete cellular-prior kernel. \\
+Annotated export & AnnData dense or sparse observed counts; H5AD/Zarr/Loom loggers & Expected profiles and intensities remain dense in the sparse export. \\
+Ground truth and provenance & Separate public/hidden loggers, runtime seeds, configuration and array hashes & Hidden state is excluded from model-facing episode payloads. \\
+Serialization & Reconstruct governed task datasets from configuration and seed & Active task datasets cannot be safely cloned through pickling across processes. \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\paragraph{A minimal stream and export interface.}
+The following example uses the implemented CellPFN adapter signatures. It takes an experiment configuration supplied by the caller, fixes its seed, obtains 64 cells and writes an annotated count matrix. The full calibrated training configuration additionally fixes task-family parameters and target construction. This is a usage example, not a throughput measurement.
+\begingroup\small
+\noindent\begin{minipage}{\linewidth}
+\begin{verbatim}
+from pathlib import Path
+import anndata as ad
+import pandas as pd
+from hashprompt.dataset.dataset import (
+    Config, build_cell_stream, synchronize_task_root_seed)
+
+def simulate_chunk(config_path, output_path, seed=42):
+    cfg = Config(Path(config_path))
+    cfg = synchronize_task_root_seed(cfg, seed)
+    stream = build_cell_stream(
+        cfg, micro_batch_size=64, device="cpu", reseed=False)
+    batch = next(iter(stream))
+    counts = batch["observed_counts"].numpy()
+    out = ad.AnnData(X=counts, obs=pd.DataFrame(batch["meta"]))
+    out.layers["expected_profile"] = (
+        batch["expected_profile"].numpy())
+    out.layers["expected_counts"] = (
+        batch["expected_counts"].numpy())
+    out.write_h5ad(output_path)
+    return out
+\end{verbatim}
+\end{minipage}
+\endgroup
+For a governed task configuration, the explicit synchronization call binds the task root and top-level seed. Production exporters additionally preserve gene annotations, public/hidden information boundaries and count/runtime receipts. Generation remains on CPU; downstream model code can transfer its selected tensors to an accelerator. The example requires the simulator, CellPFN adapter and AnnData dependencies.
+
+\paragraph{Memory and numerical representation.}
+Let $B$ be the simulation microbatch size, $C$ the number of cells retained in an output chunk and $G$ the gene count. The active generator holds several dense $B\times G$ arrays plus experiment-level class/program/donor state; the constant depends on which biological blocks and hidden artifacts are retained. Direct streaming avoids retaining all previously generated cells. Dense collation allocates three four-byte $C\times G$ arrays, requiring $12CG$ bytes before metadata; creating the returned AnnData copies these arrays, giving approximately $24CG$ bytes while both buffers and output are alive, before other temporary allocations. The sparse collator reduces storage of observed counts but still retains two dense float32 arrays, requiring $8CG$ bytes in addition to sparse counts, indices and temporary copies. These are storage calculations, not measured peak-RAM values.
+
+The current chunk exporter aggregates 100 microbatches of 10,000 cells. Its million-cell output size is an implementation setting; runtime and feasibility depend on gene count and output layers. The CellPFN fixed-bank path uses smaller materialization batches of 64 cells and releases simulator objects after bank production. One 16,384-cell, 8,192-gene bank occupies 512~MiB as int32 or 256~MiB when losslessly stored as uint16, excluding metadata; active and prefetched banks add to this memory. Prepared donor-aging maps cost $O(TG)$ once per donor for $T$ walk steps and $O(G)$ per subsequent application, preserving each intermediate clipping operation. No claim of GPU simulation, universal differentiability or end-to-end sparse sampling follows from the PyTorch interface.

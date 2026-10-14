@@ -46,13 +46,18 @@ def unwrap_claims(text):
 def counts():
     result = {}
     with tempfile.TemporaryDirectory(prefix="cellpfn_wordcount_") as temp:
-        for name in ("abstract", "introduction", "results"):
+        names = ["abstract", "introduction", "results"]
+        names += [p.stem for p in sorted((ROOT / "sections").glob("methods_*.tex"))]
+        names += [p.stem for p in sorted((ROOT / "sections").glob("technical_*.tex"))]
+        for name in names:
             source = (ROOT / "sections" / f"{name}.tex").read_text()
             path = Path(temp) / f"{name}.tex"
             path.write_text(unwrap_claims(source))
             result[name] = prose(path, DEFAULT_MARKERS, DEFAULT_FLOATS, False, False)
     result["main_text_so_far"] = result["introduction"] + result["results"]
     result["remaining_of_3000"] = 3000 - result["main_text_so_far"]
+    result["methods_total"] = sum(v for k,v in result.items() if k.startswith("methods_"))
+    result["supplementary_methods_prose"] = sum(v for k,v in result.items() if k.startswith("technical_"))
     return result
 
 

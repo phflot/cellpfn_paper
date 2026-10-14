@@ -1,0 +1,11 @@
+\subsection*{CellPFN prediction task and expression representations}
+\label{methods:cellpfn-task}
+An episode consists of a labelled support matrix $X_S\in\mathbb{R}_{\geq0}^{N\times G}$, support labels $y_S\in\{1,\ldots,C\}^{N}$ and a query matrix $X_Q\in\mathbb{R}_{\geq0}^{Q\times G}$. The same $G$ gene coordinates occur in support and query, but the network receives neither persistent gene identifiers nor donor, study or simulator metadata. Class names are localized to the support classes. CellPFN returns one logit for each query--class pair and class probabilities by softmax. Its parameters remain fixed during prediction; support fitting constructs episode-specific statistics and learned support summaries. Query cells share this support state but do not attend to one another. Consequently, changing the other query rows does not change a given row's prediction, apart from numerical effects of batching. The architecture is summarized in Fig.~\ref{fig:architecture} and Supplementary Table~\ref{tab:model-architecture}.
+
+Count and processed-expression inputs use separate linear input projections and a shared nonlinear backbone. For count inputs, the delivered-panel depth is $d_i=\max(1,\sum_g x_{ig})$, the composition is $p_{ig}=x_{ig}/d_i$, and the expression view is $\ell_{ig}=\log(1+10^4p_{ig})$. Processed inputs must already contain nonnegative log-normalized expression; the supplied values are used as $\ell_{ig}$ without another normalization or logarithm. For either mode, we compute support-wide gene means $\bar\ell_g$, population standard deviations $s_g$ and detection fractions, together with the corresponding statistics within each support class. We use $\epsilon=10^{-6}$ and define the support-standardized view
+\begin{equation}
+ z_{ig}=\operatorname{clip}\!\left(\frac{\ell_{ig}-\bar\ell_g}{\max(s_g,\epsilon)},-8,8\right).
+ \label{eq:model-standardization}
+\end{equation}
+The support statistics also transform query rows. This standardized log-expression view is an input feature, not a negative-binomial Pearson residual. Training assigns count and processed modes in a 70:30 mixture; processed training inputs are obtained by row-wise log-normalization over the complete delivered gene panel.
+

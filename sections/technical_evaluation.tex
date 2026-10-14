@@ -1,0 +1,67 @@
+\subsection*{Evaluation settings and statistical definitions}
+
+Table~\ref{tab:evaluation-settings} records the evaluated comparator contracts. The primary benchmark's gene views are not interchangeable: a full-gene CellPFN result, a support-selected tabular result and a gene-vocabulary embedding result compare practical inference routes rather than holding every input coordinate fixed. Hyperparameters below are the supplied evaluation settings, not proposed retuning.
+
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{p{0.18\textwidth}p{0.23\textwidth}p{0.50\textwidth}}
+\caption{Recorded comparator inputs and fitting settings.}\label{tab:evaluation-settings}\\
+\toprule
+Comparator & Input and fitting data & Recorded settings \\
+\midrule
+\endfirsthead
+\multicolumn{3}{l}{Table~\ref{tab:evaluation-settings} continued}\\
+\toprule
+Comparator & Input and fitting data & Recorded settings \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+TabICLv2 & Support-selected genes; labelled context & \texttt{tabicl} 2.2.0; released weights and package-default inference for the primary gene view. Support-only PCA is a separate sensitivity view. \\
+TabPFN-3.5 & Support-selected genes; labelled context & \texttt{tabpfn} 9.0.0; released weights and package defaults, including the feature guard. Non-commercial research use. \\
+Kumo Tabular & Support-selected genes; labelled context & Official 1.0.0 weights; 16 ensemble members for large, eight for small. Default recipe, at most 500 columns per member, logit averaging; float16 CUDA autocast with float32 weights. \\
+Geneformer-V2-316M & Rank-value tokens mapped by Ensembl identifier; frozen mean embeddings & At most 4,094 genes per cell. Support-standardized L2 logistic regression: $C=1$, LBFGS, maximum 2,000 iterations. Geneformer 0.1.0 and Transformers 4.46.0. \\
+scGPT whole-human & Gene-symbol vocabulary; frozen unit-length CLS embeddings & At most 1,199 nonzero genes per cell, seeded subsampling above this limit, 51 value bins. Unscaled L2 logistic regression: $C=1$, LBFGS, maximum 10,000 iterations. scGPT 0.2.4. \\
+Expression logistic regression & Support-selected expression genes or PCA; support fit only & Support standardization, $C=1$, LBFGS, maximum 2,000 iterations, tolerance $10^{-6}$, random state 0. \\
+CellTypist & Full processed gene panel; support fit only & CellTypist 1.7.1; $C=1$, LBFGS, maximum 1,000 iterations, seed 42; no additional feature selection, stochastic-gradient fitting or query majority voting. Native one-versus-rest probabilities normalized for NLL/ECE without changing the best-match class. \\
+SingleR & Full log-normalized panel; support cells as reference & BiocPy SingleR 0.5.0; classic pairwise markers, Spearman scoring, quantile 0.8, fine-tuning threshold 0.05. R SingleR 2.12.0 provided a separate concordance check. \\
+scANVI & Up to 2,000 support-selected genes and counts & scvi-tools 1.4.2; scVI 400 epochs then scANVI ten epochs, training fraction 0.9, batch size 128, no class-balanced replacement sampling (\texttt{n\_samples\_per\_label=None}), seed 0. Separate inductive support-only and transductive support-plus-unlabelled-query conditions. \\
+LDA diagnostics & Processed full-gene or 2,000-gene inputs; support fit & Diagonal, Ledoit--Wolf shrinkage and rank-32 low-rank covariance variants; recorded comparisons at ten and 100 supports. Full-gene low-rank comparisons use the Woodbury implementation. \\
+\end{longtable}
+\endgroup
+
+\paragraph{Frozen inputs and feature provenance.}
+The ZEBRA subsample SHA256 is \texttt{428fe0a0}\allowbreak\texttt{64327cb1}\allowbreak\texttt{d513367e}\allowbreak\texttt{5bee2ab0}\allowbreak\texttt{8a1cf0a5}\allowbreak\texttt{ba93d40e}\allowbreak\texttt{9b219729}\allowbreak\texttt{9550ebd9}; the case builder checks this identity and the frozen evaluation-manifest identity before reusing its splits. The PBMC preparation joins exact source barcodes and retains the donor time codes without interpreting them as independently sampled subjects. Antibody quality-control totals in GEO metadata differed from the reproduction snapshot even though the audited antibody values and labels agreed; no protein-derived quantity entered inference. Feature selection is conditional on the labelled support matrix, except for the pre-existing kidney feature panels and the assay-availability mask explicitly described above.
+
+For cortex count reconstruction, let $z_g=\exp(x_g)-1$ for a processed expression row and let $u$ be its smallest positive entry. Candidate counts were $z_g/u$. A row was rejected if any coordinate was more than 0.001 from an integer or if its reconstructed CP10k/log-transform round trip differed by more than $2\times10^{-6}$. Reconstruction preceded masking of unavailable genes. The 1,322 Yang Cortex cells failing this rule were excluded from eligible supports; existing support rankings were filtered, preserved in order and extended deterministically from the eligible original support pool. The original query cohorts were retained exactly. These checks support a conditional integer-lattice reconstruction; they do not convert inferred counts into independently observed raw reads.
+
+\paragraph{Sex-task units and label resolution.}
+The study-matched oligodendrocyte positive control required XIST and at least four of RPS4Y1, DDX3Y, UTY, KDM5D and EIF1AY to have been measured. Its 46 female--male unit pairs spanned eight studies; fourteen pairs entered each query split. The broader task added four Lim pairs and used sixteen query pairs. Common measured-gene universes were 16,708 and 12,668 genes, respectively, before support-selected 8,192-gene evaluation. Both tasks used the same four nested support-unit budgets, but 16 and 32 units supplied 160 and 320 cells per class, beyond the training support range. The joint change in studies and gene coverage is not a controlled removal of sex-linked genes. Means and ranges over reused-person splits are descriptive.
+
+PBMC fine-task eligibility used the original donor quotas. Candidate tasks were retained when
+\[
+ \frac{R/100-1/K}{1-1/K}\geq0.20\quad\text{and}\quad R<85,
+\]
+where $K$ is the class count and $R$ is the larger mean balanced accuracy of nearest-class-mean and logistic-reference classifiers at 100 supports. These references used support-standardized 2,000-gene expression. The rule did not consult CellPFN/proxy outputs, but it did consult reference predictive performance and query labels. It therefore does not create an independent external test set. Nested labels and overlapping cells also prevent interpreting an eight-task mean as eight biological replicates.
+
+\paragraph{Metric definitions.}
+With $K$ query classes, class sizes $n_c$ and predictions $\hat y_i$, balanced accuracy was
+\[
+ \mathrm{BA}=\frac{1}{K}\sum_{c=1}^{K}\frac{1}{n_c}
+             \sum_{i:y_i=c}\mathbf{1}(\hat y_i=c).
+\]
+Every declared class had to occur among the queries; the scorer rejects silent class dropping. Probabilities were obtained from class logits, and NLL was $-n^{-1}\sum_i\log\max(p_{i,y_i},10^{-12})$. ECE was $\sum_{j=1}^{15}(n_j/n)|\mathrm{accuracy}_j-\mathrm{confidence}_j|$, using confidence equal to the maximum class probability and bins $[(j-1)/15,j/15)$ for $j=1,\ldots,15$ with the final right edge included. Empty bins contributed zero. Reported BA is multiplied by 100; BA differences are percentage points. AUC remains on the zero-to-one scale.
+
+For a paired diagnostic contrast over $D$ support draws, $d_s$ was computed within draw before averaging. The conditional 95\% interval was $\bar d\pm t_{0.975,D-1}s_d/\sqrt D$. This construction was used only where the analysis supplied a ten- or twenty-draw interval; it was not applied to the three-draw headline benchmark or reused-person sex controls. For the provisional ROSMAP analysis, the reported standard error used the Nadeau--Bengio correction\cite{nadeau2003inference}, $s\sqrt{1/10+n_{\mathrm{query}}/n_{\mathrm{support}}}$, where $s$ is the standard deviation over splits; the interval multiplier was 2.262. Its units are donors under the stated split design, not cells. The available aggregate export does not permit independent reconstruction of the underlying donor assignments or label corrections.
+
+\paragraph{Pooled-statistic approximation for DS-LOO.}
+Write the concatenated pooled representation as $P(x;S)$ and its downstream class-margin function as $H_{a,b}(P)$. When the per-gene relation for gene $g$ is replaced by its zero-expression counterpart while other relations and global summaries are fixed, let the resulting pooled change be $\Delta P_g$. For example, a mean pool changes by $(r_g^0-r_g)/G$, where $G$ is the number of input genes; the squared RMS pool changes by $[(r_g^0)^2-r_g^2]/G$. Maximum and log-sum-exp pools are likewise recomputed for replacement of that term. The head-linearized deletion effect is
+\[
+ \widehat I_g^{\mathrm{pool}}
+ =-\nabla_P H_{a,b}(P(x;S))^{\mathsf T}\Delta P_g.
+\]
+The sign follows the base-minus-deleted target. This expression describes the local pooled contribution, not the complete corrected estimator: deleting a count can alter read-depth normalization, and deleting a detected gene alters detection summaries. The recorded corrected analysis uses a further gradient calculation for these couplings. With the full operator, changing a query gene can also alter other whitened gene coordinates even when the support covariance fit is fixed. Exact correction equations, treatment of this operator coupling, numerical stabilization and implementation provenance cannot be recovered from the current exported description alone; they are included in unresolved item M01 rather than supplied as invented algorithmic detail.
+
+Validation genes were drawn from unions of each method's class-level top twenty, the bottom twenty for integrated gradients and the operator readout, and twenty random expressed genes, augmented with previously untested DS-LOO top/bottom genes. DS-LOO scored every gene, while exact validation covered this selected union. The analysis compared gradient-times-input and integrated-gradients variants\cite{sundararajan2017ig} with the same finite-deletion target; numerical agreement is evidence of fidelity to that target, not a proof that the attribution methods estimate identical scientific quantities. The reported rank summary took medians over cells and then classes. Magnitude errors used $\|\widehat{\boldsymbol I}-\boldsymbol I\|_2/\|\boldsymbol I\|_2$ with the aggregation attached to each exported statistic. The six cases include two representations of the same kidney cells and therefore are not six independent cohorts. Cell-level deletion curves and support-plus-query deletion experiments were kept separate because the latter refit the support statistics.
