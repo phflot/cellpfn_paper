@@ -1,0 +1,77 @@
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{5.5cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{3.35cm}@{}}
+\caption{DS-LOO fidelity and support sensitivity.}\label{tab:s8}\\
+\toprule
+Case & Full operator: Spearman & No operator: Spearman & Full operator: relative error (\%) \\
+\midrule\endfirsthead
+\multicolumn{4}{l}{\small Table \thetable{} (continued)}\\\toprule
+Case & Full operator: Spearman & No operator: Spearman & Full operator: relative error (\%) \\
+\midrule\endhead
+\bottomrule\endfoot
+PBMC, 10 supports, draw 0 & 0.997 & 0.997 & 2.91 \\
+PBMC, 10 supports, draw 1 & 0.998 & 0.997 & 2.31 \\
+PBMC, 100 supports & 0.998 & 0.995 & 1.56 \\
+Cortex development, 10 supports & 0.993 & 0.988 & 0.48 \\
+Kidney, counts & 0.986 & 0.979 & 4.88 \\
+Kidney, processed & 0.988 & 0.989 & 1.17 \\
+\end{longtable}
+Corrected-margin DS-LOO versus exact query-only single-gene knockout, in fp32, on the selected evaluated genes and correctly classified cells. Spearman values summarize within-cell rank correlations, aggregated within classes and then across classes. Relative $L_2$ errors are computed per class and summarized by the median across classes. These are six case summaries per model, not minima across every cell. No one-shot or held-study cortex attribution validation is included.
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{8.5cm}>{\raggedright\arraybackslash}p{6.35cm}@{}}
+\toprule
+Comparison & Range of class-mean top-20 overlap \\
+\midrule
+Different PBMC support choices & 0.431--0.563 \\
+Full versus no operator & 0.663--0.878 \\
+\bottomrule
+\end{tabular}\par
+Overlap is the fraction of common genes among the twenty highest-ranked genes, averaged over classes for each comparison. The support comparisons include both a changed support draw at ten cells per class and a changed support budget; they are not a pure seed-only sensitivity analysis. Agreement with model knockout measures explanation fidelity, not causal biological validation.\par\medskip\noindent\textbf{Three highest-ranked genes for each explained cell class.}\par
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{3.65cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{3.0cm}@{}}
+\toprule
+Panel & Cell class & Rank 1 & Rank 2 & Rank 3 \\
+\midrule
+PBMC & B & CD79A & MS4A1 & BANK1 \\
+PBMC & CD4 T & MAL & IL7R & TRAC \\
+PBMC & CD8 T & CD8B & CD8A & TRBC2 \\
+PBMC & DC & FCER1A & CLEC10A & HLA-DQA1 \\
+PBMC & Mono & SERPINA1 & FTL & CD14 \\
+PBMC & NK & KLRF1 & GNLY & IL2RB \\
+PBMC & other & GNG11 & PF4 & PPBP \\
+PBMC & other T & GZMK & TRGC2 & KLRB1 \\
+ZEBRA & Glia & NPAS3 & PCDH9 & PPP2R2B \\
+ZEBRA & Immune cell & MBNL1 & FMN1 & DPYD \\
+ZEBRA & Neural & FGF12 & RGS7 & RBFOX1 \\
+ZEBRA & Vascular cell & PTPRG & MALAT1 & LAMA2 \\
+\bottomrule
+\end{tabular}\par
+Genes are selected directly by their class-mean corrected DS-LOO margin rank, independently of the curated marker checks below. PBMC uses 100 supports per class, draw 0; ZEBRA development uses ten supports per class, draw 0. These are model-ranked features conditional on the support set and class-discrimination target; they are not all canonical lineage markers and do not establish causal effects.\par\par\medskip\noindent\textbf{Known-marker ranks in the PBMC reference case.}\par
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{5.0cm}>{\raggedright\arraybackslash}p{4.5cm}>{\raggedright\arraybackslash}p{5.35cm}@{}}
+\toprule
+Cell class & Marker & Corrected DS-LOO rank \\
+\midrule
+B & CD79A & 1 \\
+B & MS4A1 & 2 \\
+CD4 T & IL7R & 2 \\
+CD8 T & CD8A & 2 \\
+DC & FCER1A & 1 \\
+DC & CLEC10A & 2 \\
+Mono & CD14 & 3 \\
+NK & GNLY & 2 \\
+NK & NKG7 & 7 \\
+other & PPBP & 3 \\
+other T & CD3E & 5 \\
+DC & LILRA4 & 4392 \\
+Mono & LYZ & 33354 \\
+\bottomrule
+\end{tabular}\par
+The reference uses 100 supports per class and support draw 0, explaining 191 correctly classified query cells across eight broad classes and 33,538 genes. Ranks refer to class-mean corrected margin attribution; smaller is higher. Familiar lineage markers\citep{schafflick2020leukocytes} rank highly in several classes, but LYZ in monocytes and LILRA4 in pooled dendritic cells illustrate that marker identity does not guarantee a high rank for this class-discrimination target. These are selected descriptive marker checks, not an enrichment test or causal validation. Gene identities were assigned after inference.\par\par\medskip\noindent\textbf{Contextual marker ranks in ZEBRA cell-type classification.}\par
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{5.0cm}>{\raggedright\arraybackslash}p{4.5cm}>{\raggedright\arraybackslash}p{5.35cm}@{}}
+\toprule
+Cell class & Marker & Corrected DS-LOO rank \\
+\midrule
+Glia & PLP1 & 8 \\
+Neural & SYT1 & 7 \\
+Vascular cell & FLT1 & 5 \\
+Vascular cell & CLDN5 & 16 \\
+Immune cell & PTPRC & 20710 \\
+\bottomrule
+\end{tabular}\par
+ZEBRA development, ten supports per class, draw 0. PLP1, SYT1 and CLDN5 provide contextual cell-identity checks\citep{gong2025stereoseq}. These are cell-type attribution ranks; they are not explanations of the sex-classification experiments in Table~\ref{tab:s9}.

@@ -1,0 +1,33 @@
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{1.5cm}>{\raggedright\arraybackslash}p{3.9cm}>{\raggedright\arraybackslash}p{1.5cm}>{\raggedright\arraybackslash}p{1.5cm}>{\raggedright\arraybackslash}p{1.5cm}>{\raggedright\arraybackslash}p{1.5cm}>{\raggedright\arraybackslash}p{2.55cm}@{}}
+\caption{Complete ten-candidate prior screen.}\label{tab:s5}\\
+\toprule
+Arm/base & Change & r42 & r43 & r44 & Mean & Decision \\
+\midrule\endfirsthead
+\multicolumn{7}{l}{\small Table \thetable{} (continued)}\\\toprule
+Arm/base & Change & r42 & r43 & r44 & Mean & Decision \\
+\midrule\endhead
+\bottomrule\endfoot
+LR / b0 & Learnable-only tasks & +1.63 & +1.62 & +2.61 & +1.95 & Keep \\
+A5 / lr & Fewer/weaker markers and closer sibling classes & -1.52 & -1.05 & -1.54 & -1.37 & Drop: guard \\
+A6 / b0 & Remove signed-covariance task lane & -0.19 & +0.74 & +1.16 & +0.57 & Neutral \\
+A7 / b0 & Donor dominance & +0.16 & -0.21 & +0.65 & +0.20 & Unresolved \\
+A1 / b0 & More donor-rich tasks & -0.0008 & -0.0080 & -0.0133 & -0.0074 & Routing only \\
+A3 / a1 & Sex mechanisms & -0.0089 & -0.0089 & +0.0357 & +0.0060 & Routing only \\
+A4 / lr & Weak metadata tasks & +0.0110 & -0.0347 & -0.0325 & -0.0188 & Routing only \\
+A2 / a1age & Adult-age prior & +0.0083 & +0.0000 & +0.0000 & +0.0028 & Routing only \\
+A8a / b0 & Study-wide gene absence & +0.52 & +0.54 & +1.64 & +0.90 & Drop: guard \\
+A8d / b0 & Study-specific detection & -0.43 & +0.60 & +0.87 & +0.35 & Not testable \\
+\end{longtable}
+All changes are improvement-signed relative to the indicated base. LR, A5, A6, A7, A8a and A8d use balanced-accuracy percentage points; A1, A3 and A2 use donor AUC differences on a 0--1 scale; A4 uses negative log-loss differences (base minus arm, nats). A7 uses the held-study panel; A8a/A8d use low-support cortex; LR/A5/A6 use all low-support core panels. A1/A3/A2 respectively target donor, worse-sex and adult-age AUC. The Kumo-small proxy uses 10,000 cellular tasks, 625 updates and 2k HVGs. The three columns are task-stream replicates from one model seed, not independent model-seed replications. A5 and A4 are compared with LR; A3 with A1; A2 with the matched age-task stream. Other candidates use the pipeline control b0.
+\par\medskip
+LR was the only retained change: its keep threshold was 1.63 points and effective noise band 1.09 points. A5 failed the low-support guard. A7 remained unresolved; omitting the prescribed two extension replicates departed from the frozen rule, although the required keep count was no longer attainable. A1--A4 routing labels do not establish successful donor-level or probability-prediction improvements: those endpoints were outside the proxy's trusted decision scope. A8a failed the log-loss guard (0.099-nat deterioration against a 0.03-nat limit). A8d was not testable because measured headroom (1.257 points) was below the 1.5-point keep threshold; its two extension replicates were omitted under the documented shortcut because the required keep count was no longer attainable. A8d replicate r43 skipped one invalid task, an authorized deviation made after the other two replicate readouts. None of these routing, unresolved or headroom-limited outcomes is evidence that its biological mechanism does or does not work.
+\par\medskip\noindent\textbf{Stored-zero mechanism readout (percentage points).}\par
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.7cm}>{\raggedright\arraybackslash}p{3.65cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{3.4cm}@{}}
+\toprule
+Arm & Mean gap shrinkage & Noise band & Proxy headroom & Keep threshold \\
+\midrule
+A8a & 0.072 & 0.620 & 1.257 & 1.500 \\
+A8d & 0.071 & 0.620 & 1.257 & 1.500 \\
+\bottomrule
+\end{tabular}\par
+Gap shrinkage is the reduction in the accuracy difference between removing unmeasured genes and retaining stored zeros. The gap did not shrink beyond the noise band; the reference row repeats the three-replicate aggregate, not a single-replicate estimate.

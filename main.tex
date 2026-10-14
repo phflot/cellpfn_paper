@@ -4,6 +4,8 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{lmodern,microtype,setspace}
 \usepackage{amsmath,amssymb,xcolor}
+\usepackage{booktabs,longtable,tabularx,array}
+\usepackage{pdflscape}
 \usepackage[numbers,super,sort&compress]{natbib}
 \usepackage[hidelinks]{hyperref}
 \usepackage{lineno}
@@ -31,7 +33,7 @@ Pirya Rani\textsuperscript{1,2}, Andreas Keller\textsuperscript{1,2}}
 \textsuperscript{2}Helmholtz Institute for Pharmaceutical Research Saarland (HIPS), Helmholtz Centre for Infection Research, Saarbr\"ucken, Germany
 \end{center}
 \begin{center}\small
-Wave 1 working draft: abstract, introduction and Results.\par
+Wave 1 working draft: abstract, introduction, Results and supporting tables.\par
 \textcolor{red!80!black}{\textbf{Bold red prose is provisional or aspirational, not an established finding.}}\par
 Claim IDs refer to \texttt{notes/open\_claims.md}. Methods and figures follow in later waves.
 \end{center}
@@ -47,4 +49,6 @@ Claim IDs refer to \texttt{notes/open\_claims.md}. Methods and figures follow in
 \nolinenumbers
 \bibliographystyle{unsrtnat}
 \bibliography{references}
+\clearpage
+\input{sections/supplementary}
 \end{document}

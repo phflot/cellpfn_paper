@@ -1,0 +1,54 @@
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{4.8cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{7.05cm}@{}}
+\caption{Operator ablation and the prespecified decision.}\label{tab:s4}\\
+\toprule
+Panel & Support/class & Full minus no operator (pp; 95\% CI) \\
+\midrule\endfirsthead
+\multicolumn{3}{l}{\small Table \thetable{} (continued)}\\\toprule
+Panel & Support/class & Full minus no operator (pp; 95\% CI) \\
+\midrule\endhead
+\bottomrule\endfoot
+PBMC coarse & 1 & +0.20 [-0.23, 0.64] \\
+PBMC coarse & 10 & -0.50 [-1.24, 0.24] \\
+PBMC coarse & 100 & +2.69 [2.35, 3.02] \\
+PBMC fine & 1 & +0.61 [0.19, 1.03] \\
+PBMC fine & 10 & +4.18 [3.48, 4.87] \\
+PBMC fine & 100 & +6.81 [6.36, 7.26] \\
+ZEBRA development & 1 & -0.29 [-0.60, 0.01] \\
+ZEBRA development & 10 & +1.97 [0.99, 2.95] \\
+ZEBRA development & 100 & +2.07 [1.77, 2.37] \\
+ZEBRA held-study & 1 & -1.35 [-1.98, -0.73] \\
+ZEBRA held-study & 10 & +2.71 [1.39, 4.04] \\
+ZEBRA held-study & 100 & +2.33 [1.86, 2.80] \\
+\end{longtable}
+Twenty paired support draws, one training seed per arm, all genes. Intervals are exported paired 95\% $t$ intervals over support draws. Full and no-operator checkpoints share the parent, prior and task stream. These later descriptive evaluations do not replace the prespecified decision below.
+\par\medskip\noindent\textbf{Operator structure across support budgets.}\par
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}p{1.65cm}>{\raggedright\arraybackslash}p{1.65cm}>{\raggedright\arraybackslash}p{1.65cm}>{\raggedright\arraybackslash}p{5.2cm}@{}}
+\toprule
+Panel & Support/ class & None & Diagonal & Full & Full minus diagonal (pp; 95\% CI) \\
+\midrule
+PBMC coarse & 1 & 59.81 & 59.09 & 60.02 & +0.92 [0.39, 1.45] \\
+PBMC coarse & 10 & 85.84 & 85.69 & 85.34 & -0.34 [-0.86, 0.18] \\
+PBMC coarse & 100 & 89.14 & 88.89 & 91.83 & +2.94 [2.64, 3.24] \\
+PBMC fine & 1 & 51.30 & 51.38 & 51.91 & +0.53 [0.13, 0.93] \\
+PBMC fine & 10 & 75.64 & 78.48 & 79.81 & +1.33 [0.87, 1.79] \\
+PBMC fine & 100 & 82.22 & 85.66 & 89.03 & +3.37 [3.06, 3.68] \\
+ZEBRA development & 1 & 46.62 & 46.45 & 46.33 & -0.12 [-0.49, 0.24] \\
+ZEBRA development & 10 & 61.36 & 63.20 & 63.33 & +0.13 [-0.48, 0.75] \\
+ZEBRA development & 100 & 63.70 & 64.74 & 65.77 & +1.03 [0.89, 1.18] \\
+ZEBRA held-study & 1 & 66.53 & 65.84 & 65.17 & -0.67 [-1.08, -0.25] \\
+ZEBRA held-study & 10 & 88.59 & 91.11 & 91.31 & +0.19 [-0.32, 0.70] \\
+ZEBRA held-study & 100 & 92.10 & 93.57 & 94.43 & +0.86 [0.40, 1.32] \\
+\bottomrule
+\end{tabular}\par
+Values are mean balanced accuracy (\%). The diagonal ablation is a trained per-gene-variance-only operator arm; it shares the parent, prior and task stream with the full-operator arm. The printed matrices use all genes. The source-value index retains additional HVG and random-panel analyses.\par
+\medskip\noindent\textbf{Prespecified three-draw readout.}\par
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{4.3cm}>{\raggedright\arraybackslash}p{2.7cm}>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{3.85cm}@{}}
+\toprule
+Panel & Support/class & Full minus none (pp) & Harm threshold (pp) \\
+\midrule
+PBMC coarse & 10 & -1.56 & 1.50 \\
+PBMC coarse & 100 & +3.02 & 1.50 \\
+ZEBRA held-study & 10 & +3.30 & 2.72 \\
+\bottomrule
+\end{tabular}\par
+The overall test was not supported because coarse-PBMC ten-support accuracy crossed the prespecified harm threshold (N3). Turning the full operator off at inference isolated a harmful -0.94-point operator contribution in that setting. Its donor-enumeration interval has approximately 80\% coverage, not 95\%, and is not used as a 95\% interval here. Three frozen support draws and four query donors informed the PBMC test; the later twenty-draw estimates describe support sensitivity rather than overturning the decision.

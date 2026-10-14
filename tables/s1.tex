@@ -1,0 +1,83 @@
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{4.5cm}>{\raggedright\arraybackslash}p{3.45cm}>{\raggedright\arraybackslash}p{3.45cm}>{\raggedright\arraybackslash}p{3.45cm}@{}}
+\caption{Panel-specific benchmark performance and contextual baselines.}\label{tab:s1}\\
+\toprule
+Model & 1 support/class & 10 supports/class & 100 supports/class \\
+\midrule\endfirsthead
+\multicolumn{4}{l}{\small Table \thetable{} (continued)}\\\toprule
+Model & 1 support/class & 10 supports/class & 100 supports/class \\
+\midrule\endhead
+\bottomrule\endfoot
+\multicolumn{4}{@{}l}{\textbf{PBMC coarse}}\\
+CellPFN & 60.1 [52.5, 70.9] & 84.0 [81.9, 85.9] & 91.9 [91.6, 92.2] \\
+TabICLv2 & 50.2 [41.3, 58.4] & 81.4 [79.4, 83.1] & 92.4 [91.3, 93.4] \\
+TabICLv2 + cellular prior & 62.3 [48.1, 72.5] & \textbf{85.2} [81.9, 88.1] & \textbf{93.4} [93.1, 94.1] \\
+Kumo small & 45.8 [40.3, 50.3] & 82.2 [80.6, 83.4] & 92.6 [91.6, 94.7] \\
+Kumo small + cellular prior & \textbf{62.8} [52.8, 69.7] & 83.3 [80.9, 86.3] & 92.3 [91.6, 93.1] \\
+Kumo large & 58.9 [46.3, 65.6] & 81.7 [78.8, 83.8] & 92.8 [91.9, 93.8] \\
+Kumo large + cellular prior & 62.2 [50.3, 70.0] & 82.5 [79.4, 85.0] & 92.8 [91.9, 93.4] \\
+TabPFN-3.5 & 34.3 [30.9, 38.4] & 82.6 [80.6, 83.8] & 91.5 [90.0, 92.5] \\
+Geneformer-V2 + LR & \textcolor{black!55}{\textbf{67.1}\textsuperscript{*} [58.1, 74.7]} & \textcolor{black!55}{\textbf{88.5}\textsuperscript{*} [86.9, 90.3]} & \textcolor{black!55}{92.7\textsuperscript{*} [91.6, 93.4]} \\
+scGPT + LR & \textcolor{black!55}{64.9\textsuperscript{*} [53.1, 72.2]} & \textcolor{black!55}{77.5\textsuperscript{*} [75.6, 78.8]} & \textcolor{black!55}{80.7\textsuperscript{*} [80.3, 81.3]} \\
+Low-rank LDA & -- & 79.4 [78.8, 80.0] & 90.0 [89.7, 90.3] \\
+CellTypist & 39.8 [33.8, 47.5] & 77.5 [76.9, 78.1] & 87.8 [87.5, 88.1] \\
+SingleR & 56.7 [52.8, 60.9] & 78.2 [74.1, 80.9] & 85.9 [85.0, 86.6] \\
+scANVI inductive & 20.0 [11.3, 32.5] & 40.7 [26.6, 51.3] & 86.7 [86.6, 86.9] \\
+scANVI transductive & 40.5 [36.3, 44.1] & 69.1 [65.9, 74.7] & 89.1 [88.1, 90.9] \\
+Logistic regression & 37.5 [34.4, 43.4] & 80.5 [79.1, 81.6] & 91.7 [90.6, 93.1] \\
+\addlinespace
+\multicolumn{4}{@{}l}{\textbf{PBMC fine}}\\
+CellPFN & \textbf{51.1} [44.8, 55.4] & 79.0 [77.6, 80.4] & 89.0 [88.6, 89.1] \\
+TabICLv2 & 30.0 [26.8, 34.3] & 73.8 [72.1, 75.6] & 83.6 [82.9, 84.5] \\
+TabICLv2 + cellular prior & 29.1 [26.4, 32.3] & 64.6 [61.0, 67.9] & 85.3 [84.3, 86.1] \\
+Kumo small & 44.1 [43.6, 44.6] & 80.0 [79.4, 80.4] & 88.3 [88.1, 88.4] \\
+Kumo small + cellular prior & 49.0 [45.9, 52.3] & 80.5 [80.0, 81.0] & 88.7 [87.6, 89.6] \\
+Kumo large & 46.3 [42.3, 50.0] & \textbf{83.3} [82.8, 83.6] & \textbf{89.3} [89.1, 89.5] \\
+Kumo large + cellular prior & 50.9 [47.0, 55.8] & 82.2 [81.4, 83.5] & 89.2 [89.1, 89.4] \\
+TabPFN-3.5 & 33.0 [29.4, 36.5] & 79.3 [77.4, 80.4] & 86.9 [86.5, 87.3] \\
+Geneformer-V2 + LR & \textcolor{black!55}{\textbf{68.8}\textsuperscript{*} [66.6, 70.9]} & \textcolor{black!55}{\textbf{84.9}\textsuperscript{*} [84.3, 85.5]} & \textcolor{black!55}{\textbf{90.4}\textsuperscript{*} [90.0, 90.9]} \\
+scGPT + LR & \textcolor{black!55}{55.7\textsuperscript{*} [51.3, 58.1]} & \textcolor{black!55}{65.9\textsuperscript{*} [65.3, 67.1]} & \textcolor{black!55}{72.0\textsuperscript{*} [71.5, 72.9]} \\
+Low-rank LDA & -- & 70.3 [70.0, 70.5] & 87.8 [87.5, 87.9] \\
+CellTypist & 33.9 [26.8, 37.8] & 69.7 [68.6, 70.8] & 84.2 [83.9, 84.6] \\
+SingleR & 46.0 [42.1, 51.8] & 68.6 [67.0, 70.1] & 83.3 [82.6, 83.9] \\
+scANVI inductive & 21.7 [14.4, 26.1] & 51.8 [50.8, 53.4] & 83.9 [81.6, 85.3] \\
+scANVI transductive & 40.8 [39.5, 41.5] & 70.8 [68.8, 74.0] & 86.2 [85.8, 86.5] \\
+Logistic regression & 39.0 [34.0, 46.8] & 73.4 [71.8, 75.9] & 85.1 [84.4, 85.6] \\
+\addlinespace
+\multicolumn{4}{@{}l}{\textbf{ZEBRA development}}\\
+CellPFN & 41.4 [33.1, 47.4] & \textbf{63.6} [61.9, 65.6] & \textbf{66.1} [65.8, 66.4] \\
+TabICLv2 & 39.5 [33.4, 42.6] & 59.9 [57.9, 62.2] & 65.3 [64.9, 65.7] \\
+TabICLv2 + cellular prior & 44.6 [35.9, 57.1] & 60.6 [57.4, 62.6] & 65.3 [65.1, 65.5] \\
+Kumo small & 31.2 [26.6, 36.4] & 57.5 [50.5, 61.7] & 65.1 [64.5, 65.7] \\
+Kumo small + cellular prior & 41.9 [34.9, 51.2] & 59.2 [53.4, 62.3] & 64.9 [63.8, 65.6] \\
+Kumo large & 40.1 [38.2, 41.5] & 56.8 [49.2, 61.2] & 65.1 [64.9, 65.3] \\
+Kumo large + cellular prior & 42.8 [37.3, 52.3] & 60.6 [55.6, 63.4] & 65.8 [65.6, 66.1] \\
+TabPFN-3.5 & 38.4 [32.8, 43.3] & 59.3 [56.6, 60.8] & 65.5 [64.8, 66.0] \\
+Geneformer-V2 + LR & \textcolor{black!55}{43.1\textsuperscript{(*)} [34.8, 50.2]} & \textcolor{black!55}{61.1\textsuperscript{(*)} [55.3, 66.7]} & \textcolor{black!55}{65.4\textsuperscript{(*)} [65.3, 65.5]} \\
+scGPT + LR & \textbf{47.6} [43.7, 55.0] & 60.2 [53.2, 66.5] & 65.8 [65.6, 66.1] \\
+Low-rank LDA & -- & 60.6 [58.4, 62.0] & 66.0 [65.8, 66.4] \\
+CellTypist & 34.9 [32.6, 37.3] & 57.8 [48.6, 64.0] & 63.9 [63.5, 64.6] \\
+SingleR & 44.4 [34.4, 53.3] & 61.7 [59.8, 63.5] & 63.9 [63.2, 64.2] \\
+scANVI inductive & -- & -- & -- \\
+scANVI transductive & -- & -- & -- \\
+Logistic regression & 34.7 [28.1, 39.6] & 57.4 [48.7, 62.4] & 65.5 [65.1, 65.8] \\
+\addlinespace
+\multicolumn{4}{@{}l}{\textbf{ZEBRA held-study}}\\
+CellPFN & 62.8 [45.2, 77.1] & \textbf{91.9} [88.6, 94.7] & \textbf{94.7} [94.3, 95.0] \\
+TabICLv2 & 49.8 [46.6, 55.2] & 83.2 [75.5, 88.1] & 92.9 [92.1, 93.5] \\
+TabICLv2 + cellular prior & 62.7 [37.8, 81.0] & 85.8 [81.9, 88.7] & 93.2 [92.2, 94.0] \\
+Kumo small & 48.8 [31.7, 65.9] & 84.8 [81.3, 86.7] & 93.7 [92.3, 94.7] \\
+Kumo small + cellular prior & 59.3 [41.8, 73.5] & 86.8 [83.4, 88.7] & 92.9 [91.1, 94.4] \\
+Kumo large & 49.1 [39.6, 56.6] & 85.1 [80.3, 88.8] & 93.1 [91.7, 94.5] \\
+Kumo large + cellular prior & 60.8 [39.1, 75.8] & 85.9 [81.4, 88.6] & 93.4 [93.2, 93.6] \\
+TabPFN-3.5 & 54.1 [48.0, 65.3] & 85.3 [84.9, 85.8] & 93.9 [92.5, 95.3] \\
+Geneformer-V2 + LR & \textcolor{black!55}{58.4\textsuperscript{*} [44.2, 72.5]} & \textcolor{black!55}{87.4\textsuperscript{*} [83.8, 91.7]} & \textcolor{black!55}{90.3\textsuperscript{*} [88.4, 92.6]} \\
+scGPT + LR & \textbf{65.5} [52.5, 80.7] & 87.2 [80.6, 93.1] & 89.5 [88.9, 90.2] \\
+Low-rank LDA & -- & 91.0 [89.6, 93.8] & \textbf{94.7} [94.0, 95.4] \\
+CellTypist & 44.4 [41.6, 47.5] & 87.8 [80.4, 92.5] & 91.4 [90.6, 92.3] \\
+SingleR & 56.8 [38.4, 71.1] & 86.6 [79.7, 90.8] & 89.1 [86.8, 90.6] \\
+scANVI inductive & -- & -- & -- \\
+scANVI transductive & -- & -- & -- \\
+Logistic regression & 45.0 [42.1, 48.1] & 73.5 [70.7, 76.0] & 90.6 [90.0, 91.5] \\
+\addlinespace
+\end{longtable}
+Values are mean [minimum, maximum] balanced accuracy (\%) over the same three support draws, not confidence intervals. Within each panel and support budget, bold identifies the highest mean overall and among unflagged comparators, including ties at displayed precision. Gray means and ranges carry the exposure stars defined in Table~\ref{table:overview}; unflagged entries do not certify absence of exposure. Inputs follow Table~\ref{table:overview}; CellTypist, SingleR and low-rank LDA use all genes, whereas logistic regression and scANVI use 2k HVGs. CellTypist\citep{dominguezconde2022celltypist} is fitted to the support cells; SingleR\citep{aran2019singler} uses the declared reference route. The scANVI\citep{xu2021scanvi} transductive route additionally uses the unlabelled query pool and is contextual rather than an inductive comparison. Dashes are missing evaluations, never zero accuracy. All selected fitted model checkpoints have one training seed; support-draw variation does not measure training uncertainty. Geneformer-V2 uses the 316M checkpoint. Source-study corpus overlap does not establish exact-cell or target-label exposure. Native gene vocabularies and training histories differ. Family variants were selected in the export and the evaluation is not a newly frozen independent benchmark.

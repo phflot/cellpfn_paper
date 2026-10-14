@@ -1,0 +1,84 @@
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{4.5cm}>{\raggedright\arraybackslash}p{2.7cm}>{\raggedright\arraybackslash}p{3.8cm}>{\raggedright\arraybackslash}p{3.85cm}@{}}
+\caption{Exploratory sensitivity analyses and provisional application.}\label{tab:s9}\\
+\toprule
+Panel & Support/class & Processed cortex BA (\%) & Reconstructed-count BA (\%) \\
+\midrule\endfirsthead
+\multicolumn{4}{l}{\small Table \thetable{} (continued)}\\\toprule
+Panel & Support/class & Processed cortex BA (\%) & Reconstructed-count BA (\%) \\
+\midrule\endhead
+\bottomrule\endfoot
+ZEBRA development & 1 & 41.4 & 51.4 \\
+ZEBRA development & 10 & 63.6 & 63.4 \\
+ZEBRA development & 100 & 66.1 & 64.9 \\
+ZEBRA held-study & 1 & 62.8 & 65.9 \\
+ZEBRA held-study & 10 & 91.9 & 92.9 \\
+ZEBRA held-study & 100 & 94.7 & 93.8 \\
+\end{longtable}
+Mean CellPFN balanced accuracy over three support draws. Processed and reconstructed-count cortex have different gene sets (21,158 versus 12,325), and some support identities change. These comparisons therefore do not isolate normalization, count reconstruction or stored-zero effects; the processed representation remains the primary panel.
+\par\medskip\noindent\textbf{Removing unmeasured genes while retaining processed values.}\par
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{4.5cm}>{\raggedright\arraybackslash}p{2.7cm}>{\raggedright\arraybackslash}p{7.65cm}@{}}
+\toprule
+Panel & Support/class & Accuracy change (pp; 95\% CI) \\
+\midrule
+ZEBRA development & 1 & +3.62 [0.42, 6.83] \\
+ZEBRA development & 10 & +0.64 [0.38, 0.90] \\
+ZEBRA development & 100 & +0.14 [-0.10, 0.38] \\
+ZEBRA held-study & 1 & +1.04 [-0.67, 2.75] \\
+ZEBRA held-study & 10 & +0.51 [0.03, 0.99] \\
+ZEBRA held-study & 100 & -0.47 [-1.66, 0.71] \\
+\bottomrule
+\end{tabular}\par
+These Stage-0 contrasts remove genes not measured in every study without changing the retained expression values or re-normalizing their denominator. Values and paired 95\% $t$ intervals are the exported summaries over ten support draws. This is a separate diagnostic from the three-draw count-reconstruction comparison above.\par\par\medskip\textbf{Post hoc classifier sensitivity.} Standardizing scGPT embeddings before logistic regression changed the PBMC mean from 69.5\% to 73.5\%. This diagnostic is not substituted for the declared baseline in Table~\ref{table:overview}.\par
+\medskip\textbf{Post hoc hard-tier boundary.} Learnable-only proxy training changed held-study cortex neuronal-subtype accuracy at ten supports by -5.83 percentage points across three task streams (-6.62 to -4.56). Hard-tier tasks were defined after the initial screen and do not change its frozen labels. A8d's hard-tier readout contains only two task-stream replicates.\par
+\medskip\noindent\textbf{Early task-mixture gene-view sensitivity at update 98,304.}\par
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{5cm}>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{6.55cm}@{}}
+\toprule
+Gene view & Support draws & PBMC low-support change (pp) \\
+\midrule
+All genes & 3 & +0.344 \\
+8,192 HVGs & 10 & -0.892 \\
+\bottomrule
+\end{tabular}\par
+Changes are GL1 minus GS1, equally weighting coarse and fine PBMC at one and ten supports per class. Different draw counts and the early checkpoint prevent treating this as a final, isolated explanation of the task-mixture tradeoff.\par\medskip\textcolor{red!80!black}{\textbf{Provisional ROSMAP application: sex-matched microglial CERAD discrimination gave donor AUC 0.745 [0.700, 0.790]. The supplied interval summarizes ten repeated splits with the export's correction; it is not independent cohort replication. Label corrections remain pending, so this is not a final or confirmatory biological result.}}
+\par\medskip\noindent\textbf{PBMC annotation levels and fine-grained subtype tasks.}\par
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{5.1cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}p{2.8cm}>{\raggedright\arraybackslash}p{2.8cm}>{\raggedright\arraybackslash}p{2.75cm}@{}}
+\toprule
+Task & Classes & 1 support/class & 10 supports/class & 100 supports/class \\
+\midrule
+Broad PBMC types (L1) & 8 & 62.3 & 84.2 & 91.9 \\
+Fine PBMC types (L2) & 20 & 53.9 & 81.8 & 90.5 \\
+\midrule
+CD4 T siblings (L2) & 4 & 36.3 & 69.2 & 85.6 \\
+T-cell siblings (L2) & 9 & 27.4 & 64.4 & 83.8 \\
+CD4 T siblings (L3) & 9 & 23.4 & 56.3 & 79.6 \\
+CD8 T siblings (L3) & 7 & 39.5 & 69.4 & 84.4 \\
+B-cell siblings (L3) & 6 & 31.6 & 63.6 & 79.8 \\
+NK-cell siblings (L3) & 6 & 36.2 & 64.3 & 73.0 \\
+T-cell siblings (L3) & 17 & 25.0 & 55.7 & 76.8 \\
+All finest PBMC types (L3) & 35 & 39.8 & 68.4 & 78.4 \\
+\midrule
+Mean of eight subtype tasks & -- & 32.4 & 63.9 & 80.2 \\
+\bottomrule
+\end{tabular}\par
+Values are mean balanced accuracy (\%) for the reference CellPFN checkpoint with 8,192 HVGs. Broad/fine context rows use the E-fast ten-, ten- and five-draw readouts at 1, 10 and 100 supports, respectively, rather than the three-draw main-table means. The subtype aggregate uses the corresponding ten/ten/five case design. L2 and L3 denote the supplied second and third annotation levels; sibling tasks restrict classification to a related group. These eight tasks were defined after the initial prior-screen readouts and are exploratory; they are not a formally defined ``easy versus difficult'' partition. The broad/coarse and fine primary panels remain in Table~\ref{table:overview}. The available checkpoint summaries do not provide CellPFN support-draw uncertainty, so no interval is inferred from the proxy-model case records. Different label sets and class counts prevent treating cross-task accuracy differences as isolated changes in difficulty.\par\par\medskip\noindent\textbf{Original ZEBRA sex-classification case.}\par
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{7.2cm}>{\raggedright\arraybackslash}p{3.8cm}>{\raggedright\arraybackslash}p{3.85cm}@{}}
+\toprule
+Scoring unit & Balanced accuracy (\%) & Log loss (nats) \\
+\midrule
+Query cells & 100.0 & 0.409 \\
+Aggregated GSM samples & 100.0 & 0.398 \\
+\bottomrule
+\end{tabular}\par
+This single Sayed-study oligodendrocyte case used 200 support cells from 12 GSM samples and 50 query cells from ten disjoint GSM samples, with 21,158 processed genes. GSM separation does not guarantee donor separation. One support draw was evaluated; the perfect observed accuracy does not imply an uncertainty-free population estimate. This case is separate from the four core cell-type panels and is excluded from their averages.\par\par\medskip\noindent\textbf{Later unit-level sex evaluation: positive control and broader task.}\par
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{5.4cm}>{\raggedright\arraybackslash}p{5.45cm}@{}}
+\toprule
+Support units/class & XY-eligible task AUC & Broader sex task AUC \\
+\midrule
+4 & 0.977 [0.872, 1.000] & 0.507 [0.391, 0.617] \\
+8 & 0.993 [0.949, 1.000] & 0.544 [0.453, 0.617] \\
+16 & 1.000 [1.000, 1.000] & 0.538 [0.441, 0.633] \\
+32 & 1.000 [1.000, 1.000] & 0.539 [0.426, 0.656] \\
+\bottomrule
+\end{tabular}\par
+Values are mean [minimum, maximum] unit-level AUC over ten support splits at the same reference CellPFN checkpoint, using 8,192 HVGs, ten support cells per unit and twenty query cells per unit. Units are persons where resolved; Sayed age-by-sex GSM groups remain a proxy, and cross-study person overlap is unknown. The XY-eligible positive control requires measured XIST and at least four Y-linked genes; this eligibility rule does not identify genes used by the model. The broader task remains close to chance. Splits reuse persons and are not independent cohort replications, so observed ranges are shown without confidence intervals. Support budgets of 16 and 32 units per class exceed the training support range. These later tasks are distinct from the original cell-level case above.\par
+\textcolor{red!80!black}{\textbf{Sex-specific gene attribution remains unresolved. XIST and Y-linked genes define eligibility; they are not measured attribution hits.}}\textsuperscript{\textcolor{red!80!black}{[O06]}}

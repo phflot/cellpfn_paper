@@ -1,0 +1,36 @@
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{4.8cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{7.05cm}@{}}
+\caption{Gene-panel scaling and random-gene controls.}\label{tab:s3}\\
+\toprule
+Panel & Support/class & All minus 2k HVGs (pp; 95\% CI) \\
+\midrule\endfirsthead
+\multicolumn{3}{l}{\small Table \thetable{} (continued)}\\\toprule
+Panel & Support/class & All minus 2k HVGs (pp; 95\% CI) \\
+\midrule\endhead
+\bottomrule\endfoot
+PBMC coarse & 1 & -3.31 [-5.20, -1.42] \\
+PBMC coarse & 10 & +0.91 [-0.11, 1.92] \\
+PBMC coarse & 100 & +1.31 [0.92, 1.71] \\
+PBMC fine & 1 & -1.96 [-3.27, -0.65] \\
+PBMC fine & 10 & -0.55 [-1.25, 0.15] \\
+PBMC fine & 100 & +1.81 [1.44, 2.18] \\
+ZEBRA development & 1 & +0.26 [-2.58, 3.10] \\
+ZEBRA development & 10 & +2.52 [1.66, 3.39] \\
+ZEBRA development & 100 & +1.30 [0.98, 1.61] \\
+ZEBRA held-study & 1 & +1.11 [-2.05, 4.27] \\
+ZEBRA held-study & 10 & +7.41 [5.26, 9.57] \\
+ZEBRA held-study & 100 & +4.38 [3.69, 5.07] \\
+\end{longtable}
+Paired differences in balanced accuracy (percentage points) use twenty support draws per panel--budget combination. Intervals are the exported paired 95\% $t$ intervals over support draws. They condition on the evaluated checkpoint and query set; they do not cover training, donor-population or panel-selection uncertainty.
+\medskip\noindent\textbf{Mean balanced accuracy across the twelve panel--budget combinations.}\par
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{7.5cm}>{\raggedright\arraybackslash}p{7.35cm}@{}}
+\toprule
+Gene panel & Mean balanced accuracy (\%) \\
+\midrule
+Random 2,000 genes & 62.9 \\
+2k HVGs & 72.4 \\
+Random 8,192 genes & 69.4 \\
+8,192 HVGs & \textbf{74.1} \\
+All genes & 73.7 \\
+\bottomrule
+\end{tabular}\par
+Bold identifies the highest descriptive gene-panel average, including ties at displayed precision; paired contrast intervals above are not ranked. These descriptive twenty-draw averages differ from the three-draw headline benchmark in Table~\ref{table:overview}. Random-panel controls assess the delivered panels and cannot isolate every effect of feature selection or gene coverage.

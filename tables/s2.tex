@@ -1,0 +1,57 @@
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{4.4cm}>{\raggedright\arraybackslash}p{6.5cm}>{\raggedright\arraybackslash}p{3.95cm}@{}}
+\caption{Training exposure, prior transfer and generic-task retention.}\label{tab:s2}\\
+\toprule
+Model & Quantity & Count \\
+\midrule\endfirsthead
+\multicolumn{3}{l}{\small Table \thetable{} (continued)}\\\toprule
+Model & Quantity & Count \\
+\midrule\endhead
+\bottomrule\endfoot
+CellPFN & Parameters & 12329889 \\
+CellPFN & Optimizer updates & 96000 \\
+CellPFN & Simulated banks & 12000 \\
+CellPFN & Scheduled episodes & 384000 \\
+CellPFN & Loss-bearing episodes & 276828 \\
+TabICLv2 & Parameters & 27552258 \\
+TabICLv2 & Additional cellular tasks & 40000 \\
+TabICLv2 & Adaptation updates & 2500 \\
+Kumo small & Parameters & 27458266 \\
+Kumo small & Additional cellular tasks & 40000 \\
+Kumo small & Adaptation updates & 2500 \\
+Kumo large & Parameters & 213668250 \\
+Kumo large & Additional cellular tasks & 40000 \\
+Kumo large & Adaptation updates & 2500 \\
+\end{longtable}
+CellPFN banks are reused for multiple episodes; scheduled and loss-bearing episodes are distinct. Adaptation uses 40,000 cellular tasks and 10,000 generic replay tasks per arm. Released-model pretraining precedes this adaptation and is not included in these counts. TabICLv2 reports 35 million synthetic pretraining datasets\citep{qu2026tabiclv2}; this published count is distinct from CellPFN banks and scheduled episodes. These units do not establish a matched-compute comparison.
+\medskip\noindent\textbf{Adapted minus released balanced accuracy (percentage points).}\par
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{4.4cm}>{\raggedright\arraybackslash}p{3.5cm}>{\raggedright\arraybackslash}p{3.5cm}>{\raggedright\arraybackslash}p{3.45cm}@{}}
+\toprule
+Model & 1 support & 10 supports & 100 supports \\
+\midrule
+TabICLv2 & +7.30 & -0.50 & +0.77 \\
+Kumo small & +10.79 & +1.31 & -0.22 \\
+Kumo large & +5.58 & +1.08 & +0.26 \\
+\bottomrule
+\end{tabular}\par
+\medskip\noindent\textbf{Kumo-small low-support change relative to released weights.}\par
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{7.5cm}>{\raggedright\arraybackslash}p{7.35cm}@{}}
+\toprule
+Training stream & Mean change (percentage points) \\
+\midrule
+Cellular task stream 1 & +6.05 \\
+Cellular task stream 2 & +5.73 \\
+Cellular task stream 3 & +5.17 \\
+Generic-table control & -0.05 \\
+\bottomrule
+\end{tabular}\par
+The low-support average weights eight panel--budget combinations equally (three support draws each). The three cellular runs vary the task stream with the same model seed. The generic control changes rows and columns per update, so this is not a matched-data or matched-cost contrast. No corresponding generic-only control was run for TabICLv2 or Kumo large.\par
+\medskip\noindent\textbf{Retention on four generic classification datasets.}\par
+\nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{4.1cm}>{\raggedright\arraybackslash}p{2.65cm}>{\raggedright\arraybackslash}p{2.65cm}>{\raggedright\arraybackslash}p{2.65cm}>{\raggedright\arraybackslash}p{2.8cm}@{}}
+\toprule
+Model & One-shot BA & One-shot accuracy & All-budget BA & All-budget accuracy \\
+\midrule
+TabICLv2 released & 70.9 & 69.3 & 87.8 & 87.2 \\
+TabICLv2 adapted & 64.0 & 62.0 & 84.8 & 84.3 \\
+\bottomrule
+\end{tabular}\par
+Balanced accuracy (BA) and ordinary accuracy (\%) equally weight breast cancer, digits, iris and wine, with five split seeds each. The all-budget mean additionally weights 1, 10 and the full training split equally. These exploratory retention checks do not estimate universal tabular performance.
