@@ -35,3 +35,7 @@ The author requested an exhaustive export index, quantitative Results and ablati
 - Use “one attribution sweep” for DS-LOO and state its head-gradient evaluations and corrections. Do not describe the exported implementation as literally one forward pass.
 - Keep the missing sex-gene attribution visible as O06. XIST/Y-linked task-eligibility criteria do not supply recovered attribution genes.
 - Preserve six unresolved scientific claims in red and defer Methods code auditing, Discussion and figure production to the agreed later waves.
+
+## 14 October 2026 — Wave 2 completed
+
+Implemented the approved extensive Methods, simulator software architecture and one editable overview figure. Three isolated Wave1 reviews were completed and frozen, then reconciled in `notes/reviews/wave1_synthesis.md`. Existing finer cortical results and comparative explanation evidence were added; task-mixture, HVG, comparator and exposure definitions were corrected. Two independent technical code checks resolved exact mathematical details in Methods. No new biological experiments, source-repository modifications or claimed simulator speed measurements were made. The current state, checks and remaining evidence gaps are in `notes/wave2_handoff.md`.

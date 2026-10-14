@@ -38,6 +38,13 @@
   {
     "command": [
       "python3",
+      "scripts/check_methods.py"
+    ],
+    "returncode": 0
+  },
+  {
+    "command": [
+      "python3",
       "scripts/vendor/audit_bib.py",
       "--bib",
       "references.bib",

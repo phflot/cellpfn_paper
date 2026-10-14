@@ -1,9 +1,18 @@
 {
   "command": "python3 scripts/count_words.py",
-  "method": "Brace-unwrapped claim narrative; skill prose_wordcount.py with detex -n; headings included; IDs, editorial apparatus, comments and floats excluded",
+  "method": "Brace-unwrapped claim narrative; skill prose_wordcount.py with detex -n; headings included; IDs, editorial apparatus, comments, floats, longtables and verbatim examples excluded",
   "abstract": 143,
   "introduction": 472,
-  "results": 1963,
-  "main_text_so_far": 2435,
-  "remaining_of_3000": 565
+  "results": 2018,
+  "methods_evaluation": 2150,
+  "methods_model": 2035,
+  "methods_overview": 255,
+  "methods_simulator": 1839,
+  "technical_evaluation": 954,
+  "technical_model": 1362,
+  "technical_simulator": 573,
+  "main_text_so_far": 2490,
+  "remaining_of_3000": 510,
+  "methods_total": 6279,
+  "supplementary_methods_prose": 2889
 }
