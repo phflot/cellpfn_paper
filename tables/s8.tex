@@ -1,20 +1,20 @@
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{5.5cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{3.35cm}@{}}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{4.65cm}>{\raggedright\arraybackslash}p{2.4cm}>{\raggedright\arraybackslash}p{2.4cm}>{\raggedright\arraybackslash}p{2.4cm}>{\raggedright\arraybackslash}p{3.0cm}@{}}
 \caption{DS-LOO fidelity and support sensitivity.}\label{tab:s8}\\
 \toprule
-Case & Full operator: Spearman & No operator: Spearman & Full operator: relative error (\%) \\
+Case & DS-LOO full: Spearman & DS-LOO none: Spearman & IG64 full: Spearman & DS-LOO full: relative error (\%) \\
 \midrule\endfirsthead
-\multicolumn{4}{l}{\small Table \thetable{} (continued)}\\\toprule
-Case & Full operator: Spearman & No operator: Spearman & Full operator: relative error (\%) \\
+\multicolumn{5}{l}{\small Table \thetable{} (continued)}\\\toprule
+Case & DS-LOO full: Spearman & DS-LOO none: Spearman & IG64 full: Spearman & DS-LOO full: relative error (\%) \\
 \midrule\endhead
 \bottomrule\endfoot
-PBMC, 10 supports, draw 0 & 0.997 & 0.997 & 2.91 \\
-PBMC, 10 supports, draw 1 & 0.998 & 0.997 & 2.31 \\
-PBMC, 100 supports & 0.998 & 0.995 & 1.56 \\
-Cortex development, 10 supports & 0.993 & 0.988 & 0.48 \\
-Kidney, counts & 0.986 & 0.979 & 4.88 \\
-Kidney, processed & 0.988 & 0.989 & 1.17 \\
+PBMC, 10 supports, draw 0 & 0.997 & 0.997 & 0.789 & 2.91 \\
+PBMC, 10 supports, draw 1 & 0.998 & 0.997 & 0.802 & 2.31 \\
+PBMC, 100 supports & 0.998 & 0.995 & 0.794 & 1.56 \\
+Cortex development, 10 supports & 0.993 & 0.988 & 0.809 & 0.48 \\
+Kidney, counts & 0.986 & 0.979 & 0.867 & 4.88 \\
+Kidney, processed & 0.988 & 0.989 & 0.937 & 1.17 \\
 \end{longtable}
-Corrected-margin DS-LOO versus exact query-only single-gene knockout, in fp32, on the selected evaluated genes and correctly classified cells. Spearman values summarize within-cell rank correlations, aggregated within classes and then across classes. Relative $L_2$ errors are computed per class and summarized by the median across classes. These are six case summaries per model, not minima across every cell. No one-shot or held-study cortex attribution validation is included.
+Corrected-margin DS-LOO and 64-step integrated gradients (IG64) are compared with the same exact query-only single-gene deletion margin target and evaluated gene set in each case, in fp32, using correctly classified cells. IG64 is available for the full-operator model in all six cases. Spearman values summarize within-cell rank correlations, aggregated within classes and then across classes. Relative $L_2$ errors are computed per class and summarized by the median across classes. These are six case summaries per model, not minima across every cell. No one-shot or held-study cortex attribution validation is included. A positive deletion-margin attribution means that the observed gene favours the predicted class over its fixed runner-up; a negative value opposes that margin and does not mean biological downregulation. Setting an already zero query value to zero cannot measure information carried by its absence.
 \nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{8.5cm}>{\raggedright\arraybackslash}p{6.35cm}@{}}
 \toprule
 Comparison & Range of class-mean top-20 overlap \\
@@ -62,7 +62,7 @@ DC & LILRA4 & 4392 \\
 Mono & LYZ & 33354 \\
 \bottomrule
 \end{tabular}\par
-The reference uses 100 supports per class and support draw 0, explaining 191 correctly classified query cells across eight broad classes and 33,538 genes. Ranks refer to class-mean corrected margin attribution; smaller is higher. Familiar lineage markers\citep{schafflick2020leukocytes} rank highly in several classes, but LYZ in monocytes and LILRA4 in pooled dendritic cells illustrate that marker identity does not guarantee a high rank for this class-discrimination target. These are selected descriptive marker checks, not an enrichment test or causal validation. Gene identities were assigned after inference.\par\par\medskip\noindent\textbf{Contextual marker ranks in ZEBRA cell-type classification.}\par
+The reference uses 100 supports per class and support draw 0, explaining 191 correctly classified query cells across eight broad classes and 33,538 genes. Ranks refer to class-mean corrected margin attribution; smaller is higher. Familiar lineage markers\citep{schafflick2020leukocytes} rank highly in several classes, but LYZ in monocytes and LILRA4 in pooled dendritic cells illustrate that marker identity does not guarantee a high rank for this class-discrimination target. These are selected descriptive marker checks, not an enrichment test or causal validation. Gene identities were assigned after inference.\par For example, monocyte LYZ ranks 33354 for corrected-margin DS-LOO but 5 for predicted-class-logit DS-LOO. The estimand and attribution variant therefore matter when interpreting marker ranks.\par\par\medskip\noindent\textbf{Contextual marker ranks in ZEBRA cell-type classification.}\par
 \nopagebreak[4]\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{5.0cm}>{\raggedright\arraybackslash}p{4.5cm}>{\raggedright\arraybackslash}p{5.35cm}@{}}
 \toprule
 Cell class & Marker & Corrected DS-LOO rank \\
@@ -74,4 +74,4 @@ Vascular cell & CLDN5 & 16 \\
 Immune cell & PTPRC & 20710 \\
 \bottomrule
 \end{tabular}\par
-ZEBRA development, ten supports per class, draw 0. PLP1, SYT1 and CLDN5 provide contextual cell-identity checks\citep{gong2025stereoseq}. These are cell-type attribution ranks; they are not explanations of the sex-classification experiments in Table~\ref{tab:s9}.
+ZEBRA development, ten supports per class, draw 0. PLP1, SYT1 and CLDN5 provide contextual cell-identity checks\citep{gong2025stereoseq}. The immune-class ranking uses 24 correctly classified cells; the source report gives low immune-class recall (approximately 0.17), which was not reanalysed here. The ranking therefore characterizes this selected subset. These are cell-type attribution ranks; they are not explanations of the sex-classification experiments in Table~\ref{tab:s9}.

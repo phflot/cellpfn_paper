@@ -7,12 +7,12 @@ Statistic & Prior & Synthetic median [5th, 95th percentile] & Real median [minim
 Statistic & Prior & Synthetic median [5th, 95th percentile] & Real median [minimum, maximum] \\
 \midrule\endhead
 \bottomrule\endfoot
-Strongest marker (log2 FC) & v1 & 1.936 [1.408, 3.497] & 7.100 [3.310, 9.762] \\
-Strongest marker (log2 FC) & v2.2-B & 6.232 [4.273, 10.225] & 7.100 [3.310, 9.762] \\
-Class separation (chance-adjusted BA) & v1 & 0.022 [0.001, 0.120] & 0.775 [0.525, 0.916] \\
-Class separation (chance-adjusted BA) & v2.2-B & 0.881 [0.522, 0.994] & 0.775 [0.525, 0.916] \\
-Within-study donor SD (log2) & v1 & 0.331 [0.213, 0.489] & 0.290 [0.197, 0.391] \\
-Within-study donor SD (log2) & v2.2-B & 0.404 [0.291, 0.528] & 0.290 [0.197, 0.391] \\
+Strongest marker (log2 FC) & Baseline prior & 1.936 [1.408, 3.497] & 7.100 [3.310, 9.762] \\
+Strongest marker (log2 FC) & Cellular prior & 6.232 [4.273, 10.225] & 7.100 [3.310, 9.762] \\
+Class separation (chance-adjusted BA) & Baseline prior & 0.022 [0.001, 0.120] & 0.775 [0.525, 0.916] \\
+Class separation (chance-adjusted BA) & Cellular prior & 0.881 [0.522, 0.994] & 0.775 [0.525, 0.916] \\
+Within-study donor SD (log2) & Baseline prior & 0.331 [0.213, 0.489] & 0.290 [0.197, 0.391] \\
+Within-study donor SD (log2) & Cellular prior & 0.404 [0.291, 0.528] & 0.290 [0.197, 0.391] \\
 \end{longtable}
 Synthetic quantile ranges and observed real ranges are descriptive distributions, not confidence intervals. The reference contains public PBMC, cortex and kidney datasets; ROSMAP is excluded. Class separation uses nearest-class-mean balanced accuracy at ten supports per class with eight classes in both synthetic and primary real references.
 \par\medskip\noindent\textbf{Sampling units and synthetic tail frequencies by prior.}\par
@@ -20,12 +20,12 @@ Synthetic quantile ranges and observed real ranges are descriptive distributions
 \toprule
 Statistic & Prior & Synthetic banks & Synthetic units & Real units & Synthetic above real max (\%) \\
 \midrule
-Strongest marker (log2 FC) & v1 & 72 & 2016 & 142 & 0.0 \\
-Strongest marker (log2 FC) & v2.2-B & 96 & 2688 & 142 & 8.3 \\
-Class separation (chance-adjusted BA) & v1 & 72 & 72 & 8 & 0.0 \\
-Class separation (chance-adjusted BA) & v2.2-B & 96 & 96 & 8 & 37.5 \\
-Within-study donor SD (log2) & v1 & 96 & 768 & 11 & 37.9 \\
-Within-study donor SD (log2) & v2.2-B & 128 & 1024 & 11 & 58.9 \\
+Strongest marker (log2 FC) & Baseline prior & 72 & 2016 & 142 & 0.0 \\
+Strongest marker (log2 FC) & Cellular prior & 96 & 2688 & 142 & 8.3 \\
+Class separation (chance-adjusted BA) & Baseline prior & 72 & 72 & 8 & 0.0 \\
+Class separation (chance-adjusted BA) & Cellular prior & 96 & 96 & 8 & 37.5 \\
+Within-study donor SD (log2) & Baseline prior & 96 & 768 & 11 & 37.9 \\
+Within-study donor SD (log2) & Cellular prior & 128 & 1024 & 11 & 58.9 \\
 \bottomrule
 \end{tabular}\par
-Units differ by statistic: class-pair comparisons for marker effects, dataset-level summaries for separation and donor-effect units for within-study SD. Units from one simulated bank are not independent biological replicates. The real reference helped calibrate the prior, so this is a reference-comparison diagnostic rather than independent validation. Prior v2.2-B supplied only the final 16.7\% of scheduled CellPFN training episodes. Improved moment agreement is not itself evidence of a causal performance benefit.
+Units differ by statistic: class-pair comparisons for marker effects, dataset-level summaries for separation and donor-effect units for within-study SD. Units from one simulated bank are not independent biological replicates. The real reference helped calibrate the prior, so this is a reference-comparison diagnostic rather than independent validation. The cellular prior supplied only the final 16.7\% of scheduled CellPFN training episodes. Improved moment agreement is not itself evidence of a causal performance benefit.

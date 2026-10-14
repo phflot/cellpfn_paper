@@ -53,7 +53,7 @@ def counts():
             source = (ROOT / "sections" / f"{name}.tex").read_text()
             path = Path(temp) / f"{name}.tex"
             path.write_text(unwrap_claims(source))
-            result[name] = prose(path, DEFAULT_MARKERS, DEFAULT_FLOATS, False, False)
+            result[name] = prose(path, DEFAULT_MARKERS, DEFAULT_FLOATS + ("longtable", "verbatim"), False, False)
     result["main_text_so_far"] = result["introduction"] + result["results"]
     result["remaining_of_3000"] = 3000 - result["main_text_so_far"]
     result["methods_total"] = sum(v for k,v in result.items() if k.startswith("methods_"))
@@ -67,6 +67,6 @@ if __name__ == "__main__":
         print(f"{name}: {n}")
     destination = ROOT / "output/review/word_counts.json"
     destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text(json.dumps({"command": "python3 scripts/count_words.py", "method": "Brace-unwrapped claim narrative; skill prose_wordcount.py with detex -n; headings included; IDs, editorial apparatus, comments and floats excluded", **result}, indent=2) + "\n")
+    destination.write_text(json.dumps({"command": "python3 scripts/count_words.py", "method": "Brace-unwrapped claim narrative; skill prose_wordcount.py with detex -n; headings included; IDs, editorial apparatus, comments, floats, longtables and verbatim examples excluded", **result}, indent=2) + "\n")
     if result["abstract"] > 150 or result["remaining_of_3000"] < 0:
         raise SystemExit("NBT working word limit exceeded")

@@ -18,7 +18,7 @@ for repo, record in manifest.items():
         assert hashlib.sha256((path/name).read_bytes()).hexdigest() == expected, f'Source changed: {repo}/{name}'
         count += 1
 
-required = ['methods_simulator','methods_model','methods_evaluation',
+required = ['methods_overview','methods_simulator','methods_model','methods_evaluation',
             'technical_simulator','technical_model','technical_evaluation']
 for name in required:
     assert (ROOT/'sections'/f'{name}.tex').stat().st_size > 500, f'Missing substantive section: {name}'
@@ -35,4 +35,9 @@ labels=tree.findall('.//s:text',ns)
 assert len(labels)>40
 assert min(float(t.attrib['font-size']) for t in labels)>=13
 assert hashlib.sha256((ROOT/'figures/graphical_abstract_source.png').read_bytes()).hexdigest() == hashlib.sha256((ROOT.parent/'graphical_abstract.png').read_bytes()).hexdigest()
-print(f'PASS: {count} source files unchanged; six Methods sections, five technical tables and editable Figure 1 contracts present.')
+reviews=json.loads((ROOT/'evidence/wave1_review_packet.json').read_text())['frozen_reports']
+assert len(reviews)==3
+for name,expected in reviews.items():
+    assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest()==expected, f'Frozen reviewer report changed: {name}'
+print(f'PASS: {count} source files unchanged; {len(required)} Methods sections, five technical tables and editable Figure 1 contracts present.')
+print('PASS: three independent Wave 1 reviewer reports match their frozen hashes.')

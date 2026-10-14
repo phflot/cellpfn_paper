@@ -27,3 +27,6 @@
 | Gene–gene operator | Support-fitted pooled covariance channel with learned integration | A learned causal gene-regulatory graph |
 | Program tokens | Learned computational summaries in CellPFN | Identified biological pathways |
 | Simulator throughput | Direct measured generator performance under declared hardware/output contract | Model-job runtime, legacy unverified numbers, code capability as completed benchmark |
+
+| Restricted task mixture | Cell-type/donor-identity targets in3:1 ratio with signed-covariance banks excluded; raw arm IDs LR/GL1 | Learnable-only or filtering as the sole intervention |
+| HVG view | Requested upper cap on support-selected eligible genes | A guaranteed fixed-width panel in every one-shot draw |

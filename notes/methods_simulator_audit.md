@@ -79,3 +79,7 @@ System Python has NumPy and pytest but lacks torch, OmegaConf and AnnData. Inspe
 ## Draft structure and consistency
 
 Main Methods proceeds from experiment architecture to biological variation, observation/calibration, then software interfaces. The technical supplement supplies parameter distributions and capability boundaries, executable API syntax and memory accounting. This separates scientific generative assumptions from implementation reuse without reducing the simulator to a list of biological effects. Canonical terms: pyScIntelligentDesign, CellPFN, cellular prior, baseline prior, expected profile, expected counts/intensity, observed counts, simulation microbatch, fixed biology bank, and episode. Supplementary table labels are `tab:simulator-parameters` and `tab:software-capabilities`; numbering is delegated to integration.
+
+## Independent integration checks
+
+The final independent audit (`notes/reviews/wave2_simulator_check.md`) resolved effective age-dependent gamma shapes and the preservation of the expected log-state shift. Bank QC is per cell: final configuration inherits `dataset_reuse_v2.qc_min_counts=20` from `conf/foundation_realism_v2.yaml:94`; `generate_biology_bank` allows eight deterministic technical redraws, retains the highest-count attempt and rejects a bank containing any remaining zero-count cell. The phrase “all-zero banks rejected” above is weaker than the actual check. No code was changed.

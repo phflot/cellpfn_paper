@@ -83,3 +83,7 @@ These changes were communicated to the parent before its final compile; the inte
 5. The admission nuisance comparison is **strictly less** than the analytic score minus0.025. “At least0.025lower” in a draft paraphrase should be replaced by the exact strict inequality when describing the rule.
 
 Historical residual, role-slot, expert-routing and other alternatives remain identifiable in the repository but are not presented as components of the evaluated direct model. No new architectural experiment was proposed solely to rehabilitate such history. The already measured no/diagonal/full operator comparison directly addresses the joint-gene claim and is retained.
+
+## Integration correction to source navigation
+
+The training loop, scheduler and optimizer helpers named above live in `hashprompt/experiments/run_program_pfn_synthetic.py`; `src/hashprompt/train_foundation_model.py` is a launcher shim. Final independent inspection corrected the global-standard-deviation floor in the feature definitions: the floored support-wide standard deviation also enters both neural statistic tuples. The model equations and operator checks were independently reviewed in `notes/reviews/wave2_model_check.md`; their execution status remains static inspection.

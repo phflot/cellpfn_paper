@@ -112,6 +112,8 @@
 <rect x="490" y="721" width="373" height="43" rx="9" fill="#F5F6F9" stroke="#BCC6D1" stroke-width="1.5"/>
 <text x="677" y="740" fill="#24364B" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="normal" text-anchor="middle">Symmetric pooling + 8 program tokens</text>
 <text x="677" y="756" fill="#637587" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="normal" text-anchor="middle">2 transformer layers → class logits</text>
+<polyline points="852,688 872,688 872,754 848,754" fill="none" stroke="#637587" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="860" y="713" fill="#826199" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="normal" text-anchor="end">3 scalars</text>
 <polyline points="677,766 677,782" fill="none" stroke="#637587" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
 <text x="677" y="802" fill="#24364B" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="normal" text-anchor="middle">Gene-anonymous; no query–query conditioning</text>
 </svg>
